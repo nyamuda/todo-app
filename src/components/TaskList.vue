@@ -18,12 +18,12 @@
           <td>{{ task.dueDate }}</td>
           <td>
             <span
-              :class="{
-                'text-success': task.completed,
-                'text-danger': !task.completed,
+              v-bind:class="{
+                'text-success': task.isCompleted,
+                'text-danger': !task.isCompleted,
               }"
             >
-              {{ task.completed ? "Completed" : "Pending" }}
+              {{ task.isCompleted ? "Completed" : "Pending" }}
             </span>
           </td>
           <td>
@@ -53,8 +53,18 @@ const apiUrl = "http://quovoyapi.runasp.net/api";
 onMounted(async () => {
   try {
     const response = await axios.get(`${apiUrl}/items`);
-    console.log(response.data);
-    tasks.value = response.data;
+
+    //get the tasks and format the date
+    let tasksWithFormattedDate = response.data.map((task) => {
+      return {
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        dueDate: new Date(task.dueDate).toLocaleString(), // Format the dueDate
+      };
+    });
+
+    tasks.value = tasksWithFormattedDate;
   } catch (error) {
     console.log("Error");
   }
