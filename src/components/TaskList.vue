@@ -43,35 +43,22 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      tasks: [
-        {
-          title: "Buy groceries",
-          description: "Milk, Bread, Eggs",
-          dueDate: "2025-01-10",
-          completed: false,
-        },
-        {
-          title: "Finish project",
-          description: "Complete Vue.js app",
-          dueDate: "2025-01-15",
-          completed: false,
-        },
-      ],
-    };
-  },
-  methods: {
-    markCompleted(index) {
-      this.tasks[index].completed = true;
-    },
-    deleteTask(index) {
-      this.tasks.splice(index, 1);
-    },
-  },
-};
+<script setup>
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
+const tasks = ref([]);
+const apiUrl = "http://quovoyapi.runasp.net/api";
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(`${apiUrl}/items`);
+    console.log(response.data);
+    tasks.value = response.data;
+  } catch (error) {
+    console.log("Error");
+  }
+});
 </script>
 
 <style>
