@@ -85,6 +85,14 @@
         </template>
       </tbody>
     </table>
+    <!--Load more items start-->
+    <button
+      @click="loadMoreItems"
+      :disabled="isLoadingMoreItems || hasMoreItems"
+    >
+      {{ isLoadingMoreItems ? "Loading..." : "Load More" }}
+    </button>
+    <!--Load more items end-->
   </div>
   <!-- Modal Start-->
   <div
@@ -182,7 +190,17 @@ let filterItems = () => {
     store.dispatch("fetchTasks");
   }
 };
+let loadMoreItems = () => {
+  store.dispatch("loadMoreTasks");
+};
+//is an item being marked as complete
 let isCompletingItem = computed(() => store.state.isCompletingItem);
+
+//are there more items currently being loaded
+let isLoadingMoreItems = computed(() => store.state.isLoadingMoreItems);
+
+//are there still more items that can be loaded
+let hasMoreItems = computed(() => store.state.itemsPageInfo.hasMore);
 </script>
 
 <style></style>

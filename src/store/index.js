@@ -13,6 +13,13 @@ export default createStore({
       isCreatingItem: false, //to show the loading button
       isCompletingItem: false, //to show the loading button
       failureMessage: "Oops! Something went wrong. Please try again.",
+      itemsPageInfo: {
+        //page info for lazy loading
+        page: 1, //current page size
+        pageSize: 10, //total items per page
+        hasMore: false, //whether there is more tasks to load
+      },
+      isLoadingMoreItems: false,
     };
   },
   getters: {},
@@ -43,6 +50,13 @@ export default createStore({
         };
       });
     },
+    updatePageInfo(state, pageInfo) {
+      state.itemsPageInfo = pageInfo;
+    },
+    //load more tasks
+    loadAdditionalTasks(state, tasks) {
+      state.todoTasks.push(tasks);
+    },
   },
   actions: {
     //fetch all tasks
@@ -51,10 +65,13 @@ export default createStore({
         this.state.isGettingItems = true;
         const response = await axios.get(this.state.apiUrl);
         //mutate the state with the fetched tasks
-        commit("formatTaskDate", response.data);
-        this.state.isGettingItems = false;
+        commit("formatTaskDate", response.data.items);
+
+        //page info
+        commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
         console.error("Error fetching tasks:", error);
+      } finally {
         this.state.isGettingItems = false;
       }
     },
@@ -64,10 +81,13 @@ export default createStore({
         this.state.isGettingItems = true;
         const response = await axios.get(`${this.state.apiUrl}/completed`);
         //mutate the state with the fetched tasks
-        commit("formatTaskDate", response.data);
-        this.state.isGettingItems = false;
+        commit("formatTaskDate", response.data.items);
+
+        //page info
+        commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
         console.error("Error fetching tasks:", error);
+      } finally {
         this.state.isGettingItems = false;
       }
     },
@@ -77,11 +97,36 @@ export default createStore({
         this.state.isGettingItems = true;
         const response = await axios.get(`${this.state.apiUrl}/uncompleted`);
         //mutate the state with the fetched tasks
-        commit("formatTaskDate", response.data);
-        this.state.isGettingItems = false;
+        commit("formatTaskDate", response.data.items);
+
+        //page info
+        commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
         console.error("Error fetching tasks:", error);
+      } finally {
         this.state.isGettingItems = false;
+      }
+    },
+
+    //Load more tasks
+    async loadMoreTasks({ commit }) {
+      try {
+        this.state.isLoadingMoreItems = true;
+        const response = await axios.get(this.state.apiUrl, {
+          params: {
+            page: this.state.pageInfo.page + 1,
+            pageSize: this.state.pageInfo.pageSize,
+          },
+        });
+        //mutate the state with the additional tasks
+        commit("loadAdditionalTasks", response.data.items);
+
+        //page info
+        commit("updatePageInfo", response.data.pageInfo);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      } finally {
+        this.state.isLoadingMoreItems = false;
       }
     },
 
