@@ -50,6 +50,12 @@ export default createStore({
         };
       });
     },
+    //remove deleted item from the state
+    //without calling the server
+    removeItem(state, id) {
+      let currentItems = state.todoTasks;
+      state.todoTasks = currentItems.filter((task) => task.id != id);
+    },
     updatePageInfo(state, pageInfo) {
       state.itemsPageInfo = pageInfo;
     },
@@ -224,7 +230,7 @@ export default createStore({
     },
 
     // Asynchronous action to delete a task
-    async deleteTask({ dispatch }, id) {
+    async deleteTask({ dispatch, commit }, id) {
       try {
         // Send a DELETE request to the API
         let response = await axios.delete(`${this.state.apiUrl}/${id}`);
@@ -236,8 +242,8 @@ export default createStore({
           let message = "The task has been successfully deleted.";
           dispatch("showToast", { message: message, severity: "success" });
 
-          //refresh the list of items
-          await dispatch("fetchTasks");
+          //remove item from state
+          await commit("removeItem", id);
         } else {
           dispatch("showToast", {
             message: this.state.failureMessage,

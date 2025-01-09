@@ -19,74 +19,83 @@
         <button type="button" class="btn btn-dark">Add Task</button>
       </router-link>
     </div>
-    <table class="table table-striped mt-3">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Due Date</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Show placeholders while loading -->
-        <template v-if="isGettingItems">
-          <tr v-for="n in 5" :key="n">
-            <td><span class="placeholder col-6"></span></td>
-            <td><span class="placeholder col-8"></span></td>
-            <td><span class="placeholder col-4"></span></td>
-            <td><span class="placeholder col-3"></span></td>
-            <td><span class="placeholder col-4"></span></td>
+    <div class="table-responsive">
+      <table class="table table-striped mt-3">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
-        </template>
-        <!-- Show tasks once loaded -->
-        <template v-else>
-          <tr class="item-list" v-for="(task, index) in tasks" :key="index">
-            <td>{{ task.title }}</td>
-            <td>{{ task.description }}</td>
-            <td>{{ task.dueDate }}</td>
-            <td>
-              <span
-                v-bind:class="{
-                  'text-success': task.isCompleted,
-                  'text-danger': !task.isCompleted,
-                }"
-              >
-                {{ task.isCompleted ? "Completed" : "Pending" }}
-              </span>
-            </td>
-            <td>
-              <button
-                v-if="isCompletingItem && pendingUpdateTaskId == task.id"
-                class="btn btn-success btn-sm me-2"
-                disabled
-              >
+        </thead>
+        <tbody>
+          <!-- Show placeholders while loading -->
+          <template v-if="isGettingItems">
+            <tr v-for="n in 5" :key="n">
+              <td><span class="placeholder col-6"></span></td>
+              <td><span class="placeholder col-8"></span></td>
+              <td><span class="placeholder col-4"></span></td>
+              <td><span class="placeholder col-3"></span></td>
+              <td><span class="placeholder col-6"></span></td>
+            </tr>
+          </template>
+          <!-- Show tasks once loaded -->
+          <template v-else>
+            <tr class="item-list" v-for="(task, index) in tasks" :key="index">
+              <td>{{ task.title }}</td>
+              <td>{{ task.description }}</td>
+              <td>{{ task.dueDate }}</td>
+              <td>
                 <span
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Please wait...
-              </button>
-              <button
-                v-else
-                :disabled="task.isCompleted"
-                class="btn btn-success btn-sm me-2"
-                @click="markCompleted(task.id)"
-              >
-                Mark Completed
-              </button>
-              <button class="btn btn-danger" @click="confirmDelete(task.id)">
-                Delete
-              </button>
-            </td>
-          </tr>
-        </template>
-      </tbody>
-    </table>
+                  v-bind:class="{
+                    'text-success': task.isCompleted,
+                    'text-danger': !task.isCompleted,
+                  }"
+                >
+                  {{ task.isCompleted ? "Completed" : "Pending" }}
+                </span>
+              </td>
+              <td>
+                <div
+                  class="d-flex justify-content-start align-items-center flex-nowrap"
+                >
+                  <button
+                    v-if="isCompletingItem && pendingUpdateTaskId == task.id"
+                    class="btn btn-success btn-sm me-2"
+                    disabled
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    Please wait...
+                  </button>
+                  <button
+                    v-else
+                    :disabled="task.isCompleted"
+                    class="btn btn-success btn-sm me-2 text-nowrap"
+                    @click="markCompleted(task.id)"
+                  >
+                    Mark Completed
+                  </button>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    @click="confirmDelete(task.id)"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
     <!--Load more items start-->
-    <div class="d-grid gap-2 col-3 mx-auto">
+    <div class="d-grid gap-2 col-md-3 mx-auto mt-3 mt-md-2">
       <button
         :class="{
           'btn btn-secondary': !hasMoreItems,
@@ -101,7 +110,7 @@
           role="status"
           aria-hidden="true"
         ></span>
-        {{ isLoadingMoreItems ? "Loading..." : "Load More" }}
+        {{ isLoadingMoreItems ? "Loading..." : "Load more" }}
       </button>
     </div>
     <!--Load more items end-->
@@ -220,6 +229,9 @@ let hasMoreItems = computed(() => store.state.itemsPageInfo.hasMore);
 <style>
 .item-list {
   animation: fadeIn 0.5s ease-in-out;
+}
+.modal {
+  animation: fadeIn 0.3s ease-in-out;
 }
 /* Animation */
 @keyframes fadeIn {
