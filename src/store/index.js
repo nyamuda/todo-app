@@ -151,6 +151,11 @@ export default createStore({
     //add a task
     async addTask({ dispatch }, task) {
       try {
+        //convert time to UCT
+        let localDueDate = task.dueDate;
+        task.dueDate = new Date(localDueDate + "Z").toISOString();
+        console.log(localDueDate);
+        console.log(task.dueDate);
         this.state.isCreatingItem = true;
         const response = await axios.post(this.state.apiUrl, task);
         // Check if the request was successful
