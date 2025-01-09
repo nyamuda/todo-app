@@ -3,6 +3,18 @@
     <h3>Task List</h3>
 
     <div class="d-flex justify-content-end">
+      <div class="me-2">
+        <select
+          v-model="filterItemsBy"
+          @change="filterItems"
+          class="form-select"
+          aria-label="Filter items"
+        >
+          <option value="all" selected>All tasks</option>
+          <option value="completed">Completed tasks</option>
+          <option value="uncompleted">Uncompleted tasks</option>
+        </select>
+      </div>
       <router-link to="/tasks/add">
         <button type="button" class="btn btn-dark">Add Task</button>
       </router-link>
@@ -129,6 +141,7 @@ const store = useStore();
 let pendingDeleteTaskId = ref(0); //id of item to be deleted
 let pendingUpdateTaskId = ref(0); //id of item to be updated
 let showModal = ref(false);
+let filterItemsBy = ref("all");
 
 onMounted(async () => {
   //get all items
@@ -154,10 +167,20 @@ let deleteTask = () => {
   showModal.value = false;
   store.dispatch("deleteTask", pendingDeleteTaskId.value);
 };
-//make task as completed
+//mark task as completed
 let markCompleted = (id) => {
   pendingUpdateTaskId.value = id;
   store.dispatch("completeTask", id);
+};
+
+let filterItems = () => {
+  if (filterItemsBy.value == "completed") {
+    store.dispatch("fetchCompletedTasks");
+  } else if (filterItemsBy.value == "uncompleted") {
+    store.dispatch("fetchUncompletedTasks");
+  } else {
+    store.dispatch("fetchTasks");
+  }
 };
 let isCompletingItem = computed(() => store.state.isCompletingItem);
 </script>

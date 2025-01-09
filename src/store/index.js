@@ -45,12 +45,37 @@ export default createStore({
     },
   },
   actions: {
-    //fetch tasks
+    //fetch all tasks
     async fetchTasks({ commit }) {
       try {
         this.state.isGettingItems = true;
-        console.log(`$Api url: ${this.state.apiUrl}`);
         const response = await axios.get(this.state.apiUrl);
+        //mutate the state with the fetched tasks
+        commit("formatTaskDate", response.data);
+        this.state.isGettingItems = false;
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        this.state.isGettingItems = false;
+      }
+    },
+    //fetch completed tasks
+    async fetchCompletedTasks({ commit }) {
+      try {
+        this.state.isGettingItems = true;
+        const response = await axios.get(`${this.state.apiUrl}/completed`);
+        //mutate the state with the fetched tasks
+        commit("formatTaskDate", response.data);
+        this.state.isGettingItems = false;
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        this.state.isGettingItems = false;
+      }
+    },
+    //fetch uncompleted tasks
+    async fetchUncompletedTasks({ commit }) {
+      try {
+        this.state.isGettingItems = true;
+        const response = await axios.get(`${this.state.apiUrl}/uncompleted`);
         //mutate the state with the fetched tasks
         commit("formatTaskDate", response.data);
         this.state.isGettingItems = false;
