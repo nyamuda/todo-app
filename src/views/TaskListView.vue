@@ -8,7 +8,7 @@
 import TaskList from "@/components/TaskList.vue";
 
 export default {
-  name: "HomeView",
+  name: "TaskListView",
   components: {
     TaskList,
   },

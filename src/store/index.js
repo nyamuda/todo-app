@@ -1,13 +1,16 @@
 import { createStore } from "vuex";
 import axios from "axios";
+import { useToast } from "vue-toastification";
+const toast = useToast();
+import router from "@/router";
 
 export default createStore({
   state() {
     return {
       todoTasks: [],
       apiUrl: "http://quovoyapi.runasp.net/api/items",
-      isGettingItems: false,
-      toastMessage: "",
+      isGettingItems: false, //to show placeholder items
+      isCreatingItem: false, //to show the loading button
       failureMessage: "Oops! Something went wrong. Please try again.",
     };
   },
@@ -23,9 +26,6 @@ export default createStore({
           dueDate: new Date(task.dueDate).toLocaleString(), // Format the dueDate
         };
       });
-    },
-    addToastMessage(state, message) {
-      state.toastMessage = message;
     },
   },
   actions: {
@@ -45,36 +45,77 @@ export default createStore({
     },
 
     //add a task
-    async addTask({ commit }, task) {
+    async addTask({ dispatch }, task) {
       try {
-        const response = await axios.post(
-          "https://quovoyapi.runasp.net/tasks",
-          task
-        ); // Replace with your API endpoint
-        commit("ADD_TASK", response.data); // Update the state with the new task
+        this.state.isCreatingItem = true;
+        const response = await axios.post(this.state.apiUrl, task);
+        // Check if the request was successful
+        //status code will be 201 from the API
+        if (response.status == 201) {
+          //show toast success message
+          let message = "The task has been successfully added.";
+          dispatch("showToast", { message: message, severity: "success" });
+
+          router.push("/tasks");
+
+          //refresh the state
+          await dispatch("fetchTasks");
+        } else {
+          dispatch("showToast", {
+            message: this.state.failureMessage,
+            severity: "error",
+          });
+        }
+        this.state.isCreatingItem = false;
       } catch (error) {
-        console.error("Error adding task:", error);
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
+
+        console.log(error);
+        this.state.isCreatingItem = false;
       }
     },
 
     // Asynchronous action to delete a task
     async deleteTask({ dispatch }, id) {
       try {
-        console.log(`Id of item ${id}`);
         // Send a DELETE request to the API
         let response = await axios.delete(`${this.state.apiUrl}/${id}`);
 
         // Check if the request was successful
         //status code will be 204 from the API
         if (response.status == 204) {
+          //show toast success message
+          let message = "The task has been successfully deleted.";
+          dispatch("showToast", { message: message, severity: "success" });
+
           //refresh the list of items
-          //get all items
           await dispatch("fetchTasks");
         } else {
-          console.error("Failed to delete task:", response.statusText);
+          dispatch("showToast", {
+            message: this.state.failureMessage,
+            severity: "error",
+          });
         }
       } catch (error) {
-        console.error("Error deleting task:", error);
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
+      }
+    },
+    //Show toast notification
+    showToast(context, payload) {
+      const { message, severity } = payload;
+
+      if (severity == "success") {
+        toast.success(message);
+      } else if (severity == "error") {
+        toast.error(message);
+      } else {
+        toast(message);
       }
     },
   },

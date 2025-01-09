@@ -3,7 +3,9 @@
     <h3>Task List</h3>
 
     <div class="d-flex justify-content-end">
-      <button type="button" class="btn btn-dark">Add Task</button>
+      <router-link to="/tasks/add">
+        <button type="button" class="btn btn-dark">Add Task</button>
+      </router-link>
     </div>
     <table class="table table-striped mt-3">
       <thead>
@@ -102,21 +104,16 @@
     </div>
   </div>
   <!-- Modal End-->
-  <!--Toast-->
-  <ToastItem ref="toastRef"></ToastItem>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import ToastItem from "./ToastItem.vue";
-import axios from "axios";
 
 import { useStore } from "vuex";
 // Access the store
 const store = useStore();
 let pendingDeleteTaskId = ref(0);
 let showModal = ref(false);
-const toastRef = ref(null);
 
 onMounted(async () => {
   //get all items
@@ -137,40 +134,10 @@ const closeModal = () => {
   showModal.value = false;
 };
 
-let showToast = (message) => {
-  store.commit("addToastMessage", message);
-  if (toastRef.value) {
-    toastRef.value.showToast(); // Call the child component's method
-  }
-};
-
 //delete a task and hide the modal
-let deleteTask = async () => {
-  try {
-    showModal.value = false;
-    // Send a DELETE request to the API
-    let response = await axios.delete(
-      `${store.state.apiUrl}/${pendingDeleteTaskId.value}`
-    );
-
-    // Check if the request was successful
-    //status code will be 204 from the API
-    if (response.status == 204) {
-      //show success message
-      let message = "The task has been successfully deleted.";
-      showToast(message);
-
-      //refresh the list of items
-      //get all items
-      store.dispatch("fetchTasks");
-    } else {
-      showToast(store.state.failureMessage);
-      console.error("Failed to delete task:", response.statusText);
-    }
-  } catch (error) {
-    showToast(store.state.failureMessage);
-    console.error("Error deleting task:", error);
-  }
+let deleteTask = () => {
+  showModal.value = false;
+  store.dispatch("deleteTask", pendingDeleteTaskId.value);
 };
 </script>
 
