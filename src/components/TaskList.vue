@@ -86,12 +86,24 @@
       </tbody>
     </table>
     <!--Load more items start-->
-    <button
-      @click="loadMoreItems"
-      :disabled="isLoadingMoreItems || hasMoreItems"
-    >
-      {{ isLoadingMoreItems ? "Loading..." : "Load More" }}
-    </button>
+    <div class="d-grid gap-2 col-3 mx-auto">
+      <button
+        :class="{
+          'btn btn-secondary': !hasMoreItems,
+          'btn btn-primary': hasMoreItems,
+        }"
+        @click="loadMoreItems"
+        :disabled="isLoadingMoreItems || !hasMoreItems"
+      >
+        <span
+          v-if="isLoadingMoreItems"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        {{ isLoadingMoreItems ? "Loading..." : "Load More" }}
+      </button>
+    </div>
     <!--Load more items end-->
   </div>
   <!-- Modal Start-->
@@ -190,8 +202,10 @@ let filterItems = () => {
     store.dispatch("fetchTasks");
   }
 };
+//load more tasks depending on whether
+//the current list is for all, completed or uncompleted tasks
 let loadMoreItems = () => {
-  store.dispatch("loadMoreTasks");
+  store.dispatch("loadMoreTasks", filterItemsBy.value);
 };
 //is an item being marked as complete
 let isCompletingItem = computed(() => store.state.isCompletingItem);

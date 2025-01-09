@@ -55,7 +55,17 @@ export default createStore({
     },
     //load more tasks
     loadAdditionalTasks(state, tasks) {
-      state.todoTasks.push(tasks);
+      //marge original tasks with new loaded tasks
+      let mergedItems = state.todoTasks.concat(tasks);
+      state.todoTasks = mergedItems.map((task) => {
+        return {
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          isCompleted: task.isCompleted,
+          dueDate: new Date(task.dueDate).toLocaleString(), // Format the dueDate
+        };
+      });
     },
   },
   actions: {
@@ -109,15 +119,23 @@ export default createStore({
     },
 
     //Load more tasks
-    async loadMoreTasks({ commit }) {
+    async loadMoreTasks({ commit }, filterBy) {
       try {
+        //check which filter to use
+        let filterValue = "";
+        if (filterBy == "completed" || filterBy == "uncompleted") {
+          filterValue = filterBy;
+        }
         this.state.isLoadingMoreItems = true;
-        const response = await axios.get(this.state.apiUrl, {
-          params: {
-            page: this.state.pageInfo.page + 1,
-            pageSize: this.state.pageInfo.pageSize,
-          },
-        });
+        const response = await axios.get(
+          `${this.state.apiUrl}/${filterValue}`,
+          {
+            params: {
+              page: this.state.itemsPageInfo.page + 1,
+              pageSize: this.state.itemsPageInfo.pageSize,
+            },
+          }
+        );
         //mutate the state with the additional tasks
         commit("loadAdditionalTasks", response.data.items);
 
