@@ -9,11 +9,16 @@
 body {
   font-family: var(--main-font);
 }
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
 
 /*Form Styles Start*/
 .form-select:focus {
   outline: none;
   box-shadow: none;
+  --bs-primary: red !important;
 }
 .add-item-container {
   padding: 2rem;

@@ -16,7 +16,7 @@
         </select>
       </div>
       <router-link to="/tasks/add">
-        <button type="button" class="btn btn-dark">Add Task</button>
+        <button type="button" class="btn btn-primary">Add Task</button>
       </router-link>
     </div>
     <div class="table-responsive">
