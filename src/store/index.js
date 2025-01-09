@@ -11,6 +11,7 @@ export default createStore({
       apiUrl: "http://quovoyapi.runasp.net/api/items",
       isGettingItems: false, //to show placeholder items
       isCreatingItem: false, //to show the loading button
+      isCompletingItem: false, //to show the loading button
       failureMessage: "Oops! Something went wrong. Please try again.",
     };
   },
@@ -23,7 +24,22 @@ export default createStore({
           id: task.id,
           title: task.title,
           description: task.description,
+          isCompleted: task.isCompleted,
           dueDate: new Date(task.dueDate).toLocaleString(), // Format the dueDate
+        };
+      });
+    },
+    //update the state to show a recently completed item
+    //without calling the server
+    showCompletedItem(state, id) {
+      let currentItems = state.todoTasks;
+      state.todoTasks = currentItems.map((task) => {
+        return {
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          isCompleted: task.id == id ? true : task.isCompleted, //update status of recently completed item
+          dueDate: task.dueDate,
         };
       });
     },
@@ -75,6 +91,42 @@ export default createStore({
 
         console.log(error);
         this.state.isCreatingItem = false;
+      }
+    },
+
+    //mark a task as completed
+    async completeTask({ dispatch, commit }, id) {
+      try {
+        this.state.isCompletingItem = true;
+        let completedTask = {
+          isCompleted: true,
+        };
+        const response = await axios.put(
+          `${this.state.apiUrl}/${id}`,
+          completedTask
+        );
+        // Check if the request was successful
+        //status code will be 204 from the API
+        if (response.status == 204) {
+          //show toast success message
+          let message = "The task is done and dusted.";
+          dispatch("showToast", { message: message, severity: "success" });
+
+          //update status of recently completed item
+          commit("showCompletedItem", id);
+        } else {
+          dispatch("showToast", {
+            message: this.state.failureMessage,
+            severity: "error",
+          });
+        }
+        this.state.isCompletingItem = false;
+      } catch (error) {
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
+        this.state.isCompletingItem = false;
       }
     },
 

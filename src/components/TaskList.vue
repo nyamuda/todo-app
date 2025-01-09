@@ -46,8 +46,22 @@
             </td>
             <td>
               <button
+                v-if="isCompletingItem && pendingUpdateTaskId == task.id"
                 class="btn btn-success btn-sm me-2"
-                @click="markCompleted(index)"
+                disabled
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Please wait...
+              </button>
+              <button
+                v-else
+                :disabled="task.isCompleted"
+                class="btn btn-success btn-sm me-2"
+                @click="markCompleted(task.id)"
               >
                 Mark Completed
               </button>
@@ -72,7 +86,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Delete Task ?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Delete Task?</h5>
           <button
             type="button"
             class="btn-close"
@@ -112,7 +126,8 @@ import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 // Access the store
 const store = useStore();
-let pendingDeleteTaskId = ref(0);
+let pendingDeleteTaskId = ref(0); //id of item to be deleted
+let pendingUpdateTaskId = ref(0); //id of item to be updated
 let showModal = ref(false);
 
 onMounted(async () => {
@@ -139,6 +154,12 @@ let deleteTask = () => {
   showModal.value = false;
   store.dispatch("deleteTask", pendingDeleteTaskId.value);
 };
+//make task as completed
+let markCompleted = (id) => {
+  pendingUpdateTaskId.value = id;
+  store.dispatch("completeTask", id);
+};
+let isCompletingItem = computed(() => store.state.isCompletingItem);
 </script>
 
 <style></style>
