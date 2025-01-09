@@ -78,27 +78,4 @@ const submitForm = () => {
 let isCreatingItem = computed(() => store.state.isCreatingItem);
 </script>
 
-<style scoped>
-.add-item-container {
-  padding: 2rem;
-  background: #ffffff;
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.add-item-title {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-}
-
-.add-item-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-@media (min-width: 728px) {
-  .add-item-container {
-    width: 40rem;
-  }
-}
-</style>
+<style scoped></style>
