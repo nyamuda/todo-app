@@ -19,7 +19,7 @@
           id="description"
           v-model="form.description"
           class="form-input"
-          rows="4"
+          rows="3"
           required
         ></textarea>
       </div>
