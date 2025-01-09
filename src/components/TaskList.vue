@@ -42,7 +42,7 @@
         </template>
         <!-- Show tasks once loaded -->
         <template v-else>
-          <tr v-for="(task, index) in tasks" :key="index">
+          <tr class="item-list" v-for="(task, index) in tasks" :key="index">
             <td>{{ task.title }}</td>
             <td>{{ task.description }}</td>
             <td>{{ task.dueDate }}</td>
@@ -217,4 +217,19 @@ let isLoadingMoreItems = computed(() => store.state.isLoadingMoreItems);
 let hasMoreItems = computed(() => store.state.itemsPageInfo.hasMore);
 </script>
 
-<style></style>
+<style>
+.item-list {
+  animation: fadeIn 0.5s ease-in-out;
+}
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
