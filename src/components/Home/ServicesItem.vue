@@ -15,8 +15,8 @@
             <h6 class="text-white font-weight-medium m-0">Task Management</h6>
           </div>
           <p>
-            Easily add, edit, and organize your tasks with titles, descriptions,
-            and due dates. Stay on top of your to-do list effortlessly.
+            Easily add and organize your tasks with titles, descriptions, and
+            due dates. Stay on top of your to-do list effortlessly.
           </p>
         </div>
         <div class="col-lg-3 col-md-6 text-center mb-5">

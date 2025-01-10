@@ -122,7 +122,7 @@
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
-    style="display: block; background: rgba(0, 0, 0, 0.5)"
+    style="display: block; background: rgba(0, 0, 0, 0.5); z-index: 10000"
   >
     <div class="modal-dialog">
       <div class="modal-content">

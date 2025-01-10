@@ -45,4 +45,19 @@
   background-color: darken(var(--accent-color), 10%) !important;
   background-color: var(--accent-color);
 }
+
+#hero {
+  animation: fadeIn 0.2s ease-out;
+}
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 </style>

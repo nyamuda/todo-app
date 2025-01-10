@@ -4,30 +4,37 @@
     <div class="row align-items-center top-bar">
       <div class="col-lg-3 col-md-12 text-center text-lg-start">
         <a href="" class="navbar-brand m-0 p-0">
-          <h1 class="text-primary m-0">Plumberz</h1>
+          <h1 class="text-primary m-0">Thinking It Over</h1>
         </a>
       </div>
       <div class="col-lg-9 col-md-12 text-end">
         <div class="h-100 d-inline-flex align-items-center me-4">
           <i class="fa fa-map-marker-alt text-primary me-2"></i>
-          <p class="m-0">123 Street, New York, USA</p>
+          <p class="m-0">123 Street, Cape Town, South Africa</p>
         </div>
         <div class="h-100 d-inline-flex align-items-center me-4">
           <i class="far fa-envelope-open text-primary me-2"></i>
-          <p class="m-0">info@example.com</p>
+          <p class="m-0">nya20002@byui.edu</p>
         </div>
         <div class="h-100 d-inline-flex align-items-center">
-          <a class="btn btn-sm-square bg-white text-primary me-1" href=""
-            ><i class="fab fa-facebook-f"></i
+          <a
+            class="btn btn-sm-square bg-white text-primary me-1"
+            href="https://github.com/nyamuda"
+            target="_blank"
+            ><i class="fab fa-github"></i
           ></a>
-          <a class="btn btn-sm-square bg-white text-primary me-1" href=""
-            ><i class="fab fa-twitter"></i
-          ></a>
-          <a class="btn btn-sm-square bg-white text-primary me-1" href=""
+
+          <a
+            class="btn btn-sm-square bg-white text-primary me-1"
+            href="https://www.linkedin.com/in/nyamuda/"
+            target="_blank"
             ><i class="fab fa-linkedin-in"></i
           ></a>
-          <a class="btn btn-sm-square bg-white text-primary me-0" href=""
-            ><i class="fab fa-instagram"></i
+          <a
+            class="btn btn-sm-square bg-white text-primary me-0"
+            href="https://nyamuda.netlify.app/"
+            target="_blank"
+            ><i class="fas fa-briefcase"></i
           ></a>
         </div>
       </div>
@@ -44,7 +51,7 @@
         href=""
         class="navbar-brand d-flex align-items-center m-0 p-0 d-lg-none"
       >
-        <h1 class="text-primary m-0">Plumberz</h1>
+        <h1 class="text-primary m-0">Thinking It Over</h1>
       </a>
       <button
         class="navbar-toggler"
@@ -70,7 +77,7 @@
             <i class="fa fa-phone-alt text-primary"></i>
           </div>
           <div class="ms-3">
-            <h5 class="m-0 text-light">+012 345 6789</h5>
+            <h5 class="m-0 text-light">+27 67 331 9415</h5>
           </div>
         </div>
       </div>
