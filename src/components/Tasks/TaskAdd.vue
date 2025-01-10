@@ -1,5 +1,5 @@
 <template>
-  <div class="add-item-container container m-auto mt-5">
+  <div class="add-item-container container m-auto">
     <h2 class="add-item-title text-start">Add New Task</h2>
     <form @submit.prevent="submitForm" class="add-item-form needs-validation">
       <div class="form-group">

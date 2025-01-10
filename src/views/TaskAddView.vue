@@ -1,5 +1,5 @@
 <template>
-  <div class="tasks">
+  <div class="tasks mt-5">
     <TaskAdd />
   </div>
 </template>
