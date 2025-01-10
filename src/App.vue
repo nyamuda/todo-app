@@ -1,7 +1,9 @@
 <template>
-  <NavBarItem />
-  <router-view />
-  <FooterItem />
+  <div class="d-flex flex-column justify-content-between">
+    <NavBarItem />
+    <router-view />
+    <FooterItem />
+  </div>
 </template>
 
 <script setup>

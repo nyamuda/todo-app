@@ -95,7 +95,10 @@
       </table>
     </div>
     <!--Load more items start-->
-    <div class="d-grid gap-2 col-md-3 mx-auto mt-3 mt-md-2">
+    <div
+      v-if="tasks.length > 0"
+      class="d-grid gap-2 col-md-3 mx-auto mt-3 mt-md-2"
+    >
       <button
         :class="{
           'btn btn-secondary': !hasMoreItems,

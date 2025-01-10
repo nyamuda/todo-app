@@ -9,8 +9,6 @@ A simple to-do list application built with Vue 3, Vuex for state management, and
 - **Task Filtering:** Filter tasks by completed, uncompleted, or view all.
 - **Lazy Loading:** Tasks are displayed 10 at a time with an option to load more.
 - **State Management:** Vuex is used for centralized state management.
-- **Bootstrap 5:** For responsive UI components.
-- **ASP.NET Core API:** Backend for task storage and retrieval.
 
 ---
 
@@ -33,7 +31,7 @@ A simple to-do list application built with Vue 3, Vuex for state management, and
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/todo-list-app.git
+   git clone https://github.com/nyamuda/todo-app.git
    cd todo-list-app
    ```
 
@@ -48,16 +46,19 @@ A simple to-do list application built with Vue 3, Vuex for state management, and
    npm run serve
    ```
 
-## Technologies Used
+## 🧪 Form Validation
 
-## Technologies Used
+Form validation is handled using native browser validation. This approach was chosen because the application requires only basic validation (all fields are required).
 
-- Vue.js 3
-- Vuex
-- Bootstrap 5
-- ASP.NET Core API (Backend)
+## 📦 State Management (Vuex)
 
-## API Endpoints
+The Vuex store handles:
+
+- Fetching tasks from the API (actions)
+- Mutations for adding, completing, and deleting tasks
+- State for tasks and pagination control
+
+## ✅ API Endpoints
 
 The application interacts with the following ASP.NET Core API endpoints:
 
@@ -67,3 +68,10 @@ The application interacts with the following ASP.NET Core API endpoints:
 - **DELETE /api/tasks/{id}**: Deletes a task (where `{id}` is the task ID).
 - **GET /api/tasks/completed**: Fetches completed tasks (paginated).
 - **GET /api/tasks/uncompleted**: Fetches uncompleted tasks (paginated).
+
+## 📦 Technologies Used
+
+- Vue.js 3
+- Vuex
+- Bootstrap 5
+- ASP.NET Core API (Backend)
