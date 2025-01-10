@@ -33,8 +33,8 @@
                   <i class="fa fa-tasks fa-2x text-primary"></i>
                 </div>
                 <div>
-                  <h6 class="mb-1">Task Management</h6>
-                  <p class="mb-0">Easily add, edit, and organize tasks.</p>
+                  <h6 class="mb-1 fw-bold">Task Management</h6>
+                  <p class="mb-0">Easily organize tasks.</p>
                 </div>
               </div>
               <div class="col-sm-6 d-flex">
@@ -42,7 +42,7 @@
                   <i class="fa fa-calendar-check fa-2x text-primary"></i>
                 </div>
                 <div>
-                  <h6 class="mb-1">Due Date Tracking</h6>
+                  <h6 class="mb-1 fw-bold">Due Date Tracking</h6>
                   <p class="mb-0">Never miss a deadline again.</p>
                 </div>
               </div>
@@ -51,7 +51,7 @@
                   <i class="fa fa-filter fa-2x text-primary"></i>
                 </div>
                 <div>
-                  <h6 class="mb-1">Task Filtering</h6>
+                  <h6 class="mb-1 fw-bold">Task Filtering</h6>
                   <p class="mb-0">Filter tasks by status.</p>
                 </div>
               </div>
@@ -60,7 +60,7 @@
                   <i class="fa fa-spinner fa-2x text-primary"></i>
                 </div>
                 <div>
-                  <h6 class="mb-1">Lazy Loading</h6>
+                  <h6 class="mb-1 fw-bold">Lazy Loading</h6>
                   <p class="mb-0">Load tasks dynamically.</p>
                 </div>
               </div>
