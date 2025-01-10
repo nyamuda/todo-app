@@ -3,9 +3,9 @@
   <div class="container-fluid nav-bg d-none d-lg-block">
     <div class="row align-items-center top-bar">
       <div class="col-lg-3 col-md-12 text-center text-lg-start">
-        <a href="" class="navbar-brand m-0 p-0">
-          <h1 class="text-primary fw-bold m-0">Prioritia</h1>
-        </a>
+        <router-link to="/" class="navbar-brand m-0 p-0"
+          ><h1 class="text-primary fw-bold m-0">Prioritia</h1></router-link
+        >
       </div>
       <div class="col-lg-9 col-md-12 text-end">
         <div class="h-100 d-inline-flex align-items-center me-4">
@@ -43,23 +43,23 @@
   <!-- Topbar End -->
 
   <!-- Navbar Start -->
-  <div class="container-fluid nav-bar nav-bg">
+  <div class="container-fluid nav-bar nav-bg shadow">
     <nav
       class="navbar navbar-expand-lg navbar-light bg-white p-3 py-lg-0 px-lg-4"
     >
-      <a
-        href=""
+      <router-link
+        to="/"
         class="navbar-brand d-flex align-items-center m-0 p-0 d-lg-none"
+        ><h1 class="text-primary m-0 fw-bold">Prioritia</h1></router-link
       >
-        <h1 class="text-primary m-0 fw-bold">Prioritia</h1>
-      </a>
+
       <button
         class="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#navbarCollapse"
       >
-        <span class="fa fa-bars"></span>
+        <span class="fas fa-bars"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav me-auto">
@@ -101,6 +101,15 @@ export default {
 .top-bar {
   height: 75px;
   padding: 0 4rem;
+}
+.navbar-toggler {
+  border: none;
+}
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .nav-bar {

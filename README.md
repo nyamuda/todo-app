@@ -14,7 +14,7 @@ A simple to-do list application built with Vue 3, Vuex for state management, and
 
 ## 🚀 Live Demo
 
-[👉 Hosted App Link](https://your-hosted-app-link.com)
+[👉 Hosted App Link](https://prioritia.netlify.app)
 
 ---
 
@@ -32,7 +32,7 @@ A simple to-do list application built with Vue 3, Vuex for state management, and
 
    ```bash
    git clone https://github.com/nyamuda/todo-app.git
-   cd todo-list-app
+   cd todo-app
    ```
 
 2. **Install Dependencies:**

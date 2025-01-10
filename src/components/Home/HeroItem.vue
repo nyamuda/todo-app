@@ -2,7 +2,7 @@
   <section
     id="hero"
     style="
-      background-image: url(https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+      background-image: url(../../assets/img/hero-bg.jpg);
       background-repeat: no-repeat;
     "
   >
@@ -11,7 +11,7 @@
         <div class="col-md-6 pe-5 mt-5 mt-md-0">
           <h2 class="display-1 text-uppercase">Organize Your Life</h2>
           <p class="fs-4 my-4 pb-2">
-            Stay on top of your tasks with our simple and to-do list app.
+            Stay on top of your tasks with our simple to-do list app.
           </p>
           <div>
             <router-link to="/tasks/add">
@@ -44,20 +44,5 @@
 .action-btn:hover {
   background-color: darken(var(--accent-color), 10%) !important;
   background-color: var(--accent-color);
-}
-
-#hero {
-  animation: fadeIn 0.2s ease-out;
-}
-/* Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 </style>

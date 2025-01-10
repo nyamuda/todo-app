@@ -16,7 +16,7 @@
           </div>
           <p>
             Easily add and organize your tasks with titles, descriptions, and
-            due dates. Stay on top of your to-do list effortlessly.
+            due dates.
           </p>
         </div>
         <div class="col-lg-3 col-md-6 text-center mb-5">
