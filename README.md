@@ -14,7 +14,7 @@ A simple to-do list application built with Vue 3, Vuex for state management, and
 
 ## 🚀 Live Demo
 
-[👉 Hosted App Link](https://prioritia.netlify.app)
+[Hosted App Link](https://prioritia.netlify.app)
 
 ---
 
@@ -74,4 +74,8 @@ The application interacts with the following ASP.NET Core API endpoints:
 - Vue.js 3
 - Vuex
 - Bootstrap 5
-- ASP.NET Core API (Backend)
+
+## 🚀 API Used
+
+- [Repository Link](https://github.com/nyamuda/TodoAPI)
+- [Hosted App Link](https://quovoyapi.runasp.net/api/items)
