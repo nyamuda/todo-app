@@ -1,17 +1,12 @@
 <template>
-  <NavBarItem></NavBarItem>
+  <NavBarItem />
   <router-view />
+  <FooterItem />
 </template>
 
-<script>
-import NavBarItem from "./components/NavBarItem.vue";
-
-export default {
-  name: "App",
-  components: {
-    NavBarItem,
-  },
-};
+<script setup>
+import NavBarItem from "./components/Layout/NavBarItem.vue";
+import FooterItem from "./components/Layout/FooterItem.vue";
 </script>
 
 <style>

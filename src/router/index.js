@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import TaskListView from "../views/TaskListView.vue";
 import TaskAddView from "../views/TaskAddView.vue";
-import TaskUpdateView from "@/components/TaskUpdate.vue";
 
 const routes = [
   {
@@ -19,20 +18,6 @@ const routes = [
     path: "/tasks/add",
     name: "addTask",
     component: TaskAddView,
-  },
-  {
-    path: "/tasks/update",
-    name: "updateTask",
-    component: TaskUpdateView,
-  },
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
 ];
 

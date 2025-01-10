@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import TaskAdd from "@/components/TaskAdd.vue";
+import TaskAdd from "@/components/Tasks/TaskAdd.vue";
 
 export default {
   name: "TaskAddView",

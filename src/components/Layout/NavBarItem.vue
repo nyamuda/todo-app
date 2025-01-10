@@ -61,28 +61,11 @@
           <router-link to="/tasks/add" class="nav-item nav-link"
             >Add Task</router-link
           >
-          <div class="nav-item dropdown">
-            <a
-              href="#"
-              class="nav-link dropdown-toggle"
-              data-bs-toggle="dropdown"
-              >Pages</a
-            >
-            <div class="dropdown-menu fade-up m-0">
-              <a href="booking.html" class="dropdown-item">Booking</a>
-              <a href="team.html" class="dropdown-item">Technicians</a>
-              <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-              <a href="404.html" class="dropdown-item">404 Page</a>
-            </div>
-          </div>
-          <a href="contact.html" class="nav-item nav-link">Contact</a>
         </div>
-        <div
-          class="call-box mt-4 mt-lg-0 me-lg-n4 py-3 px-4 d-flex align-items-center"
-        >
+        <div class="call-box mt-4 mt-lg-0 py-3 px-4 d-flex align-items-center">
           <div
             class="d-flex flex-shrink-0 align-items-center justify-content-center bg-white"
-            style="width: 45px; height: 45px"
+            style="width: 2.6rem; height: 2.6rem"
           >
             <i class="fa fa-phone-alt text-primary"></i>
           </div>
@@ -185,6 +168,9 @@ export default {
     visibility: visible;
     transition: 0.5s;
     opacity: 1;
+  }
+  .call-box {
+    margin-right: -1.5rem;
   }
 }
 </style>
