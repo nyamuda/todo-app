@@ -4,7 +4,10 @@
     <div class="container">
       <div class="row g-5 align-items-center">
         <!-- Left Column: Image Section -->
-        <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+        <div
+          class="d-none d-lg-block col-lg-6 wow fadeInUp"
+          data-wow-delay="0.1s"
+        >
           <div class="position-relative h-100">
             <img
               src="../../assets/img/about.png"
