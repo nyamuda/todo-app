@@ -1,5 +1,5 @@
 <template>
-  <div class="container m-auto mt-5">
+  <div class="container mx-auto">
     <h3>Task List</h3>
 
     <div class="d-flex justify-content-end">
