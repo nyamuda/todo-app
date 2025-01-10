@@ -1,36 +1,99 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+  <!-- Topbar Start -->
+  <div class="container-fluid nav-bg d-none d-lg-block">
+    <div class="row align-items-center top-bar">
+      <div class="col-lg-3 col-md-12 text-center text-lg-start">
+        <a href="" class="navbar-brand m-0 p-0">
+          <h1 class="text-primary m-0">Plumberz</h1>
+        </a>
+      </div>
+      <div class="col-lg-9 col-md-12 text-end">
+        <div class="h-100 d-inline-flex align-items-center me-4">
+          <i class="fa fa-map-marker-alt text-primary me-2"></i>
+          <p class="m-0">123 Street, New York, USA</p>
+        </div>
+        <div class="h-100 d-inline-flex align-items-center me-4">
+          <i class="far fa-envelope-open text-primary me-2"></i>
+          <p class="m-0">info@example.com</p>
+        </div>
+        <div class="h-100 d-inline-flex align-items-center">
+          <a class="btn btn-sm-square bg-white text-primary me-1" href=""
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a class="btn btn-sm-square bg-white text-primary me-1" href=""
+            ><i class="fab fa-twitter"></i
+          ></a>
+          <a class="btn btn-sm-square bg-white text-primary me-1" href=""
+            ><i class="fab fa-linkedin-in"></i
+          ></a>
+          <a class="btn btn-sm-square bg-white text-primary me-0" href=""
+            ><i class="fab fa-instagram"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Topbar End -->
+
+  <!-- Navbar Start -->
+  <div class="container-fluid nav-bar nav-bg">
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-white p-3 py-lg-0 px-lg-4"
+    >
+      <a
+        href=""
+        class="navbar-brand d-flex align-items-center m-0 p-0 d-lg-none"
+      >
+        <h1 class="text-primary m-0">Plumberz</h1>
+      </a>
       <button
         class="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+        data-bs-target="#navbarCollapse"
       >
-        <span class="navbar-toggler-icon"></span>
+        <span class="fa fa-bars"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
-          </li>
-        </ul>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav me-auto">
+          <router-link to="/" class="nav-item nav-link">Home</router-link>
+          <router-link to="/tasks" class="nav-item nav-link">Tasks</router-link>
+          <router-link to="/tasks/add" class="nav-item nav-link"
+            >Add Task</router-link
+          >
+          <div class="nav-item dropdown">
+            <a
+              href="#"
+              class="nav-link dropdown-toggle"
+              data-bs-toggle="dropdown"
+              >Pages</a
+            >
+            <div class="dropdown-menu fade-up m-0">
+              <a href="booking.html" class="dropdown-item">Booking</a>
+              <a href="team.html" class="dropdown-item">Technicians</a>
+              <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+              <a href="404.html" class="dropdown-item">404 Page</a>
+            </div>
+          </div>
+          <a href="contact.html" class="nav-item nav-link">Contact</a>
+        </div>
+        <div
+          class="call-box mt-4 mt-lg-0 me-lg-n4 py-3 px-4 d-flex align-items-center"
+        >
+          <div
+            class="d-flex flex-shrink-0 align-items-center justify-content-center bg-white"
+            style="width: 45px; height: 45px"
+          >
+            <i class="fa fa-phone-alt text-primary"></i>
+          </div>
+          <div class="ms-3">
+            <h5 class="m-0 text-light">+012 345 6789</h5>
+          </div>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </div>
+  <!-- Navbar End -->
 </template>
 
 <script>
@@ -39,3 +102,89 @@ export default {
   components: {},
 };
 </script>
+
+<style scoped>
+/*** Navbar ***/
+.nav-bg {
+  background-color: rgba(255, 111, 97, 0.08); /* 50% opacity */
+}
+.top-bar {
+  height: 75px;
+  padding: 0 4rem;
+}
+
+.nav-bar {
+  position: relative;
+  padding: 0 4.75rem;
+  transition: 0.5s;
+  z-index: 9999;
+}
+
+.nav-bar.sticky-top {
+  position: sticky;
+  padding: 0;
+  z-index: 9999;
+}
+
+.navbar .dropdown-toggle::after {
+  border: none;
+  content: "\f107";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  margin-right: 30px;
+  padding: 25px 0;
+  color: var(--dark-color);
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link.active {
+  color: var(--primary-color);
+}
+.call-box {
+  background-color: var(--primary-color);
+}
+@media (max-width: 991.98px) {
+  .nav-bar {
+    padding: 0;
+  }
+
+  .navbar-light .navbar-nav .nav-link {
+    margin-right: 0;
+    padding: 10px 0;
+  }
+
+  .navbar-light .navbar-nav {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eeeeee;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar .nav-item .dropdown-menu {
+    display: block;
+    border: none;
+    margin-top: 0;
+    top: 150%;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s;
+  }
+
+  .navbar .nav-item:hover .dropdown-menu {
+    top: 100%;
+    visibility: visible;
+    transition: 0.5s;
+    opacity: 1;
+  }
+}
+</style>

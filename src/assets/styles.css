@@ -1,8 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Oxygen&display=swap");
 
 :root {
-  --primary-color: #646cff;
-  --secondary-color: #535bf2;
+  --primary-color: #ff6f61;
+  --secondary-color: #ffd166;
+  --accent-color: #88d498;
+  --dark-color: #2f4858;
   --main-font: "Oxygen", sans-serif;
 }
 
@@ -12,6 +14,9 @@ body {
 .btn-primary {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
+}
+.text-primary {
+  color: var(--primary-color) !important;
 }
 
 /*Form Styles Start*/
