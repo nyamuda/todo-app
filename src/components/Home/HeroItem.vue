@@ -1,14 +1,11 @@
 <template>
   <section
     id="hero"
-    style="
-      background-image: url(../../assets/img/hero-bg.jpg);
-      background-repeat: no-repeat;
-    "
+    style="background-image: url(); background-repeat: no-repeat"
   >
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-md-6 pe-5 mt-5 mt-md-0">
+      <div class="row">
+        <div class="col-md-6 pe-5" style="margin-top: 5rem">
           <h2 class="display-1 text-uppercase">Organize Your Life</h2>
           <p class="fs-4 my-4 pb-2">
             Stay on top of your tasks with our simple to-do list app.
@@ -44,5 +41,8 @@
 .action-btn:hover {
   background-color: darken(var(--accent-color), 10%) !important;
   background-color: var(--accent-color);
+}
+#hero {
+  animation: fadeIn 0.1s ease-in;
 }
 </style>

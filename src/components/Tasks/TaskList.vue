@@ -19,105 +19,125 @@
         <button type="button" class="btn btn-primary">Add Task</button>
       </router-link>
     </div>
-    <div class="table-responsive">
-      <table class="table table-striped mt-3">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Due Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Show placeholders while loading -->
-          <template v-if="isGettingItems">
-            <tr v-for="n in 5" :key="n">
-              <td><span class="placeholder col-6"></span></td>
-              <td><span class="placeholder col-8"></span></td>
-              <td><span class="placeholder col-4"></span></td>
-              <td><span class="placeholder col-3"></span></td>
-              <td><span class="placeholder col-6"></span></td>
+
+    <!--Tasks Table Start-->
+    <div v-if="tasks.length > 0 || hasMoreItems">
+      <div class="table-responsive">
+        <table class="table table-striped mt-3 placeholder-glow">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Due Date</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
-          </template>
-          <!-- Show tasks once loaded -->
-          <template v-else>
-            <tr class="item-list" v-for="(task, index) in tasks" :key="index">
-              <td>{{ task.title }}</td>
-              <td>{{ task.description }}</td>
-              <td>{{ task.dueDate }}</td>
-              <td>
-                <span
-                  v-bind:class="{
-                    'text-success': task.isCompleted,
-                    'text-danger': !task.isCompleted,
-                  }"
-                >
-                  {{ task.isCompleted ? "Completed" : "Pending" }}
-                </span>
-              </td>
-              <td>
-                <div
-                  class="d-flex justify-content-start align-items-center flex-nowrap"
-                >
-                  <button
-                    v-if="isCompletingItem && pendingUpdateTaskId == task.id"
-                    class="btn btn-success btn-sm me-2"
-                    disabled
+          </thead>
+          <tbody>
+            <!-- Show placeholders while loading -->
+            <template v-if="isGettingItems">
+              <tr v-for="n in 5" :key="n">
+                <td><span class="placeholder col-6"></span></td>
+                <td><span class="placeholder col-8"></span></td>
+                <td><span class="placeholder col-4"></span></td>
+                <td><span class="placeholder col-3"></span></td>
+                <td><span class="placeholder col-6"></span></td>
+              </tr>
+            </template>
+            <!-- Show tasks once loaded -->
+            <template v-else>
+              <tr class="item-list" v-for="(task, index) in tasks" :key="index">
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.dueDate }}</td>
+                <td>
+                  <span
+                    v-bind:class="{
+                      'text-success': task.isCompleted,
+                      'text-danger': !task.isCompleted,
+                    }"
                   >
-                    <span
-                      class="spinner-border spinner-border-sm"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    Please wait...
-                  </button>
-                  <button
-                    v-else
-                    :disabled="task.isCompleted"
-                    class="btn btn-success btn-sm me-2 text-nowrap"
-                    @click="markCompleted(task.id)"
+                    {{ task.isCompleted ? "Completed" : "Pending" }}
+                  </span>
+                </td>
+                <td>
+                  <div
+                    class="d-flex justify-content-start align-items-center flex-nowrap"
                   >
-                    Mark Completed
-                  </button>
-                  <button
-                    class="btn btn-danger btn-sm"
-                    @click="confirmDelete(task.id)"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </template>
-        </tbody>
-      </table>
+                    <button
+                      v-if="isCompletingItem && pendingUpdateTaskId == task.id"
+                      class="btn btn-success btn-sm me-2"
+                      disabled
+                    >
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Please wait...
+                    </button>
+                    <button
+                      v-else
+                      :disabled="task.isCompleted"
+                      class="btn btn-success btn-sm me-2 text-nowrap"
+                      @click="markCompleted(task.id)"
+                    >
+                      Mark Completed
+                    </button>
+                    <button
+                      class="btn btn-danger btn-sm"
+                      @click="confirmDelete(task.id)"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+      <!--Load more items start-->
+      <div class="d-grid gap-2 col-md-3 mx-auto mt-3 mt-md-2">
+        <button
+          :class="{
+            'btn btn-secondary': !hasMoreItems,
+            'btn btn-primary': hasMoreItems,
+          }"
+          @click="loadMoreItems"
+          :disabled="isLoadingMoreItems || !hasMoreItems"
+        >
+          <span
+            v-if="isLoadingMoreItems"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          {{ isLoadingMoreItems ? "Loading..." : "Load more" }}
+        </button>
+      </div>
+      <!--Load more items end-->
     </div>
-    <!--Load more items start-->
+
+    <!--No Items  Start-->
     <div
-      v-if="tasks.length > 0"
-      class="d-grid gap-2 col-md-3 mx-auto mt-3 mt-md-2"
+      v-else
+      class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
     >
-      <button
-        :class="{
-          'btn btn-secondary': !hasMoreItems,
-          'btn btn-primary': hasMoreItems,
-        }"
-        @click="loadMoreItems"
-        :disabled="isLoadingMoreItems || !hasMoreItems"
-      >
-        <span
-          v-if="isLoadingMoreItems"
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        {{ isLoadingMoreItems ? "Loading..." : "Load more" }}
-      </button>
+      <div class="mb-4">
+        <!-- Font Awesome Icon for no tasks -->
+        <i class="fas fa-tasks fa-3x text-primary"></i>
+      </div>
+      <p class="fs-4 text-muted mb-2">You have no tasks to do right now</p>
+      <p class="text-muted">
+        Take a break or add some new tasks to get started.
+      </p>
     </div>
-    <!--Load more items end-->
+
+    <!--No Items End-->
   </div>
+  <!--Tasks Table End-->
+
   <!-- Modal Start-->
   <div
     v-if="showModal"

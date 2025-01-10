@@ -86,12 +86,7 @@
   <!-- Navbar End -->
 </template>
 
-<script>
-export default {
-  name: "NavBarItem",
-  components: {},
-};
-</script>
+<script setup></script>
 
 <style scoped>
 /*** Navbar ***/
