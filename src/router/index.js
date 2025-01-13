@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import TaskListView from "../views/TaskListView.vue";
 import TaskAddView from "../views/TaskAddView.vue";
+import LoginView from "@/views/LoginView.vue";
 
 const routes = [
   {
@@ -18,6 +19,18 @@ const routes = [
     path: "/tasks/add",
     name: "addTask",
     component: TaskAddView,
+  },
+
+  {
+    path: "/login",
+    name: "login",
+    component: LoginView,
+  },
+  //Google Oauth redirect URL
+  {
+    path: "/login/oauth/google/callback",
+    name: "googleLogin",
+    component: LoginView,
   },
 ];
 

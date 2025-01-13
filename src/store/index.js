@@ -20,9 +20,22 @@ export default createStore({
         hasMore: false, //whether there is more tasks to load
       },
       isLoadingMoreItems: false,
+      googleOauth: {
+        clientId:
+          "966223459862-dn8u4cgl991vff4h1c7cqormorbqh6v2.apps.googleusercontent.com",
+        redirectUrl: "http://localhost:8080/login/oauth/google/callback",
+        scope:
+          "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+        responseType: "code",
+      },
     };
   },
-  getters: {},
+  getters: {
+    googleLoginUrl(state) {
+      // Construct the authorization URL with the required parameters
+      return `https://accounts.google.com/o/oauth2/auth?client_id=${state.googleOauth.clientId}&redirect_uri=${state.googleOauth.redirectUrl}&response_type=${state.googleOauth.responseType}&scope=${state.googleOauth.scope}`;
+    },
+  },
   mutations: {
     formatTaskDate(state, tasks) {
       // mutate state by formatting the date
