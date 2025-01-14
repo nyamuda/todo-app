@@ -64,7 +64,7 @@
               type="checkbox"
               value=""
               id="loginCheck"
-              checked
+              v-model="loginForm.rememberMe"
             />
             <label class="form-check-label" for="loginCheck">
               Remember me
@@ -79,7 +79,11 @@
       </div>
 
       <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-2 w-100">
+      <button
+        @click="submitForm"
+        type="submit"
+        class="btn btn-primary btn-block mb-2 w-100"
+      >
         Sign in
       </button>
 
@@ -89,7 +93,7 @@
       </div>
     </form>
   </div>
-  <h1>{{ v$.email.$model }}</h1>
+  <h1>{{ loginForm.rememberMe }}</h1>
 </template>
 
 <script setup>
@@ -111,9 +115,10 @@ onMounted(() => {
 });
 
 //form validation with Vuelidate start
-const state = ref({
+const loginForm = ref({
   email: "",
   password: "",
+  rememberMe: false,
 });
 const passwordRule = helpers.regex(
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
@@ -121,18 +126,26 @@ const passwordRule = helpers.regex(
 let passwordErrorMessage =
   "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.";
 const rules = {
-  email: { required, email },
+  email: { required, email, $autoDirty: true },
   password: {
     required,
     passwordRule: helpers.withMessage(passwordErrorMessage, passwordRule),
+    $autoDirty: true,
   },
 };
 
-const v$ = useVuelidate(rules, state);
+const v$ = useVuelidate(rules, loginForm);
 //form validation with Vuelidate end
 
 let loginWithGoogle = () => {
   window.location.href = store.getters.googleLoginUrl;
+};
+
+let submitForm = async () => {
+  const isFormCorrect = await this.v$.$validate();
+  if (isFormCorrect) {
+    console.log("hey there");
+  }
 };
 </script>
 

@@ -3,6 +3,8 @@ import axios from "axios";
 import { useToast } from "vue-toastification";
 const toast = useToast();
 import router from "@/router";
+import { jwtDecode } from "jwt-decode";
+import { email } from "@vuelidate/validators";
 
 export default createStore({
   state() {
@@ -10,8 +12,9 @@ export default createStore({
       todoTasks: [],
       apiUrl: "https://quovoyapi.runasp.net/api/items",
       isGettingItems: false, //to show placeholder items
-      isCreatingItem: false, //to show the loading button
-      isCompletingItem: false, //to show the loading button
+      isCreatingItem: false, //to show the loading button during task creation
+      isCompletingItem: false, //to show the loading button during task completion
+      isLoggingIn: false, //to show loading button during log in process
       failureMessage: "Oops! Something went wrong. Please try again.",
       itemsPageInfo: {
         //page info for lazy loading
@@ -27,6 +30,12 @@ export default createStore({
         scope:
           "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
         responseType: "code",
+      },
+      attemptedUrl: "/", //attempted url when user is not authenticated
+      loggedInUser: {
+        id: "",
+        name: "",
+        email: "",
       },
     };
   },
@@ -85,6 +94,10 @@ export default createStore({
           dueDate: new Date(task.dueDate).toLocaleString(), // Format the dueDate
         };
       });
+    },
+    //add logged in user info
+    addUserInfo(state, info) {
+      state.loggedInUser = info;
     },
   },
   actions: {
@@ -280,6 +293,76 @@ export default createStore({
         toast.error(message);
       } else {
         toast(message);
+      }
+    },
+    //login user and get the JWT token
+    async loginUser({ dispatch, commit }, payload) {
+      try {
+        const { rememberMe, email } = payload;
+
+        this.state.isLoggingIn = true;
+        const response = await axios.post(
+          `${this.state.apiUrl}/account/login`,
+          payload
+        );
+
+        // Check if the request was successful
+        //status code will be 201 from the API
+        if (response.status == 201) {
+          //get the access token and decode it
+          let accessToken = response.data.token;
+          let decodedToken = jwtDecode(accessToken);
+
+          //check user has verified their email or not
+          let isVerified = decodedToken.isVerified;
+          if (isVerified) {
+            let userInfo = {
+              id: decodedToken["id"],
+              name: decodedToken["name"],
+              email: decodedToken["email"],
+            };
+            commit("addUserInfo", userInfo);
+
+            //if the user wants to be be remembered on log in
+            //save the JWT token to local storage
+            if (rememberMe) {
+              localStorage.setItem("jwt_token", accessToken);
+            }
+
+            //else save the JWT token to session storage
+            else {
+              sessionStorage.setItem("jwt_token", accessToken);
+            }
+
+            //show toast success message
+            let message = "Login successful";
+            dispatch("showToast", { message: message });
+
+            router.push(this.state.attemptedUrl);
+          }
+
+          //if not verified, send verification email
+          else {
+            await axios.post(`${this.state.apiUrl}/account/verify`, {
+              email: email,
+            });
+
+            router.push("/verify-email");
+          }
+        } else {
+          dispatch("showToast", {
+            message: response.data.message,
+            severity: "error",
+          });
+        }
+        this.state.isCreatingItem = false;
+      } catch {
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
+      } finally {
+        this.state.isLoggingIn = false;
       }
     },
   },
