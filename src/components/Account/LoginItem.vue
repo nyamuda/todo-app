@@ -93,7 +93,7 @@
       </div>
     </form>
   </div>
-  <h1>{{ loginForm.rememberMe }}</h1>
+
 </template>
 
 <script setup>

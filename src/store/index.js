@@ -4,7 +4,6 @@ import { useToast } from "vue-toastification";
 const toast = useToast();
 import router from "@/router";
 import { jwtDecode } from "jwt-decode";
-import { email } from "@vuelidate/validators";
 
 export default createStore({
   state() {
@@ -26,7 +25,8 @@ export default createStore({
       googleOauth: {
         clientId:
           "493408617395-dsbcps3dthaspgan66b9jt3auq6iut0v.apps.googleusercontent.com",
-        redirectUrl: "http://localhost:8080/login/oauth/google/callback",
+        redirectUrl:
+          "http://localhost:8080/account/login/oauth/google/callback",
         scope:
           "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
         responseType: "code",
@@ -347,7 +347,7 @@ export default createStore({
               email: email,
             });
 
-            router.push("/verify-email");
+            router.push("/account/verify");
           }
         } else {
           dispatch("showToast", {

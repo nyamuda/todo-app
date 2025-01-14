@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import TaskListView from "../views/TaskListView.vue";
 import TaskAddView from "../views/TaskAddView.vue";
 import LoginView from "@/views/LoginView.vue";
+import EmailVerificationView from "@/views/EmailVerificationView.vue";
 
 const routes = [
   {
@@ -22,15 +23,20 @@ const routes = [
   },
 
   {
-    path: "/login",
+    path: "/account/login",
     name: "login",
     component: LoginView,
   },
   //Google Oauth redirect URL
   {
-    path: "/login/oauth/google/callback",
+    path: "/account/login/oauth/google/callback",
     name: "googleLogin",
     component: LoginView,
+  },
+  {
+    path: "/account/verify",
+    name: "emailVerification",
+    component: EmailVerificationView,
   },
 ];
 
