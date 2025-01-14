@@ -4,6 +4,7 @@ import TaskListView from "../views/TaskListView.vue";
 import TaskAddView from "../views/TaskAddView.vue";
 import LoginView from "@/views/LoginView.vue";
 import EmailVerificationView from "@/views/EmailVerificationView.vue";
+import RegisterView from "@/views/RegisterView.vue";
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
     path: "/account/verify",
     name: "emailVerification",
     component: EmailVerificationView,
+  },
+  {
+    path: "/account/register",
+    name: "register",
+    component: RegisterView,
   },
 ];
 

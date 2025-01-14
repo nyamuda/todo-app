@@ -12,7 +12,11 @@
         </button>
       </div>
 
-      <p class="text-center">or:</p>
+      <div class="d-flex align-items-center my-1">
+        <hr class="flex-grow-1" />
+        <p class="text-center fw-bold mx-3 mb-0">Or</p>
+        <hr class="flex-grow-1" />
+      </div>
 
       <!-- Email input -->
       <div class="mb-3">
@@ -80,6 +84,21 @@
 
       <!-- Submit button -->
       <button
+        v-if="isLoggingIn"
+        type="submit"
+        class="btn btn-primary btn-block mb-2 w-100"
+        disabled
+      >
+        <span
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        Please wait...
+      </button>
+      <button
+        v-else
+        :disabled="v$.$errors.length > 0"
         @click="submitForm"
         type="submit"
         class="btn btn-primary btn-block mb-2 w-100"
@@ -89,15 +108,17 @@
 
       <!-- Register buttons -->
       <div class="text-center">
-        <p>Not a member? <a href="#!">Register</a></p>
+        <p>
+          Don't have an account?
+          <router-link to="/account/register">Register here</router-link>
+        </p>
       </div>
     </form>
   </div>
-
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 //Vuelidate for login form validation
@@ -111,7 +132,12 @@ const route = useRouter();
 let code = ref("");
 
 onMounted(() => {
-  code.value = route.currentRoute.value.query.code ?? "no code";
+  v$._value.$touch();
+  code.value = route.currentRoute.value.query.code ?? "";
+
+  if (code.value) {
+    code.value = "it exists";
+  }
 });
 
 //form validation with Vuelidate start
@@ -126,15 +152,14 @@ const passwordRule = helpers.regex(
 let passwordErrorMessage =
   "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.";
 const rules = {
-  email: { required, email, $autoDirty: true },
+  email: { required, email },
   password: {
     required,
     passwordRule: helpers.withMessage(passwordErrorMessage, passwordRule),
-    $autoDirty: true,
   },
 };
 
-const v$ = useVuelidate(rules, loginForm);
+const v$ = useVuelidate(rules, loginForm.value);
 //form validation with Vuelidate end
 
 let loginWithGoogle = () => {
@@ -147,12 +172,13 @@ let submitForm = async () => {
     console.log("hey there");
   }
 };
+let isLoggingIn = computed(() => store.state.isLoggingIn);
 </script>
 
 <style>
 .login-form {
   @media (min-width: 768px) {
-    max-width: 30rem;
+    max-width: 33rem;
   }
 }
 </style>

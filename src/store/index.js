@@ -14,6 +14,7 @@ export default createStore({
       isCreatingItem: false, //to show the loading button during task creation
       isCompletingItem: false, //to show the loading button during task completion
       isLoggingIn: false, //to show loading button during log in process
+      isRegistering: false, //to show loading button during registering process
       failureMessage: "Oops! Something went wrong. Please try again.",
       itemsPageInfo: {
         //page info for lazy loading
@@ -355,7 +356,6 @@ export default createStore({
             severity: "error",
           });
         }
-        this.state.isCreatingItem = false;
       } catch {
         dispatch("showToast", {
           message: this.state.failureMessage,
@@ -363,6 +363,40 @@ export default createStore({
         });
       } finally {
         this.state.isLoggingIn = false;
+      }
+    },
+    //Register user
+    async registerUser({ dispatch }, payload) {
+      try {
+        const { email } = payload;
+
+        this.state.isRegistering = true;
+        const response = await axios.post(
+          `${this.state.apiUrl}/account/register`,
+          payload
+        );
+
+        // Check if the request was successful
+        //status code will be 201 from the API
+        if (response.status == 201) {
+          //send verification email
+          await axios.post(`${this.state.apiUrl}/account/verify`, {
+            email: email,
+          });
+          router.push("/account/verify");
+        } else {
+          dispatch("showToast", {
+            message: response.data.message,
+            severity: "error",
+          });
+        }
+      } catch {
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
+      } finally {
+        this.state.isRegistering = false;
       }
     },
   },
