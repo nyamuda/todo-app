@@ -1,39 +1,35 @@
 <template>
   <div>
-    <div
-      class="container-fluid custom d-flex flex-column justify-content-center align-items-center text-center mt-5 email-container"
-    >
-      <div>
-        <div v-if="verificationStatus == 'success'">
-          <p><i class="far fa-check-circle fa-5x text-success"></i></p>
-          <h2>Thank You!</h2>
-          <p>Your email address has been successfully verified.</p>
-          <router-link :to="'/' + attemptedUrl"
-            ><a class="btn btn-primary">Continue</a></router-link
+    <div class="container-fluid m-auto text-center">
+      <div v-if="verificationStatus == 'success'">
+        <p><i class="far fa-check-circle fa-5x text-success"></i></p>
+        <h2>Thank You!</h2>
+        <p>Your email address has been successfully verified.</p>
+        <router-link :to="'/' + attemptedUrl"
+          ><a class="btn btn-primary">Continue</a></router-link
+        >
+      </div>
+
+      <div v-else-if="verificationStatus == 'fail'">
+        <p><i class="fas fa-times fa-5x text-danger"></i></p>
+
+        <h2>Verification Failed</h2>
+        <p>
+          Sorry, an unexpected error occurred during the verification process.
+          Please try again later.
+        </p>
+      </div>
+
+      <div v-else>
+        <div class="d-flex align-items-center justify-content-center">
+          <div
+            class="spinner-border me-1"
+            role="status"
+            style="width: 3rem; height: 3rem"
           >
-        </div>
-
-        <div v-else-if="verificationStatus == 'fail'">
-          <p><i class="fas fa-times fa-5x text-danger"></i></p>
-
-          <h2>Verification Failed</h2>
-          <p>
-            Sorry, an unexpected error occurred during the verification process.
-            Please try again later.
-          </p>
-        </div>
-
-        <div v-else>
-          <div class="d-flex align-items-center justify-content-center">
-            <div
-              class="spinner-border me-1"
-              role="status"
-              style="width: 3rem; height: 3rem"
-            >
-              <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="ms-1 fw-bold">Please wait...</div>
+            <span class="visually-hidden">Loading...</span>
           </div>
+          <div class="ms-1 fw-bold">Verifying...</div>
         </div>
       </div>
     </div>

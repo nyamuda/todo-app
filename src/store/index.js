@@ -414,7 +414,7 @@ export default createStore({
 
         // Check if the request was successful
         //status code will be 200 from the API
-        if (response.status == 201) {
+        if (response.status == 204) {
           //if the token has been verified
           //save it to local storage
           localStorage.setItem("jwt_token", token);
@@ -429,6 +429,31 @@ export default createStore({
         }
       } catch {
         this.state.emailVerificationStatus = "fail";
+      }
+    },
+    //send password reset link to user who has forgotten their password
+    async sendPasswordResetLink({ dispatch }, payload) {
+      try {
+        const { email } = payload;
+        const response = await axios.post(
+          `${this.state.apiUrl}/account/password/forgot`,
+          { email }
+        );
+        // Check if the request was successful
+        //status code will be 200 from the API
+        if (response.status == 200) {
+          router.push("/account/password/email");
+        } else {
+          dispatch("showToast", {
+            message: response.data.message,
+            severity: "error",
+          });
+        }
+      } catch {
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
       }
     },
   },

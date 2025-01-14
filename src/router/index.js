@@ -5,7 +5,9 @@ import TaskAddView from "../views/Tasks/TaskAddView.vue";
 import LoginView from "@/views/Account/LoginView.vue";
 import EmailVerificationView from "@/views/Account/EmailVerificationView.vue";
 import RegisterView from "@/views/Account/RegisterView.vue";
-import EmailVerificationResult from "@/components/Account/EmailVerificationResult.vue";
+import PasswordForgotView from "@/views/Account/PasswordForgotView.vue";
+import EmailVerificationResultView from "@/views/Account/EmailVerificationResultView.vue";
+import PasswordForgotEmailView from "@/views/Account/PasswordForgotEmailView.vue";
 
 const routes = [
   {
@@ -43,12 +45,22 @@ const routes = [
   {
     path: "/account/verify/token",
     name: "emailVerificationResult",
-    component: EmailVerificationResult,
+    component: EmailVerificationResultView,
   },
   {
     path: "/account/register",
     name: "register",
     component: RegisterView,
+  },
+  {
+    path: "/account/password/forgot",
+    name: "forgotPassword",
+    component: PasswordForgotView,
+  },
+  {
+    path: "/account/password/forgot/email",
+    name: "forgotPasswordEmail",
+    component: PasswordForgotEmailView,
   },
 ];
 
