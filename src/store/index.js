@@ -22,7 +22,7 @@ export default createStore({
       isLoadingMoreItems: false,
       googleOauth: {
         clientId:
-          "966223459862-dn8u4cgl991vff4h1c7cqormorbqh6v2.apps.googleusercontent.com",
+          "493408617395-dsbcps3dthaspgan66b9jt3auq6iut0v.apps.googleusercontent.com",
         redirectUrl: "http://localhost:8080/login/oauth/google/callback",
         scope:
           "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
