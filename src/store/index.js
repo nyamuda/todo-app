@@ -16,6 +16,7 @@ export default createStore({
       isLoggingIn: false, //to show loading button during log in process
       isRegistering: false, //to show loading button during registering process
       failureMessage: "Oops! Something went wrong. Please try again.",
+      emailVerificationStatus: "fail",
       itemsPageInfo: {
         //page info for lazy loading
         page: 1, //current page size
@@ -397,6 +398,37 @@ export default createStore({
         });
       } finally {
         this.state.isRegistering = false;
+      }
+    },
+    //verify user email address
+    //by verifying the token sent to their email
+    async verifyUser({ dispatch }, payload) {
+      this.state.emailVerificationStatus = "verifying";
+      const { token } = payload;
+
+      try {
+        const response = await axios.post(
+          `${this.state.apiUrl}/account/verify/token`,
+          payload
+        );
+
+        // Check if the request was successful
+        //status code will be 200 from the API
+        if (response.status == 201) {
+          //if the token has been verified
+          //save it to local storage
+          localStorage.setItem("jwt_token", token);
+
+          this.state.emailVerificationStatus = "success";
+        } else {
+          dispatch("showToast", {
+            message: response.data.message,
+            severity: "error",
+          });
+          this.state.emailVerificationStatus = "fail";
+        }
+      } catch {
+        this.state.emailVerificationStatus = "fail";
       }
     },
   },

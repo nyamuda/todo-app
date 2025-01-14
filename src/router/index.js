@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import TaskListView from "../views/TaskListView.vue";
-import TaskAddView from "../views/TaskAddView.vue";
-import LoginView from "@/views/LoginView.vue";
-import EmailVerificationView from "@/views/EmailVerificationView.vue";
-import RegisterView from "@/views/RegisterView.vue";
+import TaskListView from "../views/Tasks/TaskListView.vue";
+import TaskAddView from "../views/Tasks/TaskAddView.vue";
+import LoginView from "@/views/Account/LoginView.vue";
+import EmailVerificationView from "@/views/Account/EmailVerificationView.vue";
+import RegisterView from "@/views/Account/RegisterView.vue";
+import EmailVerificationResult from "@/components/Account/EmailVerificationResult.vue";
 
 const routes = [
   {
@@ -38,6 +39,11 @@ const routes = [
     path: "/account/verify",
     name: "emailVerification",
     component: EmailVerificationView,
+  },
+  {
+    path: "/account/verify/token",
+    name: "emailVerificationResult",
+    component: EmailVerificationResult,
   },
   {
     path: "/account/register",
