@@ -178,8 +178,8 @@ let isLoggingIn = computed(() => store.state.isLoggingIn);
 </script>
 
 <style scoped>
-.login-form {
-  @media (min-width: 768px) {
+@media (min-width: 768px) {
+  .login-form {
     max-width: 33rem;
   }
 }

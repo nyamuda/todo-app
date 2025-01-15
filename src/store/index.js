@@ -36,10 +36,10 @@ export default createStore({
       },
       attemptedUrl: "/", //attempted url when user is not authenticated
       loggedInUser: {
-        id: "",
         name: "",
         email: "",
       },
+      isAuthenticated: false, //is user logged in or not
     };
   },
   getters: {
@@ -101,6 +101,14 @@ export default createStore({
     //add logged in user info
     addUserInfo(state, info) {
       state.loggedInUser = info;
+    },
+    //mark the user as authenticated or not
+    authenticateUser(state, isAuthenticated) {
+      state.isAuthenticated = isAuthenticated;
+    },
+    //set Url user attempted to access when they're not logged in
+    setAttemptedUrl(state, url) {
+      state.attemptedUrl = url;
     },
   },
   actions: {
@@ -320,7 +328,6 @@ export default createStore({
           let isVerified = decodedToken.isVerified;
           if (isVerified) {
             let userInfo = {
-              id: decodedToken["id"],
               name: decodedToken["name"],
               email: decodedToken["email"],
             };
@@ -495,6 +502,32 @@ export default createStore({
         });
       } finally {
         this.state.isResettingPassword = false;
+      }
+    },
+    //check to see if user is authenticated by using the Jwt token
+    authenticateUser({ commit }) {
+      //check if there is a token in session storage
+      let sessionToken = sessionStorage.getItem("jwt_token");
+      //check if there is a token in local storage
+      let localToken = localStorage.getItem("jwt_token");
+
+      //the current token
+      let token = sessionToken ? sessionToken : localToken ? localToken : "";
+
+      try {
+        if (token) {
+          //check if token has expired or not
+          const decoded = jwtDecode(token);
+
+          // Convert time to seconds
+          const currentTime = Date.now() / 1000;
+
+          const hasExpired = decoded.exp > currentTime;
+
+          commit("authenticateUser", hasExpired);
+        }
+      } catch (error) {
+        return false;
       }
     },
   },

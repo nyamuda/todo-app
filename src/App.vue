@@ -11,6 +11,15 @@
 <script setup>
 import NavBarItem from "./components/Layout/NavBarItem.vue";
 import FooterItem from "./components/Layout/FooterItem.vue";
+import { onMounted } from "vue";
+
+import { useStore } from "vuex";
+const store = useStore();
+
+onMounted(() => {
+  //Check if user is authenticated or not
+  store.dispatch("authenticateUser");
+});
 </script>
 
 <style>

@@ -9,64 +9,85 @@ import PasswordForgotView from "@/views/Account/PasswordForgotView.vue";
 import EmailVerificationResultView from "@/views/Account/EmailVerificationResultView.vue";
 import PasswordForgotEmailView from "@/views/Account/PasswordForgotEmailView.vue";
 import PasswordResetView from "@/views/Account/PasswordResetView.vue";
-
+import UserDashboardView from "@/views/Account/UserDashboardView.vue";
+import store from "@/store";
 const routes = [
   {
     path: "/",
     name: "home",
     component: HomeView,
   },
-  {
-    path: "/tasks",
-    name: "tasks",
-    component: TaskListView,
-  },
-  {
-    path: "/tasks/add",
-    name: "addTask",
-    component: TaskAddView,
-  },
 
   {
-    path: "/account/login",
-    name: "login",
-    component: LoginView,
-  },
-  //Google Oauth redirect URL
-  {
-    path: "/account/login/oauth/google/callback",
-    name: "googleLogin",
-    component: LoginView,
-  },
-  {
-    path: "/account/verify",
-    name: "emailVerification",
-    component: EmailVerificationView,
+    path: "/tasks",
+    component: TaskListView,
+    name: "Tasks",
+    beforeEnter: (to) => {
+      if (!store.state.isAuthenticated) {
+        store.commit("setAttemptedUrl", to.fullPath); // Save the attempted URL
+        return { name: "Login" }; // Redirect to login page
+      }
+      return true;
+    },
+    children: [{ path: "add", name: "AddTask", component: TaskAddView }],
   },
   {
-    path: "/account/verify/token",
-    name: "emailVerificationResult",
-    component: EmailVerificationResultView,
-  },
-  {
-    path: "/account/register",
-    name: "register",
-    component: RegisterView,
-  },
-  {
-    path: "/account/password/forgot",
-    name: "forgotPassword",
-    component: PasswordForgotView,
-  },
-  {
-    path: "/account/password/forgot/email",
-    name: "forgotPasswordEmail",
-    component: PasswordForgotEmailView,
-  },
-  {
-    path: "/account/password/reset",
-    name: "resetPassword",
-    component: PasswordResetView,
+    path: "/account",
+    children: [
+      {
+        path: "",
+        component: UserDashboardView,
+        name: "UserDashboard",
+        beforeEnter: (to) => {
+          if (!store.state.isAuthenticated) {
+            store.commit("setAttemptedUrl", to.fullPath); // Save the attempted URL
+            return { name: "Login" }; // Redirect to login page
+          }
+          return true;
+        },
+      },
+      {
+        path: "login",
+        name: "Login",
+        component: LoginView,
+      },
+      {
+        path: "register",
+        name: "Register",
+        component: RegisterView,
+      },
+      {
+        path: "verify",
+        name: "VerifyEmail",
+        component: EmailVerificationView,
+      },
+      {
+        path: "verify/token",
+        name: "VerificationResult",
+        component: EmailVerificationResultView,
+      },
+      {
+        path: "password/forgot",
+        name: "PasswordForgot",
+        component: PasswordForgotView,
+      },
+
+      {
+        path: "password/forgot/email",
+        name: "PasswordForgotEmail",
+        component: PasswordForgotEmailView,
+      },
+      {
+        path: "password/reset",
+        name: "PasswordReset",
+        component: PasswordResetView,
+      },
+      {
+        path: "login/oauth/google/callback", //Google Oauth redirect URL
+        name: "GoogleLogin",
+        component: LoginView,
+      },
+    ],
   },
 ];
 

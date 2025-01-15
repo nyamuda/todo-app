@@ -1,9 +1,6 @@
 <template>
   <div class="">
-    <form
-      @submit.prevent="submitForm"
-      class="login-form m-auto shadow px-5 py-3"
-    >
+    <form @submit.prevent="submitForm" class="register-form m-auto px-5 py-3">
       <div class="text-center mb-3">
         <p>Sign up with</p>
         <button
@@ -166,10 +163,10 @@ let submitForm = async () => {
 let isRegistering = computed(() => store.state.isRegistering);
 </script>
 
-<style>
-.login-form {
-  @media (min-width: 768px) {
-    max-width: 30rem;
+<style scoped>
+@media (min-width: 768px) {
+  .register-form {
+    max-width: 33rem;
   }
 }
 </style>
