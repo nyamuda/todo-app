@@ -64,13 +64,33 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav me-auto">
           <router-link to="/" class="nav-item nav-link">Home</router-link>
-          <router-link to="/tasks" class="nav-item nav-link">Tasks</router-link>
-          <router-link to="/tasks/add" class="nav-item nav-link"
-            >Add Task</router-link
+          <router-link to="/contact" class="nav-item nav-link"
+            >Contact</router-link
           >
         </div>
 
-        <div class="d-flex flex-column flex-md-row">
+        <!--Account section-->
+
+        <div v-if="!isAuthenticated" class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle cursor-pointer d-flex align-items-center"
+            data-bs-toggle="dropdown"
+          >
+            <i class="fa-regular fa-user fa-2xl"></i>
+            <span class="ms-1">Account</span></a
+          >
+          <div class="dropdown-menu fade-up m-0">
+            <router-link class="dropdown-item" to="/account"
+              >Dashboard</router-link
+            >
+            <router-link class="dropdown-item" to="/tasks">Tasks</router-link>
+            <router-link class="dropdown-item" to="/tasks/add"
+              >Add task</router-link
+            >
+          </div>
+        </div>
+
+        <div v-else class="d-flex flex-column flex-md-row">
           <router-link to="/account/login"
             ><button class="btn btn-outline-dark w-100 py-2 px-4">
               Log in
@@ -84,6 +104,7 @@
             </button></router-link
           >
         </div>
+
         <!-- <div class="call-box mt-4 mt-lg-0 py-3 px-4 d-flex align-items-center"> 
           <div
             class="d-flex flex-shrink-0 align-items-center justify-content-center bg-white"
@@ -101,7 +122,13 @@
   <!-- Navbar End -->
 </template>
 
-<script setup></script>
+<script setup>
+import { useStore } from "vuex";
+const store = useStore();
+import { computed } from "vue";
+
+let isAuthenticated = computed(() => store.state.isAuthenticated);
+</script>
 
 <style scoped>
 /*** Navbar ***/
@@ -152,6 +179,14 @@
   font-weight: 600;
   text-transform: uppercase;
   outline: none;
+}
+.dropdown-item,
+.dropdown-toggle,
+.fa-user {
+  color: var(--dark-color);
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .navbar-light .navbar-nav .nav-link:hover,

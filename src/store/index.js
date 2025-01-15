@@ -16,6 +16,7 @@ export default createStore({
       isLoggingIn: false, //to show loading button during log in process
       isRegistering: false, //to show loading button during registering process
       isResettingPassword: false, //to show loading button during password reset process
+      isContactingUs: false, //to show loading button during contact us process
       failureMessage: "Oops! Something went wrong. Please try again.",
       emailVerificationStatus: "fail",
       itemsPageInfo: {
@@ -528,6 +529,39 @@ export default createStore({
         }
       } catch (error) {
         return false;
+      }
+    },
+    //Contact us message from user
+    async contactUs({ dispatch }, payload) {
+      try {
+        this.state.isContactingUs = true;
+        const response = await axios.post(
+          `${this.state.apiUrl}/contact`,
+          payload
+        );
+        // Check if the request was successful
+        //status code will be 201 from the API
+        if (response.status == 201) {
+          let message =
+            "We’ve received your message. Our team will get back to you shortly.";
+          dispatch("showToast", {
+            message: message,
+            severity: "success",
+          });
+          router.push("/");
+        } else {
+          dispatch("showToast", {
+            message: response.data.message,
+            severity: "error",
+          });
+        }
+      } catch {
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
+      } finally {
+        this.state.isContactingUs = false;
       }
     },
   },

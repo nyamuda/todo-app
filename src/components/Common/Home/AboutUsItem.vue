@@ -10,7 +10,7 @@
         >
           <div class="position-relative h-100">
             <img
-              src="../../assets/img/about.png"
+              src="@/assets/img/about.png"
               alt="To-Do List App Interface"
               class="img-fluid rounded-lg"
             />

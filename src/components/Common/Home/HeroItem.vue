@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="col-md-6 mt-5">
-          <img src="../../assets/img/hero1.png" alt="img" class="img-fluid" />
+          <img src="@/assets/img/hero1.png" alt="img" class="img-fluid" />
         </div>
       </div>
     </div>

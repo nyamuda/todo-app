@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "@/views/Common/HomeView.vue";
 import TaskListView from "../views/Tasks/TaskListView.vue";
 import TaskAddView from "../views/Tasks/TaskAddView.vue";
 import LoginView from "@/views/Account/LoginView.vue";
@@ -10,12 +10,18 @@ import EmailVerificationResultView from "@/views/Account/EmailVerificationResult
 import PasswordForgotEmailView from "@/views/Account/PasswordForgotEmailView.vue";
 import PasswordResetView from "@/views/Account/PasswordResetView.vue";
 import UserDashboardView from "@/views/Account/UserDashboardView.vue";
+import ContactUsView from "@/views/Common/ContactUsView.vue";
 import store from "@/store";
 const routes = [
   {
     path: "/",
-    name: "home",
+    name: "Home",
     component: HomeView,
+  },
+  {
+    path: "/contact",
+    name: "Contact",
+    component: ContactUsView,
   },
 
   {
