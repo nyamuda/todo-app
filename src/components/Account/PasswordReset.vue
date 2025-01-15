@@ -1,10 +1,10 @@
 <template>
   <div class="">
-    <div class="text-center">
-      <h2 class="fw-bold">Reset Your Password</h2>
-      <p>Enter your new password.</p>
-    </div>
     <form class="reset-password-form m-auto">
+      <div class="text-start">
+        <h2 class="fw-bold">Reset Your Password</h2>
+        <p>Enter your new password.</p>
+      </div>
       <!-- Password input -->
       <div class="form-outline mb-3">
         <label for="resetPassword" class="form-label">Password</label>
@@ -71,7 +71,6 @@
         Change password
       </button>
     </form>
-    <h1>{{ providedToken }}</h1>
   </div>
 </template>
 

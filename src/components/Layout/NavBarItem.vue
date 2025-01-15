@@ -69,7 +69,22 @@
             >Add Task</router-link
           >
         </div>
-        <div class="call-box mt-4 mt-lg-0 py-3 px-4 d-flex align-items-center">
+
+        <div class="d-flex flex-column flex-md-row">
+          <router-link to="/account/login"
+            ><button class="btn btn-outline-dark w-100 py-2 px-4">
+              Log in
+            </button></router-link
+          >
+          <router-link to="/account/register"
+            ><button
+              class="btn btn-primary w-100 py-2 px-4 mt-2 mt-md-0 ms-md-2"
+            >
+              Sign up
+            </button></router-link
+          >
+        </div>
+        <!-- <div class="call-box mt-4 mt-lg-0 py-3 px-4 d-flex align-items-center"> 
           <div
             class="d-flex flex-shrink-0 align-items-center justify-content-center bg-white"
             style="width: 2.6rem; height: 2.6rem"
@@ -79,7 +94,7 @@
           <div class="ms-3">
             <h5 class="m-0 text-light">+27 67 331 9415</h5>
           </div>
-        </div>
+        </div> -->
       </div>
     </nav>
   </div>
@@ -144,7 +159,7 @@
   color: var(--primary-color);
 }
 .call-box {
-  background-color: var(--primary-color);
+  /* background-color: var(--primary-color); */
 }
 @media (max-width: 991.98px) {
   .nav-bar {

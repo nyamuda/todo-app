@@ -78,7 +78,9 @@
 
         <div class="col-md-6 d-flex justify-content-center">
           <!-- Simple link -->
-          <a href="#!">Forgot password?</a>
+          <router-link to="/account/password/forgot"
+            >Forgot password?</router-link
+          >
         </div>
       </div>
 
