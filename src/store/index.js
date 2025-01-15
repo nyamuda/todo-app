@@ -15,6 +15,7 @@ export default createStore({
       isCompletingItem: false, //to show the loading button during task completion
       isLoggingIn: false, //to show loading button during log in process
       isRegistering: false, //to show loading button during registering process
+      isResettingPassword: false, //to show loading button during password reset process
       failureMessage: "Oops! Something went wrong. Please try again.",
       emailVerificationStatus: "fail",
       itemsPageInfo: {
@@ -454,6 +455,46 @@ export default createStore({
           message: this.state.failureMessage,
           severity: "error",
         });
+      }
+    },
+    //allow user to change their password
+    //by verifying the reset password token sent to their email
+    async resetPassword({ dispatch }, payload) {
+      this.state.isResettingPassword = true;
+      const { token } = payload;
+
+      try {
+        const response = await axios.post(
+          `${this.state.apiUrl}/account/password/reset`,
+          { token }
+        );
+
+        // Check if the request was successful
+        //status code will be 200 from the API
+        if (response.status == 200) {
+          //if the token has been verified
+          let message =
+            "Your password has been successfully reset. You can now log in with your new password.";
+          dispatch("showToast", {
+            message: message,
+            severity: "success",
+          });
+          router.push("/account/login");
+        } else {
+          dispatch("showToast", {
+            message: response.data.message,
+            severity: "error",
+          });
+        }
+      } catch {
+        let message =
+          "Password reset failed. Please ensure the link is correct or try again later.";
+        dispatch("showToast", {
+          message: message,
+          severity: "error",
+        });
+      } finally {
+        this.state.isResettingPassword = false;
       }
     },
   },

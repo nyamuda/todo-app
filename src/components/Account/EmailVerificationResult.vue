@@ -47,7 +47,7 @@ const store = useStore();
 onMounted(() => {
   //get the token provided in the URL from
   //when the user clicks the verify button in their confirmation email
-  let providedToken = route.currentRoute.value.query.code ?? "";
+  let providedToken = route.currentRoute.value.query.token ?? "";
   if (providedToken) {
     //verify the authenticity of the token
     store.dispatch("verifyUser", { token: providedToken });

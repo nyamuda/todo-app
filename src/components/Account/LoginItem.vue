@@ -167,7 +167,7 @@ let loginWithGoogle = () => {
 };
 
 let submitForm = async () => {
-  const isFormCorrect = await this.v$.$validate();
+  const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
     console.log("hey there");
   }
@@ -175,7 +175,7 @@ let submitForm = async () => {
 let isLoggingIn = computed(() => store.state.isLoggingIn);
 </script>
 
-<style>
+<style scoped>
 .login-form {
   @media (min-width: 768px) {
     max-width: 33rem;

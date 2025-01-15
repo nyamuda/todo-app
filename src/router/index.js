@@ -8,6 +8,7 @@ import RegisterView from "@/views/Account/RegisterView.vue";
 import PasswordForgotView from "@/views/Account/PasswordForgotView.vue";
 import EmailVerificationResultView from "@/views/Account/EmailVerificationResultView.vue";
 import PasswordForgotEmailView from "@/views/Account/PasswordForgotEmailView.vue";
+import PasswordResetView from "@/views/Account/PasswordResetView.vue";
 
 const routes = [
   {
@@ -61,6 +62,11 @@ const routes = [
     path: "/account/password/forgot/email",
     name: "forgotPasswordEmail",
     component: PasswordForgotEmailView,
+  },
+  {
+    path: "/account/password/reset",
+    name: "resetPassword",
+    component: PasswordResetView,
   },
 ];
 

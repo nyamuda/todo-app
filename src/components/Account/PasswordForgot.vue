@@ -8,19 +8,14 @@
       <p>We'll send you a link to reset your password.</p>
       <form @submit.prevent="submitForm" class="form">
         <div class="form-group mb-3">
-          <div class="input-group mt-3">
-            <span class="input-group-addon"
-              ><i class="glyphicon glyphicon-envelope color-blue"></i
-            ></span>
-            <input
-              id="emailInput"
-              placeholder="email address"
-              class="form-control"
-              type="email"
-              required
-              v-model="email"
-            />
-          </div>
+          <input
+            id="emailInput"
+            placeholder="email address"
+            class="form-control"
+            type="email"
+            required
+            v-model="email"
+          />
         </div>
         <!-- Submit button -->
         <button type="submit" class="btn btn-primary btn-block mb-2 w-100">
@@ -44,7 +39,7 @@ let submitForm = async () => {
 };
 </script>
 
-<style>
+<style scoped>
 @media (min-width: 512px) {
   .forgot-form {
     max-width: 28rem;
