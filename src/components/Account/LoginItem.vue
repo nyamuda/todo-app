@@ -169,7 +169,7 @@ let loginWithGoogle = () => {
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    console.log("hey there");
+    store.dispatch("loginUser", loginForm.value);
   }
 };
 let isLoggingIn = computed(() => store.state.isLoggingIn);

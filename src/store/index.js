@@ -314,12 +314,12 @@ export default createStore({
     //login user and get the JWT token
     async loginUser({ dispatch, commit }, payload) {
       try {
-        const { rememberMe, email } = payload;
-
+        const { rememberMe, email, password } = payload;
+        let loginDetails = { email, password };
         this.state.isLoggingIn = true;
         const response = await axios.post(
           `${this.state.apiUrl}/account/login`,
-          payload
+          loginDetails
         );
 
         // Check if the request was successful
@@ -329,31 +329,38 @@ export default createStore({
           let accessToken = response.data.token;
           let decodedToken = jwtDecode(accessToken);
 
-          console.log(decodedToken);
-
-          //check user has verified their email or not
-          let isVerified = decodedToken.isVerified;
+          // Extract the claims (name, isVerified etc.)
+          const name =
+            decodedToken[
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+            ];
+          let isVerified = decodedToken["isVerified"];
           if (isVerified) {
+            //store user information
             let userInfo = {
-              name: decodedToken["name"],
-              email: decodedToken["email"],
+              name: name,
+              email: email,
             };
             commit("addUserInfo", userInfo);
 
             //if the user wants to be be remembered on log in
             //save the JWT token to local storage
             if (rememberMe) {
-              //localStorage.setItem("jwt_token", accessToken);
+              localStorage.setItem("jwt_token", accessToken);
             }
 
             //else save the JWT token to session storage
             else {
-              //sessionStorage.setItem("jwt_token", accessToken);
+              sessionStorage.setItem("jwt_token", accessToken);
             }
+
+            //mark the user as authenticated
+            commit("authenticateUser", true);
 
             //show toast success message
             let message = "Login successful";
-            dispatch("showToast", { message: message });
+
+            dispatch("showToast", { message: message, severity: "success" });
 
             router.push(this.state.attemptedUrl);
           }
@@ -380,6 +387,31 @@ export default createStore({
       } finally {
         this.state.isLoggingIn = false;
       }
+    },
+
+    // When the user logs out
+    logoutUser({ dispatch, commit }) {
+      //first, remove access token from local or session storage
+      localStorage.removeItem("jwt_token");
+      sessionStorage.removeItem("jwt_token");
+
+      //second, clear the user info from the state
+      let userInfo = {
+        name: "",
+        email: "",
+      };
+      commit("addUserInfo", userInfo);
+
+      //third, mark the user as unauthenticated
+      commit("authenticateUser", false);
+
+      //finally, navigate to the homepage and show logged out message
+      router.push("/");
+      let message = "You’re now logged out";
+      dispatch("showToast", {
+        message: message,
+        severity: "success",
+      });
     },
     //Register user
     async registerUser({ dispatch }, payload) {

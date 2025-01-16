@@ -25,7 +25,7 @@ const routes = [
   },
   {
     path: "/email",
-    children:[
+    children: [
       {
         path: "verify",
         name: "VerifyEmail",
@@ -36,13 +36,11 @@ const routes = [
         name: "PasswordForgotEmail",
         component: PasswordForgotEmailView,
       },
-    ]
+    ],
   },
 
   {
     path: "/tasks",
-    component: TaskListView,
-    name: "Tasks",
     beforeEnter: (to) => {
       if (!store.state.isAuthenticated) {
         store.commit("setAttemptedUrl", to.fullPath); // Save the attempted URL
@@ -50,13 +48,16 @@ const routes = [
       }
       return true;
     },
-    children: [{ path: "add", name: "AddTask", component: TaskAddView }],
+    children: [
+      { path: "list", name: "AddList", component: TaskListView },
+      { path: "add", name: "AddTask", component: TaskAddView },
+    ],
   },
   {
     path: "/account",
     children: [
       {
-        path: "/user",
+        path: "user",
         component: UserDashboardView,
         name: "UserDashboard",
         beforeEnter: (to) => {
@@ -77,7 +78,7 @@ const routes = [
         name: "Register",
         component: RegisterView,
       },
-     
+
       {
         path: "verify",
         name: "VerificationResult",

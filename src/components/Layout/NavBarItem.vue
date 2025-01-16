@@ -43,7 +43,7 @@
   <!-- Topbar End -->
 
   <!-- Navbar Start -->
-  <div class="container-fluid nav-bar nav-bg shadow">
+  <div class="container-fluid nav-bar nav-bg shadow-sm">
     <nav
       class="navbar navbar-expand-lg navbar-light bg-white p-3 py-lg-0 px-lg-4"
     >
@@ -71,22 +71,28 @@
 
         <!--Account section-->
 
-        <div v-if="isAuthenticated" class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle cursor-pointer d-flex align-items-center"
-            data-bs-toggle="dropdown"
-          >
-            <i class="fa-regular fa-user fa-2xl"></i>
-            <span class="ms-1">Account</span></a
-          >
-          <div class="dropdown-menu fade-up m-0">
-            <router-link class="dropdown-item" to="/account/user"
-              >Dashboard</router-link
+        <div v-if="isAuthenticated" class="d-flex flex-column flex-md-row">
+          <div class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle cursor-pointer d-flex align-items-center"
+              data-bs-toggle="dropdown"
             >
-            <router-link class="dropdown-item" to="/tasks">Tasks</router-link>
-            <router-link class="dropdown-item" to="/tasks/add"
-              >Add task</router-link
+              <i class="fa-regular fa-user fa-2xl"></i>
+              <span class="ms-1">Account</span></a
             >
+            <div class="dropdown-menu fade-up m-0">
+              <router-link class="dropdown-item btn" to="/account/user"
+                >Dashboard</router-link
+              >
+              <router-link class="dropdown-item btn" to="/tasks/list"
+                >Tasks</router-link
+              >
+              <router-link class="dropdown-item btn" to="/tasks/add"
+                >Add task</router-link
+              >
+              <hr />
+              <a @click.prevent="logout" class="dropdown-item btn">Log out</a>
+            </div>
           </div>
         </div>
 
@@ -128,6 +134,10 @@ const store = useStore();
 import { computed } from "vue";
 
 let isAuthenticated = computed(() => store.state.isAuthenticated);
+
+let logout = () => {
+  store.dispatch("logoutUser");
+};
 </script>
 
 <style scoped>
