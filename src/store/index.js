@@ -41,6 +41,11 @@ export default createStore({
         name: "",
         email: "",
       },
+      userStatistics: {
+        totalItems: 0,
+        totalCompletedItems: 0,
+        totalUncompletedItems: 0,
+      },
       isAuthenticated: false, //is user logged in or not
     };
   },
@@ -112,6 +117,10 @@ export default createStore({
     setAttemptedUrl(state, url) {
       state.attemptedUrl = url;
     },
+    //set user statistics such as total uncompleted items by the user
+    setUserStatistics(state, stats) {
+      state.userStatistics = stats;
+    },
   },
   actions: {
     //fetch all tasks
@@ -134,6 +143,7 @@ export default createStore({
         this.state.isGettingItems = false;
       }
     },
+
     //fetch completed tasks
     async fetchCompletedTasks({ commit, dispatch }) {
       try {
@@ -176,6 +186,26 @@ export default createStore({
         console.error("Error fetching tasks:", error);
       } finally {
         this.state.isGettingItems = false;
+      }
+    },
+
+    //fetch user statistics such as the number of completed tasks by the user
+    async fetchTUserStatistics({ commit, dispatch }) {
+      try {
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+
+        const response = await axios.get(
+          `${this.state.apiUrl}/items/statistics`
+        );
+        //mutate the state with the fetched statistics
+        commit("setUserStatistics", response.data);
+      } catch (error) {
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
       }
     },
 
