@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-import PasswordForgot from "@/components/Account/PasswordForgot.vue";
+import PasswordForgot from "@/components/Email/PasswordForgotEmail.vue";
 </script>

@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-import EmailVerificationResult from "@/components/Account/VerificationResult.vueue";
+import EmailVerificationResult from "@/components/Account/VerificationResult.vue";
 </script>

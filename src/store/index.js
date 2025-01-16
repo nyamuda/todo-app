@@ -9,7 +9,7 @@ export default createStore({
   state() {
     return {
       todoTasks: [],
-      apiUrl: "https://quovoyapi.runasp.net/api/items",
+      apiUrl: "http://localhost:5066/api",
       isGettingItems: false, //to show placeholder items
       isCreatingItem: false, //to show the loading button during task creation
       isCompletingItem: false, //to show the loading button during task completion
@@ -117,7 +117,7 @@ export default createStore({
     async fetchTasks({ commit }) {
       try {
         this.state.isGettingItems = true;
-        const response = await axios.get(this.state.apiUrl);
+        const response = await axios.get(`${this.state.apiUrl}/items`);
         //mutate the state with the fetched tasks
         commit("formatTaskDate", response.data.items);
 
@@ -133,7 +133,9 @@ export default createStore({
     async fetchCompletedTasks({ commit }) {
       try {
         this.state.isGettingItems = true;
-        const response = await axios.get(`${this.state.apiUrl}/completed`);
+        const response = await axios.get(
+          `${this.state.apiUrl}/items/completed`
+        );
         //mutate the state with the fetched tasks
         commit("formatTaskDate", response.data.items);
 
@@ -149,7 +151,9 @@ export default createStore({
     async fetchUncompletedTasks({ commit }) {
       try {
         this.state.isGettingItems = true;
-        const response = await axios.get(`${this.state.apiUrl}/uncompleted`);
+        const response = await axios.get(
+          `${this.state.apiUrl}/items/uncompleted`
+        );
         //mutate the state with the fetched tasks
         commit("formatTaskDate", response.data.items);
 
@@ -172,7 +176,7 @@ export default createStore({
         }
         this.state.isLoadingMoreItems = true;
         const response = await axios.get(
-          `${this.state.apiUrl}/${filterValue}`,
+          `${this.state.apiUrl}/items/${filterValue}`,
           {
             params: {
               page: this.state.itemsPageInfo.page + 1,
@@ -201,7 +205,7 @@ export default createStore({
         console.log(localDueDate);
         console.log(task.dueDate);
         this.state.isCreatingItem = true;
-        const response = await axios.post(this.state.apiUrl, task);
+        const response = await axios.post(`${this.state.apiUrl}/items`, task);
         // Check if the request was successful
         //status code will be 201 from the API
         if (response.status == 201) {
@@ -239,7 +243,7 @@ export default createStore({
           isCompleted: true,
         };
         const response = await axios.put(
-          `${this.state.apiUrl}/${id}`,
+          `${this.state.apiUrl}/items/${id}`,
           completedTask
         );
         // Check if the request was successful
@@ -271,7 +275,7 @@ export default createStore({
     async deleteTask({ dispatch, commit }, id) {
       try {
         // Send a DELETE request to the API
-        let response = await axios.delete(`${this.state.apiUrl}/${id}`);
+        let response = await axios.delete(`${this.state.apiUrl}/items/${id}`);
 
         // Check if the request was successful
         //status code will be 204 from the API
@@ -319,11 +323,13 @@ export default createStore({
         );
 
         // Check if the request was successful
-        //status code will be 201 from the API
-        if (response.status == 201) {
+        //status code will be 200 from the API
+        if (response.status == 200) {
           //get the access token and decode it
           let accessToken = response.data.token;
           let decodedToken = jwtDecode(accessToken);
+
+          console.log(decodedToken);
 
           //check user has verified their email or not
           let isVerified = decodedToken.isVerified;
@@ -337,12 +343,12 @@ export default createStore({
             //if the user wants to be be remembered on log in
             //save the JWT token to local storage
             if (rememberMe) {
-              localStorage.setItem("jwt_token", accessToken);
+              //localStorage.setItem("jwt_token", accessToken);
             }
 
             //else save the JWT token to session storage
             else {
-              sessionStorage.setItem("jwt_token", accessToken);
+              //sessionStorage.setItem("jwt_token", accessToken);
             }
 
             //show toast success message
@@ -354,7 +360,7 @@ export default createStore({
 
           //if not verified, send verification email
           else {
-            await axios.post(`${this.state.apiUrl}/account/verify`, {
+            await axios.post(`${this.state.apiUrl}/email/verify`, {
               email: email,
             });
 
@@ -390,19 +396,19 @@ export default createStore({
         //status code will be 201 from the API
         if (response.status == 201) {
           //send verification email
-          await axios.post(`${this.state.apiUrl}/account/verify`, {
+          await axios.post(`${this.state.apiUrl}/email/verify`, {
             email: email,
           });
-          router.push("/account/verify");
+          router.push("/email/verify");
         } else {
           dispatch("showToast", {
             message: response.data.message,
             severity: "error",
           });
         }
-      } catch {
+      } catch (ex) {
         dispatch("showToast", {
-          message: this.state.failureMessage,
+          message: ex.response.data.message,
           severity: "error",
         });
       } finally {
@@ -413,31 +419,16 @@ export default createStore({
     //by verifying the token sent to their email
     async verifyUser({ dispatch }, payload) {
       this.state.emailVerificationStatus = "verifying";
-      const { token } = payload;
-
       try {
-        const response = await axios.post(
-          `${this.state.apiUrl}/account/verify/token`,
-          payload
-        );
-
-        // Check if the request was successful
-        //status code will be 200 from the API
-        if (response.status == 204) {
-          //if the token has been verified
-          //save it to local storage
-          localStorage.setItem("jwt_token", token);
-
-          this.state.emailVerificationStatus = "success";
-        } else {
-          dispatch("showToast", {
-            message: response.data.message,
-            severity: "error",
-          });
-          this.state.emailVerificationStatus = "fail";
-        }
-      } catch {
+        await axios.put(`${this.state.apiUrl}/account/verify`, payload);
+        this.state.emailVerificationStatus = "success";
+      } catch (ex) {
+        console.log(ex);
         this.state.emailVerificationStatus = "fail";
+        dispatch("showToast", {
+          message: ex.response.data.message,
+          severity: "error",
+        });
       }
     },
     //send password reset link to user who has forgotten their password
@@ -445,13 +436,13 @@ export default createStore({
       try {
         const { email } = payload;
         const response = await axios.post(
-          `${this.state.apiUrl}/account/password/forgot`,
+          `${this.state.apiUrl}/email/password`,
           { email }
         );
         // Check if the request was successful
         //status code will be 200 from the API
         if (response.status == 200) {
-          router.push("/account/password/email");
+          router.push("email/password");
         } else {
           dispatch("showToast", {
             message: response.data.message,
@@ -469,12 +460,11 @@ export default createStore({
     //by verifying the reset password token sent to their email
     async resetPassword({ dispatch }, payload) {
       this.state.isResettingPassword = true;
-      const { token } = payload;
 
       try {
         const response = await axios.post(
-          `${this.state.apiUrl}/account/password/reset`,
-          { token }
+          `${this.state.apiUrl}/account/password-reset`,
+          payload
         );
 
         // Check if the request was successful

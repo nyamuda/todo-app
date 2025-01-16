@@ -71,7 +71,7 @@
 
         <!--Account section-->
 
-        <div v-if="!isAuthenticated" class="nav-item dropdown">
+        <div v-if="isAuthenticated" class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle cursor-pointer d-flex align-items-center"
             data-bs-toggle="dropdown"
@@ -80,7 +80,7 @@
             <span class="ms-1">Account</span></a
           >
           <div class="dropdown-menu fade-up m-0">
-            <router-link class="dropdown-item" to="/account"
+            <router-link class="dropdown-item" to="/account/user"
               >Dashboard</router-link
             >
             <router-link class="dropdown-item" to="/tasks">Tasks</router-link>
@@ -188,7 +188,10 @@ let isAuthenticated = computed(() => store.state.isAuthenticated);
   font-weight: 600;
   text-transform: uppercase;
 }
-
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: var(--primary-color);
+}
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
   color: var(--primary-color);

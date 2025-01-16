@@ -78,9 +78,7 @@
 
         <div class="col-md-6 d-flex justify-content-center">
           <!-- Simple link -->
-          <router-link to="/account/password/forgot"
-            >Forgot password?</router-link
-          >
+          <router-link to="/email/password">Forgot password?</router-link>
         </div>
       </div>
 
@@ -101,7 +99,7 @@
       <button
         v-else
         :disabled="v$.$errors.length > 0"
-        @click="submitForm"
+        @click.prevent="submitForm"
         type="submit"
         class="btn btn-primary btn-block mb-2 w-100"
       >
