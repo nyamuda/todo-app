@@ -114,8 +114,12 @@ export default createStore({
   },
   actions: {
     //fetch all tasks
-    async fetchTasks({ commit }) {
+    async fetchTasks({ commit, dispatch }) {
       try {
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+
         this.state.isGettingItems = true;
         const response = await axios.get(`${this.state.apiUrl}/items`);
         //mutate the state with the fetched tasks
@@ -130,9 +134,13 @@ export default createStore({
       }
     },
     //fetch completed tasks
-    async fetchCompletedTasks({ commit }) {
+    async fetchCompletedTasks({ commit, dispatch }) {
       try {
         this.state.isGettingItems = true;
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
         const response = await axios.get(
           `${this.state.apiUrl}/items/completed`
         );
@@ -148,9 +156,13 @@ export default createStore({
       }
     },
     //fetch uncompleted tasks
-    async fetchUncompletedTasks({ commit }) {
+    async fetchUncompletedTasks({ commit, dispatch }) {
       try {
         this.state.isGettingItems = true;
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
         const response = await axios.get(
           `${this.state.apiUrl}/items/uncompleted`
         );
@@ -167,7 +179,7 @@ export default createStore({
     },
 
     //Load more tasks
-    async loadMoreTasks({ commit }, filterBy) {
+    async loadMoreTasks({ commit, dispatch }, filterBy) {
       try {
         //check which filter to use
         let filterValue = "";
@@ -175,6 +187,10 @@ export default createStore({
           filterValue = filterBy;
         }
         this.state.isLoadingMoreItems = true;
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
         const response = await axios.get(
           `${this.state.apiUrl}/items/${filterValue}`,
           {
@@ -202,9 +218,11 @@ export default createStore({
         //convert time to UCT
         let localDueDate = task.dueDate;
         task.dueDate = new Date(localDueDate + "Z").toISOString();
-        console.log(localDueDate);
-        console.log(task.dueDate);
         this.state.isCreatingItem = true;
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
         const response = await axios.post(`${this.state.apiUrl}/items`, task);
         // Check if the request was successful
         //status code will be 201 from the API
@@ -242,6 +260,10 @@ export default createStore({
         let completedTask = {
           isCompleted: true,
         };
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
         const response = await axios.put(
           `${this.state.apiUrl}/items/${id}`,
           completedTask
@@ -274,6 +296,9 @@ export default createStore({
     // Asynchronous action to delete a task
     async deleteTask({ dispatch, commit }, id) {
       try {
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
         // Send a DELETE request to the API
         let response = await axios.delete(`${this.state.apiUrl}/items/${id}`);
 
@@ -585,6 +610,18 @@ export default createStore({
       } finally {
         this.state.isContactingUs = false;
       }
+    },
+    //Set authorization header for all request to access protected routes from the API
+    setAuthorizationHeader() {
+      //check if there is a token in session storage
+      let sessionToken = sessionStorage.getItem("jwt_token");
+      //check if there is a token in local storage
+      let localToken = localStorage.getItem("jwt_token");
+
+      //the current token
+      let token = sessionToken ? sessionToken : localToken ? localToken : null;
+
+      axios.defaults.headers.common["Authorization"] = token;
     },
   },
   modules: {},
