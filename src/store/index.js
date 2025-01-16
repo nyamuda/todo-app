@@ -19,6 +19,7 @@ export default createStore({
       isContactingUs: false, //to show loading button during contact us process
       failureMessage: "Oops! Something went wrong. Please try again.",
       emailVerificationStatus: "fail",
+      isSendingPasswordLink: false,
       itemsPageInfo: {
         //page info for lazy loading
         page: 1, //current page size
@@ -236,19 +237,20 @@ export default createStore({
           //refresh the state
           await dispatch("fetchTasks");
         } else {
-          dispatch("showToast", {
-            message: this.state.failureMessage,
-            severity: "error",
-          });
+          if (response.data.message) {
+            dispatch("showToast", {
+              message: this.response.data.message,
+              severity: "error",
+            });
+          }
         }
         this.state.isCreatingItem = false;
-      } catch (error) {
+      } catch (err) {
+        console.log(err);
         dispatch("showToast", {
           message: this.state.failureMessage,
           severity: "error",
         });
-
-        console.log(error);
         this.state.isCreatingItem = false;
       }
     },
@@ -491,26 +493,21 @@ export default createStore({
     //send password reset link to user who has forgotten their password
     async sendPasswordResetLink({ dispatch }, payload) {
       try {
-        const { email } = payload;
-        const response = await axios.post(
-          `${this.state.apiUrl}/email/password`,
-          { email }
-        );
-        // Check if the request was successful
-        //status code will be 200 from the API
-        if (response.status == 200) {
-          router.push("email/password");
-        } else {
-          dispatch("showToast", {
-            message: response.data.message,
-            severity: "error",
-          });
-        }
-      } catch {
+        this.state.isSendingPasswordLink = true;
+        await axios.post(`${this.state.apiUrl}/email/password`, payload);
+        router.push("/email/password/sent");
+      } catch (ex) {
+        let message =
+          ex.status == 400
+            ? ex.response.data.message
+            : this.state.failureMessage;
+
         dispatch("showToast", {
-          message: this.state.failureMessage,
+          message: message,
           severity: "error",
         });
+      } finally {
+        this.state.isSendingPasswordLink = false;
       }
     },
     //allow user to change their password
@@ -519,31 +516,22 @@ export default createStore({
       this.state.isResettingPassword = true;
 
       try {
-        const response = await axios.post(
+        await axios.post(
           `${this.state.apiUrl}/account/password-reset`,
           payload
         );
-
-        // Check if the request was successful
-        //status code will be 200 from the API
-        if (response.status == 200) {
-          //if the token has been verified
-          let message =
-            "Your password has been successfully reset. You can now log in with your new password.";
-          dispatch("showToast", {
-            message: message,
-            severity: "success",
-          });
-          router.push("/account/login");
-        } else {
-          dispatch("showToast", {
-            message: response.data.message,
-            severity: "error",
-          });
-        }
-      } catch {
         let message =
-          "Password reset failed. Please ensure the link is correct or try again later.";
+          "Your password has been successfully reset. You can now log in with your new password.";
+        dispatch("showToast", {
+          message: message,
+          severity: "success",
+        });
+        router.push("/account/login");
+      } catch (ex) {
+        let message =
+          ex.status == 400
+            ? ex.response.data.message
+            : this.state.failureMessage;
         dispatch("showToast", {
           message: message,
           severity: "error",
@@ -621,7 +609,7 @@ export default createStore({
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : null;
 
-      axios.defaults.headers.common["Authorization"] = token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     },
   },
   modules: {},

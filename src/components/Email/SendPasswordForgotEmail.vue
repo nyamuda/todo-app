@@ -18,7 +18,20 @@
           />
         </div>
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-2 w-100">
+        <button
+          v-if="isSendingPasswordResetLink"
+          type="submit"
+          class="btn btn-dark btn-block mb-2 w-100"
+          disabled
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Sending reset link...
+        </button>
+        <button v-else type="submit" class="btn btn-dark btn-block mb-2 w-100">
           Submit
         </button>
       </form>
@@ -27,16 +40,19 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 
 let email = ref("");
 let submitForm = async () => {
   if (email.value) {
-    store.dispatch("sendPasswordResetLink", email.value);
+    store.dispatch("sendPasswordResetLink", { email: email.value });
   }
 };
+let isSendingPasswordResetLink = computed(
+  () => store.state.isSendingPasswordLink
+);
 </script>
 
 <style scoped>

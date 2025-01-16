@@ -78,7 +78,7 @@
 
         <div class="col-md-6 d-flex justify-content-center">
           <!-- Simple link -->
-          <router-link to="/email/password">Forgot password?</router-link>
+          <router-link to="/email/password/send">Forgot password?</router-link>
         </div>
       </div>
 

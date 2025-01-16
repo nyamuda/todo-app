@@ -3,14 +3,14 @@ import HomeView from "@/views/Common/HomeView.vue";
 import TaskListView from "../views/Tasks/TaskListView.vue";
 import TaskAddView from "../views/Tasks/TaskAddView.vue";
 import LoginView from "@/views/Account/LoginView.vue";
-import EmailVerificationView from "@/views/Email/EmailVerificationView.vue";
 import RegisterView from "@/views/Account/RegisterView.vue";
-import PasswordForgotView from "@/views/Account/PasswordForgotView.vue";
 import VerificationResultView from "@/views/Account/VerificationResultView.vue";
-import PasswordForgotEmailView from "@/views/Email/PasswordForgotEmailView.vue";
 import PasswordResetView from "@/views/Account/PasswordResetView.vue";
 import UserDashboardView from "@/views/Account/UserDashboardView.vue";
 import ContactUsView from "@/views/Common/ContactUsView.vue";
+import SentPasswordForgotEmailView from "@/views/Email/SentPasswordForgotEmailView.vue";
+import SendPasswordForgotEmailView from "@/views/Email/SendPasswordForgotEmailView.vue";
+import SentEmailVerificationView from "@/views/Email/SentEmailVerificationView.vue";
 import store from "@/store";
 const routes = [
   {
@@ -23,18 +23,24 @@ const routes = [
     name: "Contact",
     component: ContactUsView,
   },
+  //routes related to send sending an email
   {
     path: "/email",
     children: [
       {
         path: "verify",
         name: "VerifyEmail",
-        component: EmailVerificationView,
+        component: SentEmailVerificationView,
       },
       {
-        path: "password",
+        path: "password/sent",
         name: "PasswordForgotEmail",
-        component: PasswordForgotEmailView,
+        component: SentPasswordForgotEmailView,
+      },
+      {
+        path: "password/send",
+        name: "SendPasswordForgotEmail",
+        component: SendPasswordForgotEmailView,
       },
     ],
   },
@@ -83,11 +89,6 @@ const routes = [
         path: "verify",
         name: "VerificationResult",
         component: VerificationResultView,
-      },
-      {
-        path: "password-forgot",
-        name: "PasswordForgot",
-        component: PasswordForgotView,
       },
 
       {

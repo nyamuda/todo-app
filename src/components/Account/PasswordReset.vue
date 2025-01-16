@@ -130,7 +130,10 @@ let isResettingPassword = computed(() => store.state.isResettingPassword);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect && providedToken.value) {
-    store.dispatch("resetPassword", { token: providedToken.value });
+    store.dispatch("resetPassword", {
+      token: providedToken.value,
+      password: resetPasswordForm.value.password,
+    });
   }
 };
 </script>
