@@ -19,7 +19,7 @@ A feature-rich to-do list application built with Vue 3, Vuex for state managemen
 - **JWT-Based Authentication:**  
    The app uses **JWT tokens** for secure authentication and authorization. Tokens are generated on login and included in all API requests to protect user data.
 - **Google OAuth Integration:**  
-   Users can also register and log in using their **Google account** securely.
+   Users can also register and log in using their **Google account** securely. The feature is currently being verified by Google and will be ready shortly after approval.
 
 ### 📧 Forgot Password & Password Reset
 
