@@ -64,51 +64,46 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav me-auto">
           <router-link to="/" class="nav-item nav-link">Home</router-link>
+          <!--Links for logged in users-->
+          <template v-if="isAuthenticated">
+            <router-link to="/account/user" class="nav-item nav-link"
+              >Dashboard</router-link
+            >
+            <router-link to="/tasks/list" class="nav-item nav-link"
+              >Tasks</router-link
+            >
+            <router-link to="/tasks/add" class="nav-item nav-link"
+              >Add Task</router-link
+            >
+          </template>
+
           <router-link to="/contact" class="nav-item nav-link"
             >Contact</router-link
           >
         </div>
 
-        <!--Account section-->
-
-        <div v-if="isAuthenticated" class="d-flex flex-column flex-md-row">
-          <div class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle cursor-pointer d-flex align-items-center"
-              data-bs-toggle="dropdown"
-            >
-              <i class="fa-regular fa-user fa-2xl"></i>
-              <span class="ms-1">Account</span></a
-            >
-            <div class="dropdown-menu fade-up m-0">
-              <router-link class="dropdown-item btn" to="/account/user"
-                >Dashboard</router-link
-              >
-              <router-link class="dropdown-item btn" to="/tasks/list"
-                >Tasks</router-link
-              >
-              <router-link class="dropdown-item btn" to="/tasks/add"
-                >Add task</router-link
-              >
-              <hr />
-              <a @click.prevent="logout" class="dropdown-item btn">Log out</a>
-            </div>
-          </div>
-        </div>
-
-        <div v-else class="d-flex flex-column flex-md-row">
-          <router-link to="/account/login"
-            ><button class="btn btn-outline-dark w-100 py-2 px-4">
-              Log in
-            </button></router-link
+        <!--Signin, signup & logout button section-->
+        <div class="d-flex flex-column flex-md-row">
+          <a
+            v-if="isAuthenticated"
+            @click.prevent="logout"
+            class="btn btn-outline-dark w-100 py-2 px-4"
+            >Log out</a
           >
-          <router-link to="/account/register"
-            ><button
-              class="btn btn-primary w-100 py-2 px-4 mt-2 mt-md-0 ms-md-2"
+          <template v-else>
+            <router-link to="/account/login"
+              ><button class="btn btn-outline-dark w-100 py-2 px-4">
+                Log in
+              </button></router-link
             >
-              Sign up
-            </button></router-link
-          >
+            <router-link to="/account/register"
+              ><button
+                class="btn btn-primary w-100 py-2 px-4 mt-2 mt-md-0 ms-md-2"
+              >
+                Sign up
+              </button></router-link
+            >
+          </template>
         </div>
 
         <!-- <div class="call-box mt-4 mt-lg-0 py-3 px-4 d-flex align-items-center"> 

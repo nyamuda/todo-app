@@ -50,7 +50,7 @@ import { useStore } from "vuex";
 const store = useStore();
 
 let userStatistics = computed(() => store.state.userStatistics);
-let userInfo = computed(() => store.state.userInfo);
+let userInfo = computed(() => store.state.loggedInUser);
 
 onMounted(() => {
   //get user statistics such as the total number of items they have completed

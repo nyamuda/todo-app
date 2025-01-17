@@ -1,17 +1,7 @@
 <template>
   <div class="">
     <form class="login-form m-auto">
-      <div class="text-center mb-3">
-        <p>Sign in with:</p>
-        <button
-          @click="loginWithGoogle"
-          type="button"
-          class="login-with-google-btn py-2"
-        >
-          Sign in with Google
-        </button>
-      </div>
-
+      <OauthItem />
       <div class="d-flex align-items-center my-1">
         <hr class="flex-grow-1" />
         <p class="text-center fw-bold mx-3 mb-0">Or</p>
@@ -119,8 +109,8 @@
 
 <script setup>
 import { onMounted, ref, computed } from "vue";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import OauthItem from "./OauthItem.vue";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";
@@ -128,16 +118,8 @@ import { required, email, helpers } from "@vuelidate/validators";
 // Access the store
 const store = useStore();
 
-const route = useRouter();
-let code = ref("");
-
 onMounted(() => {
   v$._value.$touch();
-  code.value = route.currentRoute.value.query.code ?? "";
-
-  if (code.value) {
-    code.value = "it exists";
-  }
 });
 
 //form validation with Vuelidate start
@@ -161,10 +143,6 @@ const rules = {
 
 const v$ = useVuelidate(rules, loginForm.value);
 //form validation with Vuelidate end
-
-let loginWithGoogle = () => {
-  window.location.href = store.getters.googleLoginUrl;
-};
 
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();

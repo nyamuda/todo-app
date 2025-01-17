@@ -4,12 +4,13 @@ import { useToast } from "vue-toastification";
 const toast = useToast();
 import router from "@/router";
 import { jwtDecode } from "jwt-decode";
+import { isJwtExpired } from "jwt-check-expiration";
 
 export default createStore({
   state() {
     return {
       todoTasks: [],
-      apiUrl: "http://localhost:5066/api",
+      apiUrl: "https://localhost:7156/api",
       isGettingItems: false, //to show placeholder items
       isCreatingItem: false, //to show the loading button during task creation
       isCompletingItem: false, //to show the loading button during task completion
@@ -35,6 +36,7 @@ export default createStore({
         scope:
           "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
         responseType: "code",
+        state: "",
       },
       attemptedUrl: "/", //attempted url when user is not authenticated
       loggedInUser: {
@@ -52,7 +54,7 @@ export default createStore({
   getters: {
     googleLoginUrl(state) {
       // Construct the authorization URL with the required parameters
-      return `https://accounts.google.com/o/oauth2/auth?client_id=${state.googleOauth.clientId}&redirect_uri=${state.googleOauth.redirectUrl}&response_type=${state.googleOauth.responseType}&scope=${state.googleOauth.scope}`;
+      return `https://accounts.google.com/o/oauth2/auth?client_id=${state.googleOauth.clientId}&redirect_uri=${state.googleOauth.redirectUrl}&response_type=${state.googleOauth.responseType}&scope=${state.googleOauth.scope}&state=${state.googleOauth.state}`;
     },
   },
   mutations: {
@@ -120,6 +122,10 @@ export default createStore({
     //set user statistics such as total uncompleted items by the user
     setUserStatistics(state, stats) {
       state.userStatistics = stats;
+    },
+    //set state parameter for Google Oauth
+    setGoogleStateParameter(state, stateParameter) {
+      state.googleOauth.state = stateParameter;
     },
   },
   actions: {
@@ -262,7 +268,7 @@ export default createStore({
           let message = "The task has been successfully added.";
           dispatch("showToast", { message: message, severity: "success" });
 
-          router.push("/tasks");
+          router.push("/tasks/list");
 
           //refresh the state
           await dispatch("fetchTasks");
@@ -387,19 +393,8 @@ export default createStore({
           let decodedToken = jwtDecode(accessToken);
 
           // Extract the claims (name, isVerified etc.)
-          const name =
-            decodedToken[
-              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-            ];
           let isVerified = decodedToken["isVerified"];
           if (isVerified) {
-            //store user information
-            let userInfo = {
-              name: name,
-              email: email,
-            };
-            commit("addUserInfo", userInfo);
-
             //if the user wants to be be remembered on log in
             //save the JWT token to local storage
             if (rememberMe) {
@@ -437,6 +432,36 @@ export default createStore({
           });
         }
       } catch {
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
+      } finally {
+        this.state.isLoggingIn = false;
+      }
+    },
+    async loginWithGoogle({ dispatch, commit }, payload) {
+      try {
+        const response = await axios.post(
+          `${this.state.apiUrl}/account/google-login`,
+          payload
+        );
+        //get the access token and decode it
+        let accessToken = response.data.token;
+
+        //save the JWT token to local storage
+        localStorage.setItem("jwt_token", accessToken);
+        //mark the user as authenticated
+        commit("authenticateUser", true);
+
+        //show toast success message
+        let message = "You’re signed in!";
+
+        dispatch("showToast", { message: message, severity: "success" });
+
+        router.push(this.state.attemptedUrl);
+      } catch (ex) {
+        console.log(ex);
         dispatch("showToast", {
           message: this.state.failureMessage,
           severity: "error",
@@ -571,7 +596,7 @@ export default createStore({
       }
     },
     //check to see if user is authenticated by using the Jwt token
-    authenticateUser({ commit }) {
+    authenticateUser({ commit, dispatch }) {
       //check if there is a token in session storage
       let sessionToken = sessionStorage.getItem("jwt_token");
       //check if there is a token in local storage
@@ -582,15 +607,16 @@ export default createStore({
 
       try {
         if (token) {
-          //check if token has expired or not
-          const decoded = jwtDecode(token);
+          //check if access token has expired or not
+          const hasExpired = isJwtExpired(token);
+          const isUserAuthenticated = hasExpired ? false : true;
 
-          // Convert time to seconds
-          const currentTime = Date.now() / 1000;
-
-          const hasExpired = decoded.exp > currentTime;
-
-          commit("authenticateUser", hasExpired);
+          //if token hasn't expired
+          //decode access token and load user info
+          if (!hasExpired) {
+            dispatch("decodeTokenAndLoadInfo", { token });
+          }
+          commit("authenticateUser", isUserAuthenticated);
         }
       } catch (error) {
         return false;
@@ -628,6 +654,55 @@ export default createStore({
       let token = sessionToken ? sessionToken : localToken ? localToken : null;
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    },
+
+    //decode access token and load user info
+    decodeTokenAndLoadInfo({ commit }, payload) {
+      let { token } = payload;
+      let decodedToken = jwtDecode(token);
+      // Extract the claims (name, isVerified etc.)
+      const name =
+        decodedToken[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        ];
+      const email =
+        decodedToken[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+        ];
+      let isVerified = decodedToken["isVerified"];
+
+      //store user information
+      let userInfo = {
+        name: name,
+        email: email,
+        isVerified,
+      };
+      commit("addUserInfo", userInfo);
+    },
+
+    //Generate the state parameter for Oauth 2.0
+    // ---> to prevent CSRF & and preserve the application state
+    generateOauthRandomState({ commit }) {
+      // Generate a random string for security
+      const randomString = Math.random().toString(36).substring(2);
+
+      // Create the state object
+      const stateObject = {
+        randomString: randomString,
+        currentState: this.state.attemptedUrl, //current state of the app or attempted url
+      };
+
+      // Convert the state object to a JSON string
+      const stateString = JSON.stringify(stateObject);
+
+      // Save it to session storage
+      sessionStorage.setItem("oauthState", stateString);
+
+      //encode it
+      let encodedState = btoa(stateString);
+
+      //save it
+      commit("setGoogleStateParameter", encodedState);
     },
   },
   modules: {},
