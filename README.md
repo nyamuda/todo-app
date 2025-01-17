@@ -1,6 +1,6 @@
 # Vue 3 To-Do List App
 
-A simple to-do list application built with Vue 3, Vuex for state management, and Bootstrap 5 for UI components. The app consumes an ASP.NET Core API and allows users to manage tasks with features like task addition, completion, filtering, and lazy loading.
+A feature-rich to-do list application built with Vue 3, Vuex for state management, and Bootstrap 5 for UI components. The app consumes an ASP.NET Core API and allows users to manage tasks with features like user registration, secure authentication, task management, filtering, and lazy loading.
 
 ---
 
