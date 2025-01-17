@@ -2,23 +2,68 @@
 
 A simple to-do list application built with Vue 3, Vuex for state management, and Bootstrap 5 for UI components. The app consumes an ASP.NET Core API and allows users to manage tasks with features like task addition, completion, filtering, and lazy loading.
 
-## 🎯 Features
-## 🎯 New Features
-
-- **User Registration & Login:** Users can register with their email, verify their email address, and log in with their credentials or Google OAuth.
-- **Task Management:** Create tasks with a title, description, and due date. Tasks can be marked as completed or deleted.
-- **Dashboard Overview:** After logging in, users are shown a dashboard with statistics on completed and uncompleted tasks.
-- **Task Filtering:** Filter tasks by completed, uncompleted, or view all.
-- **Forgot Password:** Users can reset their password via email if they forget it.
-- **Google OAuth:** Users can register or log in using their Google account for easier access.
-- **State Management:** Vuex is used for centralized state management, ensuring smooth user interaction with the app.
-- **Lazy Loading:** Tasks are displayed 10 at a time with an option to load more.
-
 ---
 
 ## 🚀 Live Demo
 
-[Hosted App Link](https://prioritia.netlify.app)
+- [Hosted App Link](https://prioritia.netlify.app)
+
+---
+
+## 🎯 Features
+
+### 🛡️ Authentication & Authorization
+
+- **User Registration & Email Verification:**  
+   Users can register with their name, email, and password. Upon registration, a verification email is sent, and users need to verify their email before accessing the app.
+- **JWT-Based Authentication:**  
+   The app uses **JWT tokens** for secure authentication and authorization. Tokens are generated on login and included in all API requests to protect user data.
+- **Google OAuth Integration:**  
+   Users can also register and log in using their **Google account** securely.
+
+### 📧 Forgot Password & Password Reset
+
+- **Forgot Password:**  
+   Users can request a password reset by entering their email. A secure **password reset link** is sent via email.
+- **Password Reset:**  
+   The password can be securely reset using the link provided.
+
+### ✅ Task Management
+
+- **Create, Update, and Delete Tasks:**  
+   Users can create tasks with a **title, description, and due date**. Tasks can be edited, marked as completed, or deleted.
+- **User-Specific Tasks:**  
+   Each user can only view and manage **their own tasks** after logging in.
+- **Dashboard Overview:**  
+   After logging in, users are presented with a dashboard summarizing the **number of completed and uncompleted tasks**.
+
+### 🎛️ Task Filtering & Pagination
+
+- **Task Filtering:**  
+   Users can filter tasks by:
+  - All tasks
+  - Completed tasks
+  - Uncompleted tasks
+- **Lazy Loading:**  
+   Tasks are loaded **10 at a time**, with a **Load More** button for better performance on large datasets.
+
+### 📦 Form Validation
+
+- **Vuelidate Integration:**  
+   Form validation is handled using **Vuelidate**, ensuring proper:
+  - Required fields
+  - Valid email formats
+  - Minimum password length and format
+
+---
+
+## 📦 State Management (Vuex)
+
+The app uses **Vuex** for centralized state management, handling:
+
+- Fetching tasks and user data from the API
+- Mutations for task creation, completion, and deletion
+- Managing JWT tokens and authentication state
 
 ---
 
@@ -50,28 +95,15 @@ A simple to-do list application built with Vue 3, Vuex for state management, and
    npm run serve
    ```
 
-## 🧪 Form Validation
+---
 
-Form validation is handled using Vuelidate for robust validation of user inputs (e.g., passwords, required fields, proper email format).
+## ✅ API Endpoints (ASP.NET Core)
 
-## 📦 State Management (Vuex)
+The app communicates with an **ASP.NET Core API** using the following endpoints:
 
-The Vuex store handles:
+- [Link To See Endpoints](https://quovoyapi.runasp.net/swagger/index.html)
 
-- Fetching tasks from the API (actions)
-- Mutations for adding, completing, and deleting tasks
-- State for tasks and pagination control
-
-## ✅ API Endpoints
-
-The application interacts with the following ASP.NET Core API endpoints:
-
-- **GET /api/tasks**: Fetches all tasks (paginated).
-- **POST /api/tasks**: Adds a new task.
-- **PUT /api/tasks/{id}**: Updates a task (where `{id}` is the task ID).
-- **DELETE /api/tasks/{id}**: Deletes a task (where `{id}` is the task ID).
-- **GET /api/tasks/completed**: Fetches completed tasks (paginated).
-- **GET /api/tasks/uncompleted**: Fetches uncompleted tasks (paginated).
+---
 
 ## 📦 Technologies Used
 
@@ -79,7 +111,8 @@ The application interacts with the following ASP.NET Core API endpoints:
 - Vuex
 - Bootstrap 5
 
+---
+
 ## 🚀 API Used
 
 - [Repository Link](https://github.com/nyamuda/TodoAPI)
-- [Hosted App Link](https://quovoyapi.runasp.net/api/items)
