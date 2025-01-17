@@ -7,10 +7,10 @@ import "bootstrap";
 import "./assets/styles.css";
 
 /* Toast library start*/
-import Toast from "vue-toastification";
+import Toast, { POSITION } from "vue-toastification";
 
 import "vue-toastification/dist/index.css";
-const options = {};
+const options = { position: POSITION.TOP_CENTER };
 /* Toast library end*/
 
 createApp(App).use(store).use(router).use(Toast, options).mount("#app");
