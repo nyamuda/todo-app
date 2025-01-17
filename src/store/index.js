@@ -431,9 +431,12 @@ export default createStore({
             severity: "error",
           });
         }
-      } catch {
+      } catch (ex) {
+        let message = ex.response.data.message
+          ? ex.response.data.message
+          : this.state.failureMessage;
         dispatch("showToast", {
-          message: this.state.failureMessage,
+          message: message,
           severity: "error",
         });
       } finally {
