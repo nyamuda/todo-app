@@ -442,6 +442,8 @@ export default createStore({
     },
     async loginWithGoogle({ dispatch, commit }, payload) {
       try {
+        // Clear the default authorization header
+        delete axios.defaults.headers.common["Authorization"];
         const response = await axios.post(
           `${this.state.apiUrl}/account/google-login`,
           payload
