@@ -27,7 +27,7 @@
                       <label for="name">Your Name</label>
                       <input
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-lg"
                         id="name"
                         v-model="v$.name.$model"
                         :class="{
@@ -48,7 +48,7 @@
                       <label for="email">Your Email</label>
                       <input
                         type="email"
-                        class="form-control"
+                        class="form-control form-control-lg"
                         id="email"
                         v-model="v$.email.$model"
                         :class="{
@@ -86,7 +86,12 @@
                       class="btn btn-primary w-100 py-3"
                       type="submit"
                     >
-                      Please wait
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Sending message...
                     </button>
                     <button
                       v-else

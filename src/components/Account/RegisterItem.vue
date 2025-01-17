@@ -1,108 +1,105 @@
 <template>
-  <div class="">
-    <form @submit.prevent="submitForm" class="register-form m-auto px-5 py-3">
-      <div class="text-center mb-3">
-        <p>Sign up with</p>
-        <button
-          @click="registerWithGoogle"
-          type="button"
-          class="login-with-google-btn py-2"
-        >
-          Sign up with Google
-        </button>
-      </div>
-
-      <div class="d-flex align-items-center my-1">
-        <hr class="flex-grow-1" />
-        <p class="text-center fw-bold mx-3 mb-0">Or</p>
-        <hr class="flex-grow-1" />
-      </div>
-
-      <!-- Name input -->
-      <div class="mb-3">
-        <label for="registerName" class="form-label">Name</label>
-        <input
-          type="text"
-          id="registerName"
-          class="form-control"
-          v-model="v$.name.$model"
-          :class="{
-            'is-invalid': v$.name.$error,
-            'is-valid': !v$.name.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.name.$error">
-          <div v-for="error of v$.name.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Email input -->
-      <div class="mb-3">
-        <label for="registerEmail" class="form-label">Email address</label>
-        <input
-          type="email"
-          id="registerEmail"
-          class="form-control"
-          v-model="v$.email.$model"
-          :class="{
-            'is-invalid': v$.email.$error,
-            'is-valid': !v$.email.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.email.$error">
-          <div v-for="error of v$.email.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Password input -->
-      <div class="form-outline mb-3">
-        <label for="registerPassword" class="form-label">Password</label>
-        <input
-          type="password"
-          id="registerPassword"
-          class="form-control"
-          v-model="v$.password.$model"
-          :class="{
-            'is-invalid': v$.password.$error,
-            'is-valid': !v$.password.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.password.$error">
-          <div v-for="error of v$.password.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Submit button -->
+  <form @submit.prevent="submitForm" class="register-form m-auto">
+    <div class="text-center mb-3">
+      <p>Sign up with</p>
       <button
-        v-if="isRegistering"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-        disabled
+        @click="registerWithGoogle"
+        type="button"
+        class="login-with-google-btn py-2"
       >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Please wait...
+        Sign up with Google
       </button>
-      <button
-        v-else
-        :disabled="v$.$errors.length > 0"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-      >
-        Sign up
-      </button>
-    </form>
-    <h1>{{ code }}</h1>
-  </div>
+    </div>
+
+    <div class="d-flex align-items-center my-1">
+      <hr class="flex-grow-1" />
+      <p class="text-center fw-bold mx-3 mb-0">Or</p>
+      <hr class="flex-grow-1" />
+    </div>
+
+    <!-- Name input -->
+    <div class="mb-3">
+      <label for="registerName" class="form-label">Name</label>
+      <input
+        type="text"
+        id="registerName"
+        class="form-control"
+        v-model="v$.name.$model"
+        :class="{
+          'is-invalid': v$.name.$error,
+          'is-valid': !v$.name.$error,
+        }"
+      />
+      <div class="invalid-feedback" v-if="v$.name.$error">
+        <div v-for="error of v$.name.$errors" :key="error.$uid">
+          <div>{{ error.$message }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email input -->
+    <div class="mb-3">
+      <label for="registerEmail" class="form-label">Email address</label>
+      <input
+        type="email"
+        id="registerEmail"
+        class="form-control"
+        v-model="v$.email.$model"
+        :class="{
+          'is-invalid': v$.email.$error,
+          'is-valid': !v$.email.$error,
+        }"
+      />
+      <div class="invalid-feedback" v-if="v$.email.$error">
+        <div v-for="error of v$.email.$errors" :key="error.$uid">
+          <div>{{ error.$message }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Password input -->
+    <div class="form-outline mb-3">
+      <label for="registerPassword" class="form-label">Password</label>
+      <input
+        type="password"
+        id="registerPassword"
+        class="form-control"
+        v-model="v$.password.$model"
+        :class="{
+          'is-invalid': v$.password.$error,
+          'is-valid': !v$.password.$error,
+        }"
+      />
+      <div class="invalid-feedback" v-if="v$.password.$error">
+        <div v-for="error of v$.password.$errors" :key="error.$uid">
+          <div>{{ error.$message }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit button -->
+    <button
+      v-if="isRegistering"
+      type="submit"
+      class="btn btn-primary btn-block mb-2 w-100"
+      disabled
+    >
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      Please wait...
+    </button>
+    <button
+      v-else
+      :disabled="v$.$errors.length > 0"
+      type="submit"
+      class="btn btn-primary btn-block mb-2 w-100"
+    >
+      Sign up
+    </button>
+  </form>
 </template>
 
 <script setup>
@@ -166,7 +163,7 @@ let isRegistering = computed(() => store.state.isRegistering);
 <style scoped>
 @media (min-width: 768px) {
   .register-form {
-    max-width: 33rem;
+    max-width: 30rem;
   }
 }
 </style>
