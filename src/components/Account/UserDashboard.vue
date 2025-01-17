@@ -8,8 +8,7 @@
         <!-- User Info Section -->
         <div class="mb-4">
           <h5 class="fw-bold">
-            Welcome, <span id="userName">{{ userInfo.name }}</span
-            >!
+            Welcome, <span id="userName">{{ userInfo.name }}</span>
           </h5>
         </div>
 
@@ -35,9 +34,7 @@
       </div>
       <div class="card-footer text-end">
         <router-link to="/tasks/list"
-          ><button class="btn btn-outline-primary">
-            View Tasks
-          </button></router-link
+          ><button class="btn btn-secondary">View Tasks</button></router-link
         >
       </div>
     </div>

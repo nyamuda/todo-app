@@ -1,12 +1,12 @@
 <template>
   <div class="text-center mb-3">
-    <p>Sign in with:</p>
+    <!-- <p>Sign in with:</p> -->
     <button
       @click="loginWithGoogle"
       type="button"
       class="login-with-google-btn py-2"
     >
-      Sign in with Google
+      Continue with Google
     </button>
   </div>
 </template>

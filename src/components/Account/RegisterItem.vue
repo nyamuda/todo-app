@@ -1,15 +1,6 @@
 <template>
   <form @submit.prevent="submitForm" class="register-form m-auto">
-    <div class="text-center mb-3">
-      <p>Sign up with</p>
-      <button
-        @click="registerWithGoogle"
-        type="button"
-        class="login-with-google-btn py-2"
-      >
-        Sign up with Google
-      </button>
-    </div>
+    <OauthItem />
 
     <div class="d-flex align-items-center my-1">
       <hr class="flex-grow-1" />
@@ -104,8 +95,8 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import OauthItem from "./OauthItem.vue";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers, minLength } from "@vuelidate/validators";
@@ -113,15 +104,8 @@ import { required, email, helpers, minLength } from "@vuelidate/validators";
 // Access the store
 const store = useStore();
 
-const route = useRouter();
-let code = ref("");
-
 onMounted(() => {
   v$._value.$touch();
-  code.value = route.currentRoute.value.query.code ?? "";
-  if (code.value) {
-    console.log("hello");
-  }
 });
 
 //form validation with Vuelidate start
@@ -146,10 +130,6 @@ const rules = {
 
 const v$ = useVuelidate(rules, registrationForm);
 //form validation with Vuelidate end
-
-let registerWithGoogle = () => {
-  window.location.href = store.getters.googleLoginUrl;
-};
 
 let submitForm = async () => {
   const isFormCorrect = v$._value.$validate;

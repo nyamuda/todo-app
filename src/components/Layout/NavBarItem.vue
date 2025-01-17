@@ -87,12 +87,12 @@
           <a
             v-if="isAuthenticated"
             @click.prevent="logout"
-            class="btn btn-outline-dark w-100 py-2 px-4"
+            class="btn btn-secondary w-100 py-2 px-4"
             >Log out</a
           >
           <template v-else>
             <router-link to="/account/login"
-              ><button class="btn btn-outline-dark w-100 py-2 px-4">
+              ><button class="btn btn-secondary w-100 py-2 px-4">
                 Log in
               </button></router-link
             >

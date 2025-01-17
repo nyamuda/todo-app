@@ -163,11 +163,7 @@
           undone.
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            @click="closeModal"
-          >
+          <button type="button" class="btn btn-secondary" @click="closeModal">
             Close
           </button>
           <button
