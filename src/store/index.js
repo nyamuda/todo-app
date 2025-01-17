@@ -10,7 +10,7 @@ export default createStore({
   state() {
     return {
       todoTasks: [],
-      apiUrl: "https://localhost:7156/api",
+      apiUrl: "https://quovoyapi.runasp.net/api",
       isGettingItems: false, //to show placeholder items
       isCreatingItem: false, //to show the loading button during task creation
       isCompletingItem: false, //to show the loading button during task completion

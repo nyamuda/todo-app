@@ -3,12 +3,16 @@
 A simple to-do list application built with Vue 3, Vuex for state management, and Bootstrap 5 for UI components. The app consumes an ASP.NET Core API and allows users to manage tasks with features like task addition, completion, filtering, and lazy loading.
 
 ## 🎯 Features
+## 🎯 New Features
 
-- **Add Tasks:** Users can add tasks with a title, description, and due date.
-- **Task Completion:** Mark tasks as completed.
+- **User Registration & Login:** Users can register with their email, verify their email address, and log in with their credentials or Google OAuth.
+- **Task Management:** Create tasks with a title, description, and due date. Tasks can be marked as completed or deleted.
+- **Dashboard Overview:** After logging in, users are shown a dashboard with statistics on completed and uncompleted tasks.
 - **Task Filtering:** Filter tasks by completed, uncompleted, or view all.
+- **Forgot Password:** Users can reset their password via email if they forget it.
+- **Google OAuth:** Users can register or log in using their Google account for easier access.
+- **State Management:** Vuex is used for centralized state management, ensuring smooth user interaction with the app.
 - **Lazy Loading:** Tasks are displayed 10 at a time with an option to load more.
-- **State Management:** Vuex is used for centralized state management.
 
 ---
 
@@ -48,7 +52,7 @@ A simple to-do list application built with Vue 3, Vuex for state management, and
 
 ## 🧪 Form Validation
 
-Form validation is handled using native browser validation. This approach was chosen because the application requires only basic validation (all fields are required).
+Form validation is handled using Vuelidate for robust validation of user inputs (e.g., passwords, required fields, proper email format).
 
 ## 📦 State Management (Vuex)
 
