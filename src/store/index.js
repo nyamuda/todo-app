@@ -375,7 +375,7 @@ export default createStore({
       }
     },
     //login user and get the JWT token
-    async loginUser({ dispatch, commit }, payload) {
+    async loginUser({ dispatch }, payload) {
       try {
         const { rememberMe, email, password } = payload;
         let loginDetails = { email, password };
@@ -407,7 +407,7 @@ export default createStore({
             }
 
             //mark the user as authenticated
-            commit("authenticateUser", true);
+            dispatch("authenticateUser");
 
             //show toast success message
             let message = "Login successful";
@@ -443,28 +443,30 @@ export default createStore({
         this.state.isLoggingIn = false;
       }
     },
-    async loginWithGoogle({ dispatch, commit }, payload) {
+    async loginWithGoogle({ dispatch }, payload) {
       try {
-        // Clear the default authorization header
-        delete axios.defaults.headers.common["Authorization"];
         const response = await axios.post(
           `${this.state.apiUrl}/account/google-login`,
           payload
         );
-        //get the access token and decode it
-        let accessToken = response.data.token;
 
-        //save the JWT token to local storage
-        localStorage.setItem("jwt_token", accessToken);
-        //mark the user as authenticated
-        commit("authenticateUser", true);
+        if (response.status == 200) {
+          //get the access token and decode it
+          let accessToken = response.data.token.result;
 
-        //show toast success message
-        let message = "You’re signed in!";
+          //save the JWT token to local storage
+          localStorage.setItem("jwt_token", accessToken);
 
-        dispatch("showToast", { message: message, severity: "success" });
+          //mark the user as authenticated
+          dispatch("authenticateUser");
 
-        router.push(this.state.attemptedUrl);
+          //show toast success message
+          let message = "You’re signed in!";
+
+          dispatch("showToast", { message: message, severity: "success" });
+
+          router.push(this.state.attemptedUrl);
+        }
       } catch (ex) {
         console.log(ex);
         dispatch("showToast", {
@@ -481,6 +483,9 @@ export default createStore({
       //first, remove access token from local or session storage
       localStorage.removeItem("jwt_token");
       sessionStorage.removeItem("jwt_token");
+
+      // Clear the default authorization header
+      delete axios.defaults.headers.common["Authorization"];
 
       //second, clear the user info from the state
       let userInfo = {
@@ -526,8 +531,11 @@ export default createStore({
           });
         }
       } catch (ex) {
+        let message = ex.response.data.message
+          ? ex.response.data.message
+          : this.state.failureMessage;
         dispatch("showToast", {
-          message: ex.response.data.message,
+          message: message,
           severity: "error",
         });
       } finally {
