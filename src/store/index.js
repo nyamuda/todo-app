@@ -38,6 +38,16 @@ export default createStore({
         responseType: "code",
         state: "",
       },
+      facebookOAuth: {
+        clientId:
+          "493408617395-dsbcps3dthaspgan66b9jt3auq6iut0v.apps.googleusercontent.com",
+        redirectUrl:
+          "https://prioritia.netlify.app/account/login/oauth/google/callback",
+        scope:
+          "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+        responseType: "code",
+        state: "",
+      },
       attemptedUrl: "/", //attempted url when user is not authenticated
       loggedInUser: {
         name: "",
@@ -394,7 +404,7 @@ export default createStore({
 
           // Extract the claims (name, isVerified etc.)
           let isVerified = decodedToken["isVerified"];
-          if (isVerified) {
+          if (isVerified == true) {
             //if the user wants to be be remembered on log in
             //save the JWT token to local storage
             if (rememberMe) {
@@ -446,7 +456,7 @@ export default createStore({
     async loginWithGoogle({ dispatch }, payload) {
       try {
         const response = await axios.post(
-          `${this.state.apiUrl}/account/google-login`,
+          `${this.state.apiUrl}/account/oauth/google`,
           payload
         );
 

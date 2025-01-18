@@ -9,6 +9,16 @@
       Continue with Google
     </button>
   </div>
+  <div class="text-center mb-3">
+    <button
+      class="btn btn-primary btn-lg btn-block"
+      style="background-color: #3b5998"
+      href="#!"
+      role="button"
+    >
+      <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
+    </button>
+  </div>
 </template>
 
 <script setup>
