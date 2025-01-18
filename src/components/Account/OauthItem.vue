@@ -9,14 +9,14 @@
       Continue with Google
     </button>
   </div>
-  <div class="text-center mb-3">
+  <!-- <div class="text-center mb-3">
     <button
       @click.prevent="loginWithFacebook"
       class="btn btn-primary btn-lg btn-block px-4 py-2"
       style="background-color: #3b5998"
     >
       <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
-    </button>
+    </button> -->
   </div>
 </template>
 
