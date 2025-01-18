@@ -11,6 +11,7 @@
   </div>
   <div class="text-center mb-3">
     <button
+      @click="loginWithFacebook"
       class="btn btn-primary btn-lg btn-block"
       style="background-color: #3b5998"
       href="#!"
@@ -42,7 +43,7 @@ onMounted(() => {
     //if the states match
     //login user with Oauth by making a request to the backend
     if (doStatesMatch) {
-      store.dispatch("loginWithGoogle", { code });
+      makeOAuthLoginRequest(code);
     }
   }
 });
@@ -52,6 +53,12 @@ let loginWithGoogle = () => {
   store.dispatch("generateOauthRandomState");
   //navigate to the login page
   window.location.href = store.getters.googleLoginUrl;
+};
+let loginWithFacebook = () => {
+  //generate the facebook login url state parameter
+  store.dispatch("generateOauthRandomState");
+  //navigate to the login page
+  window.location.href = store.getters.facebookLoginUrl;
 };
 
 //Compare two state objects
@@ -99,6 +106,22 @@ let getStateFromSessionStorage = () => {
   } else {
     // If it doesn't exist, return null
     return null;
+  }
+};
+
+//Make the right OAuth login request
+//based on the redirect_uri
+//if the redirect_uri contain the term 'google' --- login with google
+//if the redirect_uri contain the term 'facebook' --- login with facebook
+let makeOAuthLoginRequest = (code) => {
+  //Google redirect url
+  if (window.location.pathname.includes("/oauth/google/callback")) {
+    //use the code to get the JWT token from the server
+    store.dispatch("loginWithGoogle", { code });
+  }
+  //else go with facebook
+  else {
+    store.dispatch("loginWithFacebook", { code });
   }
 };
 </script>

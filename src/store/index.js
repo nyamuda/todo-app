@@ -38,14 +38,11 @@ export default createStore({
         responseType: "code",
         state: "",
       },
-      facebookOAuth: {
-        clientId:
-          "493408617395-dsbcps3dthaspgan66b9jt3auq6iut0v.apps.googleusercontent.com",
+      facebookOauth: {
+        clientId: "1140074330816834",
         redirectUrl:
-          "https://prioritia.netlify.app/account/login/oauth/google/callback",
-        scope:
-          "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
-        responseType: "code",
+          "https://prioritia.netlify.app/account/login/oauth/facebook/callback",
+
         state: "",
       },
       attemptedUrl: "/", //attempted url when user is not authenticated
@@ -65,6 +62,10 @@ export default createStore({
     googleLoginUrl(state) {
       // Construct the authorization URL with the required parameters
       return `https://accounts.google.com/o/oauth2/auth?client_id=${state.googleOauth.clientId}&redirect_uri=${state.googleOauth.redirectUrl}&response_type=${state.googleOauth.responseType}&scope=${state.googleOauth.scope}&state=${state.googleOauth.state}`;
+    },
+    facebookLoginUrl(state) {
+      // Construct the authorization URL with the required parameters
+      return `https://www.facebook.com/v21.0/dialog/oauth?client_id=${state.facebookOauth.clientId}&redirect_uri=${state.facebookOauth.redirectUrl}&state=${state.facebookOauth.state}`;
     },
   },
   mutations: {
@@ -133,9 +134,10 @@ export default createStore({
     setUserStatistics(state, stats) {
       state.userStatistics = stats;
     },
-    //set state parameter for Google Oauth
-    setGoogleStateParameter(state, stateParameter) {
+    //set state parameter for Google & Facebook Oauth
+    setStateParameter(state, stateParameter) {
       state.googleOauth.state = stateParameter;
+      state.facebookOauth.state = stateParameter;
     },
   },
   actions: {
@@ -487,6 +489,40 @@ export default createStore({
         this.state.isLoggingIn = false;
       }
     },
+    async loginWithFacebook({ dispatch }, payload) {
+      try {
+        const response = await axios.post(
+          `${this.state.apiUrl}/account/oauth/facebook`,
+          payload
+        );
+
+        if (response.status == 200) {
+          //get the access token and decode it
+          let accessToken = response.data.token.result;
+
+          //save the JWT token to local storage
+          localStorage.setItem("jwt_token", accessToken);
+
+          //mark the user as authenticated
+          dispatch("authenticateUser");
+
+          //show toast success message
+          let message = "You’re signed in!";
+
+          dispatch("showToast", { message: message, severity: "success" });
+
+          router.push(this.state.attemptedUrl);
+        }
+      } catch (ex) {
+        console.log(ex);
+        dispatch("showToast", {
+          message: this.state.failureMessage,
+          severity: "error",
+        });
+      } finally {
+        this.state.isLoggingIn = false;
+      }
+    },
 
     // When the user logs out
     logoutUser({ dispatch, commit }) {
@@ -725,7 +761,7 @@ export default createStore({
       let encodedState = btoa(stateString);
 
       //save it
-      commit("setGoogleStateParameter", encodedState);
+      commit("setStateParameter", encodedState);
     },
   },
   modules: {},
