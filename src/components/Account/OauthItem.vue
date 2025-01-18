@@ -52,12 +52,12 @@ let loginWithGoogle = () => {
   //navigate to the login page
   window.location.href = store.getters.googleLoginUrl;
 };
-let loginWithFacebook = () => {
-  //generate the facebook login url state parameter
-  store.dispatch("generateOauthRandomState");
-  //navigate to the login page
-  window.location.href = store.getters.facebookLoginUrl;
-};
+// let loginWithFacebook = () => {
+//   //generate the facebook login url state parameter
+//   store.dispatch("generateOauthRandomState");
+//   //navigate to the login page
+//   window.location.href = store.getters.facebookLoginUrl;
+// };
 
 //Compare two state objects
 //One from the Oauth redirect url and and another from session storage
