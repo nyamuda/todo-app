@@ -11,7 +11,7 @@
   </div>
   <div class="text-center mb-3">
     <button
-      @click="loginWithFacebook"
+      @click.prevent="loginWithFacebook"
       class="btn btn-primary btn-lg btn-block px-4 py-2"
       style="background-color: #3b5998"
     >
