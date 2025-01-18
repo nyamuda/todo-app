@@ -12,7 +12,7 @@
   <div class="text-center mb-3">
     <button
       @click="loginWithFacebook"
-      class="btn btn-primary btn-lg btn-block"
+      class="btn btn-primary btn-lg btn-block px-4 py-2"
       style="background-color: #3b5998"
     >
       <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
