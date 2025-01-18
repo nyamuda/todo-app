@@ -16,8 +16,8 @@
       style="background-color: #3b5998"
     >
       <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
-    </button> -->
-  </div>
+    </button>
+  </div> -->
 </template>
 
 <script setup>
