@@ -435,7 +435,7 @@ export default createStore({
               email: email,
             });
 
-            router.push("/account/verify");
+            router.push("/email/verify");
           }
         } else {
           dispatch("showToast", {
