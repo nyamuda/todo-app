@@ -14,8 +14,6 @@
       @click="loginWithFacebook"
       class="btn btn-primary btn-lg btn-block"
       style="background-color: #3b5998"
-      href="#!"
-      role="button"
     >
       <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
     </button>
