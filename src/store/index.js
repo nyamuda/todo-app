@@ -406,9 +406,8 @@ export default createStore({
 
           // Extract the claims (name, isVerified etc.)
           let isVerified = decodedToken["isVerified"];
-          console.log(decodedToken);
-          console.log(decodedToken.isVerified);
-          if (isVerified == true) {
+
+          if (isVerified) {
             //if the user wants to be be remembered on log in
             //save the JWT token to local storage
             if (rememberMe) {
