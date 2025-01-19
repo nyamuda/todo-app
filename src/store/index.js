@@ -461,7 +461,7 @@ export default createStore({
         let { code } = payload;
         console.log(code);
         const response = await axios.post(
-          `${this.state.apiUrl}/account/oauth/google`,
+          `${this.state.apiUrl}/oauth/google`,
           payload
         );
 
@@ -495,7 +495,7 @@ export default createStore({
     async loginWithFacebook({ dispatch }, payload) {
       try {
         const response = await axios.post(
-          `${this.state.apiUrl}/account/oauth/facebook`,
+          `${this.state.apiUrl}/oauth/facebook`,
           payload
         );
 
