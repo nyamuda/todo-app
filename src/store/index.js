@@ -458,6 +458,8 @@ export default createStore({
     },
     async loginWithGoogle({ dispatch }, payload) {
       try {
+        let { code } = payload;
+        console.log(code);
         const response = await axios.post(
           `${this.state.apiUrl}/account/oauth/google`,
           payload
