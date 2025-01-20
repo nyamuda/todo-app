@@ -30,7 +30,7 @@ export default createStore({
       isLoadingMoreItems: false,
       googleOauth: {
         clientId:
-          "966223459862-clm27dve7uikctc5hh9tf02u585ck85c.apps.googleusercontent.com",
+          "966223459862-ivf3bvfusji5rj1lk5j16mrsih4iu5mr.apps.googleusercontent.com",
         redirectUrl:
           "https://prioritia.netlify.app/account/login/oauth/google/callback",
         scope:
