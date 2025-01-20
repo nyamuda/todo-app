@@ -1,12 +1,12 @@
 <template>
   <form @submit.prevent="submitForm" class="register-form m-auto">
-    <OauthItem />
+    <!-- <OauthItem />
 
     <div class="d-flex align-items-center my-1">
       <hr class="flex-grow-1" />
       <p class="text-center fw-bold mx-3 mb-0">Or</p>
       <hr class="flex-grow-1" />
-    </div>
+    </div> -->
 
     <!-- Name input -->
     <div class="mb-3">
@@ -96,7 +96,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import OauthItem from "./OauthItem.vue";
+//import OauthItem from "./OauthItem.vue";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers, minLength } from "@vuelidate/validators";
