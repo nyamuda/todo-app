@@ -50,10 +50,12 @@ onMounted(() => {
   let providedToken = route.currentRoute.value.query.token ?? "";
   if (providedToken) {
     //verify the authenticity of the token
-    store.dispatch("verifyUser", { token: providedToken });
+    store.dispatch("account/verifyUser", { token: providedToken });
   }
 });
 
-let verificationStatus = computed(() => store.state.emailVerificationStatus);
-let attemptedUrl = computed(() => store.state.attemptedUrl);
+let verificationStatus = computed(
+  () => store.state.account.emailVerificationStatus
+);
+let attemptedUrl = computed(() => store.state.account.attemptedUrl);
 </script>

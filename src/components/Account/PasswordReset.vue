@@ -125,12 +125,14 @@ onMounted(() => {
   providedToken.value = route.currentRoute.value.query.token ?? "";
 });
 
-let isResettingPassword = computed(() => store.state.isResettingPassword);
+let isResettingPassword = computed(
+  () => store.state.account.isResettingPassword
+);
 
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect && providedToken.value) {
-    store.dispatch("resetPassword", {
+    store.dispatch("account/resetPassword", {
       token: providedToken.value,
       password: resetPasswordForm.value.password,
     });

@@ -2,8 +2,10 @@ import axios from "axios";
 import router from "@/router";
 import { jwtDecode } from "jwt-decode";
 import { isJwtExpired } from "jwt-check-expiration";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
-export const account = {
+const account = {
   state: () => ({
     isLoggingIn: false, //to show loading button during log in process
     isRegistering: false, //to show loading button during registering process
@@ -47,10 +49,7 @@ export const account = {
     setAttemptedUrl(state, url) {
       state.attemptedUrl = url;
     },
-    //set user statistics such as total uncompleted items by the user
-    setUserStatistics(state, stats) {
-      state.userStatistics = stats;
-    },
+
     //set state parameter for Google & Facebook Oauth
     setStateParameter(state, stateParameter) {
       state.googleOauth.state = stateParameter;
@@ -69,13 +68,13 @@ export const account = {
   },
   actions: {
     //login user and get the JWT token
-    async loginUser({ dispatch }, payload) {
+    async loginUser({ dispatch, rootState }, payload) {
       try {
         const { rememberMe, email, password } = payload;
         let loginDetails = { email, password };
         this.state.isLoggingIn = true;
         const response = await axios.post(
-          `${this.state.apiUrl}/account/login`,
+          `${rootState.apiUrl}/account/login`,
           loginDetails
         );
 
@@ -107,43 +106,37 @@ export const account = {
             //show toast success message
             let message = "Login successful";
 
-            dispatch("showToast", { message: message, severity: "success" });
+            toast.success(message);
 
             router.push(this.state.attemptedUrl);
           }
 
           //if not verified, send verification email
           else {
-            await axios.post(`${this.state.apiUrl}/email/verify`, {
+            await axios.post(`${rootState.apiUrl}/email/verify`, {
               email: email,
             });
 
             router.push("/email/verify");
           }
         } else {
-          dispatch("showToast", {
-            message: response.data.message,
-            severity: "error",
-          });
+          toast.error(response.data.message);
         }
       } catch (ex) {
         let message = ex.response.data.message
           ? ex.response.data.message
-          : this.state.failureMessage;
-        dispatch("showToast", {
-          message: message,
-          severity: "error",
-        });
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         this.state.isLoggingIn = false;
       }
     },
-    async loginWithGoogle({ dispatch }, payload) {
+    async loginWithGoogle({ dispatch, rootState }, payload) {
       try {
         let { code } = payload;
         console.log(code);
         const response = await axios.post(
-          `${this.state.apiUrl}/oauth/google`,
+          `${rootState.apiUrl}/oauth/google`,
           payload
         );
 
@@ -160,24 +153,20 @@ export const account = {
           //show toast success message
           let message = "You’re signed in!";
 
-          dispatch("showToast", { message: message, severity: "success" });
+          toast.success(message);
 
           router.push(this.state.attemptedUrl);
         }
       } catch (ex) {
-        console.log(ex);
-        dispatch("showToast", {
-          message: this.state.failureMessage,
-          severity: "error",
-        });
+        toast.error(rootState.failureMessage);
       } finally {
         this.state.isLoggingIn = false;
       }
     },
-    async loginWithFacebook({ dispatch }, payload) {
+    async loginWithFacebook({ dispatch, rootState }, payload) {
       try {
         const response = await axios.post(
-          `${this.state.apiUrl}/oauth/facebook`,
+          `${rootState.apiUrl}/oauth/facebook`,
           payload
         );
 
@@ -193,24 +182,18 @@ export const account = {
 
           //show toast success message
           let message = "You’re signed in!";
-
-          dispatch("showToast", { message: message, severity: "success" });
-
+          toast.success(message);
           router.push(this.state.attemptedUrl);
         }
       } catch (ex) {
-        console.log(ex);
-        dispatch("showToast", {
-          message: this.state.failureMessage,
-          severity: "error",
-        });
+        toast.error(rootState.failureMessage);
       } finally {
         this.state.isLoggingIn = false;
       }
     },
 
     // When the user logs out
-    logoutUser({ dispatch, commit }) {
+    logoutUser({ commit }) {
       //first, remove access token from local or session storage
       localStorage.removeItem("jwt_token");
       sessionStorage.removeItem("jwt_token");
@@ -231,19 +214,16 @@ export const account = {
       //finally, navigate to the homepage and show logged out message
       router.push("/");
       let message = "You’re now logged out";
-      dispatch("showToast", {
-        message: message,
-        severity: "success",
-      });
+      toast.success(message);
     },
     //Register user
-    async registerUser({ dispatch }, payload) {
+    async registerUser({ rootState }, payload) {
       try {
         const { email } = payload;
 
         this.state.isRegistering = true;
         const response = await axios.post(
-          `${this.state.apiUrl}/account/register`,
+          `${rootState.apiUrl}/account/register`,
           payload
         );
 
@@ -251,90 +231,68 @@ export const account = {
         //status code will be 201 from the API
         if (response.status == 201) {
           //send verification email
-          await axios.post(`${this.state.apiUrl}/email/verify`, {
+          await axios.post(`${rootState.apiUrl}/email/verify`, {
             email: email,
           });
           router.push("/email/verify");
         } else {
-          dispatch("showToast", {
-            message: response.data.message,
-            severity: "error",
-          });
+          toast.error(response.data.message);
         }
       } catch (ex) {
         let message = ex.response.data.message
           ? ex.response.data.message
-          : this.state.failureMessage;
-        dispatch("showToast", {
-          message: message,
-          severity: "error",
-        });
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         this.state.isRegistering = false;
       }
     },
     //verify user email address
     //by verifying the token sent to their email
-    async verifyUser({ dispatch }, payload) {
+    async verifyUser({ rootState }, payload) {
       this.state.emailVerificationStatus = "verifying";
       try {
-        await axios.put(`${this.state.apiUrl}/account/verify`, payload);
+        await axios.put(`${rootState.apiUrl}/account/verify`, payload);
         this.state.emailVerificationStatus = "success";
       } catch (ex) {
-        console.log(ex);
         this.state.emailVerificationStatus = "fail";
-        dispatch("showToast", {
-          message: ex.response.data.message,
-          severity: "error",
-        });
+        toast.error(ex.response.data.message);
       }
     },
     //send password reset link to user who has forgotten their password
-    async sendPasswordResetLink({ dispatch }, payload) {
+    async sendPasswordResetLink({ rootState }, payload) {
       try {
         this.state.isSendingPasswordLink = true;
-        await axios.post(`${this.state.apiUrl}/email/password`, payload);
+        await axios.post(`${rootState.apiUrl}/email/password`, payload);
         router.push("/email/password/sent");
       } catch (ex) {
         let message =
           ex.status == 400
             ? ex.response.data.message
-            : this.state.failureMessage;
+            : rootState.failureMessage;
 
-        dispatch("showToast", {
-          message: message,
-          severity: "error",
-        });
+        toast.error(message);
       } finally {
         this.state.isSendingPasswordLink = false;
       }
     },
     //allow user to change their password
     //by verifying the reset password token sent to their email
-    async resetPassword({ dispatch }, payload) {
+    async resetPassword({ rootState }, payload) {
       this.state.isResettingPassword = true;
 
       try {
-        await axios.post(
-          `${this.state.apiUrl}/account/password-reset`,
-          payload
-        );
+        await axios.post(`${rootState.apiUrl}/account/password-reset`, payload);
         let message =
           "Your password has been successfully reset. You can now log in with your new password.";
-        dispatch("showToast", {
-          message: message,
-          severity: "success",
-        });
+        toast.success(message);
         router.push("/account/login");
       } catch (ex) {
         let message =
           ex.status == 400
             ? ex.response.data.message
-            : this.state.failureMessage;
-        dispatch("showToast", {
-          message: message,
-          severity: "error",
-        });
+            : rootState.failureMessage;
+        toast.error(message);
       } finally {
         this.state.isResettingPassword = false;
       }
@@ -367,22 +325,16 @@ export const account = {
       }
     },
     //Contact us message from user
-    async contactUs({ dispatch }, payload) {
+    async contactUs({ rootState }, payload) {
       try {
         this.state.isContactingUs = true;
-        await axios.post(`${this.state.apiUrl}/email/contact`, payload);
+        await axios.post(`${rootState.apiUrl}/email/contact`, payload);
         let message =
           "We’ve received your message. Our team will get back to you shortly.";
-        dispatch("showToast", {
-          message: message,
-          severity: "success",
-        });
+        toast.success(message);
         router.push("/");
       } catch (ex) {
-        dispatch("showToast", {
-          message: this.state.failureMessage,
-          severity: "error",
-        });
+        toast.error(rootState.failureMessage);
       } finally {
         this.state.isContactingUs = false;
       }
@@ -449,4 +401,9 @@ export const account = {
       commit("setStateParameter", encodedState);
     },
   },
+};
+
+export default {
+  namespaced: true,
+  account,
 };

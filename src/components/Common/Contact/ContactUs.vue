@@ -147,7 +147,7 @@ let isContactingUs = computed(() => store.state.isContactingUs);
 let submitForm = async () => {
   const isFormCorrect = v$._value.$validate;
   if (isFormCorrect) {
-    store.dispatch("contactUs", contactForm.value);
+    store.dispatch("account/contactUs", contactForm.value);
   }
 };
 </script>

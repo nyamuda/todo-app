@@ -134,10 +134,10 @@ const v$ = useVuelidate(rules, registrationForm);
 let submitForm = async () => {
   const isFormCorrect = v$._value.$validate;
   if (isFormCorrect) {
-    store.dispatch("registerUser", registrationForm.value);
+    store.dispatch("account/registerUser", registrationForm.value);
   }
 };
-let isRegistering = computed(() => store.state.isRegistering);
+let isRegistering = computed(() => store.state.account.isRegistering);
 </script>
 
 <style scoped>

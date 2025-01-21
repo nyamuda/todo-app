@@ -1,7 +1,8 @@
 import axios from "axios";
 import router from "@/router";
-
-export const tasks = {
+import { useToast } from "vue-toastification";
+const toast = useToast();
+const tasks = {
   state: () => ({
     todoTasks: [],
     isGettingItems: false, //to show placeholder items
@@ -70,18 +71,22 @@ export const tasks = {
         };
       });
     },
+    //set user statistics such as total uncompleted items by the user
+    setUserStatistics(state, stats) {
+      state.userStatistics = stats;
+    },
   },
   getters: {},
   actions: {
     //fetch all tasks
-    async fetchTasks({ commit, dispatch }) {
+    async fetchTasks({ commit, dispatch, rootState }) {
       try {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
 
         this.state.isGettingItems = true;
-        const response = await axios.get(`${this.state.apiUrl}/items`);
+        const response = await axios.get(`${rootState.apiUrl}/items`);
         //mutate the state with the fetched tasks
         commit("formatTaskDate", response.data.items);
 
@@ -95,16 +100,14 @@ export const tasks = {
     },
 
     //fetch completed tasks
-    async fetchCompletedTasks({ commit, dispatch }) {
+    async fetchCompletedTasks({ commit, dispatch, rootState }) {
       try {
         this.state.isGettingItems = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        const response = await axios.get(
-          `${this.state.apiUrl}/items/completed`
-        );
+        const response = await axios.get(`${rootState.apiUrl}/items/completed`);
         //mutate the state with the fetched tasks
         commit("formatTaskDate", response.data.items);
 
@@ -117,7 +120,7 @@ export const tasks = {
       }
     },
     //fetch uncompleted tasks
-    async fetchUncompletedTasks({ commit, dispatch }) {
+    async fetchUncompletedTasks({ commit, dispatch, rootState }) {
       try {
         this.state.isGettingItems = true;
         //add authorization header to the request
@@ -125,7 +128,7 @@ export const tasks = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${this.state.apiUrl}/items/uncompleted`
+          `${rootState.apiUrl}/items/uncompleted`
         );
         //mutate the state with the fetched tasks
         commit("formatTaskDate", response.data.items);
@@ -140,27 +143,24 @@ export const tasks = {
     },
 
     //fetch user statistics such as the number of completed tasks by the user
-    async fetchTUserStatistics({ commit, dispatch }) {
+    async fetchTUserStatistics({ commit, dispatch, rootState }) {
       try {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
 
         const response = await axios.get(
-          `${this.state.apiUrl}/items/statistics`
+          `${rootState.apiUrl}/items/statistics`
         );
         //mutate the state with the fetched statistics
         commit("setUserStatistics", response.data);
       } catch (error) {
-        dispatch("showToast", {
-          message: this.state.failureMessage,
-          severity: "error",
-        });
+        toast.error(rootState.failureMessage);
       }
     },
 
     //Load more tasks
-    async loadMoreTasks({ commit, dispatch }, filterBy) {
+    async loadMoreTasks({ commit, dispatch, rootState }, filterBy) {
       try {
         //check which filter to use
         let filterValue = "";
@@ -173,7 +173,7 @@ export const tasks = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${this.state.apiUrl}/items/${filterValue}`,
+          `${rootState.apiUrl}/items/${filterValue}`,
           {
             params: {
               page: this.state.itemsPageInfo.page + 1,
@@ -194,7 +194,7 @@ export const tasks = {
     },
 
     //add a task
-    async addTask({ dispatch }, task) {
+    async addTask({ dispatch, rootState }, task) {
       try {
         //convert time to UCT
         let localDueDate = task.dueDate;
@@ -204,7 +204,7 @@ export const tasks = {
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        const response = await axios.post(`${this.state.apiUrl}/items`, task);
+        const response = await axios.post(`${rootState.apiUrl}/items`, task);
         // Check if the request was successful
         //status code will be 201 from the API
         if (response.status == 201) {
@@ -218,25 +218,18 @@ export const tasks = {
           await dispatch("fetchTasks");
         } else {
           if (response.data.message) {
-            dispatch("showToast", {
-              message: this.response.data.message,
-              severity: "error",
-            });
+            toast.error(response.data.message);
           }
         }
         this.state.isCreatingItem = false;
       } catch (err) {
-        console.log(err);
-        dispatch("showToast", {
-          message: this.state.failureMessage,
-          severity: "error",
-        });
+        toast.error(rootState.failureMessage);
         this.state.isCreatingItem = false;
       }
     },
 
     //mark a task as completed
-    async completeTask({ dispatch, commit }, id) {
+    async completeTask({ dispatch, commit, rootState }, id) {
       try {
         this.state.isCompletingItem = true;
         let completedTask = {
@@ -247,7 +240,7 @@ export const tasks = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.put(
-          `${this.state.apiUrl}/items/${id}`,
+          `${rootState.apiUrl}/items/${id}`,
           completedTask
         );
         // Check if the request was successful
@@ -260,51 +253,56 @@ export const tasks = {
           //update status of recently completed item
           commit("showCompletedItem", id);
         } else {
-          dispatch("showToast", {
-            message: this.state.failureMessage,
-            severity: "error",
-          });
+          toast.error(rootState.failureMessage);
         }
         this.state.isCompletingItem = false;
       } catch (error) {
-        dispatch("showToast", {
-          message: this.state.failureMessage,
-          severity: "error",
-        });
+        toast.error(rootState.failureMessage);
         this.state.isCompletingItem = false;
       }
     },
 
     // Asynchronous action to delete a task
-    async deleteTask({ dispatch, commit }, id) {
+    async deleteTask({ dispatch, commit, rootState }, id) {
       try {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         // Send a DELETE request to the API
-        let response = await axios.delete(`${this.state.apiUrl}/items/${id}`);
+        let response = await axios.delete(`${rootState.apiUrl}/items/${id}`);
 
         // Check if the request was successful
         //status code will be 204 from the API
         if (response.status == 204) {
           //show toast success message
           let message = "The task has been successfully deleted.";
-          dispatch("showToast", { message: message, severity: "success" });
+          toast.success(message);
 
           //remove item from state
           await commit("removeItem", id);
         } else {
-          dispatch("showToast", {
-            message: this.state.failureMessage,
-            severity: "error",
-          });
+          toast.error(rootState.failureMessage);
         }
       } catch (error) {
-        dispatch("showToast", {
-          message: this.state.failureMessage,
-          severity: "error",
-        });
+        toast.error(rootState.failureMessage);
       }
     },
+    //Set authorization header for all request to access protected routes from the API
+    setAuthorizationHeader() {
+      //check if there is a token in session storage
+      let sessionToken = sessionStorage.getItem("jwt_token");
+      //check if there is a token in local storage
+      let localToken = localStorage.getItem("jwt_token");
+
+      //the current token
+      let token = sessionToken ? sessionToken : localToken ? localToken : null;
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    },
   },
+};
+
+export default {
+  namespaced: true,
+  tasks,
 };

@@ -193,11 +193,11 @@ let filterItemsBy = ref("all");
 
 onMounted(async () => {
   //get all items
-  store.dispatch("fetchTasks");
+  store.dispatch("tasks/fetchTasks");
 });
 
 let tasks = computed(() => store.state.todoTasks);
-let isGettingItems = computed(() => store.state.isGettingItems);
+let isGettingItems = computed(() => store.state.tasks.isGettingItems);
 
 //let the user confirm deleting an item
 //by showing a modal
@@ -213,36 +213,36 @@ const closeModal = () => {
 //delete a task and hide the modal
 let deleteTask = () => {
   showModal.value = false;
-  store.dispatch("deleteTask", pendingDeleteTaskId.value);
+  store.dispatch("tasks/deleteTask", pendingDeleteTaskId.value);
 };
 //mark task as completed
 let markCompleted = (id) => {
   pendingUpdateTaskId.value = id;
-  store.dispatch("completeTask", id);
+  store.dispatch("tasks/completeTask", id);
 };
 
 let filterItems = () => {
   if (filterItemsBy.value == "completed") {
-    store.dispatch("fetchCompletedTasks");
+    store.dispatch("tasks/fetchCompletedTasks");
   } else if (filterItemsBy.value == "uncompleted") {
-    store.dispatch("fetchUncompletedTasks");
+    store.dispatch("tasks/fetchUncompletedTasks");
   } else {
-    store.dispatch("fetchTasks");
+    store.dispatch("tasks/fetchTasks");
   }
 };
 //load more tasks depending on whether
 //the current list is for all, completed or uncompleted tasks
 let loadMoreItems = () => {
-  store.dispatch("loadMoreTasks", filterItemsBy.value);
+  store.dispatch("tasks/loadMoreTasks", filterItemsBy.value);
 };
 //is an item being marked as complete
-let isCompletingItem = computed(() => store.state.isCompletingItem);
+let isCompletingItem = computed(() => store.state.tasks.isCompletingItem);
 
 //are there more items currently being loaded
-let isLoadingMoreItems = computed(() => store.state.isLoadingMoreItems);
+let isLoadingMoreItems = computed(() => store.state.tasks.isLoadingMoreItems);
 
 //are there still more items that can be loaded
-let hasMoreItems = computed(() => store.state.itemsPageInfo.hasMore);
+let hasMoreItems = computed(() => store.state.tasks.itemsPageInfo.hasMore);
 </script>
 
 <style>

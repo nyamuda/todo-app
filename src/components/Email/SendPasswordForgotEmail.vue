@@ -47,11 +47,11 @@ const store = useStore();
 let email = ref("");
 let submitForm = async () => {
   if (email.value) {
-    store.dispatch("sendPasswordResetLink", { email: email.value });
+    store.dispatch("account/sendPasswordResetLink", { email: email.value });
   }
 };
 let isSendingPasswordResetLink = computed(
-  () => store.state.isSendingPasswordLink
+  () => store.state.account.isSendingPasswordLink
 );
 </script>
 

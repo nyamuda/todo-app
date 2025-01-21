@@ -48,7 +48,7 @@ onMounted(() => {
 
 let loginWithGoogle = () => {
   //generate the google login url state parameter
-  store.dispatch("generateOauthRandomState");
+  store.dispatch("account/generateOauthRandomState");
   //navigate to the login page
   window.location.href = store.getters.googleLoginUrl;
 };
@@ -81,7 +81,7 @@ let compareStates = (redirectState) => {
   ) {
     //save the state url to redirect the user to the page
     //they were initially wanted to go to when then clicked the oauth button
-    store.commit("setAttemptedUrl", urlState.currentState);
+    store.commit("account/setAttemptedUrl", urlState.currentState);
     return true;
   }
   //show an error the states don't match
@@ -115,11 +115,11 @@ let makeOAuthLoginRequest = (code) => {
   //Google redirect url
   if (window.location.pathname.includes("/oauth/google/callback")) {
     //use the code to get the JWT token from the server
-    store.dispatch("loginWithGoogle", { code });
+    store.dispatch("account/loginWithGoogle", { code });
   }
   //else go with facebook
   else {
-    store.dispatch("loginWithFacebook", { code });
+    store.dispatch("account/loginWithFacebook", { code });
   }
 };
 </script>

@@ -1,4 +1,6 @@
 import { createStore } from "vuex";
+import { account } from "./modules/account";
+import { tasks } from "./modules/tasks";
 
 import { useToast } from "vue-toastification";
 const toast = useToast();
@@ -28,5 +30,5 @@ export default createStore({
       }
     },
   },
-  modules: {},
+  modules: { account, tasks },
 });

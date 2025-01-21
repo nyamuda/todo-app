@@ -147,10 +147,10 @@ const v$ = useVuelidate(rules, loginForm.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("loginUser", loginForm.value);
+    store.dispatch("account/loginUser", loginForm.value);
   }
 };
-let isLoggingIn = computed(() => store.state.isLoggingIn);
+let isLoggingIn = computed(() => store.state.account.isLoggingIn);
 </script>
 
 <style scoped>

@@ -71,11 +71,11 @@ const form = ref({
 
 // Submit form
 const submitForm = () => {
-  store.dispatch("addTask", form.value);
+  store.dispatch("tasks/addTask", form.value);
 };
 
 //show loading button or not
-let isCreatingItem = computed(() => store.state.isCreatingItem);
+let isCreatingItem = computed(() => store.state.tasks.isCreatingItem);
 </script>
 
 <style scoped></style>
