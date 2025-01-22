@@ -2,7 +2,8 @@ import axios from "axios";
 import router from "@/router";
 import { useToast } from "vue-toastification";
 const toast = useToast();
-const tasks = {
+const items = {
+  namespaced: true,
   state: () => ({
     todoTasks: [],
     isGettingItems: false, //to show placeholder items
@@ -79,13 +80,13 @@ const tasks = {
   getters: {},
   actions: {
     //fetch all tasks
-    async fetchTasks({ commit, dispatch, rootState }) {
+    async fetchTasks({ commit, dispatch, state, rootState }) {
       try {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
 
-        this.state.isGettingItems = true;
+        state.isGettingItems = true;
         const response = await axios.get(`${rootState.apiUrl}/items`);
         //mutate the state with the fetched tasks
         commit("formatTaskDate", response.data.items);
@@ -93,16 +94,16 @@ const tasks = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        toast.error("Failed to load bookings.");
       } finally {
-        this.state.isGettingItems = false;
+        state.isGettingItems = false;
       }
     },
 
     //fetch completed tasks
-    async fetchCompletedTasks({ commit, dispatch, rootState }) {
+    async fetchCompletedTasks({ commit, dispatch, state, rootState }) {
       try {
-        this.state.isGettingItems = true;
+        state.isGettingItems = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
@@ -114,15 +115,15 @@ const tasks = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        toast.error("Failed to load bookings.");
       } finally {
-        this.state.isGettingItems = false;
+        state.isGettingItems = false;
       }
     },
     //fetch uncompleted tasks
-    async fetchUncompletedTasks({ commit, dispatch, rootState }) {
+    async fetchUncompletedTasks({ commit, dispatch, state, rootState }) {
       try {
-        this.state.isGettingItems = true;
+        state.isGettingItems = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
@@ -136,14 +137,14 @@ const tasks = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        toast.error("Failed to load bookings.");
       } finally {
-        this.state.isGettingItems = false;
+        state.isGettingItems = false;
       }
     },
 
     //fetch user statistics such as the number of completed tasks by the user
-    async fetchTUserStatistics({ commit, dispatch, rootState }) {
+    async fetchUserStatistics({ commit, dispatch, rootState }) {
       try {
         //add authorization header to the request
         //to access the protected route
@@ -160,14 +161,14 @@ const tasks = {
     },
 
     //Load more tasks
-    async loadMoreTasks({ commit, dispatch, rootState }, filterBy) {
+    async loadMoreTasks({ commit, dispatch, state, rootState }, filterBy) {
       try {
         //check which filter to use
         let filterValue = "";
         if (filterBy == "completed" || filterBy == "uncompleted") {
           filterValue = filterBy;
         }
-        this.state.isLoadingMoreItems = true;
+        state.isLoadingMoreItems = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
@@ -176,8 +177,8 @@ const tasks = {
           `${rootState.apiUrl}/items/${filterValue}`,
           {
             params: {
-              page: this.state.itemsPageInfo.page + 1,
-              pageSize: this.state.itemsPageInfo.pageSize,
+              page: state.itemsPageInfo.page + 1,
+              pageSize: state.itemsPageInfo.pageSize,
             },
           }
         );
@@ -187,19 +188,19 @@ const tasks = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        toast.error("Failed to load more bookings.");
       } finally {
-        this.state.isLoadingMoreItems = false;
+        state.isLoadingMoreItems = false;
       }
     },
 
     //add a task
-    async addTask({ dispatch, rootState }, task) {
+    async addTask({ dispatch, state, rootState }, task) {
       try {
         //convert time to UCT
         let localDueDate = task.dueDate;
         task.dueDate = new Date(localDueDate + "Z").toISOString();
-        this.state.isCreatingItem = true;
+        state.isCreatingItem = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
@@ -209,7 +210,7 @@ const tasks = {
         //status code will be 201 from the API
         if (response.status == 201) {
           //show toast success message
-          let message = "The task has been successfully added.";
+          let message = "The booking has been successfully added.";
           dispatch("showToast", { message: message, severity: "success" });
 
           router.push("/tasks/list");
@@ -221,17 +222,17 @@ const tasks = {
             toast.error(response.data.message);
           }
         }
-        this.state.isCreatingItem = false;
+        state.isCreatingItem = false;
       } catch (err) {
         toast.error(rootState.failureMessage);
-        this.state.isCreatingItem = false;
+        state.isCreatingItem = false;
       }
     },
 
     //mark a task as completed
-    async completeTask({ dispatch, commit, rootState }, id) {
+    async completeTask({ dispatch, commit, state, rootState }, id) {
       try {
-        this.state.isCompletingItem = true;
+        state.isCompletingItem = true;
         let completedTask = {
           isCompleted: true,
         };
@@ -255,10 +256,10 @@ const tasks = {
         } else {
           toast.error(rootState.failureMessage);
         }
-        this.state.isCompletingItem = false;
+        state.isCompletingItem = false;
       } catch (error) {
         toast.error(rootState.failureMessage);
-        this.state.isCompletingItem = false;
+        state.isCompletingItem = false;
       }
     },
 
@@ -275,7 +276,7 @@ const tasks = {
         //status code will be 204 from the API
         if (response.status == 204) {
           //show toast success message
-          let message = "The task has been successfully deleted.";
+          let message = "The item has been successfully deleted.";
           toast.success(message);
 
           //remove item from state
@@ -302,7 +303,4 @@ const tasks = {
   },
 };
 
-export default {
-  namespaced: true,
-  tasks,
-};
+export default items;

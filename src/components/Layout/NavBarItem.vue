@@ -128,10 +128,10 @@ import { useStore } from "vuex";
 const store = useStore();
 import { computed } from "vue";
 
-let isAuthenticated = computed(() => store.state.isAuthenticated);
+let isAuthenticated = computed(() => store.state.account.isAuthenticated);
 
 let logout = () => {
-  store.dispatch("logoutUser");
+  store.dispatch("account/logoutUser");
 };
 </script>
 

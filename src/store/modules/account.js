@@ -6,6 +6,7 @@ import { useToast } from "vue-toastification";
 const toast = useToast();
 
 const account = {
+  namespaced: true,
   state: () => ({
     isLoggingIn: false, //to show loading button during log in process
     isRegistering: false, //to show loading button during registering process
@@ -68,11 +69,11 @@ const account = {
   },
   actions: {
     //login user and get the JWT token
-    async loginUser({ dispatch, rootState }, payload) {
+    async loginUser({ dispatch, state, rootState }, payload) {
       try {
         const { rememberMe, email, password } = payload;
         let loginDetails = { email, password };
-        this.state.isLoggingIn = true;
+        state.isLoggingIn = true;
         const response = await axios.post(
           `${rootState.apiUrl}/account/login`,
           loginDetails
@@ -108,7 +109,7 @@ const account = {
 
             toast.success(message);
 
-            router.push(this.state.attemptedUrl);
+            router.push(state.attemptedUrl);
           }
 
           //if not verified, send verification email
@@ -128,10 +129,10 @@ const account = {
           : rootState.failureMessage;
         toast.error(message);
       } finally {
-        this.state.isLoggingIn = false;
+        state.isLoggingIn = false;
       }
     },
-    async loginWithGoogle({ dispatch, rootState }, payload) {
+    async loginWithGoogle({ dispatch, state, rootState }, payload) {
       try {
         let { code } = payload;
         console.log(code);
@@ -155,15 +156,15 @@ const account = {
 
           toast.success(message);
 
-          router.push(this.state.attemptedUrl);
+          router.push(state.attemptedUrl);
         }
       } catch (ex) {
         toast.error(rootState.failureMessage);
       } finally {
-        this.state.isLoggingIn = false;
+        state.isLoggingIn = false;
       }
     },
-    async loginWithFacebook({ dispatch, rootState }, payload) {
+    async loginWithFacebook({ dispatch, state, rootState }, payload) {
       try {
         const response = await axios.post(
           `${rootState.apiUrl}/oauth/facebook`,
@@ -183,12 +184,12 @@ const account = {
           //show toast success message
           let message = "You’re signed in!";
           toast.success(message);
-          router.push(this.state.attemptedUrl);
+          router.push(state.attemptedUrl);
         }
       } catch (ex) {
         toast.error(rootState.failureMessage);
       } finally {
-        this.state.isLoggingIn = false;
+        state.isLoggingIn = false;
       }
     },
 
@@ -217,11 +218,11 @@ const account = {
       toast.success(message);
     },
     //Register user
-    async registerUser({ rootState }, payload) {
+    async registerUser({ rootState, state }, payload) {
       try {
         const { email } = payload;
 
-        this.state.isRegistering = true;
+        state.isRegistering = true;
         const response = await axios.post(
           `${rootState.apiUrl}/account/register`,
           payload
@@ -244,25 +245,25 @@ const account = {
           : rootState.failureMessage;
         toast.error(message);
       } finally {
-        this.state.isRegistering = false;
+        state.isRegistering = false;
       }
     },
     //verify user email address
     //by verifying the token sent to their email
-    async verifyUser({ rootState }, payload) {
-      this.state.emailVerificationStatus = "verifying";
+    async verifyUser({ state, rootState }, payload) {
+      state.emailVerificationStatus = "verifying";
       try {
         await axios.put(`${rootState.apiUrl}/account/verify`, payload);
-        this.state.emailVerificationStatus = "success";
+        state.emailVerificationStatus = "success";
       } catch (ex) {
-        this.state.emailVerificationStatus = "fail";
+        state.emailVerificationStatus = "fail";
         toast.error(ex.response.data.message);
       }
     },
     //send password reset link to user who has forgotten their password
-    async sendPasswordResetLink({ rootState }, payload) {
+    async sendPasswordResetLink({ state, rootState }, payload) {
       try {
-        this.state.isSendingPasswordLink = true;
+        state.isSendingPasswordLink = true;
         await axios.post(`${rootState.apiUrl}/email/password`, payload);
         router.push("/email/password/sent");
       } catch (ex) {
@@ -273,13 +274,13 @@ const account = {
 
         toast.error(message);
       } finally {
-        this.state.isSendingPasswordLink = false;
+        state.isSendingPasswordLink = false;
       }
     },
     //allow user to change their password
     //by verifying the reset password token sent to their email
-    async resetPassword({ rootState }, payload) {
-      this.state.isResettingPassword = true;
+    async resetPassword({ state, rootState }, payload) {
+      state.isResettingPassword = true;
 
       try {
         await axios.post(`${rootState.apiUrl}/account/password-reset`, payload);
@@ -294,7 +295,7 @@ const account = {
             : rootState.failureMessage;
         toast.error(message);
       } finally {
-        this.state.isResettingPassword = false;
+        state.isResettingPassword = false;
       }
     },
     //check to see if user is authenticated by using the Jwt token
@@ -311,6 +312,7 @@ const account = {
         if (token) {
           //check if access token has expired or not
           const hasExpired = isJwtExpired(token);
+          //if token has expired, then the user is not authenticated
           const isUserAuthenticated = hasExpired ? false : true;
 
           //if token hasn't expired
@@ -325,9 +327,9 @@ const account = {
       }
     },
     //Contact us message from user
-    async contactUs({ rootState }, payload) {
+    async contactUs({ state, rootState }, payload) {
       try {
-        this.state.isContactingUs = true;
+        state.isContactingUs = true;
         await axios.post(`${rootState.apiUrl}/email/contact`, payload);
         let message =
           "We’ve received your message. Our team will get back to you shortly.";
@@ -336,7 +338,7 @@ const account = {
       } catch (ex) {
         toast.error(rootState.failureMessage);
       } finally {
-        this.state.isContactingUs = false;
+        state.isContactingUs = false;
       }
     },
     //Set authorization header for all request to access protected routes from the API
@@ -378,14 +380,14 @@ const account = {
 
     //Generate the state parameter for Oauth 2.0
     // ---> to prevent CSRF & and preserve the application state
-    generateOauthRandomState({ commit }) {
+    generateOauthRandomState({ commit, state }) {
       // Generate a random string for security
       const randomString = Math.random().toString(36).substring(2);
 
       // Create the state object
       const stateObject = {
         randomString: randomString,
-        currentState: this.state.attemptedUrl, //current state of the app or attempted url
+        currentState: state.attemptedUrl, //current state of the app or attempted url
       };
 
       // Convert the state object to a JSON string
@@ -403,7 +405,4 @@ const account = {
   },
 };
 
-export default {
-  namespaced: true,
-  account,
-};
+export default account;

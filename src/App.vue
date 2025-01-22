@@ -18,7 +18,7 @@ const store = useStore();
 
 onMounted(() => {
   //Check if user is authenticated or not
-  store.dispatch("authenticateUser");
+  store.dispatch("account/authenticateUser");
 });
 </script>
 

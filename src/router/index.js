@@ -48,8 +48,8 @@ const routes = [
   {
     path: "/tasks",
     beforeEnter: (to) => {
-      if (!store.state.isAuthenticated) {
-        store.commit("setAttemptedUrl", to.fullPath); // Save the attempted URL
+      if (!store.state.account.isAuthenticated) {
+        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
         return { name: "Login" }; // Redirect to login page
       }
       return true;
@@ -67,8 +67,8 @@ const routes = [
         component: UserDashboardView,
         name: "UserDashboard",
         beforeEnter: (to) => {
-          if (!store.state.isAuthenticated) {
-            store.commit("setAttemptedUrl", to.fullPath); // Save the attempted URL
+          if (!store.state.account.isAuthenticated) {
+            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
             return { name: "Login" }; // Redirect to login page
           }
           return true;

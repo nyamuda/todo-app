@@ -193,11 +193,11 @@ let filterItemsBy = ref("all");
 
 onMounted(async () => {
   //get all items
-  store.dispatch("tasks/fetchTasks");
+  store.dispatch("items/fetchTasks");
 });
 
-let tasks = computed(() => store.state.todoTasks);
-let isGettingItems = computed(() => store.state.tasks.isGettingItems);
+let tasks = computed(() => store.state.items.todoTasks);
+let isGettingItems = computed(() => store.state.items.isGettingItems);
 
 //let the user confirm deleting an item
 //by showing a modal
@@ -213,36 +213,36 @@ const closeModal = () => {
 //delete a task and hide the modal
 let deleteTask = () => {
   showModal.value = false;
-  store.dispatch("tasks/deleteTask", pendingDeleteTaskId.value);
+  store.dispatch("items/deleteTask", pendingDeleteTaskId.value);
 };
 //mark task as completed
 let markCompleted = (id) => {
   pendingUpdateTaskId.value = id;
-  store.dispatch("tasks/completeTask", id);
+  store.dispatch("items/completeTask", id);
 };
 
 let filterItems = () => {
   if (filterItemsBy.value == "completed") {
-    store.dispatch("tasks/fetchCompletedTasks");
+    store.dispatch("items/fetchCompletedTasks");
   } else if (filterItemsBy.value == "uncompleted") {
-    store.dispatch("tasks/fetchUncompletedTasks");
+    store.dispatch("items/fetchUncompletedTasks");
   } else {
-    store.dispatch("tasks/fetchTasks");
+    store.dispatch("items/fetchTasks");
   }
 };
 //load more tasks depending on whether
 //the current list is for all, completed or uncompleted tasks
 let loadMoreItems = () => {
-  store.dispatch("tasks/loadMoreTasks", filterItemsBy.value);
+  store.dispatch("items/loadMoreTasks", filterItemsBy.value);
 };
 //is an item being marked as complete
-let isCompletingItem = computed(() => store.state.tasks.isCompletingItem);
+let isCompletingItem = computed(() => store.state.items.isCompletingItem);
 
 //are there more items currently being loaded
-let isLoadingMoreItems = computed(() => store.state.tasks.isLoadingMoreItems);
+let isLoadingMoreItems = computed(() => store.state.items.isLoadingMoreItems);
 
 //are there still more items that can be loaded
-let hasMoreItems = computed(() => store.state.tasks.itemsPageInfo.hasMore);
+let hasMoreItems = computed(() => store.state.items.itemsPageInfo.hasMore);
 </script>
 
 <style>

@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
-import { account } from "./modules/account";
-import { tasks } from "./modules/tasks";
+import account from "./modules/account";
+import items from "./modules/items";
 
 import { useToast } from "vue-toastification";
 const toast = useToast();
@@ -30,5 +30,5 @@ export default createStore({
       }
     },
   },
-  modules: { account, tasks },
+  modules: { account, items },
 });
