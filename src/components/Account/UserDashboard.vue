@@ -12,21 +12,39 @@
           </h5>
         </div>
 
-        <!-- Task Statistics Section -->
+        <!-- Item Statistics Section -->
         <div class="row text-center">
           <div class="col-md-6 mb-3">
             <div class="p-3 border rounded bg-light">
-              <h6 class="text-success fw-bold">Completed Tasks</h6>
-              <p class="display-6 fw-bold" id="completedTasks">
-                {{ userStatistics.totalCompletedItems }}
+              <h6 class="text-dark fw-bold">Total Bookings</h6>
+              <p class="display-6 fw-bold">
+                {{ userStatistics.totalItems }}
               </p>
             </div>
           </div>
           <div class="col-md-6 mb-3">
             <div class="p-3 border rounded bg-light">
-              <h6 class="text-warning fw-bold">Pending Tasks</h6>
+              <h6 class="text-success fw-bold">Completed Bookings</h6>
               <p class="display-6 fw-bold" id="pendingTasks">
-                {{ userStatistics.totalUncompletedItems }}
+                {{ userStatistics.totalCompletedItems }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row text-center">
+          <div class="col-md-6 mb-3">
+            <div class="p-3 border rounded bg-light">
+              <h6 class="text-warning fw-bold">Pending Bookings</h6>
+              <p class="display-6 fw-bold" id="completedTasks">
+                {{ userStatistics.totalPendingItems }}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="p-3 border rounded bg-light">
+              <h6 class="text-danger fw-bold">Cancelled Bookings</h6>
+              <p class="display-6 fw-bold" id="pendingTasks">
+                {{ userStatistics.totalCancelledItems }}
               </p>
             </div>
           </div>

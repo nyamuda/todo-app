@@ -1,5 +1,6 @@
 <template>
   <form @submit.prevent="submitForm" class="register-form m-auto">
+    <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Sign up</h3>
     <!-- <OauthItem />
 
     <div class="d-flex align-items-center my-1">

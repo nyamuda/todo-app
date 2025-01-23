@@ -19,7 +19,8 @@ const items = {
     userStatistics: {
       totalItems: 0,
       totalCompletedItems: 0,
-      totalUncompletedItems: 0,
+      totalPendingItems: 0,
+      totalCancelledItems: 0,
     },
   }),
   mutations: {

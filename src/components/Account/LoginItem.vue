@@ -1,6 +1,7 @@
 <template>
   <div class="">
     <form class="login-form m-auto">
+      <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Sign in</h3>
       <!-- <OauthItem />
       <div class="d-flex align-items-center my-1">
         <hr class="flex-grow-1" />
