@@ -1,0 +1,56 @@
+<!--For logged in users start-->
+    <form
+      v-if="isAuthenticated"
+      @submit.prevent="submitForm"
+      class="add-item-form needs-validation"
+    >
+      <div class="form-group">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          id="title"
+          v-model="form.title"
+          class="form-input"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          v-model="form.description"
+          class="form-input"
+          rows="3"
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="dueDate" class="form-label">Due Date</label>
+        <VueDatePicker
+          id="dueDate"
+          required
+          v-model="form.dueDate"
+          :transitions="true"
+          time-picker-inline
+          :is-24="true"
+        />
+      </div>
+
+      <button
+        v-if="isCreatingItem"
+        type="submit"
+        class="submit-button"
+        disabled
+      >
+        <span
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        Please wait...
+      </button>
+      <button v-else type="submit" class="submit-button">Add Task</button>
+    </form>
+    <!--For logged in users end-->
