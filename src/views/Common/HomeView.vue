@@ -1,13 +1,13 @@
 <template>
   <div class="home">
-    <HeroItem />
-    <AboutUsItem />
-    <ServicesItem />
+    <HeroSection />
+    <AboutUsSection />
+    <ServicesSection />
   </div>
 </template>
 
 <script setup>
-import HeroItem from "@/components/Common/Home/HeroItem.vue";
-import AboutUsItem from "@/components/Common/Home/AboutUsItem.vue";
-import ServicesItem from "@/components/Common/Home/ServicesItem.vue";
+import HeroSection from "@/components/Common/Home/HeroSection.vue";
+import AboutUsSection from "@/components/Common/Home/AboutUsSection.vue";
+import ServicesSection from "@/components/Common/Home/ServicesSection.vue";
 </script>

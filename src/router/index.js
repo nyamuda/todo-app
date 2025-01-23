@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/Common/HomeView.vue";
-import TaskListView from "../views/Tasks/TaskListView.vue";
-import TaskAddView from "../views/Tasks/TaskAddView.vue";
 import LoginView from "@/views/Account/LoginView.vue";
 import RegisterView from "@/views/Account/RegisterView.vue";
 import VerificationResultView from "@/views/Account/VerificationResultView.vue";
@@ -12,6 +10,8 @@ import SentPasswordForgotEmailView from "@/views/Email/SentPasswordForgotEmailVi
 import SendPasswordForgotEmailView from "@/views/Email/SendPasswordForgotEmailView.vue";
 import SentEmailVerificationView from "@/views/Email/SentEmailVerificationView.vue";
 import store from "@/store";
+import AddItemView from "@/views/BookingItems/AddItemView.vue";
+import ItemListView from "@/views/BookingItems/ItemListView.vue";
 const routes = [
   {
     path: "/",
@@ -44,9 +44,14 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/items/add",
+    name: "AddItem",
+    component: AddItemView,
+  },
 
   {
-    path: "/tasks",
+    path: "/items",
     beforeEnter: (to) => {
       if (!store.state.account.isAuthenticated) {
         store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
@@ -54,11 +59,9 @@ const routes = [
       }
       return true;
     },
-    children: [
-      { path: "list", name: "AddList", component: TaskListView },
-      { path: "add", name: "AddTask", component: TaskAddView },
-    ],
+    children: [{ path: "list", name: "ItemsList", component: ItemListView }],
   },
+
   {
     path: "/account",
     children: [

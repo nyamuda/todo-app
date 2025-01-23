@@ -243,7 +243,6 @@ const submitForm = () => {
 
 //show loading button or not
 let isCreatingItem = computed(() => store.state.items.isCreatingItem);
-//let isAuthenticated = computed(() => store.state.account.isAuthenticated);
 </script>
 
 <style scoped></style>
