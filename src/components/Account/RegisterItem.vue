@@ -48,6 +48,26 @@
       </div>
     </div>
 
+    <!-- Phone input -->
+    <div class="mb-3">
+      <label for="registerPhone" class="form-label">Phone Number</label>
+      <input
+        type="number"
+        id="registerPhone"
+        class="form-control"
+        v-model="v$.phone.$model"
+        :class="{
+          'is-invalid': v$.phone.$error,
+          'is-valid': !v$.phone.$error,
+        }"
+      />
+      <div class="invalid-feedback" v-if="v$.phone.$error">
+        <div v-for="error of v$.phone.$errors" :key="error.$uid">
+          <div>{{ error.$message }}</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Password input -->
     <div class="form-outline mb-3">
       <label for="registerPassword" class="form-label">Password</label>
@@ -112,16 +132,23 @@ onMounted(() => {
 const registrationForm = ref({
   name: "",
   email: "",
+  phone: "",
   password: "",
 });
 const passwordRule = helpers.regex(
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 );
+let phoneRule = helpers.regex(/^\+?[1-9]\d{1,14}$/);
 let passwordErrorMessage =
   "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.";
+let phoneErrorMessage = "The phone number you entered is invalid.";
 const rules = {
   name: { required, minLengthValue: minLength(3) },
   email: { required, email },
+  phone: {
+    required,
+    phoneRule: helpers.withMessage(phoneErrorMessage, phoneRule),
+  },
   password: {
     required,
     passwordRule: helpers.withMessage(passwordErrorMessage, passwordRule),
