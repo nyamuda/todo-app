@@ -5,7 +5,7 @@ const toast = useToast();
 const items = {
   namespaced: true,
   state: () => ({
-    todoTasks: [],
+    items: [],
     isGettingItems: false, //to show placeholder items
     isCreatingItem: false, //to show the loading button during task creation
     isCompletingItem: false, //to show the loading button during task completion
@@ -289,6 +289,7 @@ const items = {
         toast.error(rootState.failureMessage);
       }
     },
+
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage

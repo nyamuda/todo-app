@@ -53,7 +53,7 @@
     <div class="mb-3">
       <label for="registerPhone" class="form-label">Phone Number</label>
       <input
-        type="number"
+        type="tel"
         id="registerPhone"
         class="form-control"
         v-model="v$.phone.$model"
@@ -139,10 +139,10 @@ const registrationForm = ref({
 const passwordRule = helpers.regex(
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 );
-let phoneRule = helpers.regex(/^\+?[1-9]\d{1,14}$/);
+let phoneRule = helpers.regex(/^(\+27|0)[6-8][0-9]{8}$/);
 let passwordErrorMessage =
-  "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.";
-let phoneErrorMessage = "The phone number you entered is invalid.";
+  "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters";
+let phoneErrorMessage = "The phone number you entered is invalid";
 const rules = {
   name: { required, minLengthValue: minLength(3) },
   email: { required, email },

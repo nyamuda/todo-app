@@ -133,7 +133,7 @@ const passwordRule = helpers.regex(
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 );
 let passwordErrorMessage =
-  "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.";
+  "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters";
 const rules = {
   email: { required, email },
   password: {
