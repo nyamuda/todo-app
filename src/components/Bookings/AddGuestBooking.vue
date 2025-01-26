@@ -1,9 +1,12 @@
 <template>
-  <div class="add-item-container container m-auto">
-    <h2 class="add-item-title text-start">Book a car wash session</h2>
+  <div class="add-booking-container container m-auto">
+    <h2 class="add-booking-title text-start">Book a car wash session</h2>
 
     <!--For guest users start-->
-    <form @submit.prevent="submitForm" class="add-item-form needs-validation">
+    <form
+      @submit.prevent="submitForm"
+      class="add-booking-form needs-validation"
+    >
       <!-- Name input -->
       <div class="form-group">
         <label for="guestName" class="form-label">Name</label>
@@ -164,7 +167,7 @@
       </div>
 
       <button
-        v-if="isCreatingItem"
+        v-if="isCreatingBooking"
         type="submit"
         class="submit-button"
         disabled
@@ -238,11 +241,11 @@ const v$ = useVuelidate(rules, guestUserForm.value);
 //form validation with Vuelidate end
 // Submit form
 const submitForm = () => {
-  store.dispatch("items/addTask", guestUserForm.value);
+  store.dispatch("bookings/addTask", guestUserForm.value);
 };
 
 //show loading button or not
-let isCreatingItem = computed(() => store.state.items.isCreatingItem);
+let isCreatingBooking = computed(() => store.state.bookings.isCreatingBooking);
 </script>
 
 <style scoped></style>

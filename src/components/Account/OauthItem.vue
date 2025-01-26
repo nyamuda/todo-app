@@ -94,7 +94,7 @@ let compareStates = (redirectState) => {
 // Read the Oauth state object from session storage
 let getStateFromSessionStorage = () => {
   // Get the JSON string from session storage
-  const stateString = sessionStorage.getItem("oauthState");
+  const stateString = sessionStorage.getBooking("oauthState");
 
   // Check if it exists
   if (stateString) {

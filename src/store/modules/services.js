@@ -25,7 +25,9 @@ const services = {
     //fetch all the car wash service types
     async getServices({ commit, rootState }) {
       try {
-        const response = await axios.get(`${rootState.apiUrl}/items/services`);
+        const response = await axios.get(
+          `${rootState.apiUrl}/bookings/services`
+        );
         //mutate the state with the fetched service types
         commit("setServices", response.data);
       } catch (error) {
@@ -36,7 +38,7 @@ const services = {
     async getService({ commit, rootState }, id) {
       try {
         const response = await axios.get(
-          `${rootState.apiUrl}/items/services/${id}`
+          `${rootState.apiUrl}/bookings/services/${id}`
         );
         //mutate the state with the fetched service types
         commit("setServices", response.data);
@@ -53,7 +55,7 @@ const services = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.post(
-          `${rootState.apiUrl}/items/services`,
+          `${rootState.apiUrl}/bookings/services`,
           payload
         );
         // Check if the request was successful
@@ -75,7 +77,7 @@ const services = {
         state.isCreatingService = false;
       } catch (err) {
         toast.error(rootState.failureMessage);
-        state.isCreatingItem = false;
+        state.isCreatingBooking = false;
       }
     },
     // Delete a service
@@ -86,7 +88,7 @@ const services = {
         dispatch("setAuthorizationHeader");
         // Send a DELETE request to the API
         let response = await axios.delete(
-          `${rootState.apiUrl}/items/services/${id}`
+          `${rootState.apiUrl}/bookings/services/${id}`
         );
 
         // Check if the request was successful
@@ -116,7 +118,7 @@ const services = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.put(
-          `${rootState.apiUrl}/items/services/${id}`,
+          `${rootState.apiUrl}/bookings/services/${id}`,
           updatedService
         );
         // Check if the request was successful
@@ -140,9 +142,9 @@ const services = {
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage
-      let sessionToken = sessionStorage.getItem("jwt_token");
+      let sessionToken = sessionStorage.getBooking("jwt_token");
       //check if there is a token in local storage
-      let localToken = localStorage.getItem("jwt_token");
+      let localToken = localStorage.getBooking("jwt_token");
 
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : null;

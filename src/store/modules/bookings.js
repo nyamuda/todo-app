@@ -2,25 +2,25 @@ import axios from "axios";
 import router from "@/router";
 import { useToast } from "vue-toastification";
 const toast = useToast();
-const items = {
+const bookings = {
   namespaced: true,
   state: () => ({
-    items: [],
-    isGettingItems: false, //to show placeholder items
-    isCreatingItem: false, //to show the loading button during task creation
-    isCompletingItem: false, //to show the loading button during task completion
-    itemsPageInfo: {
+    bookings: [],
+    isGettingBookings: false, //to show placeholder bookings
+    isCreatingBooking: false, //to show the loading button during task creation
+    isCompletingBooking: false, //to show the loading button during task completion
+    bookingsPageInfo: {
       //page info for lazy loading
       page: 1, //current page size
-      pageSize: 10, //total items per page
+      pageSize: 10, //total bookings per page
       hasMore: false, //whether there is more tasks to load
     },
-    isLoadingMoreItems: false,
+    isLoadingMoreBookings: false,
     userStatistics: {
-      totalItems: 0,
-      totalCompletedItems: 0,
-      totalPendingItems: 0,
-      totalCancelledItems: 0,
+      totalBookings: 0,
+      totalCompletedBookings: 0,
+      totalPendingBookings: 0,
+      totalCancelledBookings: 0,
     },
   }),
   mutations: {
@@ -36,34 +36,34 @@ const items = {
         };
       });
     },
-    //update the state to show a recently completed item
+    //update the state to show a recently completed booking
     //without calling the server
-    showCompletedItem(state, id) {
-      let currentItems = state.todoTasks;
-      state.todoTasks = currentItems.map((task) => {
+    showCompletedBooking(state, id) {
+      let currentBookings = state.todoTasks;
+      state.todoTasks = currentBookings.map((task) => {
         return {
           id: task.id,
           title: task.title,
           description: task.description,
-          isCompleted: task.id == id ? true : task.isCompleted, //update status of recently completed item
+          isCompleted: task.id == id ? true : task.isCompleted, //update status of recently completed booking
           dueDate: task.dueDate,
         };
       });
     },
-    //remove deleted item from the state
+    //remove deleted booking from the state
     //without calling the server
-    removeItem(state, id) {
-      let currentItems = state.todoTasks;
-      state.todoTasks = currentItems.filter((task) => task.id != id);
+    removeBooking(state, id) {
+      let currentBookings = state.todoTasks;
+      state.todoTasks = currentBookings.filter((task) => task.id != id);
     },
     updatePageInfo(state, pageInfo) {
-      state.itemsPageInfo = pageInfo;
+      state.bookingsPageInfo = pageInfo;
     },
     //load more tasks
-    loadAdditionalTasks(state, tasks) {
+    loadAdditionalBookings(state, tasks) {
       //marge original tasks with new loaded tasks
-      let mergedItems = state.todoTasks.concat(tasks);
-      state.todoTasks = mergedItems.map((task) => {
+      let mergedBookings = state.todoTasks.concat(tasks);
+      state.todoTasks = mergedBookings.map((task) => {
         return {
           id: task.id,
           title: task.title,
@@ -73,74 +73,99 @@ const items = {
         };
       });
     },
-    //set user statistics such as total uncompleted items by the user
+    //set user statistics such as total uncompleted bookings by the user
     setUserStatistics(state, stats) {
       state.userStatistics = stats;
     },
   },
   getters: {},
   actions: {
-    //fetch all tasks
-    async fetchTasks({ commit, dispatch, state, rootState }) {
+    //fetch all bookings
+    async getBookings({ commit, dispatch, state, rootState }) {
       try {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
 
-        state.isGettingItems = true;
-        const response = await axios.get(`${rootState.apiUrl}/items`);
+        state.isGettingBookings = true;
+        const response = await axios.get(`${rootState.apiUrl}/bookings`);
         //mutate the state with the fetched tasks
-        commit("formatTaskDate", response.data.items);
+        commit("formatTaskDate", response.data.bookings);
 
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
         toast.error("Failed to load bookings.");
       } finally {
-        state.isGettingItems = false;
+        state.isGettingBookings = false;
       }
     },
 
-    //fetch completed tasks
-    async fetchCompletedTasks({ commit, dispatch, state, rootState }) {
+    //fetch completed bookings
+    async getCompletedBookings({ commit, dispatch, state, rootState }) {
       try {
-        state.isGettingItems = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.get(`${rootState.apiUrl}/items/completed`);
-        //mutate the state with the fetched tasks
-        commit("formatTaskDate", response.data.items);
-
-        //page info
-        commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
-        toast.error("Failed to load bookings.");
-      } finally {
-        state.isGettingItems = false;
-      }
-    },
-    //fetch uncompleted tasks
-    async fetchUncompletedTasks({ commit, dispatch, state, rootState }) {
-      try {
-        state.isGettingItems = true;
+        state.isGettingBookings = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${rootState.apiUrl}/items/uncompleted`
+          `${rootState.apiUrl}/bookings/completed`
         );
         //mutate the state with the fetched tasks
-        commit("formatTaskDate", response.data.items);
+        commit("formatTaskDate", response.data.bookings);
 
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
         toast.error("Failed to load bookings.");
       } finally {
-        state.isGettingItems = false;
+        state.isGettingBookings = false;
+      }
+    },
+    //fetch pending bookings
+    async getPendingBookings({ commit, dispatch, state, rootState }) {
+      try {
+        state.isGettingBookings = true;
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
+        const response = await axios.get(
+          `${rootState.apiUrl}/bookings/uncompleted`
+        );
+        //mutate the state with the fetched tasks
+        commit("formatTaskDate", response.data.bookings);
+
+        //page info
+        commit("updatePageInfo", response.data.pageInfo);
+      } catch (error) {
+        toast.error("Failed to load bookings.");
+      } finally {
+        state.isGettingBookings = false;
+      }
+    },
+
+    //fetch cancelled booking
+    async getCancelledBookings({ commit, dispatch, state, rootState }) {
+      try {
+        state.isGettingBookings = true;
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
+        const response = await axios.get(
+          `${rootState.apiUrl}/bookings/cancelled`
+        );
+        //mutate the state with the fetched tasks
+        commit("formatTaskDate", response.data.bookings);
+
+        //page info
+        commit("updatePageInfo", response.data.pageInfo);
+      } catch (error) {
+        toast.error("Failed to load bookings.");
+      } finally {
+        state.isGettingBookings = false;
       }
     },
 
@@ -152,7 +177,7 @@ const items = {
         dispatch("setAuthorizationHeader");
 
         const response = await axios.get(
-          `${rootState.apiUrl}/items/statistics`
+          `${rootState.apiUrl}/bookings/statistics`
         );
         //mutate the state with the fetched statistics
         commit("setUserStatistics", response.data);
@@ -161,52 +186,52 @@ const items = {
       }
     },
 
-    //Load more tasks
-    async loadMoreTasks({ commit, dispatch, state, rootState }, filterBy) {
+    //Load more bookings
+    async loadMoreBookings({ commit, dispatch, state, rootState }, filterBy) {
       try {
         //check which filter to use
         let filterValue = "";
         if (filterBy == "completed" || filterBy == "uncompleted") {
           filterValue = filterBy;
         }
-        state.isLoadingMoreItems = true;
+        state.isLoadingMoreBookings = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${rootState.apiUrl}/items/${filterValue}`,
+          `${rootState.apiUrl}/bookings/${filterValue}`,
           {
             params: {
-              page: state.itemsPageInfo.page + 1,
-              pageSize: state.itemsPageInfo.pageSize,
+              page: state.bookingsPageInfo.page + 1,
+              pageSize: state.bookingsPageInfo.pageSize,
             },
           }
         );
         //mutate the state with the additional tasks
-        commit("loadAdditionalTasks", response.data.items);
+        commit("loadAdditionalBookings", response.data.bookings);
 
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
         toast.error("Failed to load more bookings.");
       } finally {
-        state.isLoadingMoreItems = false;
+        state.isLoadingMoreBookings = false;
       }
     },
 
-    //add a task
-    async addTask({ dispatch, state, rootState }, task) {
+    //add a booking
+    async addBooking({ dispatch, state, rootState }, task) {
       try {
         //convert time to UCT
         let localDueDate = task.dueDate;
         task.dueDate = new Date(localDueDate + "Z").toISOString();
-        state.isCreatingItem = true;
+        state.isCreatingBooking = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        const response = await axios.post(`${rootState.apiUrl}/items`, task);
+        const response = await axios.post(`${rootState.apiUrl}/bookings`, task);
         // Check if the request was successful
         //status code will be 201 from the API
         if (response.status == 201) {
@@ -223,17 +248,17 @@ const items = {
             toast.error(response.data.message);
           }
         }
-        state.isCreatingItem = false;
+        state.isCreatingBooking = false;
       } catch (err) {
         toast.error(rootState.failureMessage);
-        state.isCreatingItem = false;
+        state.isCreatingBooking = false;
       }
     },
 
-    //mark a task as completed
-    async completeTask({ dispatch, commit, state, rootState }, id) {
+    //mark a booking as completed
+    async completeBooking({ dispatch, commit, state, rootState }, id) {
       try {
-        state.isCompletingItem = true;
+        state.isCompletingBooking = true;
         let completedTask = {
           isCompleted: true,
         };
@@ -242,7 +267,7 @@ const items = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.put(
-          `${rootState.apiUrl}/items/${id}`,
+          `${rootState.apiUrl}/bookings/${id}`,
           completedTask
         );
         // Check if the request was successful
@@ -252,36 +277,35 @@ const items = {
           let message = "The task is done and dusted.";
           dispatch("showToast", { message: message, severity: "success" });
 
-          //update status of recently completed item
-          commit("showCompletedItem", id);
+          //update status of recently completed booking
+          commit("showCompletedBooking", id);
         } else {
           toast.error(rootState.failureMessage);
         }
-        state.isCompletingItem = false;
+        state.isCompletingBooking = false;
       } catch (error) {
         toast.error(rootState.failureMessage);
-        state.isCompletingItem = false;
+        state.isCompletingBooking = false;
       }
     },
 
-    // Asynchronous action to delete a task
-    async deleteTask({ dispatch, commit, rootState }, id) {
+    async deleteBooking({ dispatch, commit, rootState }, id) {
       try {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         // Send a DELETE request to the API
-        let response = await axios.delete(`${rootState.apiUrl}/items/${id}`);
+        let response = await axios.delete(`${rootState.apiUrl}/bookings/${id}`);
 
         // Check if the request was successful
         //status code will be 204 from the API
         if (response.status == 204) {
           //show toast success message
-          let message = "The item has been successfully deleted.";
+          let message = "The booking has been successfully deleted.";
           toast.success(message);
 
-          //remove item from state
-          await commit("removeItem", id);
+          //remove booking from state
+          await commit("removeBooking", id);
         } else {
           toast.error(rootState.failureMessage);
         }
@@ -293,9 +317,9 @@ const items = {
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage
-      let sessionToken = sessionStorage.getItem("jwt_token");
+      let sessionToken = sessionStorage.getBooking("jwt_token");
       //check if there is a token in local storage
-      let localToken = localStorage.getItem("jwt_token");
+      let localToken = localStorage.getBooking("jwt_token");
 
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : null;
@@ -305,4 +329,4 @@ const items = {
   },
 };
 
-export default items;
+export default bookings;

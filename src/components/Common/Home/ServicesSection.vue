@@ -9,7 +9,7 @@
       <div class="row pb-3">
         <div class="col-lg-3 col-md-6 text-center mb-5">
           <div
-            class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4"
+            class="d-flex align-bookings-center justify-content-center bg-primary mb-4 p-4"
           >
             <i class="fa fa-2x fa-tasks text-light pe-3"></i>
             <h6 class="text-white font-weight-medium m-0">Task Management</h6>
@@ -21,7 +21,7 @@
         </div>
         <div class="col-lg-3 col-md-6 text-center mb-5">
           <div
-            class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4"
+            class="d-flex align-bookings-center justify-content-center bg-primary mb-4 p-4"
           >
             <i class="fa fa-2x fa-calendar-check text-light pe-3"></i>
             <h6 class="text-white font-weight-medium m-0">Due Date Tracking</h6>
@@ -33,7 +33,7 @@
         </div>
         <div class="col-lg-3 col-md-6 text-center mb-5">
           <div
-            class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4"
+            class="d-flex align-bookings-center justify-content-center bg-primary mb-4 p-4"
           >
             <i class="fa fa-2x fa-filter text-light pe-3"></i>
             <h6 class="text-white font-weight-medium m-0">Task Filtering</h6>
@@ -45,7 +45,7 @@
         </div>
         <div class="col-lg-3 col-md-6 text-center mb-5">
           <div
-            class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4"
+            class="d-flex align-bookings-center justify-content-center bg-primary mb-4 p-4"
           >
             <i class="fa fa-2x fa-spinner text-light pe-3"></i>
             <h6 class="text-white font-weight-medium m-0">Lazy Loading</h6>

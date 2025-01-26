@@ -21,7 +21,7 @@
       </div>
 
       <div v-else>
-        <div class="d-flex align-items-center justify-content-center">
+        <div class="d-flex align-bookings-center justify-content-center">
           <div
             class="spinner-border me-1"
             role="status"

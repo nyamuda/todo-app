@@ -1,10 +1,10 @@
 <template>
   <div class="mt-5">
     <div v-if="isAuthenticated">
-      <BookLoggedInUser />
+      <AddMemberBooking />
     </div>
     <div v-else>
-      <BookGuestUser />
+      <AddGuestBooking />
     </div>
   </div>
 </template>
@@ -12,8 +12,8 @@
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import BookLoggedInUser from "@/components/BookingItems/BookLoggedInUser.vue";
-import BookGuestUser from "@/components/BookingItems/BookGuestUser.vue";
+import AddMemberBooking from "@/components/Bookings/AddMemberBooking.vue";
+import AddGuestBooking from "@/components/Bookings/AddGuestBooking.vue";
 const store = useStore();
 let isAuthenticated = computed(() => store.state.account.isAuthenticated);
 </script>

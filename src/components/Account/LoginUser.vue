@@ -2,8 +2,8 @@
   <div class="">
     <form class="login-form m-auto">
       <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Sign in</h3>
-      <!-- <OauthItem />
-      <div class="d-flex align-items-center my-1">
+      <!-- <OauthBooking />
+      <div class="d-flex align-bookings-center my-1">
         <hr class="flex-grow-1" />
         <p class="text-center fw-bold mx-3 mb-0">Or</p>
         <hr class="flex-grow-1" />
@@ -111,7 +111,7 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
-//import OauthItem from "./OauthItem.vue";
+//import OauthBooking from "./OauthBooking.vue";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";

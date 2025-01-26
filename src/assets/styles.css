@@ -59,18 +59,18 @@ input.form-control {
   box-shadow: none;
   --bs-primary: red !important;
 }
-.add-item-container {
+.add-booking-container {
   padding: 2rem;
   background: #ffffff;
   animation: fadeIn 0.5s ease-in-out;
 }
 
-.add-item-title {
+.add-booking-title {
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
 }
 
-.add-item-form {
+.add-booking-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -140,7 +140,7 @@ textarea.form-input {
 }
 
 @media (min-width: 728px) {
-  .add-item-container {
+  .add-booking-container {
     width: 40rem;
   }
 }

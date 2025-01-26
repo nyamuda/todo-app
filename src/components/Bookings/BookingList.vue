@@ -5,10 +5,10 @@
     <div class="d-flex justify-content-end">
       <div class="me-2">
         <select
-          v-model="filterItemsBy"
-          @change="filterItems"
+          v-model="filterBookingsBy"
+          @change="filterBookings"
           class="form-select"
-          aria-label="Filter items"
+          aria-label="Filter bookings"
         >
           <option value="all" selected>All tasks</option>
           <option value="completed">Completed tasks</option>
@@ -21,7 +21,7 @@
     </div>
 
     <!--Tasks Table Start-->
-    <div v-if="tasks.length > 0 || hasMoreItems">
+    <div v-if="tasks.length > 0 || hasMoreBookings">
       <div class="table-responsive">
         <table class="table table-striped mt-3 placeholder-glow">
           <thead>
@@ -35,7 +35,7 @@
           </thead>
           <tbody>
             <!-- Show placeholders while loading -->
-            <template v-if="isGettingItems">
+            <template v-if="isGettingBookings">
               <tr v-for="n in 5" :key="n">
                 <td><span class="placeholder col-6"></span></td>
                 <td><span class="placeholder col-8"></span></td>
@@ -46,7 +46,11 @@
             </template>
             <!-- Show tasks once loaded -->
             <template v-else>
-              <tr class="item-list" v-for="(task, index) in tasks" :key="index">
+              <tr
+                class="booking-list"
+                v-for="(task, index) in tasks"
+                :key="index"
+              >
                 <td>{{ task.title }}</td>
                 <td>{{ task.description }}</td>
                 <td>{{ task.dueDate }}</td>
@@ -62,10 +66,12 @@
                 </td>
                 <td>
                   <div
-                    class="d-flex justify-content-start align-items-center flex-nowrap"
+                    class="d-flex justify-content-start align-bookings-center flex-nowrap"
                   >
                     <button
-                      v-if="isCompletingItem && pendingUpdateTaskId == task.id"
+                      v-if="
+                        isCompletingBooking && pendingUpdateTaskId == task.id
+                      "
                       class="btn btn-success btn-sm me-2"
                       disabled
                     >
@@ -97,32 +103,32 @@
           </tbody>
         </table>
       </div>
-      <!--Load more items start-->
+      <!--Load more bookings start-->
       <div class="d-grid gap-2 col-md-3 mx-auto mt-3 mt-md-2">
         <button
           :class="{
-            'btn btn-secondary': !hasMoreItems,
-            'btn btn-primary': hasMoreItems,
+            'btn btn-secondary': !hasMoreBookings,
+            'btn btn-primary': hasMoreBookings,
           }"
-          @click="loadMoreItems"
-          :disabled="isLoadingMoreItems || !hasMoreItems"
+          @click="loadMoreBookings"
+          :disabled="isLoadingMoreBookings || !hasMoreBookings"
         >
           <span
-            v-if="isLoadingMoreItems"
+            v-if="isLoadingMoreBookings"
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
           ></span>
-          {{ isLoadingMoreItems ? "Loading..." : "Load more" }}
+          {{ isLoadingMoreBookings ? "Loading..." : "Load more" }}
         </button>
       </div>
-      <!--Load more items end-->
+      <!--Load more bookings end-->
     </div>
 
-    <!--No Items  Start-->
+    <!--No Bookings  Start-->
     <div
       v-else
-      class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
+      class="d-flex justify-content-center align-bookings-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
     >
       <div class="mb-2">
         <!-- Font Awesome Icon for no bookings -->
@@ -134,7 +140,7 @@
       </p>
     </div>
 
-    <!--No Items End-->
+    <!--No Bookings End-->
   </div>
   <!--Tasks Table End-->
 
@@ -169,7 +175,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="deleteTask(clickedItemId)"
+            @click="deleteTask(clickedBookingId)"
           >
             Delete
           </button>
@@ -186,20 +192,20 @@ import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 // Access the store
 const store = useStore();
-let pendingDeleteTaskId = ref(0); //id of item to be deleted
-let pendingUpdateTaskId = ref(0); //id of item to be updated
+let pendingDeleteTaskId = ref(0); //id of booking to be deleted
+let pendingUpdateTaskId = ref(0); //id of booking to be updated
 let showModal = ref(false);
-let filterItemsBy = ref("all");
+let filterBookingsBy = ref("all");
 
 onMounted(async () => {
-  //get all items
-  store.dispatch("items/fetchTasks");
+  //get all bookings
+  store.dispatch("bookings/fetchTasks");
 });
 
-let tasks = computed(() => store.state.items.todoTasks);
-let isGettingItems = computed(() => store.state.items.isGettingItems);
+let tasks = computed(() => store.state.bookings.todoTasks);
+let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 
-//let the user confirm deleting an item
+//let the user confirm deleting an booking
 //by showing a modal
 const confirmDelete = (id) => {
   showModal.value = true;
@@ -213,40 +219,46 @@ const closeModal = () => {
 //delete a task and hide the modal
 let deleteTask = () => {
   showModal.value = false;
-  store.dispatch("items/deleteTask", pendingDeleteTaskId.value);
+  store.dispatch("bookings/deleteTask", pendingDeleteTaskId.value);
 };
 //mark task as completed
 let markCompleted = (id) => {
   pendingUpdateTaskId.value = id;
-  store.dispatch("items/completeTask", id);
+  store.dispatch("bookings/completeTask", id);
 };
 
-let filterItems = () => {
-  if (filterItemsBy.value == "completed") {
-    store.dispatch("items/fetchCompletedTasks");
-  } else if (filterItemsBy.value == "uncompleted") {
-    store.dispatch("items/fetchUncompletedTasks");
+let filterBookings = () => {
+  if (filterBookingsBy.value == "completed") {
+    store.dispatch("bookings/fetchCompletedTasks");
+  } else if (filterBookingsBy.value == "uncompleted") {
+    store.dispatch("bookings/fetchUncompletedTasks");
   } else {
-    store.dispatch("items/fetchTasks");
+    store.dispatch("bookings/fetchTasks");
   }
 };
 //load more tasks depending on whether
 //the current list is for all, completed or uncompleted tasks
-let loadMoreItems = () => {
-  store.dispatch("items/loadMoreTasks", filterItemsBy.value);
+let loadMoreBookings = () => {
+  store.dispatch("bookings/loadMoreTasks", filterBookingsBy.value);
 };
-//is an item being marked as complete
-let isCompletingItem = computed(() => store.state.items.isCompletingItem);
+//is an booking being marked as complete
+let isCompletingBooking = computed(
+  () => store.state.bookings.isCompletingBooking
+);
 
-//are there more items currently being loaded
-let isLoadingMoreItems = computed(() => store.state.items.isLoadingMoreItems);
+//are there more bookings currently being loaded
+let isLoadingMoreBookings = computed(
+  () => store.state.bookings.isLoadingMoreBookings
+);
 
-//are there still more items that can be loaded
-let hasMoreItems = computed(() => store.state.items.itemsPageInfo.hasMore);
+//are there still more bookings that can be loaded
+let hasMoreBookings = computed(
+  () => store.state.bookings.bookingsPageInfo.hasMore
+);
 </script>
 
 <style>
-.item-list {
+.booking-list {
   animation: fadeIn 0.5s ease-in-out;
 }
 .modal {

@@ -19,7 +19,7 @@
             </p>
           </div>
           <div class="col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="bg-light p-5 h-100 d-flex align-items-center">
+            <div class="bg-light p-5 h-100 d-flex align-bookings-center">
               <form>
                 <div class="row g-3">
                   <div class="col-md-6">

@@ -11,7 +11,7 @@
             Stay on top of your tasks with our simple to-do list app.
           </p>
           <div>
-            <router-link to="/items/add">
+            <router-link to="/bookings/add">
               <button class="submit-button px-5 py-3">
                 Get Started
               </button></router-link

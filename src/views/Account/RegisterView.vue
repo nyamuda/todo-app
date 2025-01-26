@@ -1,9 +1,9 @@
 <template>
   <div class="mt-5 container">
-    <RegisterItem />
+    <RegisterUser />
   </div>
 </template>
 
 <script setup>
-import RegisterItem from "@/components/Account/RegisterItem.vue";
+import RegisterUser from "@/components/Account/RegisterUser.vue";
 </script>

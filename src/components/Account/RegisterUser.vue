@@ -1,9 +1,9 @@
 <template>
   <form @submit.prevent="submitForm" class="register-form m-auto">
     <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Sign up</h3>
-    <!-- <OauthItem />
+    <!-- <OauthBooking />
 
-    <div class="d-flex align-items-center my-1">
+    <div class="d-flex align-bookings-center my-1">
       <hr class="flex-grow-1" />
       <p class="text-center fw-bold mx-3 mb-0">Or</p>
       <hr class="flex-grow-1" />
@@ -117,7 +117,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-//import OauthItem from "./OauthItem.vue";
+//import OauthBooking from "./OauthBooking.vue";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers, minLength } from "@vuelidate/validators";

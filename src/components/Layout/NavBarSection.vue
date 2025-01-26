@@ -1,22 +1,22 @@
 <template>
   <!-- Topbar Start -->
   <div class="container-fluid nav-bg d-none d-lg-block">
-    <div class="row align-items-center top-bar">
+    <div class="row align-bookings-center top-bar">
       <div class="col-lg-3 col-md-12 text-center text-lg-start">
         <router-link to="/" class="navbar-brand m-0 p-0"
           ><h1 class="text-primary fw-bold m-0">Prioritia</h1></router-link
         >
       </div>
       <div class="col-lg-9 col-md-12 text-end">
-        <div class="h-100 d-inline-flex align-items-center me-4">
+        <div class="h-100 d-inline-flex align-bookings-center me-4">
           <i class="fa fa-map-marker-alt text-primary me-2"></i>
           <p class="m-0">123 Street, Cape Town, South Africa</p>
         </div>
-        <div class="h-100 d-inline-flex align-items-center me-4">
+        <div class="h-100 d-inline-flex align-bookings-center me-4">
           <i class="far fa-envelope-open text-primary me-2"></i>
           <p class="m-0">nya20002@byui.edu</p>
         </div>
-        <div class="h-100 d-inline-flex align-items-center">
+        <div class="h-100 d-inline-flex align-bookings-center">
           <a
             class="btn btn-sm-square bg-white text-primary me-1"
             href="https://github.com/nyamuda"
@@ -49,7 +49,7 @@
     >
       <router-link
         to="/"
-        class="navbar-brand d-flex align-items-center m-0 p-0 d-lg-none"
+        class="navbar-brand d-flex align-bookings-center m-0 p-0 d-lg-none"
         ><h1 class="text-primary m-0 fw-bold">Prioritia</h1></router-link
       >
 
@@ -63,21 +63,21 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav me-auto">
-          <router-link to="/" class="nav-item nav-link">Home</router-link>
+          <router-link to="/" class="nav-booking nav-link">Home</router-link>
           <!--Links for logged in users-->
           <template v-if="isAuthenticated">
-            <router-link to="/account/user" class="nav-item nav-link"
+            <router-link to="/account/user" class="nav-booking nav-link"
               >Dashboard</router-link
             >
-            <router-link to="/tasks/list" class="nav-item nav-link"
+            <router-link to="/tasks/list" class="nav-booking nav-link"
               >Tasks</router-link
             >
-            <router-link to="/tasks/add" class="nav-item nav-link"
+            <router-link to="/tasks/add" class="nav-booking nav-link"
               >Add Task</router-link
             >
           </template>
 
-          <router-link to="/contact" class="nav-item nav-link"
+          <router-link to="/contact" class="nav-booking nav-link"
             >Contact</router-link
           >
         </div>
@@ -106,9 +106,9 @@
           </template>
         </div>
 
-        <!-- <div class="call-box mt-4 mt-lg-0 py-3 px-4 d-flex align-items-center"> 
+        <!-- <div class="call-box mt-4 mt-lg-0 py-3 px-4 d-flex align-bookings-center"> 
           <div
-            class="d-flex flex-shrink-0 align-items-center justify-content-center bg-white"
+            class="d-flex flex-shrink-0 align-bookings-center justify-content-center bg-white"
             style="width: 2.6rem; height: 2.6rem"
           >
             <i class="fa fa-phone-alt text-primary"></i>
@@ -185,7 +185,7 @@ let logout = () => {
   text-transform: uppercase;
   outline: none;
 }
-.dropdown-item,
+.dropdown-booking,
 .dropdown-toggle,
 .fa-user {
   color: var(--dark-color);
@@ -193,8 +193,8 @@ let logout = () => {
   font-weight: 600;
   text-transform: uppercase;
 }
-.dropdown-item.active,
-.dropdown-item:active {
+.dropdown-booking.active,
+.dropdown-booking:active {
   background-color: var(--primary-color);
 }
 .navbar-light .navbar-nav .nav-link:hover,
@@ -222,7 +222,7 @@ let logout = () => {
 }
 
 @media (min-width: 992px) {
-  .navbar .nav-item .dropdown-menu {
+  .navbar .nav-booking .dropdown-menu {
     display: block;
     border: none;
     margin-top: 0;
@@ -232,7 +232,7 @@ let logout = () => {
     transition: 0.5s;
   }
 
-  .navbar .nav-item:hover .dropdown-menu {
+  .navbar .nav-booking:hover .dropdown-menu {
     top: 100%;
     visibility: visible;
     transition: 0.5s;

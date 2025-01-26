@@ -1,9 +1,9 @@
 <template>
   <div class="mt-5 container">
-    <LoginItem />
+    <LoginUser />
   </div>
 </template>
 
 <script setup>
-import LoginItem from "@/components/Account/LoginItem.vue";
+import LoginUser from "@/components/Account/LoginUser.vue";
 </script>

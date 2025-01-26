@@ -93,12 +93,12 @@ const account = {
             //if the user wants to be be remembered on log in
             //save the JWT token to local storage
             if (rememberMe) {
-              localStorage.setItem("jwt_token", accessToken);
+              localStorage.setBooking("jwt_token", accessToken);
             }
 
             //else save the JWT token to session storage
             else {
-              sessionStorage.setItem("jwt_token", accessToken);
+              sessionStorage.setBooking("jwt_token", accessToken);
             }
 
             //mark the user as authenticated
@@ -146,7 +146,7 @@ const account = {
           let accessToken = response.data.token.result;
 
           //save the JWT token to local storage
-          localStorage.setItem("jwt_token", accessToken);
+          localStorage.setBooking("jwt_token", accessToken);
 
           //mark the user as authenticated
           dispatch("authenticateUser");
@@ -176,7 +176,7 @@ const account = {
           let accessToken = response.data.token.result;
 
           //save the JWT token to local storage
-          localStorage.setItem("jwt_token", accessToken);
+          localStorage.setBooking("jwt_token", accessToken);
 
           //mark the user as authenticated
           dispatch("authenticateUser");
@@ -196,8 +196,8 @@ const account = {
     // When the user logs out
     logoutUser({ commit }) {
       //first, remove access token from local or session storage
-      localStorage.removeItem("jwt_token");
-      sessionStorage.removeItem("jwt_token");
+      localStorage.removeBooking("jwt_token");
+      sessionStorage.removeBooking("jwt_token");
 
       // Clear the default authorization header
       delete axios.defaults.headers.common["Authorization"];
@@ -301,9 +301,9 @@ const account = {
     //check to see if user is authenticated by using the Jwt token
     authenticateUser({ commit, dispatch }) {
       //check if there is a token in session storage
-      let sessionToken = sessionStorage.getItem("jwt_token");
+      let sessionToken = sessionStorage.getBooking("jwt_token");
       //check if there is a token in local storage
-      let localToken = localStorage.getItem("jwt_token");
+      let localToken = localStorage.getBooking("jwt_token");
 
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : "";
@@ -344,9 +344,9 @@ const account = {
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage
-      let sessionToken = sessionStorage.getItem("jwt_token");
+      let sessionToken = sessionStorage.getBooking("jwt_token");
       //check if there is a token in local storage
-      let localToken = localStorage.getItem("jwt_token");
+      let localToken = localStorage.getBooking("jwt_token");
 
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : null;
@@ -394,7 +394,7 @@ const account = {
       const stateString = JSON.stringify(stateObject);
 
       // Save it to session storage
-      sessionStorage.setItem("oauthState", stateString);
+      sessionStorage.setBooking("oauthState", stateString);
 
       //encode it
       let encodedState = btoa(stateString);

@@ -12,13 +12,13 @@
           </h5>
         </div>
 
-        <!-- Item Statistics Section -->
+        <!-- Booking Statistics Section -->
         <div class="row text-center">
           <div class="col-md-6 mb-3">
             <div class="p-3 border rounded bg-light">
               <h6 class="text-dark fw-bold">Total Bookings</h6>
               <p class="display-6 fw-bold">
-                {{ userStatistics.totalItems }}
+                {{ userStatistics.totalBookings }}
               </p>
             </div>
           </div>
@@ -26,7 +26,7 @@
             <div class="p-3 border rounded bg-light">
               <h6 class="text-success fw-bold">Completed Bookings</h6>
               <p class="display-6 fw-bold" id="pendingTasks">
-                {{ userStatistics.totalCompletedItems }}
+                {{ userStatistics.totalCompletedBookings }}
               </p>
             </div>
           </div>
@@ -36,7 +36,7 @@
             <div class="p-3 border rounded bg-light">
               <h6 class="text-warning fw-bold">Pending Bookings</h6>
               <p class="display-6 fw-bold" id="completedTasks">
-                {{ userStatistics.totalPendingItems }}
+                {{ userStatistics.totalPendingBookings }}
               </p>
             </div>
           </div>
@@ -44,7 +44,7 @@
             <div class="p-3 border rounded bg-light">
               <h6 class="text-danger fw-bold">Cancelled Bookings</h6>
               <p class="display-6 fw-bold" id="pendingTasks">
-                {{ userStatistics.totalCancelledItems }}
+                {{ userStatistics.totalCancelledBookings }}
               </p>
             </div>
           </div>
@@ -64,11 +64,11 @@ import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 
-let userStatistics = computed(() => store.state.items.userStatistics);
+let userStatistics = computed(() => store.state.bookings.userStatistics);
 let userInfo = computed(() => store.state.account.loggedInUser);
 
 onMounted(() => {
-  //get user statistics such as the total number of items they have completed
-  store.dispatch("items/fetchUserStatistics");
+  //get user statistics such as the total number of bookings they have completed
+  store.dispatch("bookings/fetchUserStatistics");
 });
 </script>

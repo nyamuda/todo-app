@@ -9,9 +9,10 @@ import ContactUsView from "@/views/Common/ContactUsView.vue";
 import SentPasswordForgotEmailView from "@/views/Email/SentPasswordForgotEmailView.vue";
 import SendPasswordForgotEmailView from "@/views/Email/SendPasswordForgotEmailView.vue";
 import SentEmailVerificationView from "@/views/Email/SentEmailVerificationView.vue";
+import AddBookingView from "@/views/Bookings/AddBookingView.vue";
+import BookingListView from "@/views/Bookings/BookingListView.vue";
 import store from "@/store";
-import AddItemView from "@/views/BookingItems/AddItemView.vue";
-import ItemListView from "@/views/BookingItems/ItemListView.vue";
+
 const routes = [
   {
     path: "/",
@@ -45,13 +46,13 @@ const routes = [
     ],
   },
   {
-    path: "/items/add",
-    name: "AddItem",
-    component: AddItemView,
+    path: "/bookings/add",
+    name: "AddBooking",
+    component: AddBookingView,
   },
 
   {
-    path: "/items",
+    path: "/bookings",
     beforeEnter: (to) => {
       if (!store.state.account.isAuthenticated) {
         store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
@@ -59,7 +60,9 @@ const routes = [
       }
       return true;
     },
-    children: [{ path: "list", name: "ItemsList", component: ItemListView }],
+    children: [
+      { path: "list", name: "BookingsList", component: BookingListView },
+    ],
   },
 
   {

@@ -2,7 +2,7 @@
     <form
       v-if="isAuthenticated"
       @submit.prevent="submitForm"
-      class="add-item-form needs-validation"
+      class="add-booking-form needs-validation"
     >
       <div class="form-group">
         <label for="title" class="form-label">Title</label>
@@ -39,7 +39,7 @@
       </div>
 
       <button
-        v-if="isCreatingItem"
+        v-if="isCreatingBooking"
         type="submit"
         class="submit-button"
         disabled
