@@ -26,29 +26,6 @@
           </div>
         </div>
       </div>
-      <!-- Service type input -->
-      <div class="form-group">
-        <label for="guestServiceType" class="form-label">Service type</label>
-        <select
-          id="guestServiceType"
-          class="form-select"
-          aria-label="Select service type"
-          v-model="v$.serviceType.$model"
-          :class="{
-            'is-invalid': v$.serviceType.$error,
-            'is-valid': !v$.serviceType.$error,
-          }"
-        >
-          <option value="">Select service</option>
-          <option value="Basic Wash (R120)">Basic Wash (R120)</option>
-          <option value="Premium Wash (R250">Premium Wash (R250)</option>
-        </select>
-        <div class="invalid-feedback" v-if="v$.serviceType.$error">
-          <div v-for="error of v$.serviceType.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </div>
-      </div>
 
       <!-- Location input -->
       <div class="form-group">
@@ -69,22 +46,51 @@
           </div>
         </div>
       </div>
-
-      <!-- Date and time -->
-      <div class="form-group">
-        <label for="guestDate" class="form-label">Date and time</label>
-        <VueDatePicker
-          id="guestDate"
-          v-model="v$.scheduledAt.$model"
-          :transitions="true"
-          time-picker-inline
-          :is-24="true"
-          :state="v$.scheduledAt.$error ? false : true"
-        />
-        <div class="invalid-feedback" v-if="v$.scheduledAt.$error">
-          <div v-for="error of v$.scheduledAt.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
+      <div class="row">
+        <!-- Service type input -->
+        <div class="form-group col-md-6">
+          <label for="memberServiceType" class="form-label">Service type</label>
+          <Select
+            id="memberServiceType"
+            v-model="v$.serviceType.$model"
+            :options="serviceTypes"
+            placeholder="Select a service"
+            :invalid="v$.serviceType.$error"
+          />
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.serviceType.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.serviceType.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
+        </div>
+        <!-- Date and time -->
+        <div class="form-group col-md-6">
+          <label for="memberDate" class="form-label">Date and time</label>
+          <DatePicker
+            id="memberDate"
+            v-model="v$.scheduledAt.$model"
+            showTime
+            hourFormat="12"
+            :invalid="v$.scheduledAt.$error"
+            fluid
+            showIcon
+            iconDisplay="input"
+          />
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.scheduledAt.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.scheduledAt.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
         </div>
       </div>
 
@@ -137,11 +143,13 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import Select from "primevue/select";
+import { Message } from "primevue";
+import DatePicker from "primevue/datepicker";
 
 const store = useStore();
 

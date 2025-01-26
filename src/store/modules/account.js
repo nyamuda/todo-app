@@ -301,9 +301,9 @@ const account = {
     //check to see if user is authenticated by using the Jwt token
     authenticateUser({ commit, dispatch }) {
       //check if there is a token in session storage
-      let sessionToken = sessionStorage.getBooking("jwt_token");
+      let sessionToken = sessionStorage.getItem("jwt_token");
       //check if there is a token in local storage
-      let localToken = localStorage.getBooking("jwt_token");
+      let localToken = localStorage.getItem("jwt_token");
 
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : "";
@@ -344,9 +344,9 @@ const account = {
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage
-      let sessionToken = sessionStorage.getBooking("jwt_token");
+      let sessionToken = sessionStorage.getItem("jwt_token");
       //check if there is a token in local storage
-      let localToken = localStorage.getBooking("jwt_token");
+      let localToken = localStorage.getItem("jwt_token");
 
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : null;
@@ -394,7 +394,7 @@ const account = {
       const stateString = JSON.stringify(stateObject);
 
       // Save it to session storage
-      sessionStorage.setBooking("oauthState", stateString);
+      sessionStorage.setItem("oauthState", stateString);
 
       //encode it
       let encodedState = btoa(stateString);
