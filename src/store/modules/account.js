@@ -79,52 +79,46 @@ const account = {
           loginDetails
         );
 
-        // Check if the request was successful
-        //status code will be 200 from the API
-        if (response.status == 200) {
-          //get the access token and decode it
-          let accessToken = response.data.token;
-          let decodedToken = jwtDecode(accessToken);
+        //get the access token and decode it
+        let accessToken = response.data.token;
+        let decodedToken = jwtDecode(accessToken);
 
-          // Extract the claims (name, isVerified etc.)
-          let isVerified = decodedToken["isVerified"];
+        // Extract the claims (name, isVerified etc.)
+        let isVerified = decodedToken["isVerified"];
 
-          if (isVerified) {
-            //if the user wants to be be remembered on log in
-            //save the JWT token to local storage
-            if (rememberMe) {
-              localStorage.setBooking("jwt_token", accessToken);
-            }
-
-            //else save the JWT token to session storage
-            else {
-              sessionStorage.setBooking("jwt_token", accessToken);
-            }
-
-            //mark the user as authenticated
-            dispatch("authenticateUser");
-
-            //show toast success message
-            let message = "Login successful";
-
-            toast.success(message);
-
-            router.push(state.attemptedUrl);
+        if (isVerified) {
+          //if the user wants to be be remembered on log in
+          //save the JWT token to local storage
+          if (rememberMe) {
+            localStorage.setBooking("jwt_token", accessToken);
           }
 
-          //if not verified, send verification email
+          //else save the JWT token to session storage
           else {
-            await axios.post(`${rootState.apiUrl}/email/verify`, {
-              email: email,
-            });
-
-            router.push("/email/verify");
+            sessionStorage.setBooking("jwt_token", accessToken);
           }
-        } else {
-          toast.error(response.data.message);
+
+          //mark the user as authenticated
+          dispatch("authenticateUser");
+
+          //show toast success message
+          let message = "Login successful";
+
+          toast.success(message);
+
+          router.push(state.attemptedUrl);
+        }
+
+        //if not verified, send verification email
+        else {
+          await axios.post(`${rootState.apiUrl}/email/verify`, {
+            email: email,
+          });
+
+          router.push("/email/verify");
         }
       } catch (ex) {
-        let message = ex.response.data.message
+        let message = ex.response?.data.message
           ? ex.response.data.message
           : rootState.failureMessage;
         toast.error(message);
@@ -240,7 +234,7 @@ const account = {
           toast.error(response.data.message);
         }
       } catch (ex) {
-        let message = ex.response.data.message
+        let message = ex.response.data?.message
           ? ex.response.data.message
           : rootState.failureMessage;
         toast.error(message);
@@ -269,7 +263,7 @@ const account = {
       } catch (ex) {
         let message =
           ex.status == 400
-            ? ex.response.data.message
+            ? ex.response.data?.message
             : rootState.failureMessage;
 
         toast.error(message);
@@ -291,7 +285,7 @@ const account = {
       } catch (ex) {
         let message =
           ex.status == 400
-            ? ex.response.data.message
+            ? ex.response.data?.message
             : rootState.failureMessage;
         toast.error(message);
       } finally {

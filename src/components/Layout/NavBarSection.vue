@@ -44,46 +44,26 @@
 
   <!-- Navbar Start -->
   <div class="container-fluid nav-bar nav-bg shadow-sm">
-    <nav
-      class="navbar navbar-expand-lg navbar-light bg-white p-3 py-lg-0 px-lg-4"
-    >
-      <router-link
-        to="/"
-        class="navbar-brand d-flex align-items-center m-0 p-0 d-lg-none"
-        ><h1 class="text-primary m-0 fw-bold">Prioritia</h1></router-link
-      >
+    <Menubar :model="items">
+      <template #start>
+        <router-link
+          to="/"
+          class="navbar-brand d-flex align-items-center m-0 p-0 d-lg-none"
+          ><h1 class="text-primary m-0 fw-bold">Prioritia</h1></router-link
+        >
+      </template>
+      <!--Nav Links-->
+      <template #item="{ item, props }">
+        <router-link v-slot="{ href, navigate }" :to="item.route" custom>
+          <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+            <span>{{ item.label }}</span>
+          </a>
+        </router-link>
+      </template>
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarCollapse"
-      >
-        <span class="fas fa-bars"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <div class="navbar-nav me-auto">
-          <router-link to="/" class="nav-item nav-link">Home</router-link>
-          <!--Links for logged in users-->
-          <template v-if="isAuthenticated">
-            <router-link to="/account/user" class="nav-item nav-link"
-              >Dashboard</router-link
-            >
-            <router-link to="/tasks/list" class="nav-item nav-link"
-              >Tasks</router-link
-            >
-            <router-link to="/tasks/add" class="nav-item nav-link"
-              >Add Task</router-link
-            >
-          </template>
-
-          <router-link to="/contact" class="nav-item nav-link"
-            >Contact</router-link
-          >
-        </div>
-
-        <!--Signin, signup & logout button section-->
-        <div class="d-flex flex-column flex-md-row">
+      <!--Signin, signup & logout button section-->
+      <template #end>
+        <div class="d-flex">
           <a
             v-if="isAuthenticated"
             @click.prevent="logout"
@@ -96,32 +76,17 @@
                 Log in
               </button></router-link
             >
-            <router-link to="/account/register"
-              ><button
-                class="btn btn-primary w-100 py-2 px-4 mt-2 mt-md-0 ms-md-2"
-              >
+            <router-link class="me-0 me-md-2" to="/account/register"
+              ><button class="btn btn-primary w-100 py-2 px-4 ms-2">
                 Sign up
               </button></router-link
             >
           </template>
         </div>
-
-        <!-- <div class="call-box mt-4 mt-lg-0 py-3 px-4 d-flex align-items-center"> 
-          <div
-            class="d-flex flex-shrink-0 align-items-center justify-content-center bg-white"
-            style="width: 2.6rem; height: 2.6rem"
-          >
-            <i class="fa fa-phone-alt text-primary"></i>
-          </div>
-          <div class="ms-3">
-            <h5 class="m-0 text-light">+27 67 331 9415</h5>
-          </div>
-        </div> -->
-      </div>
-    </nav>
+      </template>
+    </Menubar>
   </div>
   <!-- Navbar End -->
-   
 </template>
 
 <script setup>
@@ -129,11 +94,30 @@ import { useStore } from "vuex";
 const store = useStore();
 import { computed } from "vue";
 
+import Menubar from "primevue/menubar";
+
 let isAuthenticated = computed(() => store.state.account.isAuthenticated);
 
 let logout = () => {
   store.dispatch("account/logoutUser");
 };
+const items = computed(() => {
+  if (isAuthenticated.value) {
+    return [
+      { label: "Home", route: "/" },
+      { label: "Add booking", route: "/bookings/add" },
+      { label: "Dashboard", route: "/account/user" },
+      { label: "Bookings", route: "/bookings/list" },
+      { label: "Contact", route: "/contact" },
+    ];
+  } else {
+    return [
+      { label: "Home", route: "/" },
+      { label: "Book Session", route: "/bookings/add" },
+      { label: "Contact", route: "/contact" },
+    ];
+  }
+});
 </script>
 
 <style scoped>
@@ -244,4 +228,3 @@ let logout = () => {
   }
 }
 </style>
-

@@ -1,7 +1,7 @@
 <template>
   <div class="m-auto">
     <!-- Contact Start -->
-    <div class="container-xxl py-5">
+    <div class="">
       <div class="container">
         <div class="row g-4">
           <div class="col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -19,51 +19,45 @@
             </p>
           </div>
           <div class="col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="bg-light p-5 h-100 d-flex align-bookings-center">
+            <div class="p-md-4 h-100 d-flex align-bookings-center">
               <form>
                 <div class="row g-3">
-                  <div class="col-md-6">
-                    <div class="">
-                      <label for="name">Your Name</label>
-                      <input
-                        type="text"
-                        class="form-control form-control-lg"
-                        id="name"
-                        v-model="v$.name.$model"
-                        :class="{
-                          'is-invalid': v$.name.$error,
-                          'is-valid': !v$.name.$error,
-                        }"
-                      />
+                  <div class="col-12">
+                    <label for="name">Your Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      v-model="v$.name.$model"
+                      :class="{
+                        'is-invalid': v$.name.$error,
+                        'is-valid': !v$.name.$error,
+                      }"
+                    />
 
-                      <div class="invalid-feedback" v-if="v$.name.$error">
-                        <div v-for="error of v$.name.$errors" :key="error.$uid">
-                          <div>{{ error.$message }}</div>
-                        </div>
+                    <div class="invalid-feedback" v-if="v$.name.$error">
+                      <div v-for="error of v$.name.$errors" :key="error.$uid">
+                        <div>{{ error.$message }}</div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="">
-                      <label for="email">Your Email</label>
-                      <input
-                        type="email"
-                        class="form-control form-control-lg"
-                        id="email"
-                        v-model="v$.email.$model"
-                        :class="{
-                          'is-invalid': v$.email.$error,
-                          'is-valid': !v$.email.$error,
-                        }"
-                      />
 
-                      <div class="invalid-feedback" v-if="v$.email.$error">
-                        <div
-                          v-for="error of v$.email.$errors"
-                          :key="error.$uid"
-                        >
-                          <div>{{ error.$message }}</div>
-                        </div>
+                  <div class="col-12">
+                    <label for="email">Your Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      v-model="v$.email.$model"
+                      :class="{
+                        'is-invalid': v$.email.$error,
+                        'is-valid': !v$.email.$error,
+                      }"
+                    />
+
+                    <div class="invalid-feedback" v-if="v$.email.$error">
+                      <div v-for="error of v$.email.$errors" :key="error.$uid">
+                        <div>{{ error.$message }}</div>
                       </div>
                     </div>
                   </div>
