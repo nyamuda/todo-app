@@ -5,7 +5,98 @@ const toast = useToast();
 const bookings = {
   namespaced: true,
   state: () => ({
-    bookings: [],
+    bookings: [
+      {
+        id: 1,
+        vehicleType: "Sedan",
+        serviceType: "Basic Wash",
+        location: "Downtown Car Wash",
+        scheduledAt: "2023-10-15T10:00:00Z",
+        status: "Pending",
+        additionalNotes: "Please focus on the rear bumper.",
+      },
+      {
+        id: 2,
+        vehicleType: "SUV",
+        serviceType: "Premium Wash",
+        location: "Westside Car Wash",
+        scheduledAt: "2023-10-15T12:30:00Z",
+        status: "Pending",
+        additionalNotes: "Interior vacuuming required.",
+      },
+      {
+        id: 3,
+        vehicleType: "Truck",
+        serviceType: "Detailing",
+        location: "Northside Car Wash",
+        scheduledAt: "2023-10-16T09:00:00Z",
+        status: "Completed",
+        additionalNotes: "Remove mud from the truck bed.",
+      },
+      {
+        id: 4,
+        vehicleType: "Sedan",
+        serviceType: "Basic Wash",
+        location: "Eastside Car Wash",
+        scheduledAt: "2023-10-16T11:00:00Z",
+        status: "Cancelled",
+        additionalNotes: "Customer canceled due to change of plans.",
+      },
+      {
+        id: 5,
+        vehicleType: "SUV",
+        serviceType: "Premium Wash",
+        location: "Downtown Car Wash",
+        scheduledAt: "2023-10-17T14:00:00Z",
+        status: "Pending",
+        additionalNotes: "Use eco-friendly cleaning products.",
+      },
+      {
+        id: 6,
+        vehicleType: "Sedan",
+        serviceType: "Detailing",
+        location: "Westside Car Wash",
+        scheduledAt: "2023-10-18T16:00:00Z",
+        status: "Pending",
+        additionalNotes: "Polish the exterior.",
+      },
+      {
+        id: 7,
+        vehicleType: "Truck",
+        serviceType: "Basic Wash",
+        location: "Northside Car Wash",
+        scheduledAt: "2023-10-19T08:30:00Z",
+        status: "Pending",
+        additionalNotes: "Check for scratches on the hood.",
+      },
+      {
+        id: 8,
+        vehicleType: "SUV",
+        serviceType: "Premium Wash",
+        location: "Eastside Car Wash",
+        scheduledAt: "2023-10-20T13:00:00Z",
+        status: "Confirmed",
+        additionalNotes: "Include tire shine.",
+      },
+      {
+        id: 9,
+        vehicleType: "Sedan",
+        serviceType: "Basic Wash",
+        location: "Downtown Car Wash",
+        scheduledAt: "2023-10-21T10:00:00Z",
+        status: "Completed",
+        additionalNotes: "No additional notes.",
+      },
+      {
+        id: 10,
+        vehicleType: "Truck",
+        serviceType: "Detailing",
+        location: "Westside Car Wash",
+        scheduledAt: "2023-10-22T15:00:00Z",
+        status: "Confirmed",
+        additionalNotes: "Focus on the interior upholstery.",
+      },
+    ],
     isGettingBookings: false, //to show placeholder bookings
     isCreatingBooking: false, //to show the loading button during task creation
     isUpdatingBooking: false, //to show the loading button during task completion
@@ -24,7 +115,7 @@ const bookings = {
     },
   }),
   mutations: {
-    formatTaskDate(state, tasks) {
+    formatBookingDate(state, tasks) {
       // mutate state by formatting the date
       state.todoTasks = tasks.map((task) => {
         return {
@@ -78,7 +169,22 @@ const bookings = {
       state.userStatistics = stats;
     },
   },
-  getters: {},
+  getters: {
+    //formatting the 'scheduleAt' date of the bookings
+    formatAndGetBookings(state) {
+      return state.bookings.map((booking) => {
+        return {
+          id: booking.id,
+          vehicleType: booking.vehicleType,
+          serviceType: booking.serviceType,
+          location: booking.location,
+          scheduledAt: new Date(booking.scheduledAt).toLocaleString(), // Format the 'scheduledAt' date
+          status: booking.status,
+          additionalNotes: booking.additionalNotes,
+        };
+      });
+    },
+  },
   actions: {
     //fetch all bookings
     async getBookings({ commit, dispatch, state, rootState }) {

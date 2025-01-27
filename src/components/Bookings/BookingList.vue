@@ -184,6 +184,25 @@
     </div>
   </div>
   <!-- Modal End-->
+  <div class="card container">
+    <DataTable :value="bookings">
+      <Column field="vehicleType" header="Vehicle Type"></Column>
+      <Column field="serviceType" header="Service Type"></Column>
+      <Column field="location" header="Location"></Column>
+      <Column field="scheduledAt" header="Scheduled At"></Column>
+      <Column header="Status">
+        <template #body="slotProps">
+          <Tag
+            :icon="getIcons(slotProps.data.status)"
+            rounded
+            :value="slotProps.data.status"
+            :severity="getSeverity(slotProps.data.status)"
+          />
+        </template>
+      </Column>
+      <Column field="additionalNotes" header="Additional Notes"></Column>
+    </DataTable>
+  </div>
 </template>
 
 <script setup>
@@ -198,13 +217,16 @@ let showModal = ref(false);
 let filterBookingsBy = ref("all");
 let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
 import Select from "primevue/select";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import { Tag } from "primevue";
 
 onMounted(async () => {
   //get all bookings
   store.dispatch("bookings/getBookings");
 });
 
-let bookings = computed(() => store.state.bookings.bookings);
+let bookings = computed(() => store.getters["bookings/formatAndGetBookings"]);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 
 //let the user confirm deleting an booking
@@ -260,6 +282,40 @@ let isLoadingMoreBookings = computed(
 let hasMoreBookings = computed(
   () => store.state.bookings.bookingsPageInfo.hasMore
 );
+
+//Severity of the pills
+const getSeverity = (status) => {
+  let value = status.toLowerCase();
+  switch (value) {
+    case "completed":
+      return "success"; // Green
+    case "confirmed":
+      return "info"; // Blue
+    case "pending":
+      return "warn"; // Yellow
+    case "cancelled":
+      return "danger"; // Red
+    default:
+      return "secondary";
+  }
+};
+
+//Icons for pills
+const getIcons = (status) => {
+  let value = status.toLowerCase();
+  switch (value) {
+    case "completed":
+      return "fas fa-check-circle";
+    case "confirmed":
+      return "fas fa-calendar-check";
+    case "pending":
+      return "fas fa-hourglass-half";
+    case "cancelled":
+      return "fas fa-times-circle";
+    default:
+      return "secondary";
+  }
+};
 </script>
 
 <style>
