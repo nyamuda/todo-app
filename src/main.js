@@ -10,6 +10,7 @@ import "./assets/styles.css";
 import Toast, { POSITION } from "vue-toastification";
 import PrimeVue from "primevue/config";
 import Aura from "@primevue/themes/aura";
+import ConfirmationService from "primevue/confirmationservice";
 
 import "vue-toastification/dist/index.css";
 const options = { position: POSITION.TOP_CENTER };
@@ -22,6 +23,7 @@ createApp(App)
       preset: Aura,
     },
   })
+  .use(ConfirmationService)
   .use(router)
   .use(Toast, options)
   .mount("#app");

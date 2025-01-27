@@ -202,7 +202,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import "@vuepic/vue-datepicker/dist/main.css";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers, minLength } from "@vuelidate/validators";

@@ -144,46 +144,93 @@
   </div>
   <!--Bookings Table End-->
 
-  <!-- Modal Start-->
-  <div
-    v-if="showModal"
-    class="modal fade show"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-    style="display: block; background: rgba(0, 0, 0, 0.5); z-index: 10000"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Delete Booking?</h5>
-          <button
-            type="button"
-            class="btn-close"
-            @click="closeModal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to delete this booking? This action cannot be
-          undone.
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="closeModal">
-            Close
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger"
-            @click="deleteBooking(clickedBookingId)"
+  <!--Cancel Dialog Start-->
+  <ConfirmDialog group="headless">
+    <template #container="{ message, acceptCallback, rejectCallback }">
+      <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
+        <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
+        <p class="mb-3">{{ message.message }}</p>
+        <div class="d-flex flex-column align-items-start">
+          <FloatLabel variant="in">
+            <Textarea
+              id="cancelReason"
+              :invalid="v$.cancelReason.$error"
+              v-model="v$.cancelReason.$model"
+              rows="3"
+              cols="40"
+            />
+            <label for="cancelReason">Please provide a reason</label>
+          </FloatLabel>
+
+          <Message
+            v-if="v$.cancelReason.$error"
+            severity="error"
+            size="small"
+            variant="simple"
+            ><div v-for="error of v$.cancelReason.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div></Message
           >
-            Delete
-          </button>
+        </div>
+        <div class="d-flex align-items-center justify-content-end mt-2 w-100">
+          <Button
+            class="me-3"
+            label="Never mind"
+            variant="outlined"
+            severity="contrast"
+            size="small"
+            @click="rejectCallback"
+          ></Button>
+          <Button
+            :disabled="v$.cancelReason.$error"
+            label="Yes, cancel booking"
+            severity="warn"
+            size="small"
+            @click="acceptCallback"
+          ></Button>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- Modal End-->
+    </template>
+  </ConfirmDialog>
+  <!--Cancel Dialog End-->
+  <!--Feedback Dialog Start-->
+  <ConfirmDialog group="headless">
+    <template #container="{ message, acceptCallback, rejectCallback }">
+      <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
+        <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
+        <p class="mb-3">{{ message.message }}</p>
+        <Rating class="mb-2" v-model="value" />
+        <div class="d-flex flex-column align-items-start">
+          <FloatLabel variant="in">
+            <Textarea
+              id="bookingFeedback"
+              v-model="bookingFeedback.content"
+              rows="3"
+              cols="50"
+            />
+            <label for="bookingFeedback">Share your thoughts</label>
+          </FloatLabel>
+        </div>
+        <div class="d-flex align-items-center justify-content-end mt-2 w-100">
+          <Button
+            class="me-3"
+            label="Cancel"
+            variant="outlined"
+            severity="contrast"
+            size="small"
+            @click="rejectCallback"
+          ></Button>
+          <Button
+            label="Send feedback"
+            severity="primary"
+            size="small"
+            @click="acceptCallback"
+          ></Button>
+        </div>
+      </div>
+    </template>
+  </ConfirmDialog>
+  <!--Feedback Dialog End-->
   <div class="card container">
     <DataTable :value="bookings">
       <Column field="vehicleType" header="Vehicle Type"></Column>
@@ -201,54 +248,113 @@
         </template>
       </Column>
       <Column field="additionalNotes" header="Additional Notes"></Column>
+      <Column field="id" header="Actions">
+        <template #body="slotProps">
+          <Button
+            v-if="slotProps.data.status.toLowerCase() == 'completed'"
+            size="small"
+            label="Feedback"
+            icon="fas fa-star"
+            severity="info"
+            aria-label="Rate service"
+            @click="sendFeedback(slotProps.data.id)"
+          />
+          <Button
+            v-else
+            :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
+            size="small"
+            label="Cancel"
+            icon="fa-solid fa-xmark"
+            severity="danger"
+            aria-label="Cancel"
+            @click="cancelBooking(slotProps.data.id)"
+          />
+        </template>
+      </Column>
     </DataTable>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-
-import { useStore } from "vuex";
-// Access the store
-const store = useStore();
-let pendingDeleteBookingId = ref(0); //id of booking to be deleted
-let pendingUpdateBookingId = ref(0); //id of booking to be updated
-let showModal = ref(false);
-let filterBookingsBy = ref("all");
-let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
 import Select from "primevue/select";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { Tag } from "primevue";
+import Button from "primevue/button";
+import { useConfirm } from "primevue/useconfirm";
+import ConfirmDialog from "primevue/confirmdialog";
+import Textarea from "primevue/textarea";
+import { Message } from "primevue";
+import Rating from "primevue/rating";
+import { FloatLabel } from "primevue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, minLength } from "@vuelidate/validators";
+import { useStore } from "vuex";
+
+// Access the store
+const store = useStore();
+let filterBookingsBy = ref("all");
+let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
+const cancelDialog = useConfirm();
+const feedbackDialog = useConfirm();
+let bookings = computed(() => store.getters["bookings/formatAndGetBookings"]);
+let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
+let bookingFeedback = ref({
+  content: "",
+  rating: "",
+});
 
 onMounted(async () => {
   //get all bookings
   store.dispatch("bookings/getBookings");
 });
 
-let bookings = computed(() => store.getters["bookings/formatAndGetBookings"]);
-let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
+//Form validation with Vuelidate start
+//cancel reason data
+const reasonToCancelForm = ref({
+  cancelReason: "",
+});
+const rules = {
+  cancelReason: { required, minLengthValue: minLength(5) },
+};
+const v$ = useVuelidate(rules, reasonToCancelForm.value);
 
-//let the user confirm deleting an booking
-//by showing a modal
-const confirmDelete = (id) => {
-  showModal.value = true;
-  pendingDeleteBookingId.value = id;
+//cancel a booking
+let cancelBooking = (id) => {
+  //show text area errors
+  v$.value.$touch();
+  //show dialog
+  cancelDialog.require({
+    group: "headless",
+    message: "Are you sure you want to cancel this booking?",
+    header: "Cancel Booking",
+    icon: "fas fa-circle-exclamation",
+    accept: () => {
+      console.log(`Delete booking with ${id} confirmed`);
+    },
+    reject: () => {
+      console.log(`Delete booking with ${id} cancelled`);
+    },
+  });
 };
-// Close the modal
-const closeModal = () => {
-  showModal.value = false;
-};
+//Form validation with Vuelidate end
 
-//delete a booking and hide the modal
-let deleteBooking = () => {
-  showModal.value = false;
-  store.dispatch("bookings/deleteBooking", pendingDeleteBookingId.value);
-};
-//mark booking as completed
-let markCompleted = (id) => {
-  pendingUpdateBookingId.value = id;
-  store.dispatch("bookings/completeBooking", id);
+//Rate a booking
+let sendFeedback = (id) => {
+  //show dialog
+  feedbackDialog.require({
+    group: "headless",
+    message:
+      "Let us know how we did. Your rating and comments are appreciated.",
+    header: "How Was Your Car Wash?",
+    accept: () => {
+      console.log(`Delete booking with ${id} confirmed`);
+    },
+    reject: () => {
+      console.log(`Delete booking with ${id} cancelled`);
+    },
+  });
 };
 
 let filterBookings = () => {
