@@ -315,9 +315,11 @@ const account = {
             dispatch("decodeTokenAndLoadInfo", { token });
           }
           commit("authenticateUser", isUserAuthenticated);
+        } else {
+          commit("authenticateUser", true);
         }
       } catch (error) {
-        return false;
+        commit("authenticateUser", false);
       }
     },
     //Contact us message from user

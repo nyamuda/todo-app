@@ -1,27 +1,26 @@
 <template>
   <div class="container mx-auto">
-    <h3>Task List</h3>
+    <h1 class="display-6 mb-4">Bookings</h1>
 
     <div class="d-flex justify-content-end">
       <div class="me-2">
-        <select
+        <Select
+          style="width: 12rem"
+          placeholder="Filter bookings"
+          checkmark
           v-model="filterBookingsBy"
+          :options="filters"
           @change="filterBookings"
-          class="form-select"
-          aria-label="Filter bookings"
-        >
-          <option value="all" selected>All tasks</option>
-          <option value="completed">Completed tasks</option>
-          <option value="uncompleted">Uncompleted tasks</option>
-        </select>
+          size="small"
+        />
       </div>
-      <router-link to="/tasks/add">
-        <button type="button" class="btn btn-primary">Add Task</button>
+      <router-link to="/bookings/add">
+        <button type="button" class="btn btn-primary">Add Booking</button>
       </router-link>
     </div>
 
-    <!--Tasks Table Start-->
-    <div v-if="tasks.length > 0 || hasMoreBookings">
+    <!--Bookings Table Start-->
+    <div v-if="bookings.length > 0 || hasMoreBookings">
       <div class="table-responsive">
         <table class="table table-striped mt-3 placeholder-glow">
           <thead>
@@ -44,24 +43,24 @@
                 <td><span class="placeholder col-6"></span></td>
               </tr>
             </template>
-            <!-- Show tasks once loaded -->
+            <!-- Show bookings once loaded -->
             <template v-else>
               <tr
                 class="booking-list"
-                v-for="(task, index) in tasks"
+                v-for="(booking, index) in bookings"
                 :key="index"
               >
-                <td>{{ task.title }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.dueDate }}</td>
+                <td>{{ booking.title }}</td>
+                <td>{{ booking.description }}</td>
+                <td>{{ booking.dueDate }}</td>
                 <td>
                   <span
                     v-bind:class="{
-                      'text-success': task.isCompleted,
-                      'text-danger': !task.isCompleted,
+                      'text-success': booking.isCompleted,
+                      'text-danger': !booking.isCompleted,
                     }"
                   >
-                    {{ task.isCompleted ? "Completed" : "Pending" }}
+                    {{ booking.isCompleted ? "Completed" : "Pending" }}
                   </span>
                 </td>
                 <td>
@@ -70,7 +69,8 @@
                   >
                     <button
                       v-if="
-                        isCompletingBooking && pendingUpdateTaskId == task.id
+                        isCompletingBooking &&
+                        pendingUpdateBookingId == booking.id
                       "
                       class="btn btn-success btn-sm me-2"
                       disabled
@@ -84,15 +84,15 @@
                     </button>
                     <button
                       v-else
-                      :disabled="task.isCompleted"
+                      :disabled="booking.isCompleted"
                       class="btn btn-success btn-sm me-2 text-nowrap"
-                      @click="markCompleted(task.id)"
+                      @click="markCompleted(booking.id)"
                     >
                       Mark Completed
                     </button>
                     <button
                       class="btn btn-danger btn-sm"
-                      @click="confirmDelete(task.id)"
+                      @click="confirmDelete(booking.id)"
                     >
                       Delete
                     </button>
@@ -142,7 +142,7 @@
 
     <!--No Bookings End-->
   </div>
-  <!--Tasks Table End-->
+  <!--Bookings Table End-->
 
   <!-- Modal Start-->
   <div
@@ -156,7 +156,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Delete Task?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Delete Booking?</h5>
           <button
             type="button"
             class="btn-close"
@@ -165,7 +165,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          Are you sure you want to delete this task? This action cannot be
+          Are you sure you want to delete this booking? This action cannot be
           undone.
         </div>
         <div class="modal-footer">
@@ -175,7 +175,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="deleteTask(clickedBookingId)"
+            @click="deleteBooking(clickedBookingId)"
           >
             Delete
           </button>
@@ -192,54 +192,59 @@ import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 // Access the store
 const store = useStore();
-let pendingDeleteTaskId = ref(0); //id of booking to be deleted
-let pendingUpdateTaskId = ref(0); //id of booking to be updated
+let pendingDeleteBookingId = ref(0); //id of booking to be deleted
+let pendingUpdateBookingId = ref(0); //id of booking to be updated
 let showModal = ref(false);
 let filterBookingsBy = ref("all");
+let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
+import Select from "primevue/select";
 
 onMounted(async () => {
   //get all bookings
-  store.dispatch("bookings/fetchTasks");
+  store.dispatch("bookings/getBookings");
 });
 
-let tasks = computed(() => store.state.bookings.todoTasks);
+let bookings = computed(() => store.state.bookings.bookings);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 
 //let the user confirm deleting an booking
 //by showing a modal
 const confirmDelete = (id) => {
   showModal.value = true;
-  pendingDeleteTaskId.value = id;
+  pendingDeleteBookingId.value = id;
 };
 // Close the modal
 const closeModal = () => {
   showModal.value = false;
 };
 
-//delete a task and hide the modal
-let deleteTask = () => {
+//delete a booking and hide the modal
+let deleteBooking = () => {
   showModal.value = false;
-  store.dispatch("bookings/deleteTask", pendingDeleteTaskId.value);
+  store.dispatch("bookings/deleteBooking", pendingDeleteBookingId.value);
 };
-//mark task as completed
+//mark booking as completed
 let markCompleted = (id) => {
-  pendingUpdateTaskId.value = id;
-  store.dispatch("bookings/completeTask", id);
+  pendingUpdateBookingId.value = id;
+  store.dispatch("bookings/completeBooking", id);
 };
 
 let filterBookings = () => {
-  if (filterBookingsBy.value == "completed") {
-    store.dispatch("bookings/fetchCompletedTasks");
-  } else if (filterBookingsBy.value == "uncompleted") {
-    store.dispatch("bookings/fetchUncompletedTasks");
-  } else {
-    store.dispatch("bookings/fetchTasks");
-  }
+  alert(filterBookingsBy.value);
+  // if (filterBookingsBy.value == "completed") {
+  //   store.dispatch("bookings/getCompletedBookings");
+  // } else if (filterBookingsBy.value == "cancelled") {
+  //   store.dispatch("bookings/getCancelledBookings");
+  // } else if (filterBookingsBy.value == "pending") {
+  //   store.dispatch("bookings/getPendingBookings");
+  // } else {
+  //   store.dispatch("bookings/getBookings");
+  // }
 };
-//load more tasks depending on whether
-//the current list is for all, completed or uncompleted tasks
+//load more bookings depending on whether
+//the current list is for all, completed or uncompleted bookings
 let loadMoreBookings = () => {
-  store.dispatch("bookings/loadMoreTasks", filterBookingsBy.value);
+  store.dispatch("bookings/loadMoreBookings", filterBookingsBy.value);
 };
 //is an booking being marked as complete
 let isCompletingBooking = computed(
