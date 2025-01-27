@@ -145,19 +145,19 @@
   <!--Bookings Table End-->
 
   <!--Cancel Dialog Start-->
-  <ConfirmDialog group="headless">
+  <ConfirmDialog group="cancel">
     <template #container="{ message, acceptCallback, rejectCallback }">
       <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
         <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
         <p class="mb-3">{{ message.message }}</p>
-        <div class="d-flex flex-column align-items-start">
+        <div class="w-100">
           <FloatLabel variant="in">
             <Textarea
+              class="w-100"
               id="cancelReason"
               :invalid="v$.cancelReason.$error"
               v-model="v$.cancelReason.$model"
               rows="3"
-              cols="40"
             />
             <label for="cancelReason">Please provide a reason</label>
           </FloatLabel>
@@ -194,19 +194,34 @@
   </ConfirmDialog>
   <!--Cancel Dialog End-->
   <!--Feedback Dialog Start-->
-  <ConfirmDialog group="headless">
+  <ConfirmDialog group="feedback">
     <template #container="{ message, acceptCallback, rejectCallback }">
       <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
         <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
         <p class="mb-3">{{ message.message }}</p>
-        <Rating class="mb-2" v-model="value" />
-        <div class="d-flex flex-column align-items-start">
+        <div class="mb-2">
+          <Rating
+            class="mb-1"
+            :invalid="v2$.rating.$error"
+            v-model="v2$.rating.$model"
+          />
+          <Message
+            v-if="v2$.rating.$error"
+            severity="error"
+            size="small"
+            variant="simple"
+            ><div v-for="error of v2$.rating.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div></Message
+          >
+        </div>
+        <div class="w-100">
           <FloatLabel variant="in">
             <Textarea
+              class="w-100"
               id="bookingFeedback"
-              v-model="bookingFeedback.content"
+              v-model="v2$.content.$model"
               rows="3"
-              cols="50"
             />
             <label for="bookingFeedback">Share your thoughts</label>
           </FloatLabel>
@@ -221,6 +236,7 @@
             @click="rejectCallback"
           ></Button>
           <Button
+            :disabled="v2$.rating.$error"
             label="Send feedback"
             severity="primary"
             size="small"
@@ -289,21 +305,16 @@ import { Message } from "primevue";
 import Rating from "primevue/rating";
 import { FloatLabel } from "primevue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, minLength } from "@vuelidate/validators";
+import { required, minLength, numeric, helpers } from "@vuelidate/validators";
 import { useStore } from "vuex";
 
 // Access the store
 const store = useStore();
 let filterBookingsBy = ref("all");
 let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
-const cancelDialog = useConfirm();
-const feedbackDialog = useConfirm();
+const confirmDialog = useConfirm();
 let bookings = computed(() => store.getters["bookings/formatAndGetBookings"]);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
-let bookingFeedback = ref({
-  content: "",
-  rating: "",
-});
 
 onMounted(async () => {
   //get all bookings
@@ -315,18 +326,34 @@ onMounted(async () => {
 const reasonToCancelForm = ref({
   cancelReason: "",
 });
-const rules = {
+const feedbackForm = ref({
+  content: "",
+  rating: null,
+});
+const cancelRules = {
   cancelReason: { required, minLengthValue: minLength(5) },
 };
-const v$ = useVuelidate(rules, reasonToCancelForm.value);
+//rules for the booking feedback form
+const feedbackRules = {
+  content: {},
+  rating: {
+    required: helpers.withMessage("Rating is required", required),
+    numeric,
+  },
+};
+
+//for cancellation
+const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
+//for feedback
+const v2$ = useVuelidate(feedbackRules, feedbackForm.value);
 
 //cancel a booking
 let cancelBooking = (id) => {
   //show text area errors
   v$.value.$touch();
   //show dialog
-  cancelDialog.require({
-    group: "headless",
+  confirmDialog.require({
+    group: "cancel",
     message: "Are you sure you want to cancel this booking?",
     header: "Cancel Booking",
     icon: "fas fa-circle-exclamation",
@@ -342,9 +369,11 @@ let cancelBooking = (id) => {
 
 //Rate a booking
 let sendFeedback = (id) => {
+  //show text area errors
+  v2$.value.$touch();
   //show dialog
-  feedbackDialog.require({
-    group: "headless",
+  confirmDialog.require({
+    group: "feedback",
     message:
       "Let us know how we did. Your rating and comments are appreciated.",
     header: "How Was Your Car Wash?",
