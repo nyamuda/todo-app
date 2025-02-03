@@ -19,92 +19,99 @@
       </router-link>
     </div>
 
-    <!--Bookings Table Start-->
-    <div v-if="bookings.length > 0 || hasMoreBookings">
-      <div class="table-responsive">
-        <table class="table table-striped mt-3 placeholder-glow">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Due Date</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Show placeholders while loading -->
-            <template v-if="isGettingBookings">
-              <tr v-for="n in 5" :key="n">
-                <td><span class="placeholder col-6"></span></td>
-                <td><span class="placeholder col-8"></span></td>
-                <td><span class="placeholder col-4"></span></td>
-                <td><span class="placeholder col-3"></span></td>
-                <td><span class="placeholder col-6"></span></td>
-              </tr>
+    <!--Table section start-->
+    <div class="mt-3" v-if="bookings.length > 0 || hasMoreBookings">
+      <div class="card">
+        <!--Skeleton table start-->
+        <DataTable :value="rowSkeletons" v-if="isGettingBookings">
+          <Column field="vehicleType" header="Vehicle Type">
+            <template #body>
+              <Skeleton></Skeleton>
             </template>
-            <!-- Show bookings once loaded -->
-            <template v-else>
-              <tr
-                class="booking-list"
-                v-for="(booking, index) in bookings"
-                :key="index"
-              >
-                <td>{{ booking.title }}</td>
-                <td>{{ booking.description }}</td>
-                <td>{{ booking.dueDate }}</td>
-                <td>
-                  <span
-                    v-bind:class="{
-                      'text-success': booking.isCompleted,
-                      'text-danger': !booking.isCompleted,
-                    }"
-                  >
-                    {{ booking.isCompleted ? "Completed" : "Pending" }}
-                  </span>
-                </td>
-                <td>
-                  <div
-                    class="d-flex justify-content-start align-bookings-center flex-nowrap"
-                  >
-                    <button
-                      v-if="
-                        isCompletingBooking &&
-                        pendingUpdateBookingId == booking.id
-                      "
-                      class="btn btn-success btn-sm me-2"
-                      disabled
-                    >
-                      <span
-                        class="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Please wait...
-                    </button>
-                    <button
-                      v-else
-                      :disabled="booking.isCompleted"
-                      class="btn btn-success btn-sm me-2 text-nowrap"
-                      @click="markCompleted(booking.id)"
-                    >
-                      Mark Completed
-                    </button>
-                    <button
-                      class="btn btn-danger btn-sm"
-                      @click="confirmDelete(booking.id)"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
+          </Column>
+          <Column field="serviceType" header="Service Type">
+            <template #body>
+              <Skeleton></Skeleton>
             </template>
-          </tbody>
-        </table>
+          </Column>
+          <Column field="location" header="Location">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
+          <Column field="scheduledAt" header="Scheduled At">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
+          <Column field="status" header="Status">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
+          <Column field="additionalNotes" header="Additional Notes">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
+          <Column field="actions" header="Actions">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
+        </DataTable>
+        <!--Skeleton table end-->
+        <!--Table start-->
+        <DataTable v-else :value="bookings">
+          <Column field="vehicleType" header="Vehicle Type"></Column>
+          <Column field="serviceType" header="Service Type"></Column>
+          <Column field="location" header="Location"></Column>
+          <Column field="scheduledAt" header="Scheduled At"></Column>
+          <Column header="Status">
+            <template #body="slotProps">
+              <Tag
+                :icon="getIcons(slotProps.data.status)"
+                rounded
+                :value="slotProps.data.status"
+                :severity="getSeverity(slotProps.data.status)"
+              />
+            </template>
+          </Column>
+          <Column field="additionalNotes" header="Additional Notes"></Column>
+          <Column field="id" header="Actions">
+            <template #body="slotProps">
+              <Button
+                v-if="
+                  doesBookingRequireFeedback(
+                    slotProps.data.status,
+                    slotProps.data?.feedback?.rating
+                  )
+                "
+                size="small"
+                label="Feedback"
+                icon="fas fa-star"
+                severity="info"
+                aria-label="Rate service"
+                @click="sendFeedback(slotProps.data.id)"
+              />
+
+              <Button
+                v-else
+                :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
+                size="small"
+                label="Cancel"
+                icon="fa-solid fa-xmark"
+                severity="danger"
+                aria-label="Cancel"
+                @click="cancelBooking(slotProps.data.id)"
+              />
+            </template>
+          </Column>
+        </DataTable>
+        <!--Table end-->
       </div>
       <!--Load more bookings start-->
-      <div class="d-grid gap-2 col-md-3 mx-auto mt-3 mt-md-2">
+      <div class="d-grid gap-2 col-md-3 mx-auto mt-3">
         <button
           :class="{
             'btn btn-secondary': !hasMoreBookings,
@@ -142,7 +149,8 @@
 
     <!--No Bookings End-->
   </div>
-  <!--Bookings Table End-->
+
+  <!--Dialogs Section Start-->
 
   <!--Cancel Dialog Start-->
   <ConfirmDialog group="cancel">
@@ -247,54 +255,7 @@
     </template>
   </ConfirmDialog>
   <!--Feedback Dialog End-->
-  <div class="card container">
-    <DataTable :value="bookings">
-      <Column field="vehicleType" header="Vehicle Type"></Column>
-      <Column field="serviceType" header="Service Type"></Column>
-      <Column field="location" header="Location"></Column>
-      <Column field="scheduledAt" header="Scheduled At"></Column>
-      <Column header="Status">
-        <template #body="slotProps">
-          <Tag
-            :icon="getIcons(slotProps.data.status)"
-            rounded
-            :value="slotProps.data.status"
-            :severity="getSeverity(slotProps.data.status)"
-          />
-        </template>
-      </Column>
-      <Column field="additionalNotes" header="Additional Notes"></Column>
-      <Column field="id" header="Actions">
-        <template #body="slotProps">
-          <Button
-            v-if="
-              doesBookingRequireFeedback(
-                slotProps.data.status,
-                slotProps.data?.feedback?.rating
-              )
-            "
-            size="small"
-            label="Feedback"
-            icon="fas fa-star"
-            severity="info"
-            aria-label="Rate service"
-            @click="sendFeedback(slotProps.data.id)"
-          />
-
-          <Button
-            v-else
-            :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
-            size="small"
-            label="Cancel"
-            icon="fa-solid fa-xmark"
-            severity="danger"
-            aria-label="Cancel"
-            @click="cancelBooking(slotProps.data.id)"
-          />
-        </template>
-      </Column>
-    </DataTable>
-  </div>
+  <!--Dialogs Section Start-->
 </template>
 
 <script setup>
@@ -308,12 +269,15 @@ import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import Textarea from "primevue/textarea";
 import { Message } from "primevue";
+import Skeleton from "primevue/skeleton";
 import Rating from "primevue/rating";
 import { FloatLabel } from "primevue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, numeric, helpers } from "@vuelidate/validators";
 import { useStore } from "vuex";
 
+//table row skeletons
+const rowSkeletons = ref(new Array(4));
 // Access the store
 const store = useStore();
 let filterBookingsBy = ref("all");
@@ -409,9 +373,9 @@ let loadMoreBookings = () => {
   store.dispatch("bookings/loadMoreBookings", filterBookingsBy.value);
 };
 //is an booking being marked as complete
-let isCompletingBooking = computed(
-  () => store.state.bookings.isCompletingBooking
-);
+// let isCompletingBooking = computed(
+//   () => store.state.bookings.isCompletingBooking
+// );
 
 //are there more bookings currently being loaded
 let isLoadingMoreBookings = computed(
