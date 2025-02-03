@@ -234,6 +234,7 @@ const account = {
           toast.error(response.data.message);
         }
       } catch (ex) {
+        console.log(ex);
         let message = ex.response.data?.message
           ? ex.response.data.message
           : rootState.failureMessage;
@@ -316,7 +317,7 @@ const account = {
           }
           commit("authenticateUser", isUserAuthenticated);
         } else {
-          commit("authenticateUser", true);
+          commit("authenticateUser", false);
         }
       } catch (error) {
         commit("authenticateUser", false);

@@ -20,7 +20,7 @@
     </div>
 
     <!--Table section start-->
-    <div class="mt-3" v-if="bookings.length > 0 || hasMoreBookings">
+    <div class="mt-4" v-if="bookings.length > 0 || hasMoreBookings">
       <div class="card">
         <!--Skeleton table start-->
         <DataTable :value="rowSkeletons" v-if="isGettingBookings">
@@ -356,16 +356,15 @@ let sendFeedback = (id) => {
 //Form validation with Vuelidate end
 
 let filterBookings = () => {
-  alert(filterBookingsBy.value);
-  // if (filterBookingsBy.value == "completed") {
-  //   store.dispatch("bookings/getCompletedBookings");
-  // } else if (filterBookingsBy.value == "cancelled") {
-  //   store.dispatch("bookings/getCancelledBookings");
-  // } else if (filterBookingsBy.value == "pending") {
-  //   store.dispatch("bookings/getPendingBookings");
-  // } else {
-  //   store.dispatch("bookings/getBookings");
-  // }
+  if (filterBookingsBy.value == "completed") {
+    store.dispatch("bookings/getCompletedBookings");
+  } else if (filterBookingsBy.value == "cancelled") {
+    store.dispatch("bookings/getCancelledBookings");
+  } else if (filterBookingsBy.value == "pending") {
+    store.dispatch("bookings/getPendingBookings");
+  } else {
+    store.dispatch("bookings/getBookings");
+  }
 };
 //load more bookings depending on whether
 //the current list is for all, completed or uncompleted bookings

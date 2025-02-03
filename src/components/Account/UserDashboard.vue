@@ -51,8 +51,8 @@
         </div>
       </div>
       <div class="card-footer text-end">
-        <router-link to="/tasks/list"
-          ><button class="btn btn-secondary">View Tasks</button></router-link
+        <router-link to="/bookings/list"
+          ><button class="btn btn-secondary">View Bookings</button></router-link
         >
       </div>
     </div>

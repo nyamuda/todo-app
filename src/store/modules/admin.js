@@ -2,7 +2,7 @@ import axios from "axios";
 import router from "@/router";
 import { useToast } from "vue-toastification";
 const toast = useToast();
-const bookings = {
+const admin = {
   namespaced: true,
   state: () => ({
     bookings: [
@@ -154,6 +154,26 @@ const bookings = {
     setBookings(state, bookings) {
       // mutate state by formatting the date
       state.bookings = bookings;
+    },
+    //update the state to show a recently completed booking
+    //without calling the server
+    showCompletedBooking(state, id) {
+      let currentBookings = state.todoTasks;
+      state.todoTasks = currentBookings.map((task) => {
+        return {
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          isCompleted: task.id == id ? true : task.isCompleted, //update status of recently completed booking
+          dueDate: task.dueDate,
+        };
+      });
+    },
+    //remove deleted booking from the state
+    //without calling the server
+    removeBooking(state, id) {
+      let currentBookings = state.todoTasks;
+      state.todoTasks = currentBookings.filter((task) => task.id != id);
     },
     updatePageInfo(state, pageInfo) {
       state.bookingsPageInfo = pageInfo;
@@ -433,6 +453,30 @@ const bookings = {
       }
     },
 
+    // async deleteBooking({ dispatch, commit, rootState }, id) {
+    //   try {
+    //     //add authorization header to the request
+    //     //to access the protected route
+    //     dispatch("setAuthorizationHeader");
+    //     // Send a DELETE request to the API
+    //     let response = await axios.delete(`${rootState.apiUrl}/bookings/${id}`);
+
+    //     // Check if the request was successful
+    //     //status code will be 204 from the API
+    //     if (response.status == 204) {
+    //       //show toast success message
+    //       let message = "The booking has been successfully deleted.";
+    //       toast.success(message);
+
+    //       //remove booking from state
+    //       await commit("removeBooking", id);
+    //     } else {
+    //       toast.error(rootState.failureMessage);
+    //     }
+    //   } catch (error) {
+    //     toast.error(rootState.failureMessage);
+    //   }
+    // },
 
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
@@ -449,4 +493,4 @@ const bookings = {
   },
 };
 
-export default bookings;
+export default admin;
