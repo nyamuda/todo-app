@@ -5,134 +5,7 @@ const toast = useToast();
 const bookings = {
   namespaced: true,
   state: () => ({
-    bookings: [
-      {
-        id: 1,
-        vehicleType: "Sedan",
-        serviceType: "Basic Wash",
-        location: "Downtown Car Wash",
-        scheduledAt: "2023-10-15T10:00:00Z",
-        status: "Pending",
-        additionalNotes: "Please focus on the rear bumper.",
-        feedback: {
-          rating: 4,
-          content: "great service",
-        },
-      },
-      {
-        id: 2,
-        vehicleType: "SUV",
-        serviceType: "Premium Wash",
-        location: "Westside Car Wash",
-        scheduledAt: "2023-10-15T12:30:00Z",
-        status: "Pending",
-        additionalNotes: "Interior vacuuming required.",
-        feedback: {
-          rating: 1,
-          content: "great service",
-        },
-      },
-      {
-        id: 3,
-        vehicleType: "Truck",
-        serviceType: "Detailing",
-        location: "Northside Car Wash",
-        scheduledAt: "2023-10-16T09:00:00Z",
-        status: "Completed",
-        additionalNotes: "Remove mud from the truck bed.",
-        feedback: {
-          rating: 3,
-          content: "great service",
-        },
-      },
-      {
-        id: 4,
-        vehicleType: "Sedan",
-        serviceType: "Basic Wash",
-        location: "Eastside Car Wash",
-        scheduledAt: "2023-10-16T11:00:00Z",
-        status: "Cancelled",
-        additionalNotes: "Customer canceled due to change of plans.",
-      },
-      {
-        id: 5,
-        vehicleType: "SUV",
-        serviceType: "Premium Wash",
-        location: "Downtown Car Wash",
-        scheduledAt: "2023-10-17T14:00:00Z",
-        status: "Pending",
-        additionalNotes: "Use eco-friendly cleaning products.",
-        feedback: {
-          rating: 5,
-          content: "great service",
-        },
-      },
-      {
-        id: 6,
-        vehicleType: "Sedan",
-        serviceType: "Detailing",
-        location: "Westside Car Wash",
-        scheduledAt: "2023-10-18T16:00:00Z",
-        status: "Pending",
-        additionalNotes: "Polish the exterior.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-      {
-        id: 7,
-        vehicleType: "Truck",
-        serviceType: "Basic Wash",
-        location: "Northside Car Wash",
-        scheduledAt: "2023-10-19T08:30:00Z",
-        status: "Pending",
-        additionalNotes: "Check for scratches on the hood.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-      {
-        id: 8,
-        vehicleType: "SUV",
-        serviceType: "Premium Wash",
-        location: "Eastside Car Wash",
-        scheduledAt: "2023-10-20T13:00:00Z",
-        status: "Confirmed",
-        additionalNotes: "Include tire shine.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-      {
-        id: 9,
-        vehicleType: "Sedan",
-        serviceType: "Basic Wash",
-        location: "Downtown Car Wash",
-        scheduledAt: "2023-10-21T10:00:00Z",
-        status: "Completed",
-        additionalNotes: "No additional notes.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-      {
-        id: 10,
-        vehicleType: "Truck",
-        serviceType: "Detailing",
-        location: "Westside Car Wash",
-        scheduledAt: "2023-10-22T15:00:00Z",
-        status: "Confirmed",
-        additionalNotes: "Focus on the interior upholstery.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-    ],
+    bookings: [],
     isGettingBookings: false, //to show placeholder bookings
     isCreatingBooking: false, //to show the loading button during task creation
     isUpdatingBooking: false, //to show the loading button during task completion
@@ -200,7 +73,8 @@ const bookings = {
 
         //page info
         commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
+      } catch (ex) {
+        console.log(ex);
         toast.error("Failed to load bookings.");
       } finally {
         state.isGettingBookings = false;
@@ -433,13 +307,12 @@ const bookings = {
       }
     },
 
-
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage
-      let sessionToken = sessionStorage.getBooking("jwt_token");
+      let sessionToken = sessionStorage.getItem("jwt_token");
       //check if there is a token in local storage
-      let localToken = localStorage.getBooking("jwt_token");
+      let localToken = localStorage.getItem("jwt_token");
 
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : null;

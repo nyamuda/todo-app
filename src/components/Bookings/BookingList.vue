@@ -20,7 +20,10 @@
     </div>
 
     <!--Table section start-->
-    <div class="mt-4" v-if="bookings.length > 0 || hasMoreBookings">
+    <div
+      class="mt-4"
+      v-if="bookings.length > 0 || hasMoreBookings || isGettingBookings"
+    >
       <div class="card">
         <!--Skeleton table start-->
         <DataTable :value="rowSkeletons" v-if="isGettingBookings">
@@ -277,7 +280,7 @@ import { required, minLength, numeric, helpers } from "@vuelidate/validators";
 import { useStore } from "vuex";
 
 //table row skeletons
-const rowSkeletons = ref(new Array(4));
+const rowSkeletons = ref(new Array(10));
 // Access the store
 const store = useStore();
 let filterBookingsBy = ref("all");

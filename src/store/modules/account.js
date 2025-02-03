@@ -90,12 +90,12 @@ const account = {
           //if the user wants to be be remembered on log in
           //save the JWT token to local storage
           if (rememberMe) {
-            localStorage.setBooking("jwt_token", accessToken);
+            localStorage.setItem("jwt_token", accessToken);
           }
 
           //else save the JWT token to session storage
           else {
-            sessionStorage.setBooking("jwt_token", accessToken);
+            sessionStorage.setItem("jwt_token", accessToken);
           }
 
           //mark the user as authenticated
@@ -118,6 +118,7 @@ const account = {
           router.push("/email/verify");
         }
       } catch (ex) {
+        console.log(ex);
         let message = ex.response?.data.message
           ? ex.response.data.message
           : rootState.failureMessage;
@@ -140,7 +141,7 @@ const account = {
           let accessToken = response.data.token.result;
 
           //save the JWT token to local storage
-          localStorage.setBooking("jwt_token", accessToken);
+          localStorage.setItem("jwt_token", accessToken);
 
           //mark the user as authenticated
           dispatch("authenticateUser");
@@ -170,7 +171,7 @@ const account = {
           let accessToken = response.data.token.result;
 
           //save the JWT token to local storage
-          localStorage.setBooking("jwt_token", accessToken);
+          localStorage.setItem("jwt_token", accessToken);
 
           //mark the user as authenticated
           dispatch("authenticateUser");
@@ -190,8 +191,8 @@ const account = {
     // When the user logs out
     logoutUser({ commit }) {
       //first, remove access token from local or session storage
-      localStorage.removeBooking("jwt_token");
-      sessionStorage.removeBooking("jwt_token");
+      localStorage.removeItem("jwt_token");
+      sessionStorage.removeItem("jwt_token");
 
       // Clear the default authorization header
       delete axios.defaults.headers.common["Authorization"];
@@ -208,7 +209,7 @@ const account = {
 
       //finally, navigate to the homepage and show logged out message
       router.push("/");
-      let message = "You’re now logged out";
+      let message = "You’re now logged out.";
       toast.success(message);
     },
     //Register user
