@@ -14,6 +14,10 @@ const bookings = {
         scheduledAt: "2023-10-15T10:00:00Z",
         status: "Pending",
         additionalNotes: "Please focus on the rear bumper.",
+        feedback: {
+          rating: 4,
+          content: "great service",
+        },
       },
       {
         id: 2,
@@ -23,6 +27,10 @@ const bookings = {
         scheduledAt: "2023-10-15T12:30:00Z",
         status: "Pending",
         additionalNotes: "Interior vacuuming required.",
+        feedback: {
+          rating: 1,
+          content: "great service",
+        },
       },
       {
         id: 3,
@@ -32,6 +40,10 @@ const bookings = {
         scheduledAt: "2023-10-16T09:00:00Z",
         status: "Completed",
         additionalNotes: "Remove mud from the truck bed.",
+        feedback: {
+          rating: 3,
+          content: "great service",
+        },
       },
       {
         id: 4,
@@ -50,6 +62,10 @@ const bookings = {
         scheduledAt: "2023-10-17T14:00:00Z",
         status: "Pending",
         additionalNotes: "Use eco-friendly cleaning products.",
+        feedback: {
+          rating: 5,
+          content: "great service",
+        },
       },
       {
         id: 6,
@@ -59,6 +75,10 @@ const bookings = {
         scheduledAt: "2023-10-18T16:00:00Z",
         status: "Pending",
         additionalNotes: "Polish the exterior.",
+        feedback: {
+          rating: null,
+          content: "",
+        },
       },
       {
         id: 7,
@@ -68,6 +88,10 @@ const bookings = {
         scheduledAt: "2023-10-19T08:30:00Z",
         status: "Pending",
         additionalNotes: "Check for scratches on the hood.",
+        feedback: {
+          rating: null,
+          content: "",
+        },
       },
       {
         id: 8,
@@ -77,6 +101,10 @@ const bookings = {
         scheduledAt: "2023-10-20T13:00:00Z",
         status: "Confirmed",
         additionalNotes: "Include tire shine.",
+        feedback: {
+          rating: null,
+          content: "",
+        },
       },
       {
         id: 9,
@@ -86,6 +114,10 @@ const bookings = {
         scheduledAt: "2023-10-21T10:00:00Z",
         status: "Completed",
         additionalNotes: "No additional notes.",
+        feedback: {
+          rating: null,
+          content: "",
+        },
       },
       {
         id: 10,
@@ -95,6 +127,10 @@ const bookings = {
         scheduledAt: "2023-10-22T15:00:00Z",
         status: "Confirmed",
         additionalNotes: "Focus on the interior upholstery.",
+        feedback: {
+          rating: null,
+          content: "",
+        },
       },
     ],
     isGettingBookings: false, //to show placeholder bookings

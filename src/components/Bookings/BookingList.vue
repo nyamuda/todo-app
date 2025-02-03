@@ -267,7 +267,12 @@
       <Column field="id" header="Actions">
         <template #body="slotProps">
           <Button
-            v-if="slotProps.data.status.toLowerCase() == 'completed'"
+            v-if="
+              doesBookingRequireFeedback(
+                slotProps.data.status,
+                slotProps.data?.feedback?.rating
+              )
+            "
             size="small"
             label="Feedback"
             icon="fas fa-star"
@@ -275,6 +280,7 @@
             aria-label="Rate service"
             @click="sendFeedback(slotProps.data.id)"
           />
+
           <Button
             v-else
             :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
@@ -356,7 +362,6 @@ let cancelBooking = (id) => {
     group: "cancel",
     message: "Are you sure you want to cancel this booking?",
     header: "Cancel Booking",
-    icon: "fas fa-circle-exclamation",
     accept: () => {
       console.log(`Delete booking with ${id} confirmed`);
     },
@@ -365,7 +370,6 @@ let cancelBooking = (id) => {
     },
   });
 };
-//Form validation with Vuelidate end
 
 //Rate a booking
 let sendFeedback = (id) => {
@@ -385,6 +389,7 @@ let sendFeedback = (id) => {
     },
   });
 };
+//Form validation with Vuelidate end
 
 let filterBookings = () => {
   alert(filterBookingsBy.value);
@@ -450,6 +455,15 @@ const getIcons = (status) => {
     default:
       return "secondary";
   }
+};
+//Does the booking require feedback or not
+let doesBookingRequireFeedback = (status, rating) => {
+  //if the rating is null
+  //then the booking requires feedback
+  if (!rating && status.toLowerCase() == "completed") {
+    return true;
+  }
+  return false;
 };
 </script>
 
