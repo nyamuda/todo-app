@@ -67,7 +67,7 @@
     </div>
 
     <div class="card-footer text-end">
-      <router-link to="/admin/bookings/manage">
+      <router-link to="/admin/bookings">
         <button class="btn btn-secondary">Manage Bookings</button>
       </router-link>
     </div>
@@ -79,7 +79,7 @@ import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 
-let adminStatistics = computed(() => store.state.bookings.userStatistics);
+let adminStatistics = computed(() => store.state.admin.adminStatistics);
 let adminInfo = computed(() => store.state.account.loggedInUser);
 
 onMounted(() => {

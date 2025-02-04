@@ -16,8 +16,8 @@ import BookingsView from "@/views/Bookings/BookingsView.vue";
 import BookingsList from "@/components/Bookings/BookingsList.vue";
 import AddBooking from "@/components/Bookings/AddBooking.vue";
 import UpdateBooking from "@/components/Bookings/UpdateBooking.vue";
-import AddBookingService from "@/components/Bookings/Services/AddBookingService.vue";
-import BookingServiceList from "@/components/Bookings/Services/BookingServiceList.vue";
+import AddBookingService from "@/components/Bookings/Services/AddServiceType.vue";
+import BookingServiceList from "@/components/Bookings/Services/ServiceTypeList.vue";
 import AdminBookingsList from "@/components/Admin/AdminBookingsList.vue";
 
 const routes = [

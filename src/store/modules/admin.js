@@ -5,134 +5,7 @@ const toast = useToast();
 const admin = {
   namespaced: true,
   state: () => ({
-    bookings: [
-      {
-        id: 1,
-        vehicleType: "Sedan",
-        serviceType: "Basic Wash",
-        location: "Downtown Car Wash",
-        scheduledAt: "2023-10-15T10:00:00Z",
-        status: "Pending",
-        additionalNotes: "Please focus on the rear bumper.",
-        feedback: {
-          rating: 4,
-          content: "great service",
-        },
-      },
-      {
-        id: 2,
-        vehicleType: "SUV",
-        serviceType: "Premium Wash",
-        location: "Westside Car Wash",
-        scheduledAt: "2023-10-15T12:30:00Z",
-        status: "Pending",
-        additionalNotes: "Interior vacuuming required.",
-        feedback: {
-          rating: 1,
-          content: "great service",
-        },
-      },
-      {
-        id: 3,
-        vehicleType: "Truck",
-        serviceType: "Detailing",
-        location: "Northside Car Wash",
-        scheduledAt: "2023-10-16T09:00:00Z",
-        status: "Completed",
-        additionalNotes: "Remove mud from the truck bed.",
-        feedback: {
-          rating: 3,
-          content: "great service",
-        },
-      },
-      {
-        id: 4,
-        vehicleType: "Sedan",
-        serviceType: "Basic Wash",
-        location: "Eastside Car Wash",
-        scheduledAt: "2023-10-16T11:00:00Z",
-        status: "Cancelled",
-        additionalNotes: "Customer canceled due to change of plans.",
-      },
-      {
-        id: 5,
-        vehicleType: "SUV",
-        serviceType: "Premium Wash",
-        location: "Downtown Car Wash",
-        scheduledAt: "2023-10-17T14:00:00Z",
-        status: "Pending",
-        additionalNotes: "Use eco-friendly cleaning products.",
-        feedback: {
-          rating: 5,
-          content: "great service",
-        },
-      },
-      {
-        id: 6,
-        vehicleType: "Sedan",
-        serviceType: "Detailing",
-        location: "Westside Car Wash",
-        scheduledAt: "2023-10-18T16:00:00Z",
-        status: "Pending",
-        additionalNotes: "Polish the exterior.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-      {
-        id: 7,
-        vehicleType: "Truck",
-        serviceType: "Basic Wash",
-        location: "Northside Car Wash",
-        scheduledAt: "2023-10-19T08:30:00Z",
-        status: "Pending",
-        additionalNotes: "Check for scratches on the hood.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-      {
-        id: 8,
-        vehicleType: "SUV",
-        serviceType: "Premium Wash",
-        location: "Eastside Car Wash",
-        scheduledAt: "2023-10-20T13:00:00Z",
-        status: "Confirmed",
-        additionalNotes: "Include tire shine.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-      {
-        id: 9,
-        vehicleType: "Sedan",
-        serviceType: "Basic Wash",
-        location: "Downtown Car Wash",
-        scheduledAt: "2023-10-21T10:00:00Z",
-        status: "Completed",
-        additionalNotes: "No additional notes.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-      {
-        id: 10,
-        vehicleType: "Truck",
-        serviceType: "Detailing",
-        location: "Westside Car Wash",
-        scheduledAt: "2023-10-22T15:00:00Z",
-        status: "Confirmed",
-        additionalNotes: "Focus on the interior upholstery.",
-        feedback: {
-          rating: null,
-          content: "",
-        },
-      },
-    ],
+    bookings: [],
     isGettingBookings: false, //to show placeholder bookings
     isCreatingBooking: false, //to show the loading button during task creation
     isUpdatingBooking: false, //to show the loading button during task completion
@@ -143,37 +16,19 @@ const admin = {
       hasMore: false, //whether there is more tasks to load
     },
     isLoadingMoreBookings: false,
-    userStatistics: {
+    adminStatistics: {
       totalBookings: 0,
       totalCompletedBookings: 0,
       totalPendingBookings: 0,
+      totalConfirmedBookings: 0,
       totalCancelledBookings: 0,
+      totalRevenue: 0,
     },
   }),
   mutations: {
     setBookings(state, bookings) {
       // mutate state by formatting the date
       state.bookings = bookings;
-    },
-    //update the state to show a recently completed booking
-    //without calling the server
-    showCompletedBooking(state, id) {
-      let currentBookings = state.todoTasks;
-      state.todoTasks = currentBookings.map((task) => {
-        return {
-          id: task.id,
-          title: task.title,
-          description: task.description,
-          isCompleted: task.id == id ? true : task.isCompleted, //update status of recently completed booking
-          dueDate: task.dueDate,
-        };
-      });
-    },
-    //remove deleted booking from the state
-    //without calling the server
-    removeBooking(state, id) {
-      let currentBookings = state.todoTasks;
-      state.todoTasks = currentBookings.filter((task) => task.id != id);
     },
     updatePageInfo(state, pageInfo) {
       state.bookingsPageInfo = pageInfo;
@@ -184,9 +39,9 @@ const admin = {
       let mergedBookings = state.todoTasks.concat(bookings);
       state.todoTasks = mergedBookings;
     },
-    //set user statistics such as total uncompleted bookings by the user
-    setUserStatistics(state, stats) {
-      state.userStatistics = stats;
+    //set admin statistics such as total bookings
+    setAdminStatistics(state, stats) {
+      state.adminStatistics = stats;
     },
   },
   getters: {
@@ -214,13 +69,14 @@ const admin = {
         dispatch("setAuthorizationHeader");
 
         state.isGettingBookings = true;
-        const response = await axios.get(`${rootState.apiUrl}/bookings`);
+        const response = await axios.get(`${rootState.apiUrl}/admin/bookings`);
         //mutate the state with the fetched tasks
         commit("setBookings", response.data.bookings);
 
         //page info
         commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
+      } catch (ex) {
+        console.log(ex);
         toast.error("Failed to load bookings.");
       } finally {
         state.isGettingBookings = false;
@@ -236,7 +92,7 @@ const admin = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${rootState.apiUrl}/bookings/completed`
+          `${rootState.apiUrl}/admin/bookings/completed`
         );
         //mutate the state with the fetched tasks
         commit("setBookings", response.data.bookings);
@@ -258,7 +114,7 @@ const admin = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${rootState.apiUrl}/bookings/uncompleted`
+          `${rootState.apiUrl}/admin/bookings/pending`
         );
         //mutate the state with the fetched tasks
         commit("setBookings", response.data.bookings);
@@ -281,7 +137,7 @@ const admin = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${rootState.apiUrl}/bookings/cancelled`
+          `${rootState.apiUrl}/admin/bookings/cancelled`
         );
         //mutate the state with the fetched tasks
         commit("setBookings", response.data.bookings);
@@ -295,18 +151,18 @@ const admin = {
       }
     },
 
-    //fetch user statistics such as the number of completed tasks by the user
-    async fetchUserStatistics({ commit, dispatch, rootState }) {
+    //fetch admin statistics such as the total number of completed bookings
+    async fetchAdminStatistics({ commit, dispatch, rootState }) {
       try {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
 
         const response = await axios.get(
-          `${rootState.apiUrl}/bookings/statistics`
+          `${rootState.apiUrl}/admin/statistics`
         );
         //mutate the state with the fetched statistics
-        commit("setUserStatistics", response.data);
+        commit("setAdminStatistics", response.data);
       } catch (error) {
         toast.error(rootState.failureMessage);
       }
@@ -326,7 +182,7 @@ const admin = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${rootState.apiUrl}/bookings/${filterValue}`,
+          `${rootState.apiUrl}/admin/bookings/${filterValue}`,
           {
             params: {
               page: state.bookingsPageInfo.page + 1,
@@ -368,7 +224,7 @@ const admin = {
           let message = "The booking has been successfully added.";
           dispatch("showToast", { message: message, severity: "success" });
 
-          router.push("/bookings/list");
+          router.push("/admin/bookings");
 
           //refresh the state
           await dispatch("getBookings");
@@ -383,44 +239,8 @@ const admin = {
         state.isCreatingBooking = false;
       }
     },
-    //add a booking
-    async addGuestBooking({ dispatch, state, rootState }, booking) {
-      try {
-        //convert time to UCT
-        let localScheduledAt = booking.scheduledAt;
-        booking.scheduledAt = new Date(localScheduledAt + "Z").toISOString();
-        state.isCreatingBooking = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.post(
-          `${rootState.apiUrl}/bookings/guest`,
-          booking
-        );
-        // Check if the request was successful
-        //status code will be 201 from the API
-        if (response.status == 201) {
-          //show toast success message
-          let message =
-            "Your booking has been successfully created. Please check your email.";
-          dispatch("showToast", { message: message, severity: "success" });
-
-          router.push("/");
-        } else {
-          if (response.data.message) {
-            toast.error(response.data.message);
-          }
-        }
-      } catch (err) {
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isCreatingBooking = false;
-      }
-    },
 
     //update the booking
-    //for now users can only cancel their bookings
     async updateBooking({ dispatch, state, rootState }, payload) {
       try {
         state.isUpdatingBooking = true;
@@ -438,7 +258,7 @@ const admin = {
         //status code will be 204 from the API
         if (response.status == 204) {
           //show toast success message
-          let message = "The booking has been cancelled.";
+          let message = "The booking has been updated.";
           dispatch("showToast", { message: message, severity: "success" });
 
           //refresh the state
@@ -453,37 +273,12 @@ const admin = {
       }
     },
 
-    // async deleteBooking({ dispatch, commit, rootState }, id) {
-    //   try {
-    //     //add authorization header to the request
-    //     //to access the protected route
-    //     dispatch("setAuthorizationHeader");
-    //     // Send a DELETE request to the API
-    //     let response = await axios.delete(`${rootState.apiUrl}/bookings/${id}`);
-
-    //     // Check if the request was successful
-    //     //status code will be 204 from the API
-    //     if (response.status == 204) {
-    //       //show toast success message
-    //       let message = "The booking has been successfully deleted.";
-    //       toast.success(message);
-
-    //       //remove booking from state
-    //       await commit("removeBooking", id);
-    //     } else {
-    //       toast.error(rootState.failureMessage);
-    //     }
-    //   } catch (error) {
-    //     toast.error(rootState.failureMessage);
-    //   }
-    // },
-
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage
-      let sessionToken = sessionStorage.getBooking("jwt_token");
+      let sessionToken = sessionStorage.getItem("jwt_token");
       //check if there is a token in local storage
-      let localToken = localStorage.getBooking("jwt_token");
+      let localToken = localStorage.getItem("jwt_token");
 
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : null;

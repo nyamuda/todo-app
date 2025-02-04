@@ -286,12 +286,12 @@ const store = useStore();
 let filterBookingsBy = ref("all");
 let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
 const confirmDialog = useConfirm();
-let bookings = computed(() => store.getters["bookings/formatAndGetBookings"]);
+let bookings = computed(() => store.getters["admin/formatAndGetBookings"]);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 
 onMounted(async () => {
   //get all bookings
-  store.dispatch("bookings/getBookings");
+  store.dispatch("admin/getBookings");
 });
 
 //Form validation with Vuelidate start
@@ -360,19 +360,19 @@ let sendFeedback = (id) => {
 
 let filterBookings = () => {
   if (filterBookingsBy.value == "completed") {
-    store.dispatch("bookings/getCompletedBookings");
+    store.dispatch("admin/getCompletedBookings");
   } else if (filterBookingsBy.value == "cancelled") {
-    store.dispatch("bookings/getCancelledBookings");
+    store.dispatch("admin/getCancelledBookings");
   } else if (filterBookingsBy.value == "pending") {
-    store.dispatch("bookings/getPendingBookings");
+    store.dispatch("admin/getPendingBookings");
   } else {
-    store.dispatch("bookings/getBookings");
+    store.dispatch("admin/getBookings");
   }
 };
 //load more bookings depending on whether
 //the current list is for all, completed or uncompleted bookings
 let loadMoreBookings = () => {
-  store.dispatch("bookings/loadMoreBookings", filterBookingsBy.value);
+  store.dispatch("admin/loadMoreBookings", filterBookingsBy.value);
 };
 //is an booking being marked as complete
 // let isCompletingBooking = computed(
@@ -381,12 +381,12 @@ let loadMoreBookings = () => {
 
 //are there more bookings currently being loaded
 let isLoadingMoreBookings = computed(
-  () => store.state.bookings.isLoadingMoreBookings
+  () => store.state.admin.isLoadingMoreBookings
 );
 
 //are there still more bookings that can be loaded
 let hasMoreBookings = computed(
-  () => store.state.bookings.bookingsPageInfo.hasMore
+  () => store.state.admin.bookingsPageInfo.hasMore
 );
 
 //Severity of the pills
