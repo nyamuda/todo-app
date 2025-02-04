@@ -30,8 +30,9 @@ const services = {
         const response = await axios.get(`${rootState.apiUrl}/services`);
         //mutate the state with the fetched service types
         commit("setServices", response.data);
+        state.isGettingServices = false;
       } catch (error) {
-        toast.error(rootState.failureMessage);
+        toast.error("Failed to fetch car wash services.");
         state.isGettingServices = false;
       }
     },
@@ -62,7 +63,7 @@ const services = {
         if (response.status == 201) {
           //show toast success message
           let message = "The service has been successfully added";
-          dispatch("showToast", { message: message, severity: "success" });
+          toast.success(message);
 
           router.push("/services");
 
@@ -74,7 +75,6 @@ const services = {
           }
         }
       } catch (err) {
-        console.log(err);
         toast.error(rootState.failureMessage);
       } finally {
         state.isCreatingService = false;
@@ -124,7 +124,7 @@ const services = {
         if (response.status == 204) {
           //show toast success message
           let message = "The service has been updated.";
-          dispatch("showToast", { message: message, severity: "success" });
+          toast.success(message);
 
           router.push("/services");
         } else {

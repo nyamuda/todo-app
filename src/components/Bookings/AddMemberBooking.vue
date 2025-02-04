@@ -62,7 +62,7 @@
           <Message
             size="small"
             severity="error"
-            v-if="v$.serviceType.$error"
+            v-if="v$.serviceTypeId.$error"
             variant="simple"
           >
             <div v-for="error of v$.serviceTypeId.$errors" :key="error.$uid">

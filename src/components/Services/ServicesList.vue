@@ -6,15 +6,15 @@
         <button type="button" class="btn btn-primary">Add service</button>
       </router-link>
     </div>
-    <div class="card" v-if="services.length > 0 || isGettingServices">
+    <div class="card mt-4" v-if="services.length > 0 || isGettingServices">
       <!--Skeleton table start-->
-      <DataTable :value="rowSkeletons" v-if="isGettingBookings">
+      <DataTable :value="rowSkeletons" v-if="isGettingServices">
         <Column field="name" header="Name">
           <template #body>
             <Skeleton></Skeleton>
           </template>
         </Column>
-        <Column field="price" header="Actions">
+        <Column field="price" header="Price">
           <template #body>
             <Skeleton></Skeleton>
           </template>
@@ -57,13 +57,17 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { Skeleton } from "primevue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-
 let store = useStore();
+
+onMounted(async () => {
+  store.dispatch("services/getServices");
+});
+
 let services = computed(() => store.state.services.services);
 let rowSkeletons = new Array(4);
 let isGettingServices = computed(() => store.state.services.isGettingServices);
