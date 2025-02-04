@@ -97,20 +97,33 @@ import { computed } from "vue";
 import Menubar from "primevue/menubar";
 
 let isAuthenticated = computed(() => store.state.account.isAuthenticated);
+let isAdmin = computed(() => store.state.account.userInfo.isAdmin);
 
 let logout = () => {
   store.dispatch("account/logoutUser");
 };
 const items = computed(() => {
-  if (isAuthenticated.value) {
+  //if admin
+  if (isAuthenticated.value && isAdmin.value) {
     return [
       { label: "Home", route: "/" },
-      { label: "Add booking", route: "/bookings/add" },
+      { label: "Dashboard", route: "/admin" },
+      { label: "Bookings", route: "/admin/bookings" },
+      { label: "Booking Services", route: "/bookings/services" },
+    ];
+  }
+  //if normal user
+  else if (isAuthenticated.value) {
+    return [
+      { label: "Home", route: "/" },
       { label: "Dashboard", route: "/account/user" },
       { label: "Bookings", route: "/bookings/list" },
+      { label: "Add Booking", route: "/bookings/add" },
       { label: "Contact", route: "/contact" },
     ];
-  } else {
+  }
+  //if not logged in
+  else {
     return [
       { label: "Home", route: "/" },
       { label: "Book Session", route: "/bookings/add" },

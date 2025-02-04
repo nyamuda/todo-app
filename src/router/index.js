@@ -9,9 +9,16 @@ import ContactUsView from "@/views/Common/ContactUsView.vue";
 import SentPasswordForgotEmailView from "@/views/Email/SentPasswordForgotEmailView.vue";
 import SendPasswordForgotEmailView from "@/views/Email/SendPasswordForgotEmailView.vue";
 import SentEmailVerificationView from "@/views/Email/SentEmailVerificationView.vue";
-import AddBookingView from "@/views/Bookings/AddBookingView.vue";
-import BookingListView from "@/views/Bookings/BookingListView.vue";
 import store from "@/store";
+import AdminDashboard from "@/components/Admin/AdminDashboard.vue";
+import AdminView from "@/views/Admin/AdminView.vue";
+import BookingsView from "@/views/Bookings/BookingsView.vue";
+import BookingsList from "@/components/Bookings/BookingsList.vue";
+import AddBooking from "@/components/Bookings/AddBooking.vue";
+import UpdateBooking from "@/components/Bookings/UpdateBooking.vue";
+import AddBookingService from "@/components/Bookings/Services/AddBookingService.vue";
+import BookingServiceList from "@/components/Bookings/Services/BookingServiceList.vue";
+import AdminBookingsList from "@/components/Admin/AdminBookingsList.vue";
 
 const routes = [
   {
@@ -45,26 +52,71 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/bookings/add",
-    name: "AddBooking",
-    component: AddBookingView,
-  },
-
+  //Bookings routes
   {
     path: "/bookings",
-    beforeEnter: (to) => {
-      if (!store.state.account.isAuthenticated) {
-        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
-        return { name: "Login" }; // Redirect to login page
-      }
-      return true;
-    },
+    name: "Bookings",
+    component: BookingsView,
     children: [
-      { path: "list", name: "BookingsList", component: BookingListView },
+      {
+        path: "",
+        name: "BookingsList",
+        component: BookingsList,
+        beforeEnter: (to) => {
+          if (!store.state.account.isAuthenticated) {
+            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+            return { name: "Login" }; // Redirect to login page
+          }
+          return true;
+        },
+      },
+      {
+        path: "add",
+        name: "AddBooking",
+        component: AddBooking,
+      },
+      {
+        path: "update",
+        name: "UpdateBooking",
+        component: UpdateBooking,
+        beforeEnter: (to) => {
+          if (!store.state.account.isAuthenticated) {
+            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+            return { name: "Login" }; // Redirect to login page
+          }
+          return true;
+        },
+      },
+      //only admins can see all the booking services
+      {
+        path: "services",
+        name: "BookingServiceList",
+        component: BookingServiceList,
+        beforeEnter: (to) => {
+          if (!store.state.account.isAuthenticated) {
+            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+            return { name: "Login" }; // Redirect to login page
+          }
+          return true;
+        },
+      },
+      //only admins can add a booking service
+      {
+        path: "services/add",
+        name: "AddBookingService",
+        component: AddBookingService,
+        beforeEnter: (to) => {
+          if (!store.state.account.isAuthenticated) {
+            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+            return { name: "Login" }; // Redirect to login page
+          }
+          return true;
+        },
+      },
     ],
   },
 
+  //Account Routes
   {
     path: "/account",
     children: [
@@ -106,6 +158,28 @@ const routes = [
         path: "login/oauth/google/callback", //Google Oauth redirect URL
         name: "GoogleLogin",
         component: LoginView,
+      },
+    ],
+  },
+  //Admin routes
+  {
+    path: "/admin",
+    component: AdminView,
+    name: "Admin",
+    beforeEnter: (to) => {
+      if (!store.state.account.isAuthenticated) {
+        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+        return { name: "Login" }; // Redirect to login page
+      }
+      return true;
+    },
+
+    children: [
+      { path: "", name: "AdminDashboard", component: AdminDashboard },
+      {
+        path: "bookings",
+        name: "AdminBookingList",
+        component: AdminBookingsList,
       },
     ],
   },

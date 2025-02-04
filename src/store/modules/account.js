@@ -33,6 +33,8 @@ const account = {
     loggedInUser: {
       name: "",
       email: "",
+      isVerified: false,
+      isAdmin: false,
     },
     isAuthenticated: false, //is user logged in or not
     attemptedUrl: "/", //attempted url when user is not authenticated
@@ -356,7 +358,7 @@ const account = {
     decodeTokenAndLoadInfo({ commit }, payload) {
       let { token } = payload;
       let decodedToken = jwtDecode(token);
-      // Extract the claims (name, isVerified etc.)
+      // Extract the claims (name, isVerified, role etc.)
       const name =
         decodedToken[
           "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
@@ -365,13 +367,20 @@ const account = {
         decodedToken[
           "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
         ];
+      const role =
+        decodedToken[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ];
+
       let isVerified = decodedToken["isVerified"];
+      let isAdmin = role == "Admin" ? true : false;
 
       //store user information
       let userInfo = {
         name: name,
         email: email,
         isVerified,
+        isAdmin,
       };
       commit("addUserInfo", userInfo);
     },
