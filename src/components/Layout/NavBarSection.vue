@@ -97,7 +97,7 @@ import { computed } from "vue";
 import Menubar from "primevue/menubar";
 
 let isAuthenticated = computed(() => store.state.account.isAuthenticated);
-let isAdmin = computed(() => store.state.account.userInfo.isAdmin);
+let isAdmin = computed(() => store.state.account.loggedInUser.isAdmin);
 
 let logout = () => {
   store.dispatch("account/logoutUser");

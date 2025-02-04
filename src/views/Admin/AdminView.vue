@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-5 m-auto">
     <router-view></router-view>
   </div>
 </template>

@@ -167,7 +167,7 @@ const routes = [
     component: AdminView,
     name: "Admin",
     beforeEnter: (to) => {
-      if (!store.state.account.isAuthenticated) {
+      if (!store.state.account.loggedInUser.isAdmin) {
         store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
         return { name: "Login" }; // Redirect to login page
       }
