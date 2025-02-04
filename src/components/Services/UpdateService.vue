@@ -63,7 +63,7 @@
           role="status"
           aria-hidden="true"
         ></span>
-        Updating service...
+        Updating...
       </button>
       <button
         v-else
@@ -72,7 +72,7 @@
         type="submit"
         class="btn btn-primary btn-block mb-2 w-100"
       >
-        Add service
+        Update service
       </button>
     </form>
   </div>
@@ -105,7 +105,7 @@ onMounted(async () => {
   //populate the form with the service data
   if (id.value) {
     store
-      .dispatch("services/getService", id)
+      .dispatch("services/getService", id.value)
       .then((service) => {
         formData.value.name = service.name;
         formData.value.price = service.price;
@@ -134,7 +134,10 @@ const v$ = useVuelidate(rules, formData.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("services/updateService", formData.value);
+    store.dispatch("services/updateService", {
+      id: id.value,
+      updatedService: formData.value,
+    });
   }
 };
 let isUpdatingService = computed(() => store.state.services.isUpdatingService);

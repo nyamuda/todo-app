@@ -34,20 +34,20 @@
         <Column field="id" header="Actions">
           <template #body="slotProps">
             <Button
+              icon="fas fa-pen"
+              severity="contrast"
+              variant="text"
+              rounded
+              aria-label="update"
+              @click="updateService(slotProps.data.id)"
+            />
+            <Button
               icon="fas fa-trash"
               severity="contrast"
               variant="text"
               rounded
               aria-label="delete"
               @click="deleteService(slotProps.data.id)"
-            />
-            <Button
-              icon="fas fa-pen"
-              severity="contrast"
-              variant="text"
-              rounded
-              aria-label="delete"
-              @click="updateService(slotProps.data.id)"
             />
           </template>
         </Column>
@@ -81,7 +81,7 @@ import { useStore } from "vuex";
 import { Skeleton } from "primevue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Button from "primevue";
+import Button from "primevue/button";
 import { useRouter } from "vue-router";
 
 let store = useStore();

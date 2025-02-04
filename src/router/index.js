@@ -78,7 +78,7 @@ const routes = [
         component: AddBooking,
       },
       {
-        path: "update",
+        path: "update/:id",
         name: "UpdateBooking",
         component: UpdateBooking,
         beforeEnter: (to) => {
@@ -126,7 +126,7 @@ const routes = [
       },
       //only admins can update a booking service type
       {
-        path: "update",
+        path: "update/:id",
         name: " UpdateService",
         component: UpdateService,
         beforeEnter: (to) => {
