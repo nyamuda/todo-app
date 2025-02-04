@@ -52,10 +52,12 @@
           <label for="memberServiceType" class="form-label">Service type</label>
           <Select
             id="memberServiceType"
-            v-model="v$.serviceType.$model"
-            :options="serviceTypes"
+            v-model="v$.serviceTypeId.$model"
+            :options="services"
+            optionLabel="name"
+            optionValue="id"
             placeholder="Select a service"
-            :invalid="v$.serviceType.$error"
+            :invalid="v$.serviceTypeId.$error"
           />
           <Message
             size="small"
@@ -63,7 +65,7 @@
             v-if="v$.serviceType.$error"
             variant="simple"
           >
-            <div v-for="error of v$.serviceType.$errors" :key="error.$uid">
+            <div v-for="error of v$.serviceTypeId.$errors" :key="error.$uid">
               <div>{{ error.$message }}</div>
             </div>
           </Message>
@@ -155,12 +157,14 @@ const store = useStore();
 
 onMounted(() => {
   v$._value.$touch();
+  //get all available car wash services
+  store.dispatch("services/getServices");
 });
 
 // Form data
 const bookingForm = ref({
   vehicleType: "",
-  serviceType: "",
+  serviceTypeId: "",
   location: "",
   scheduledAt: "",
   additionalNotes: "",
@@ -169,7 +173,7 @@ const bookingForm = ref({
 //form validation with Vuelidate start
 const rules = {
   vehicleType: { required },
-  serviceType: { required },
+  serviceTypeId: { required },
   location: { required },
   scheduledAt: { required },
   additionalNotes: {},
@@ -184,6 +188,8 @@ const submitForm = () => {
 
 //show loading button or not
 let isCreatingBooking = computed(() => store.state.bookings.isCreatingBooking);
+//available car wash services
+let services = computed(() => store.state.services.services);
 //let isAuthenticated = computed(() => store.state.account.isAuthenticated);
 </script>
 

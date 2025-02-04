@@ -35,12 +35,33 @@
       </DataTable>
       <!--Table End-->
     </div>
+    <!--No Services Start-->
+    <div
+      v-else
+      class="d-flex justify-content-center align-bookings-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
+    >
+      <div class="mb-2">
+        <!-- Font Awesome Icon for no bookings -->
+        <i class="fas fa-0 fa-3x text-primary"></i>
+      </div>
+      <p class="fs-4 text-muted mb-2">
+        There are no available car wash services at the moment.
+      </p>
+      <p class="text-muted">
+        Add a service and let clients start booking car wash sessions.
+      </p>
+    </div>
+
+    <!--No Service End-->
   </div>
 </template>
 
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { Skeleton } from "primevue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 
 let store = useStore();
 let services = computed(() => store.state.services.services);
