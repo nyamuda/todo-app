@@ -5,15 +5,16 @@ const toast = useToast();
 const services = {
   namespaced: true,
   state: () => ({
-    services: [],
-    service: null,
+    services: [], //all car wash service types
+    service: null, //car wash service type
     isCreatingService: false,
     isUpdatingService: false,
+    isGettingServices: false,
   }),
   mutations: {
     //set the car wash services
     setServices(state, services) {
-      state.serviceTypes = services;
+      state.services = services;
     },
     //set a service
     setService(state, service) {
@@ -23,25 +24,23 @@ const services = {
   getters: {},
   actions: {
     //fetch all the car wash service types
-    async getServices({ commit, rootState }) {
+    async getServices({ commit, state, rootState }) {
       try {
-        const response = await axios.get(
-          `${rootState.apiUrl}/bookings/services`
-        );
+        state.isGettingServices = true;
+        const response = await axios.get(`${rootState.apiUrl}/services`);
         //mutate the state with the fetched service types
         commit("setServices", response.data);
       } catch (error) {
         toast.error(rootState.failureMessage);
+        state.isGettingServices = false;
       }
     },
     //fetch service by ID
     async getService({ commit, rootState }, id) {
       try {
-        const response = await axios.get(
-          `${rootState.apiUrl}/bookings/services/${id}`
-        );
+        const response = await axios.get(`${rootState.apiUrl}/services/${id}`);
         //mutate the state with the fetched service types
-        commit("setServices", response.data);
+        commit("setService", response.data);
       } catch (error) {
         toast.error("Error fetching service");
       }
@@ -55,7 +54,7 @@ const services = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.post(
-          `${rootState.apiUrl}/bookings/services`,
+          `${rootState.apiUrl}/services`,
           payload
         );
         // Check if the request was successful
@@ -74,9 +73,9 @@ const services = {
             toast.error(response.data.message);
           }
         }
-        state.isCreatingService = false;
       } catch (err) {
         toast.error(rootState.failureMessage);
+      } finally {
         state.isCreatingBooking = false;
       }
     },
@@ -87,9 +86,7 @@ const services = {
         //to access the protected route
         dispatch("setAuthorizationHeader");
         // Send a DELETE request to the API
-        let response = await axios.delete(
-          `${rootState.apiUrl}/bookings/services/${id}`
-        );
+        let response = await axios.delete(`${rootState.apiUrl}/services/${id}`);
 
         // Check if the request was successful
         //status code will be 204 from the API
@@ -118,7 +115,7 @@ const services = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.put(
-          `${rootState.apiUrl}/bookings/services/${id}`,
+          `${rootState.apiUrl}/services/${id}`,
           updatedService
         );
         // Check if the request was successful

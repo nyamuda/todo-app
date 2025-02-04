@@ -16,9 +16,11 @@ import BookingsView from "@/views/Bookings/BookingsView.vue";
 import BookingsList from "@/components/Bookings/BookingsList.vue";
 import AddBooking from "@/components/Bookings/AddBooking.vue";
 import UpdateBooking from "@/components/Bookings/UpdateBooking.vue";
-import AddBookingService from "@/components/Bookings/Services/AddServiceType.vue";
-import BookingServiceList from "@/components/Bookings/Services/ServiceTypeList.vue";
 import AdminBookingsList from "@/components/Admin/AdminBookingsList.vue";
+import ServicesView from "@/views/Services/ServicesView.vue";
+import ServicesList from "@/components/Services/ServicesList.vue";
+import AddService from "@/components/Services/AddService.vue";
+import UpdateService from "@/components/Services/UpdateService.vue";
 
 const routes = [
   {
@@ -87,26 +89,48 @@ const routes = [
           return true;
         },
       },
-      //only admins can see all the booking services
+    ],
+  },
+
+  //Car wash services routes
+  {
+    path: "/services",
+    name: "Services",
+    component: ServicesView,
+    children: [
+      //only admins can see the service types list component --> has delete & update actions
       {
         path: "services",
-        name: "BookingServiceList",
-        component: BookingServiceList,
+        name: "ServicesList",
+        component: ServicesList,
         beforeEnter: (to) => {
-          if (!store.state.account.isAuthenticated) {
+          if (!store.state.account.loggedInUser.isAdmin) {
             store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
             return { name: "Login" }; // Redirect to login page
           }
           return true;
         },
       },
-      //only admins can add a booking service
+      //only admins can add a car wash service type
       {
         path: "services/add",
-        name: "AddBookingService",
-        component: AddBookingService,
+        name: "AddService",
+        component: AddService,
         beforeEnter: (to) => {
-          if (!store.state.account.isAuthenticated) {
+          if (!store.state.account.loggedInUser.isAdmin) {
+            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+            return { name: "Login" }; // Redirect to login page
+          }
+          return true;
+        },
+      },
+      //only admins can update a booking service type
+      {
+        path: "services/update",
+        name: " UpdateService",
+        component: UpdateService,
+        beforeEnter: (to) => {
+          if (!store.state.account.loggedInUser.isAdmin) {
             store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
             return { name: "Login" }; // Redirect to login page
           }

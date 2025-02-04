@@ -16,7 +16,6 @@ const bookings = {
       hasMore: false, //whether there is more tasks to load
     },
     isLoadingMoreBookings: false,
-    serviceTypes: [],
     isGettingServiceTypes: false,
     userStatistics: {
       totalBookings: 0,
@@ -30,10 +29,7 @@ const bookings = {
       // mutate state by formatting the date
       state.bookings = bookings;
     },
-    setServicesTypes(state, serviceTypes) {
-      // mutate state by formatting the date
-      state.bookingServices = serviceTypes;
-    },
+
     updatePageInfo(state, pageInfo) {
       state.bookingsPageInfo = pageInfo;
     },
@@ -86,21 +82,7 @@ const bookings = {
         state.isGettingBookings = false;
       }
     },
-    //fetch all car wash service types
-    async getServiceTypes({ commit, state, rootState }) {
-      try {
-        state.isGettingServiceTypes = true;
-        const response = await axios.get(
-          `${rootState.apiUrl}/bookings/service-types`
-        );
-        //mutate the state with the fetched data
-        commit("setServiceTypes", response.data);
-      } catch (ex) {
-        console.log(ex);
-      } finally {
-        state.isGettingServiceTypes = false;
-      }
-    },
+
     //fetch completed bookings
     async getCompletedBookings({ commit, dispatch, state, rootState }) {
       try {
