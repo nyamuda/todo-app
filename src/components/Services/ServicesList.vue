@@ -31,7 +31,26 @@
       <DataTable :value="services" v-else>
         <Column field="name" header="Name"></Column>
         <Column field="price" header="Price"></Column>
-        <Column field="actions" header="Actions"></Column>
+        <Column field="id" header="Actions">
+          <template #body="slotProps">
+            <Button
+              icon="fas fa-trash"
+              severity="contrast"
+              variant="text"
+              rounded
+              aria-label="delete"
+              @click="deleteService(slotProps.data.id)"
+            />
+            <Button
+              icon="fas fa-pen"
+              severity="contrast"
+              variant="text"
+              rounded
+              aria-label="delete"
+              @click="updateService(slotProps.data.id)"
+            />
+          </template>
+        </Column>
       </DataTable>
       <!--Table End-->
     </div>
@@ -62,7 +81,11 @@ import { useStore } from "vuex";
 import { Skeleton } from "primevue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
+import Button from "primevue";
+import { useRouter } from "vue-router";
+
 let store = useStore();
+let route = useRouter();
 
 onMounted(async () => {
   store.dispatch("services/getServices");
@@ -71,4 +94,11 @@ onMounted(async () => {
 let services = computed(() => store.state.services.services);
 let rowSkeletons = new Array(4);
 let isGettingServices = computed(() => store.state.services.isGettingServices);
+
+let deleteService = (id) => {
+  store.dispatch("services/deleteService", id);
+};
+let updateService = (id) => {
+  route.push(`services/update/${id}`);
+};
 </script>

@@ -6,7 +6,6 @@ const services = {
   namespaced: true,
   state: () => ({
     services: [], //all car wash service types
-    service: null, //car wash service type
     isCreatingService: false,
     isUpdatingService: false,
     isGettingServices: false,
@@ -15,10 +14,6 @@ const services = {
     //set the car wash services
     setServices(state, services) {
       state.services = services;
-    },
-    //set a service
-    setService(state, service) {
-      state.serviceTypes = service;
     },
   },
   getters: {},
@@ -37,14 +32,18 @@ const services = {
       }
     },
     //fetch service by ID
-    async getService({ commit, rootState }, id) {
-      try {
-        const response = await axios.get(`${rootState.apiUrl}/services/${id}`);
-        //mutate the state with the fetched service types
-        commit("setService", response.data);
-      } catch (error) {
-        toast.error("Error fetching service");
-      }
+    async getService({ rootState }, id) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${rootState.apiUrl}/services/${id}`)
+          .then((response) => resolve(response.data))
+          .catch((ex) => {
+            let message = ex.response?.data.message
+              ? ex.response.data.message
+              : rootState.failureMessage;
+            reject(message);
+          });
+      });
     },
     //add a service
     async addService({ dispatch, state, rootState }, payload) {

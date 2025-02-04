@@ -215,8 +215,6 @@ const store = useStore();
 
 onMounted(() => {
   v$._value.$touch();
-  //get all available car wash services
-  store.dispatch("services/getServices");
 });
 
 // Form data
