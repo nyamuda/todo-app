@@ -74,9 +74,10 @@ const services = {
           }
         }
       } catch (err) {
+        console.log(err);
         toast.error(rootState.failureMessage);
       } finally {
-        state.isCreatingBooking = false;
+        state.isCreatingService = false;
       }
     },
     // Delete a service
@@ -139,9 +140,9 @@ const services = {
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage
-      let sessionToken = sessionStorage.getBooking("jwt_token");
+      let sessionToken = sessionStorage.getItem("jwt_token");
       //check if there is a token in local storage
-      let localToken = localStorage.getBooking("jwt_token");
+      let localToken = localStorage.getItem("jwt_token");
 
       //the current token
       let token = sessionToken ? sessionToken : localToken ? localToken : null;

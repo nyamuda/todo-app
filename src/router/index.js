@@ -100,7 +100,7 @@ const routes = [
     children: [
       //only admins can see the service types list component --> has delete & update actions
       {
-        path: "services",
+        path: "",
         name: "ServicesList",
         component: ServicesList,
         beforeEnter: (to) => {
@@ -113,7 +113,7 @@ const routes = [
       },
       //only admins can add a car wash service type
       {
-        path: "services/add",
+        path: "add",
         name: "AddService",
         component: AddService,
         beforeEnter: (to) => {
@@ -126,7 +126,7 @@ const routes = [
       },
       //only admins can update a booking service type
       {
-        path: "services/update",
+        path: "update",
         name: " UpdateService",
         component: UpdateService,
         beforeEnter: (to) => {
