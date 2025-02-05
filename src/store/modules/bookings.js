@@ -203,15 +203,17 @@ const bookings = {
     },
 
     //add a booking
-    async addBooking({ dispatch, state, rootState }, booking) {
+    async addBooking({ dispatch, state, rootState }, payload) {
       try {
+        let { booking } = payload;
         //convert time to UCT
-        let localScheduledAt = booking.scheduledAt;
-        booking.scheduledAt = new Date(localScheduledAt + "Z").toISOString();
+        // let localScheduledAt = booking.scheduledAt;
+        // booking.scheduledAt = new Date(localScheduledAt + "Z").toISOString();
         state.isCreatingBooking = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
+        console.log(booking);
         //make the request
         const response = await axios.post(
           `${rootState.apiUrl}/bookings`,
@@ -224,7 +226,7 @@ const bookings = {
           let message = "The booking has been successfully added.";
           dispatch("showToast", { message: message, severity: "success" });
 
-          router.push("/bookings/list");
+          router.push("/bookings");
 
           //refresh the state
           await dispatch("getBookings");
@@ -234,6 +236,7 @@ const bookings = {
           }
         }
       } catch (err) {
+        console.log(err);
         toast.error(rootState.failureMessage);
       } finally {
         state.isCreatingBooking = false;
