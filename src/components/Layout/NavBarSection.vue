@@ -156,7 +156,7 @@ const items = computed(() => {
   position: relative;
   padding: 0 4.75rem;
   transition: 0.5s;
-  z-index: 9999;
+  z-index: 10;
 }
 
 .nav-bar.sticky-top {

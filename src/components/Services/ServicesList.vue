@@ -30,7 +30,11 @@
       <!--Table Start-->
       <DataTable :value="services" v-else>
         <Column field="name" header="Name"></Column>
-        <Column field="price" header="Price"></Column>
+        <Column field="price" header="Price">
+          <template #body="slotProps">
+            {{ formatCurrency(slotProps.data.price) }}
+          </template>
+        </Column>
         <Column field="id" header="Actions">
           <template #body="slotProps">
             <Button
@@ -43,7 +47,7 @@
             />
             <Button
               icon="fas fa-trash"
-              severity="contrast"
+              severity="danger"
               variant="text"
               rounded
               aria-label="delete"
@@ -70,8 +74,10 @@
         Add a service and let clients start booking car wash sessions.
       </p>
     </div>
-
     <!--No Service End-->
+    <!--Delete confirmation dialog start-->
+    <ConfirmDialog></ConfirmDialog>
+    <!--Delete confirmation dialog end-->
   </div>
 </template>
 
@@ -83,6 +89,9 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import { useRouter } from "vue-router";
+import { useConfirm } from "primevue/useconfirm";
+import ConfirmDialog from "primevue/confirmdialog";
+const confirm = useConfirm();
 
 let store = useStore();
 let route = useRouter();
@@ -96,9 +105,35 @@ let rowSkeletons = new Array(4);
 let isGettingServices = computed(() => store.state.services.isGettingServices);
 
 let deleteService = (id) => {
-  store.dispatch("services/deleteService", id);
+  confirm.require({
+    message: "Do you want to delete this service?",
+    header: "Delete Car Wash Service",
+    icon: "fas fa-circle-info",
+    rejectLabel: "Cancel",
+    rejectProps: {
+      label: "Cancel",
+      severity: "secondary",
+      outlined: true,
+    },
+    acceptProps: {
+      label: "Delete",
+      severity: "danger",
+    },
+    accept: () => {
+      store.dispatch("services/deleteService", id);
+    },
+    reject: () => {},
+  });
 };
 let updateService = (id) => {
   route.push(`services/update/${id}`);
+};
+
+//format number into a monetary value
+let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(amount);
 };
 </script>
