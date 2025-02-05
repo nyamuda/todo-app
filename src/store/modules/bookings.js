@@ -75,6 +75,8 @@ const bookings = {
 
         //page info
         commit("updatePageInfo", response.data.pageInfo);
+
+        console.log(response.data);
       } catch (ex) {
         console.log(ex);
         toast.error("Failed to load bookings.");
@@ -247,9 +249,6 @@ const bookings = {
     async addGuestBooking({ dispatch, state, rootState }, payload) {
       try {
         let { booking } = payload;
-        //convert time to UCT
-        let localScheduledAt = booking.scheduledAt;
-        booking.scheduledAt = new Date(localScheduledAt + "Z").toISOString();
 
         //all guest booking fields required by the API
         let guestBooking = {

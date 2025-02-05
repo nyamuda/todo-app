@@ -67,7 +67,15 @@
         <!--Table start-->
         <DataTable v-else :value="bookings">
           <Column field="vehicleType" header="Vehicle Type"></Column>
-          <Column field="serviceType" header="Service Type"></Column>
+          <Column field="serviceType" header="Service Type">
+            <template #body="slotProps">
+              <!--Service type name and price-->
+              <span>{{ slotProps.data.serviceType.name }}</span
+              ><span>
+                ({{ formatCurrency(slotProps.data.serviceType.price) }})</span
+              >
+            </template>
+          </Column>
           <Column field="location" header="Location"></Column>
           <Column field="scheduledAt" header="Scheduled At"></Column>
           <Column header="Status">
@@ -430,6 +438,14 @@ let doesBookingRequireFeedback = (status, rating) => {
     return true;
   }
   return false;
+};
+
+//format number into a monetary value
+let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(amount);
 };
 </script>
 
