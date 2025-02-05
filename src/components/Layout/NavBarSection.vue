@@ -117,7 +117,7 @@ const items = computed(() => {
     return [
       { label: "Home", route: "/" },
       { label: "Dashboard", route: "/account/user" },
-      { label: "Bookings", route: "/bookings/list" },
+      { label: "Bookings", route: "/bookings" },
       { label: "Add Booking", route: "/bookings/add" },
       { label: "Contact", route: "/contact" },
     ];

@@ -116,7 +116,7 @@ const bookings = {
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${rootState.apiUrl}/bookings/uncompleted`
+          `${rootState.apiUrl}/bookings/pending`
         );
         //mutate the state with the fetched tasks
         commit("setBookings", response.data.bookings);

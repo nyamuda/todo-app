@@ -367,11 +367,12 @@ let sendFeedback = (id) => {
 //Form validation with Vuelidate end
 
 let filterBookings = () => {
-  if (filterBookingsBy.value == "completed") {
+  const filterValue = filterBookingsBy.value.toLowerCase();
+  if (filterValue == "completed") {
     store.dispatch("bookings/getCompletedBookings");
-  } else if (filterBookingsBy.value == "cancelled") {
+  } else if (filterValue == "cancelled") {
     store.dispatch("bookings/getCancelledBookings");
-  } else if (filterBookingsBy.value == "pending") {
+  } else if (filterValue == "pending") {
     store.dispatch("bookings/getPendingBookings");
   } else {
     store.dispatch("bookings/getBookings");
