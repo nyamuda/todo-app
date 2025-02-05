@@ -77,7 +77,17 @@
             </template>
           </Column>
           <Column field="location" header="Location"></Column>
-          <Column field="scheduledAt" header="Scheduled At"></Column>
+          <Column field="scheduledAt" header="Scheduled At">
+            <!--Format the date-->
+            <template #body="slotProps">
+              {{
+                dateFormat(
+                  slotProps.data.scheduledAt,
+                  "dddd, mmmm dS, yyyy, h:MM TT"
+                )
+              }}
+            </template>
+          </Column>
           <Column header="Status">
             <template #body="slotProps">
               <Tag
@@ -195,15 +205,15 @@
           <Button
             class="me-3"
             label="Never mind"
+            size="small"
             variant="outlined"
             severity="contrast"
-            size="small"
             @click="rejectCallback"
           ></Button>
           <Button
             :disabled="v$.cancelReason.$error"
             label="Yes, cancel booking"
-            severity="warn"
+            severity="danger"
             size="small"
             @click="acceptCallback"
           ></Button>
@@ -286,7 +296,7 @@ import { FloatLabel } from "primevue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, numeric, helpers } from "@vuelidate/validators";
 import { useStore } from "vuex";
-import { useToast } from "vue-toastification";
+import dateFormat from "dateformat";
 
 //table row skeletons
 const rowSkeletons = ref(new Array(10));
@@ -296,8 +306,7 @@ const store = useStore();
 let filterBookingsBy = ref("all");
 let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
 const confirmDialog = useConfirm();
-const toast = useToast();
-let bookings = computed(() => store.getters["bookings/formatAndGetBookings"]);
+let bookings = computed(() => store.state.bookings.bookings);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 
 onMounted(async () => {
@@ -343,16 +352,19 @@ let cancelBooking = (id) => {
     accept: () => {
       //update the booking
       //by first getting the booking with the given ID
-      //and changing the status to cancelled
-      store
-        .dispatch("bookings/getBooking", id)
-        .then((booking) => {
-          booking.status = "cancelled";
-          booking.cancelReason = reasonToCancelForm.value.cancelReason;
+      //and changing the status to "cancelled"
+      let selectedBookingArray = bookings.value.filter((val) => val.id == id);
 
-          store.dispatch("bookings/updateBooking", { id, booking });
-        })
-        .catch((message) => toast.error(message));
+      if (selectedBookingArray.length > 0) {
+        //change the status of the booking to "cancelled" and give the reason
+        let booking = selectedBookingArray[0];
+        booking.status = "cancelled";
+        booking.cancelReason = reasonToCancelForm.value.cancelReason;
+        //add the serviceTypeId field since its require by the API
+        booking.serviceTypeId = booking.serviceType.id;
+        //save the updated booking
+        store.dispatch("bookings/updateBooking", { id, booking });
+      }
     },
     reject: () => {
       console.log(`Delete booking with ${id} cancelled`);

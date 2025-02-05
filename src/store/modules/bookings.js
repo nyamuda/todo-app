@@ -85,7 +85,7 @@ const bookings = {
       }
     },
     //get booking by ID
-    getBooking({ rootState, id }) {
+    getBooking({ rootState }, id) {
       return new Promise((resolve, reject) => {
         axios
           .get(`${rootState.apiUrl}/bookings/${id}`)
@@ -319,14 +319,14 @@ const bookings = {
         if (response.status == 204) {
           //show toast success message
           let message = "The booking has been cancelled.";
-          dispatch("showToast", { message: message, severity: "success" });
-
+          toast.success(message);
           //refresh the state
           await dispatch("getBookings");
         } else {
           toast.error(rootState.failureMessage);
         }
       } catch (error) {
+        console.log(error);
         toast.error(rootState.failureMessage);
       } finally {
         state.isUpdatingBooking = false;
