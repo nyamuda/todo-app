@@ -84,6 +84,15 @@ const bookings = {
         state.isGettingBookings = false;
       }
     },
+    //get booking by ID
+    getBooking({ rootState, id }) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${rootState.apiUrl}/bookings/${id}`)
+          .then((response) => resolve(response.data))
+          .catch(() => reject(rootState.failureMessage));
+      });
+    },
 
     //fetch completed bookings
     async getCompletedBookings({ commit, dispatch, state, rootState }) {
@@ -321,6 +330,40 @@ const bookings = {
         toast.error(rootState.failureMessage);
       } finally {
         state.isUpdatingBooking = false;
+      }
+    },
+
+    //add feedback when a booking is completed
+    async addFeedback({ dispatch, rootState }, payload) {
+      try {
+        let { feedback } = payload;
+
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+
+        //make the request
+        const response = await axios.post(
+          `${rootState.apiUrl}/feedback`,
+          feedback
+        );
+        // Check if the request was successful
+        //status code will be 201 from the API
+        if (response.status == 201) {
+          //show toast success message
+          let message = "Your feedback has been received. Thank you!";
+          dispatch("showToast", { message: message, severity: "success" });
+
+          router.push("/bookings");
+          //refresh the state
+          await dispatch("getBookings");
+        } else {
+          if (response.data.message) {
+            toast.error(response.data.message);
+          }
+        }
+      } catch (err) {
+        toast.error(rootState.failureMessage);
       }
     },
 
