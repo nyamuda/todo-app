@@ -251,7 +251,7 @@ const v$ = useVuelidate(rules, guestUserForm.value);
 //form validation with Vuelidate end
 // Submit form
 const submitForm = () => {
-  store.dispatch("bookings/addGuestBooking", guestUserForm.value);
+  store.dispatch("bookings/addGuestBooking", { booking: guestUserForm.value });
 };
 
 //show loading button or not

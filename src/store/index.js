@@ -10,7 +10,8 @@ const toast = useToast();
 export default createStore({
   state() {
     return {
-      apiUrl: "https://quovoyapi.runasp.net/api",
+      apiUrl: "https://localhost:7156/api",
+      // apiUrl: "https://quovoyapi.runasp.net/api",
 
       isContactingUs: false, //to show loading button during contact us process
       failureMessage: "Oops! Something went wrong. Please try again.",

@@ -36,8 +36,8 @@ const bookings = {
     //load more bookings
     loadAdditionalBookings(state, bookings) {
       //marge original bookings with new loaded bookings
-      let mergedBookings = state.todoTasks.concat(bookings);
-      state.todoTasks = mergedBookings;
+      let mergedBookings = state.bookings.concat(bookings);
+      state.bookings = mergedBookings;
     },
     //set user statistics such as total uncompleted bookings by the user
     setUserStatistics(state, stats) {
@@ -190,6 +190,7 @@ const bookings = {
             },
           }
         );
+
         //mutate the state with the additional tasks
         commit("loadAdditionalBookings", response.data.bookings);
 
@@ -213,7 +214,7 @@ const bookings = {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
-        console.log(booking);
+
         //make the request
         const response = await axios.post(
           `${rootState.apiUrl}/bookings`,
@@ -243,19 +244,30 @@ const bookings = {
       }
     },
     //add a booking
-    async addGuestBooking({ dispatch, state, rootState }, booking) {
+    async addGuestBooking({ dispatch, state, rootState }, payload) {
       try {
+        let { booking } = payload;
         //convert time to UCT
         let localScheduledAt = booking.scheduledAt;
         booking.scheduledAt = new Date(localScheduledAt + "Z").toISOString();
+
+        //all guest booking fields required by the API
+        let guestBooking = {
+          guestName: booking.name,
+          guestEmail: booking.email,
+          guestPhone: booking.phone,
+          location: booking.location,
+          vehicleType: booking.vehicleType,
+          serviceTypeId: booking.serviceTypeId,
+          scheduledAt: booking.scheduledAt,
+          additionalNotes: booking.additionalNotes,
+        };
         state.isCreatingBooking = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
+
         //make the request
         const response = await axios.post(
           `${rootState.apiUrl}/bookings/guest`,
-          booking
+          guestBooking
         );
         // Check if the request was successful
         //status code will be 201 from the API
@@ -272,6 +284,7 @@ const bookings = {
           }
         }
       } catch (err) {
+        console.log(err);
         toast.error(rootState.failureMessage);
       } finally {
         state.isCreatingBooking = false;
