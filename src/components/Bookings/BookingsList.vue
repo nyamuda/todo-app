@@ -217,14 +217,15 @@
         </div>
         <div class="d-flex align-items-center justify-content-end mt-2 w-100">
           <Button
+            raised
             class="me-3"
             label="Never mind"
             size="small"
-            variant="outlined"
             severity="contrast"
             @click="rejectCallback"
           ></Button>
           <Button
+            raised
             :disabled="v$.cancelReason.$error"
             label="Yes, cancel booking"
             severity="danger"
@@ -271,6 +272,7 @@
         </div>
         <div class="d-flex align-items-center justify-content-end mt-2 w-100">
           <Button
+            raised
             class="me-3"
             label="Cancel"
             variant="outlined"
@@ -279,6 +281,7 @@
             @click="rejectCallback"
           ></Button>
           <Button
+            raised
             :disabled="v2$.rating.$error"
             label="Send feedback"
             severity="primary"
@@ -418,9 +421,7 @@ let sendFeedback = (id) => {
 //Form validation with Vuelidate end
 
 let filterBookings = () => {
-  const filterValue = filterBookingsBy.value
-    ? filterBookingsBy.value.toLowerCase()
-    : "";
+  const filterValue = filterBookingsBy.value.toLowerCase();
   if (filterValue == "completed") {
     store.dispatch("bookings/getCompletedBookings");
   } else if (filterValue == "cancelled") {
