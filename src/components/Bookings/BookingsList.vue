@@ -101,31 +101,45 @@
           <Column field="additionalNotes" header="Additional Notes"></Column>
           <Column field="id" header="Actions">
             <template #body="slotProps">
-              <Button
-                v-if="
-                  doesBookingRequireFeedback(
-                    slotProps.data.status,
-                    slotProps.data?.feedback?.rating
-                  )
-                "
-                size="small"
-                label="Feedback"
-                icon="fas fa-star"
-                severity="info"
-                aria-label="Rate service"
-                @click="sendFeedback(slotProps.data.id)"
-              />
-
-              <Button
-                v-else
-                :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
-                size="small"
-                label="Cancel"
-                icon="fa-solid fa-xmark"
-                severity="danger"
-                aria-label="Cancel"
-                @click="cancelBooking(slotProps.data.id)"
-              />
+              <div class="d-flex justify-content-center align-items-center">
+                <!--Spinner if an action is in progress-->
+                <ProgressSpinner
+                  v-if="
+                    isUpdatingBooking && slotProps.data.id == selectedBookingId
+                  "
+                  style="width: 32px; height: 32px"
+                  strokeWidth="8"
+                  fill="transparent"
+                  animationDuration=".5s"
+                  aria-label="Custom ProgressSpinner"
+                />
+                <!--Button to add feedback-->
+                <Button
+                  v-else-if="
+                    doesBookingRequireFeedback(
+                      slotProps.data.status,
+                      slotProps.data?.feedback?.rating
+                    )
+                  "
+                  size="small"
+                  label="Feedback"
+                  icon="fas fa-star"
+                  severity="info"
+                  aria-label="Rate service"
+                  @click="sendFeedback(slotProps.data.id)"
+                />
+                <!--Cancel Booking Button-->
+                <Button
+                  v-else
+                  :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
+                  size="small"
+                  label="Cancel"
+                  icon="fa-solid fa-xmark"
+                  severity="danger"
+                  aria-label="Cancel"
+                  @click="cancelBooking(slotProps.data.id)"
+                />
+              </div>
             </template>
           </Column>
         </DataTable>
@@ -293,6 +307,7 @@ import { Message } from "primevue";
 import Skeleton from "primevue/skeleton";
 import Rating from "primevue/rating";
 import { FloatLabel } from "primevue";
+import ProgressSpinner from "primevue/progressspinner";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, numeric, helpers } from "@vuelidate/validators";
 import { useStore } from "vuex";
@@ -308,6 +323,9 @@ let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
 const confirmDialog = useConfirm();
 let bookings = computed(() => store.state.bookings.bookings);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
+let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
+//the selected booking ID for canceling or any other action
+let selectedBookingId = ref(null);
 
 onMounted(async () => {
   //get all bookings
@@ -344,6 +362,7 @@ const v2$ = useVuelidate(feedbackRules, feedbackForm.value);
 let cancelBooking = (id) => {
   //show text area errors
   v$.value.$touch();
+  selectedBookingId.value = id;
   //show dialog
   confirmDialog.require({
     group: "cancel",
@@ -360,7 +379,7 @@ let cancelBooking = (id) => {
         let booking = selectedBookingArray[0];
         booking.status = "cancelled";
         booking.cancelReason = reasonToCancelForm.value.cancelReason;
-        //add the serviceTypeId field since its require by the API
+        //add the serviceTypeId field since its required by the API
         booking.serviceTypeId = booking.serviceType.id;
         //save the updated booking
         store.dispatch("bookings/updateBooking", { id, booking });
@@ -399,7 +418,9 @@ let sendFeedback = (id) => {
 //Form validation with Vuelidate end
 
 let filterBookings = () => {
-  const filterValue = filterBookingsBy.value.toLowerCase();
+  const filterValue = filterBookingsBy.value
+    ? filterBookingsBy.value.toLowerCase()
+    : "";
   if (filterValue == "completed") {
     store.dispatch("bookings/getCompletedBookings");
   } else if (filterValue == "cancelled") {
@@ -432,7 +453,7 @@ let hasMoreBookings = computed(
 
 //Severity of the pills
 const getSeverity = (status) => {
-  let value = status.toLowerCase();
+  let value = status ? status.toLowerCase() : "";
   switch (value) {
     case "completed":
       return "success"; // Green
@@ -449,7 +470,7 @@ const getSeverity = (status) => {
 
 //Icons for pills
 const getIcons = (status) => {
-  let value = status.toLowerCase();
+  let value = status ? status.toLowerCase() : "";
   switch (value) {
     case "completed":
       return "fas fa-check-circle";
@@ -460,7 +481,7 @@ const getIcons = (status) => {
     case "cancelled":
       return "fas fa-times-circle";
     default:
-      return "secondary";
+      return "";
   }
 };
 //Does the booking require feedback or not
