@@ -21,6 +21,10 @@ import ServicesView from "@/views/Services/ServicesView.vue";
 import ServicesList from "@/components/Services/ServicesList.vue";
 import AddService from "@/components/Services/AddService.vue";
 import UpdateService from "@/components/Services/UpdateService.vue";
+import StatusesView from "@/views/Statuses/StatusesView.vue";
+import StatusesList from "@/components/Statuses/StatusesList.vue";
+import AddStatus from "@/components/Statuses/AddStatus.vue";
+import UpdateStatus from "@/components/Statuses/UpdateStatus.vue";
 
 const routes = [
   {
@@ -93,49 +97,68 @@ const routes = [
   },
 
   //Car wash services routes
+  //Only admins have access to these routes
   {
     path: "/services",
     name: "Services",
     component: ServicesView,
+    beforeEnter: (to) => {
+      if (!store.state.account.loggedInUser.isAdmin) {
+        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+        return { name: "Login" }; // Redirect to login page
+      }
+      return true;
+    },
     children: [
-      //only admins can see the service types list component --> has delete & update actions
       {
         path: "",
         name: "ServicesList",
         component: ServicesList,
-        beforeEnter: (to) => {
-          if (!store.state.account.loggedInUser.isAdmin) {
-            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
-            return { name: "Login" }; // Redirect to login page
-          }
-          return true;
-        },
       },
-      //only admins can add a car wash service type
+
       {
         path: "add",
         name: "AddService",
         component: AddService,
-        beforeEnter: (to) => {
-          if (!store.state.account.loggedInUser.isAdmin) {
-            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
-            return { name: "Login" }; // Redirect to login page
-          }
-          return true;
-        },
       },
-      //only admins can update a booking service type
+
       {
         path: "update/:id",
         name: " UpdateService",
         component: UpdateService,
-        beforeEnter: (to) => {
-          if (!store.state.account.loggedInUser.isAdmin) {
-            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
-            return { name: "Login" }; // Redirect to login page
-          }
-          return true;
-        },
+      },
+    ],
+  },
+  //Booking statuses routes
+  //Only admins have access to these routes
+  {
+    path: "/statuses",
+    name: "Statuses",
+    component: StatusesView,
+    beforeEnter: (to) => {
+      if (!store.state.account.loggedInUser.isAdmin) {
+        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+        return { name: "Login" }; // Redirect to login page
+      }
+      return true;
+    },
+    children: [
+      {
+        path: "",
+        name: "StatusesList",
+        component: StatusesList,
+      },
+      //only admins can add a booking status
+      {
+        path: "add",
+        name: "AddStatus",
+        component: AddStatus,
+      },
+      //only admins can update a booking status
+      {
+        path: "update/:id",
+        name: " UpdateStatus",
+        component: UpdateStatus,
       },
     ],
   },

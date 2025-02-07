@@ -14,11 +14,6 @@
             <Skeleton></Skeleton>
           </template>
         </Column>
-        <Column field="price" header="Price">
-          <template #body>
-            <Skeleton></Skeleton>
-          </template>
-        </Column>
 
         <Column field="actions" header="Actions">
           <template #body>
@@ -30,11 +25,7 @@
       <!--Table Start-->
       <DataTable :value="statuses" v-else>
         <Column field="name" header="Name"></Column>
-        <Column field="price" header="Price">
-          <template #body="slotProps">
-            {{ formatCurrency(slotProps.data.price) }}
-          </template>
-        </Column>
+
         <Column field="id" header="Actions">
           <template #body="slotProps">
             <Button
@@ -42,6 +33,7 @@
               severity="contrast"
               variant="text"
               rounded
+              label="Update status"
               aria-label="update"
               @click="updateStatus(slotProps.data.id)"
             />
@@ -49,6 +41,7 @@
               icon="fas fa-trash"
               severity="danger"
               variant="text"
+              label="Delete status"
               rounded
               aria-label="delete"
               @click="deleteStatus(slotProps.data.id)"
@@ -107,7 +100,7 @@ let isGettingStatuses = computed(() => store.state.statuses.isGettingStatuses);
 let deleteStatus = (id) => {
   confirm.require({
     message: "Do you want to delete this status?",
-    header: "Delete Car Wash Status",
+    header: "Delete Status",
     icon: "fas fa-circle-info",
     rejectLabel: "Cancel",
     rejectProps: {
@@ -127,13 +120,5 @@ let deleteStatus = (id) => {
 };
 let updateStatus = (id) => {
   route.push(`statuses/update/${id}`);
-};
-
-//format number into a monetary value
-let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: currency,
-  }).format(amount);
 };
 </script>
