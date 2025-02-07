@@ -30,6 +30,18 @@ const admin = {
       // mutate state by formatting the date
       state.bookings = bookings;
     },
+    //update the status the of an updated booking without reloading the bookings from the API
+    updateBookingStatus(state, { id, status }) {
+      let updatedBookings = state.bookings.map((booking) => {
+        if (booking.id == id) {
+          //change the status
+          booking.status = status;
+          return booking;
+        }
+        return booking;
+      });
+      state.bookings = updatedBookings;
+    },
     updatePageInfo(state, pageInfo) {
       state.bookingsPageInfo = pageInfo;
     },
@@ -241,7 +253,7 @@ const admin = {
     },
 
     //update the booking
-    async updateBooking({ dispatch, state, rootState }, payload) {
+    async updateBooking({ dispatch, state, rootState, commit }, payload) {
       try {
         state.isUpdatingBooking = true;
         let { id, booking } = payload;
@@ -257,12 +269,12 @@ const admin = {
         // Check if the request was successful
         //status code will be 204 from the API
         if (response.status == 204) {
+          //update the status the of a booking without reloading the bookings from the API
+          commit("updateBookingStatus", { id: id, status: booking.status });
+
           //show toast success message
           let message = "The booking has been updated.";
-          dispatch("showToast", { message: message, severity: "success" });
-
-          //refresh the state
-          await dispatch("getBookings");
+          toast.success(message);
         } else {
           toast.error(rootState.failureMessage);
         }

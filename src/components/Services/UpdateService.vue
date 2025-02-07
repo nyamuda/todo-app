@@ -11,7 +11,7 @@
 				<hr class="flex-grow-1" />
 			</div> -->
 
-      <!-- Email input -->
+      <!-- Name input -->
       <div class="mb-3">
         <label for="serviceName" class="form-label">Service name</label>
         <input
@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <!-- Password input -->
+      <!-- Price input -->
       <div class="form-outline mb-3">
         <label for="servicePrice" class="form-label">Price</label>
         <input

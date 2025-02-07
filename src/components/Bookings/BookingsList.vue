@@ -8,8 +8,10 @@
           style="width: 12rem"
           placeholder="Filter bookings"
           checkmark
+          optionLabel="name"
+          optionValue="name"
           v-model="filterBookingsBy"
-          :options="filters"
+          :options="statuses"
           @change="filterBookings"
           size="small"
         />
@@ -91,10 +93,10 @@
           <Column header="Status">
             <template #body="slotProps">
               <Tag
-                :icon="getIcons(slotProps.data.status)"
+                :icon="getIcons(slotProps.data.status.name)"
                 rounded
-                :value="slotProps.data.status"
-                :severity="getSeverity(slotProps.data.status)"
+                :value="slotProps.data.status.name"
+                :severity="getSeverity(slotProps.data.status.name)"
               />
             </template>
           </Column>
@@ -322,9 +324,10 @@ const rowSkeletons = ref(new Array(10));
 const store = useStore();
 
 let filterBookingsBy = ref("all");
-let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
+
 const confirmDialog = useConfirm();
 let bookings = computed(() => store.state.bookings.bookings);
+let statuses = computed(() => store.state.statuses.statuses);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
 //the selected booking ID for canceling or any other action
@@ -333,6 +336,9 @@ let selectedBookingId = ref(null);
 onMounted(async () => {
   //get all bookings
   store.dispatch("bookings/getBookings");
+
+  //get all booking statuses
+  store.dispatch("statuses/getStatuses");
 });
 
 //Form validation with Vuelidate start

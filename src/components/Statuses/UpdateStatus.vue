@@ -1,22 +1,20 @@
 <template>
   <div class="">
-    <form class="service-form m-auto">
-      <h3 class="fw-normal mb-3" style="letter-spacing: 1px">
-        Add car wash service
-      </h3>
-      <!-- <OauthBooking />
-      <div class="d-flex align-bookings-center my-1">
-        <hr class="flex-grow-1" />
-        <p class="text-center fw-bold mx-3 mb-0">Or</p>
-        <hr class="flex-grow-1" />
-      </div> -->
+    <form class="status-form m-auto">
+      <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Update status</h3>
+      <!-- <OauthBooking />-->
+      <!-- <div class="d-flex align-bookings-center my-1">
+				<hr class="flex-grow-1" />
+				<p class="text-center fw-bold mx-3 mb-0">Or</p>
+				<hr class="flex-grow-1" />
+			</div> -->
 
       <!-- Name input -->
       <div class="mb-3">
-        <label for="serviceName" class="form-label">Service name</label>
+        <label for="statusName" class="form-label">Status name</label>
         <input
           type="email"
-          id="serviceName"
+          id="statusName"
           class="form-control"
           v-model="v$.name.$model"
           :class="{
@@ -31,29 +29,9 @@
         </div>
       </div>
 
-      <!-- Price input -->
-      <div class="form-outline mb-3">
-        <label for="servicePrice" class="form-label">Price</label>
-        <input
-          type="number"
-          id="servicePrice"
-          class="form-control"
-          v-model="v$.price.$model"
-          :class="{
-            'is-invalid': v$.price.$error,
-            'is-valid': !v$.price.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.price.$error">
-          <div v-for="error of v$.price.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </div>
-      </div>
-
       <!-- Submit button -->
       <button
-        v-if="isCreatingService"
+        v-if="isUpdatingStatus"
         type="submit"
         class="btn btn-primary btn-block mb-2 w-100"
         disabled
@@ -63,7 +41,7 @@
           role="status"
           aria-hidden="true"
         ></span>
-        Please wait...
+        Updating...
       </button>
       <button
         v-else
@@ -72,7 +50,7 @@
         type="submit"
         class="btn btn-primary btn-block mb-2 w-100"
       >
-        Add service
+        Update status
       </button>
     </form>
   </div>
@@ -81,30 +59,45 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 //import OauthBooking from "./OauthBooking.vue";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
-import { required, numeric } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
+import { useToast } from "vue-toastification";
 
+//toast
+const toast = useToast();
 // Access the store
 const store = useStore();
+//The route
+const route = useRouter();
+let id = ref(null);
 
-onMounted(() => {
+onMounted(async () => {
   v$._value.$touch();
+
+  //get the route parameter
+  id.value = route.currentRoute.value.params.id;
+
+  //populate the form with the status data
+  if (id.value) {
+    store
+      .dispatch("statuses/getStatus", id.value)
+      .then((status) => {
+        formData.value.name = status.name;
+      })
+      .catch((message) => toast.error(message));
+  }
 });
 
 //form validation with Vuelidate start
 const formData = ref({
   name: "",
-  price: 0,
 });
 
 const rules = {
   name: { required },
-  price: {
-    required,
-    numeric,
-  },
 };
 
 const v$ = useVuelidate(rules, formData.value);
@@ -113,10 +106,13 @@ const v$ = useVuelidate(rules, formData.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("services/addService", formData.value);
+    store.dispatch("statuss/updateStatus", {
+      id: id.value,
+      updatedStatus: formData.value,
+    });
   }
 };
-let isCreatingService = computed(() => store.state.services.isCreatingService);
+let isUpdatingStatus = computed(() => store.state.statuses.isUpdatingStatus);
 </script>
 
 <style scoped>
@@ -124,7 +120,7 @@ a {
   text-decoration: none;
 }
 @media (min-width: 768px) {
-  .service-form {
+  .status-form {
     max-width: 30rem;
   }
 }

@@ -67,9 +67,27 @@
         <!--Table start-->
         <DataTable v-else :value="bookings">
           <Column field="vehicleType" header="Vehicle Type"></Column>
-          <Column field="serviceType" header="Service Type"></Column>
+          <Column field="serviceType" header="Service Type">
+            <template #body="slotProps">
+              <!--Service type name and price-->
+              <span>{{ slotProps.data.serviceType.name }}</span
+              ><span>
+                ({{ formatCurrency(slotProps.data.serviceType.price) }})</span
+              >
+            </template>
+          </Column>
           <Column field="location" header="Location"></Column>
-          <Column field="scheduledAt" header="Scheduled At"></Column>
+          <Column field="scheduledAt" header="Scheduled At">
+            <!--Format the date-->
+            <template #body="slotProps">
+              {{
+                dateFormat(
+                  slotProps.data.scheduledAt,
+                  "dddd, mmmm dS, yyyy, h:MM TT"
+                )
+              }}
+            </template>
+          </Column>
           <Column header="Status">
             <template #body="slotProps">
               <Tag
@@ -83,31 +101,45 @@
           <Column field="additionalNotes" header="Additional Notes"></Column>
           <Column field="id" header="Actions">
             <template #body="slotProps">
-              <Button
-                v-if="
-                  doesBookingRequireFeedback(
-                    slotProps.data.status,
-                    slotProps.data?.feedback?.rating
-                  )
-                "
-                size="small"
-                label="Feedback"
-                icon="fas fa-star"
-                severity="info"
-                aria-label="Rate service"
-                @click="sendFeedback(slotProps.data.id)"
-              />
-
-              <Button
-                v-else
-                :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
-                size="small"
-                label="Cancel"
-                icon="fa-solid fa-xmark"
-                severity="danger"
-                aria-label="Cancel"
-                @click="cancelBooking(slotProps.data.id)"
-              />
+              <div class="d-flex justify-content-center align-items-center">
+                <!--Spinner if an action is in progress-->
+                <ProgressSpinner
+                  v-if="
+                    isUpdatingBooking && slotProps.data.id == selectedBookingId
+                  "
+                  style="width: 32px; height: 32px"
+                  strokeWidth="8"
+                  fill="transparent"
+                  animationDuration=".5s"
+                  aria-label="Custom ProgressSpinner"
+                />
+                <!--Button to add feedback-->
+                <Button
+                  v-else-if="
+                    doesBookingRequireFeedback(
+                      slotProps.data.status,
+                      slotProps.data?.feedback?.rating
+                    )
+                  "
+                  size="small"
+                  label="Feedback"
+                  icon="fas fa-star"
+                  severity="info"
+                  aria-label="Rate service"
+                  @click="sendFeedback(slotProps.data.id)"
+                />
+                <!--Cancel Booking Button-->
+                <Button
+                  v-else
+                  :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
+                  size="small"
+                  label="Cancel"
+                  icon="fa-solid fa-xmark"
+                  severity="danger"
+                  aria-label="Cancel"
+                  @click="cancelBooking(slotProps.data.id)"
+                />
+              </div>
             </template>
           </Column>
         </DataTable>
@@ -185,17 +217,18 @@
         </div>
         <div class="d-flex align-items-center justify-content-end mt-2 w-100">
           <Button
+            raised
             class="me-3"
             label="Never mind"
-            variant="outlined"
-            severity="contrast"
             size="small"
+            severity="contrast"
             @click="rejectCallback"
           ></Button>
           <Button
+            raised
             :disabled="v$.cancelReason.$error"
             label="Yes, cancel booking"
-            severity="warn"
+            severity="danger"
             size="small"
             @click="acceptCallback"
           ></Button>
@@ -239,6 +272,7 @@
         </div>
         <div class="d-flex align-items-center justify-content-end mt-2 w-100">
           <Button
+            raised
             class="me-3"
             label="Cancel"
             variant="outlined"
@@ -247,6 +281,7 @@
             @click="rejectCallback"
           ></Button>
           <Button
+            raised
             :disabled="v2$.rating.$error"
             label="Send feedback"
             severity="primary"
@@ -275,19 +310,25 @@ import { Message } from "primevue";
 import Skeleton from "primevue/skeleton";
 import Rating from "primevue/rating";
 import { FloatLabel } from "primevue";
+import ProgressSpinner from "primevue/progressspinner";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, numeric, helpers } from "@vuelidate/validators";
 import { useStore } from "vuex";
+import dateFormat from "dateformat";
 
 //table row skeletons
 const rowSkeletons = ref(new Array(10));
 // Access the store
 const store = useStore();
+
 let filterBookingsBy = ref("all");
 let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
 const confirmDialog = useConfirm();
-let bookings = computed(() => store.getters["admin/formatAndGetBookings"]);
-let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
+let bookings = computed(() => store.state.admin.bookings);
+let isGettingBookings = computed(() => store.state.admin.isGettingBookings);
+let isUpdatingBooking = computed(() => store.state.admin.isUpdatingBooking);
+//the selected booking ID for canceling or any other action
+let selectedBookingId = ref(null);
 
 onMounted(async () => {
   //get all bookings
@@ -324,13 +365,28 @@ const v2$ = useVuelidate(feedbackRules, feedbackForm.value);
 let cancelBooking = (id) => {
   //show text area errors
   v$.value.$touch();
+  selectedBookingId.value = id;
   //show dialog
   confirmDialog.require({
     group: "cancel",
     message: "Are you sure you want to cancel this booking?",
     header: "Cancel Booking",
     accept: () => {
-      console.log(`Delete booking with ${id} confirmed`);
+      //update the booking
+      //by first getting the booking with the given ID
+      //and changing the status to "cancelled"
+      let selectedBookingArray = bookings.value.filter((val) => val.id == id);
+
+      if (selectedBookingArray.length > 0) {
+        //change the status of the booking to "cancelled" and give the reason
+        let booking = selectedBookingArray[0];
+        booking.status = "cancelled";
+        booking.cancelReason = reasonToCancelForm.value.cancelReason;
+        //add the serviceTypeId field since its required by the API
+        booking.serviceTypeId = booking.serviceType.id;
+        //save the updated booking
+        store.dispatch("bookings/updateBooking", { id, booking });
+      }
     },
     reject: () => {
       console.log(`Delete booking with ${id} cancelled`);
@@ -349,7 +405,13 @@ let sendFeedback = (id) => {
       "Let us know how we did. Your rating and comments are appreciated.",
     header: "How Was Your Car Wash?",
     accept: () => {
-      console.log(`Delete booking with ${id} confirmed`);
+      let feedback = {
+        content: feedbackForm.value.content,
+        rating: feedbackForm.value.rating,
+        bookingId: id,
+      };
+      //send the feedback
+      store.dispatch("bookings/addFeedback", { feedback });
     },
     reject: () => {
       console.log(`Delete booking with ${id} cancelled`);
@@ -359,14 +421,15 @@ let sendFeedback = (id) => {
 //Form validation with Vuelidate end
 
 let filterBookings = () => {
-  if (filterBookingsBy.value == "completed") {
-    store.dispatch("admin/getCompletedBookings");
-  } else if (filterBookingsBy.value == "cancelled") {
-    store.dispatch("admin/getCancelledBookings");
-  } else if (filterBookingsBy.value == "pending") {
-    store.dispatch("admin/getPendingBookings");
+  const filterValue = filterBookingsBy.value.toLowerCase();
+  if (filterValue == "completed") {
+    store.dispatch("bookings/getCompletedBookings");
+  } else if (filterValue == "cancelled") {
+    store.dispatch("bookings/getCancelledBookings");
+  } else if (filterValue == "pending") {
+    store.dispatch("bookings/getPendingBookings");
   } else {
-    store.dispatch("admin/getBookings");
+    store.dispatch("bookings/getBookings");
   }
 };
 //load more bookings depending on whether
@@ -391,7 +454,7 @@ let hasMoreBookings = computed(
 
 //Severity of the pills
 const getSeverity = (status) => {
-  let value = status.toLowerCase();
+  let value = status ? status.toLowerCase() : "";
   switch (value) {
     case "completed":
       return "success"; // Green
@@ -408,7 +471,7 @@ const getSeverity = (status) => {
 
 //Icons for pills
 const getIcons = (status) => {
-  let value = status.toLowerCase();
+  let value = status ? status.toLowerCase() : "";
   switch (value) {
     case "completed":
       return "fas fa-check-circle";
@@ -419,7 +482,7 @@ const getIcons = (status) => {
     case "cancelled":
       return "fas fa-times-circle";
     default:
-      return "secondary";
+      return "";
   }
 };
 //Does the booking require feedback or not
@@ -430,6 +493,14 @@ let doesBookingRequireFeedback = (status, rating) => {
     return true;
   }
   return false;
+};
+
+//format number into a monetary value
+let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(amount);
 };
 </script>
 
