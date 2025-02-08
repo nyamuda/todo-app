@@ -46,6 +46,20 @@ const statuses = {
           });
       });
     },
+    //fetch status by name
+    async getStatusByName({ rootState }, name) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${rootState.apiUrl}/statuses/name/${name}`)
+          .then((response) => resolve(response.data))
+          .catch((ex) => {
+            let message = ex.response?.data.message
+              ? ex.response.data.message
+              : rootState.failureMessage;
+            reject(message);
+          });
+      });
+    },
     //add a status
     async addStatus({ dispatch, state, rootState }, payload) {
       try {

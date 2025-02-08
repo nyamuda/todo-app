@@ -90,7 +90,7 @@
               }}
             </template>
           </Column>
-          <Column header="Status">
+          <Column field="status" header="Status">
             <template #body="slotProps">
               <Tag
                 :icon="getIcons(slotProps.data.status.name)"
@@ -119,7 +119,7 @@
                 <Button
                   v-else-if="
                     doesBookingRequireFeedback(
-                      slotProps.data.status,
+                      slotProps.data.status.name,
                       slotProps.data?.feedback?.rating
                     )
                   "
@@ -133,7 +133,7 @@
                 <!--Cancel Booking Button-->
                 <Button
                   v-else
-                  :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
+                  :disabled="slotProps.data.status.name == 'cancelled'"
                   size="small"
                   label="Cancel"
                   icon="fa-solid fa-xmark"
@@ -378,21 +378,18 @@ let cancelBooking = (id) => {
     message: "Are you sure you want to cancel this booking?",
     header: "Cancel Booking",
     accept: () => {
-      //update the booking
-      //by first getting the booking with the given ID
-      //and changing the status to "cancelled"
-      let selectedBookingArray = bookings.value.filter((val) => val.id == id);
+      //change the status of the booking
+      //by changing the status to "cancelled"
+      let statusUpdate = {
+        statusName: "cancelled",
+        cancelReason: reasonToCancelForm.value.cancelReason,
+      };
 
-      if (selectedBookingArray.length > 0) {
-        //change the status of the booking to "cancelled" and give the reason
-        let booking = selectedBookingArray[0];
-        booking.status = "cancelled";
-        booking.cancelReason = reasonToCancelForm.value.cancelReason;
-        //add the serviceTypeId field since its required by the API
-        booking.serviceTypeId = booking.serviceType.id;
-        //save the updated booking
-        store.dispatch("bookings/updateBooking", { id, booking });
-      }
+      //save the updated booking
+      store.dispatch("bookings/changeBookingStatus", {
+        bookingId: id,
+        statusUpdate,
+      });
     },
     reject: () => {
       console.log(`Delete booking with ${id} cancelled`);

@@ -312,7 +312,6 @@ const bookings = {
     },
 
     //update the booking
-    //for now users can only cancel their bookings
     async updateBooking({ dispatch, state, rootState, commit }, payload) {
       try {
         state.isUpdatingBooking = true;
@@ -334,6 +333,43 @@ const bookings = {
 
           //show toast success message
           let message = "The booking has been cancelled.";
+          toast.success(message);
+        } else {
+          toast.error(rootState.failureMessage);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error(rootState.failureMessage);
+      } finally {
+        state.isUpdatingBooking = false;
+      }
+    },
+
+    //change booking status
+    async changeBookingStatus({ dispatch, state, rootState, commit }, payload) {
+      try {
+        state.isUpdatingBooking = true;
+        let { bookingId, statusUpdate } = payload;
+
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
+        const response = await axios.put(
+          `${rootState.apiUrl}/bookings/${bookingId}/statuses`,
+          statusUpdate
+        );
+        // Check if the request was successful
+        //status code will be 204 from the API
+        if (response.status == 204) {
+          //update the status the of a booking without reloading the bookings from the API
+          commit("updateBookingStatus", {
+            id: bookingId,
+            status: statusUpdate.statusName,
+          });
+
+          //show toast success message
+          let message = `The booking status has been changed to ${statusUpdate.statusName}.`;
           toast.success(message);
         } else {
           toast.error(rootState.failureMessage);
