@@ -65,7 +65,11 @@
               <!--Client/User information-->
               <Button
                 type="button"
-                :label="slotProps.data.user?.name"
+                :label="
+                  slotProps.data.user
+                    ? slotProps.data.user?.name
+                    : slotProps.data.guestUser?.name
+                "
                 :icon="
                   slotProps.data.user ? 'fas fa-user-check' : 'fas fa-user'
                 "
@@ -73,7 +77,13 @@
                 :badgeSeverity="slotProps.data.user ? 'success' : 'warn'"
                 variant="outlined"
                 severity="secondary"
-                @click="showUserInfo(slotProps.data.user)"
+                @click="
+                  showUserInfo(
+                    slotProps.data.user
+                      ? slotProps.data.user
+                      : slotProps.data.guestUser
+                  )
+                "
               />
             </template>
           </Column>
