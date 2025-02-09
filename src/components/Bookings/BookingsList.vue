@@ -371,7 +371,7 @@ const v2$ = useVuelidate(feedbackRules, feedbackForm.value);
 let cancelBooking = (id) => {
   //show text area errors
   v$.value.$touch();
-  selectedBookingId.value = id;
+  selectedBookingId.value = id; //show loader for in the row of the of the booking
   //show dialog
   confirmDialog.require({
     group: "cancel",

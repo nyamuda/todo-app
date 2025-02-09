@@ -50,6 +50,11 @@
               <Skeleton></Skeleton>
             </template>
           </Column>
+          <Column field="feedback" header="Feedback">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
 
           <Column field="actions" header="Actions">
             <template #body>
@@ -110,6 +115,11 @@
               />
             </template>
           </Column>
+          <Column field="feedback" header="Feedback">
+            <template #body="slotProps">
+              <Rating :value="slotProps.data.feedback?.rating" readonly />
+            </template>
+          </Column>
 
           <Column field="id" header="Actions">
             <template #body="slotProps">
@@ -126,31 +136,57 @@
                   aria-label="Custom ProgressSpinner"
                 />
                 <!--Button to add feedback-->
-                <Button
-                  v-else-if="
-                    doesBookingRequireFeedback(
-                      slotProps.data.status.name,
-                      slotProps.data?.feedback?.rating
-                    )
-                  "
-                  size="small"
-                  label="Feedback"
-                  icon="fas fa-star"
-                  severity="info"
-                  aria-label="Rate service"
-                  @click="sendFeedback(slotProps.data.id)"
-                />
-                <!--Cancel Booking Button-->
-                <Button
+                <div
                   v-else
-                  :disabled="slotProps.data.status.name == 'cancelled'"
-                  size="small"
-                  label="Cancel"
-                  icon="fa-solid fa-xmark"
-                  severity="danger"
-                  aria-label="Cancel"
-                  @click="cancelBooking(slotProps.data.id)"
-                />
+                  class="d-flex justify-content-evenly gap-2 align-items-center"
+                >
+                  <Button
+                    v-if="
+                      slotProps.data.status?.name == 'pending' &&
+                      slotProps.data.status?.name != 'cancelled'
+                    "
+                    size="small"
+                    label="Confirm"
+                    icon="far fa-calendar-check"
+                    severity="info"
+                    aria-label="Confirm"
+                    variant="outlined"
+                    @click="confirmBooking(slotProps.data.id)"
+                  />
+                  <Button
+                    v-else-if="
+                      slotProps.data.status?.name == 'confirmed' &&
+                      slotProps.data.status?.name != 'cancelled'
+                    "
+                    size="small"
+                    label="En route"
+                    icon="fas fa-road"
+                    severity="contrast"
+                    aria-label="En route"
+                    variant="outlined"
+                    @click="sendFeedback(slotProps.data.id)"
+                  />
+                  <Button
+                    v-else-if="
+                      slotProps.data.status?.name == 'en route' &&
+                      slotProps.data.status?.name != 'cancelled'
+                    "
+                    size="small"
+                    label="Complete"
+                    icon="fas fa-circle-check"
+                    severity="success"
+                    aria-label="Complete"
+                    variant="outlined"
+                    @click="sendFeedback(slotProps.data.id)"
+                  />
+
+                  <Button
+                    label="Details"
+                    severity="secondary"
+                    size="small"
+                    icon="fas fa-info"
+                  />
+                </div>
               </div>
             </template>
           </Column>
@@ -198,113 +234,8 @@
   </div>
 
   <!--Dialogs Section Start-->
+  <ConfirmDialog></ConfirmDialog>
 
-  <!--Cancel Dialog Start-->
-  <ConfirmDialog group="cancel">
-    <template #container="{ message, acceptCallback, rejectCallback }">
-      <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
-        <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
-        <p class="mb-3">{{ message.message }}</p>
-        <div class="w-100">
-          <FloatLabel variant="in">
-            <Textarea
-              class="w-100"
-              id="cancelReason"
-              :invalid="v$.cancelReason.$error"
-              v-model="v$.cancelReason.$model"
-              rows="3"
-            />
-            <label for="cancelReason">Please provide a reason</label>
-          </FloatLabel>
-
-          <Message
-            v-if="v$.cancelReason.$error"
-            severity="error"
-            size="small"
-            variant="simple"
-            ><div v-for="error of v$.cancelReason.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div></Message
-          >
-        </div>
-        <div class="d-flex align-items-center justify-content-end mt-2 w-100">
-          <Button
-            raised
-            class="me-3"
-            label="Never mind"
-            size="small"
-            severity="contrast"
-            @click="rejectCallback"
-          ></Button>
-          <Button
-            raised
-            :disabled="v$.cancelReason.$error"
-            label="Yes, cancel booking"
-            severity="danger"
-            size="small"
-            @click="acceptCallback"
-          ></Button>
-        </div>
-      </div>
-    </template>
-  </ConfirmDialog>
-  <!--Cancel Dialog End-->
-  <!--Feedback Dialog Start-->
-  <ConfirmDialog group="feedback">
-    <template #container="{ message, acceptCallback, rejectCallback }">
-      <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
-        <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
-        <p class="mb-3">{{ message.message }}</p>
-        <div class="mb-2">
-          <Rating
-            class="mb-1"
-            :invalid="v2$.rating.$error"
-            v-model="v2$.rating.$model"
-          />
-          <Message
-            v-if="v2$.rating.$error"
-            severity="error"
-            size="small"
-            variant="simple"
-            ><div v-for="error of v2$.rating.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div></Message
-          >
-        </div>
-        <div class="w-100">
-          <FloatLabel variant="in">
-            <Textarea
-              class="w-100"
-              id="bookingFeedback"
-              v-model="v2$.content.$model"
-              rows="3"
-            />
-            <label for="bookingFeedback">Share your thoughts</label>
-          </FloatLabel>
-        </div>
-        <div class="d-flex align-items-center justify-content-end mt-2 w-100">
-          <Button
-            raised
-            class="me-3"
-            label="Cancel"
-            variant="outlined"
-            severity="contrast"
-            size="small"
-            @click="rejectCallback"
-          ></Button>
-          <Button
-            raised
-            :disabled="v2$.rating.$error"
-            label="Send feedback"
-            severity="primary"
-            size="small"
-            @click="acceptCallback"
-          ></Button>
-        </div>
-      </div>
-    </template>
-  </ConfirmDialog>
-  <!--Feedback Dialog End-->
   <!--User details dialog start-->
   <Dialog
     v-model:visible="showSelectedUser"
@@ -344,14 +275,11 @@ import Button from "primevue/button";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import Dialog from "primevue/dialog";
-import Textarea from "primevue/textarea";
-import { Message } from "primevue";
+
 import Skeleton from "primevue/skeleton";
 import Rating from "primevue/rating";
-import { FloatLabel } from "primevue";
 import ProgressSpinner from "primevue/progressspinner";
-import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, numeric, helpers } from "@vuelidate/validators";
+
 import { useStore } from "vuex";
 import dateFormat from "dateformat";
 
@@ -380,88 +308,6 @@ onMounted(async () => {
   //get all booking statuses
   store.dispatch("statuses/getStatuses");
 });
-
-//Form validation with Vuelidate start
-//cancel reason data
-const reasonToCancelForm = ref({
-  cancelReason: "",
-});
-const feedbackForm = ref({
-  content: "",
-  rating: null,
-});
-const cancelRules = {
-  cancelReason: { required, minLengthValue: minLength(5) },
-};
-//rules for the booking feedback form
-const feedbackRules = {
-  content: {},
-  rating: {
-    required: helpers.withMessage("Rating is required", required),
-    numeric,
-  },
-};
-
-//for cancellation
-const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
-//for feedback
-const v2$ = useVuelidate(feedbackRules, feedbackForm.value);
-
-//cancel a booking
-let cancelBooking = (id) => {
-  //show text area errors
-  v$.value.$touch();
-  selectedBookingId.value = id;
-  //show dialog
-  confirmDialog.require({
-    group: "cancel",
-    message: "Are you sure you want to cancel this booking?",
-    header: "Cancel Booking",
-    accept: () => {
-      //change the status of the booking
-      //by changing the status to "cancelled"
-      let statusUpdate = {
-        statusName: "cancelled",
-        cancelReason: reasonToCancelForm.value.cancelReason,
-      };
-
-      //save the updated booking
-      store.dispatch("bookings/changeBookingStatus", {
-        bookingId: id,
-        statusUpdate,
-      });
-    },
-    reject: () => {
-      console.log(`Delete booking with ${id} cancelled`);
-    },
-  });
-};
-
-//Rate a booking
-let sendFeedback = (id) => {
-  //show text area errors
-  v2$.value.$touch();
-  //show dialog
-  confirmDialog.require({
-    group: "feedback",
-    message:
-      "Let us know how we did. Your rating and comments are appreciated.",
-    header: "How Was Your Car Wash?",
-    accept: () => {
-      let feedback = {
-        content: feedbackForm.value.content,
-        rating: feedbackForm.value.rating,
-        bookingId: id,
-      };
-      //send the feedback
-      store.dispatch("bookings/addFeedback", { feedback });
-    },
-    reject: () => {
-      console.log(`Delete booking with ${id} cancelled`);
-    },
-  });
-};
-//Form validation with Vuelidate end
 
 let filterBookings = () => {
   const filterValue = filterBookingsBy.value;
@@ -528,19 +374,42 @@ const getIcons = (status) => {
       return "";
   }
 };
-//Does the booking require feedback or not
-let doesBookingRequireFeedback = (status, rating) => {
-  //if the rating is null
-  //then the booking requires feedback
-  if (!rating && status.toLowerCase() == "completed") {
-    return true;
-  }
-  return false;
-};
 
 let showUserInfo = (user) => {
   selectedUser.value = user;
   showSelectedUser.value = true;
+};
+
+const confirmBooking = (id) => {
+  selectedBookingId.value = id; //show loader for in the row of the of the booking
+
+  confirmDialog.require({
+    message: "Are you sure you want to confirm this booking?",
+    header: "Confirm Booking",
+    icon: "fas fa-triangle-exclamation",
+    rejectProps: {
+      label: "Cancel",
+      severity: "secondary",
+      outlined: true,
+      size: "small",
+    },
+    acceptProps: {
+      label: "Confirm booking",
+      severity: "info",
+      size: "small",
+    },
+    accept: () => {
+      //change the status of the booking
+      //by changing the status to "confirmed"
+      let statusUpdate = {
+        statusName: "confirmed",
+      };
+      store.dispatch("admin/changeBookingStatus", {
+        bookingId: id,
+        statusUpdate,
+      });
+    },
+  });
 };
 </script>
 
