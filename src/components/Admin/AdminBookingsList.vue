@@ -29,21 +29,12 @@
       <div class="card">
         <!--Skeleton table start-->
         <DataTable :value="rowSkeletons" v-if="isGettingBookings">
-          <Column field="user" header="Client">
+          <Column field="user" header="Client Details">
             <template #body>
               <Skeleton></Skeleton>
             </template>
           </Column>
-          <Column field="vehicleType" header="Vehicle Type">
-            <template #body>
-              <Skeleton></Skeleton>
-            </template>
-          </Column>
-          <Column field="serviceType" header="Service Type">
-            <template #body>
-              <Skeleton></Skeleton>
-            </template>
-          </Column>
+
           <Column field="location" header="Location">
             <template #body>
               <Skeleton></Skeleton>
@@ -59,11 +50,7 @@
               <Skeleton></Skeleton>
             </template>
           </Column>
-          <Column field="additionalNotes" header="Additional Notes">
-            <template #body>
-              <Skeleton></Skeleton>
-            </template>
-          </Column>
+
           <Column field="actions" header="Actions">
             <template #body>
               <Skeleton></Skeleton>
@@ -73,31 +60,24 @@
         <!--Skeleton table end-->
         <!--Table start-->
         <DataTable v-else :value="bookings">
-          <Column field="user" header="Client">
+          <Column field="user" header="Client Details">
             <template #body="slotProps">
               <!--Client/User information-->
-              <div class="">
-                <Tag
-                  :icon="
-                    slotProps.data.user ? 'fas fa-user-check' : 'fas fa-user'
-                  "
-                  :value="slotProps.data.user ? 'Member' : 'Guest'"
-                  :severity="slotProps.data.user ? 'success' : 'warn'"
-                />
-                <span>{{ slotProps.data.user?.name }}</span>
-              </div>
+              <Button
+                type="button"
+                :label="slotProps.data.user?.name"
+                :icon="
+                  slotProps.data.user ? 'fas fa-user-check' : 'fas fa-user'
+                "
+                :badge="slotProps.data.user ? 'Member' : 'Guest'"
+                :badgeSeverity="slotProps.data.user ? 'success' : 'warn'"
+                variant="outlined"
+                severity="secondary"
+                @click="showUserInfo(slotProps.data.user)"
+              />
             </template>
           </Column>
-          <Column field="vehicleType" header="Vehicle Type"></Column>
-          <Column field="serviceType" header="Service Type">
-            <template #body="slotProps">
-              <!--Service type name and price-->
-              <span>{{ slotProps.data.serviceType.name }}</span
-              ><span>
-                ({{ formatCurrency(slotProps.data.serviceType.price) }})</span
-              >
-            </template>
-          </Column>
+
           <Column field="location" header="Location"></Column>
           <Column field="scheduledAt" header="Scheduled At">
             <!--Format the date-->
@@ -120,7 +100,7 @@
               />
             </template>
           </Column>
-          <Column field="additionalNotes" header="Additional Notes"></Column>
+
           <Column field="id" header="Actions">
             <template #body="slotProps">
               <div class="d-flex justify-content-center align-items-center">
@@ -315,7 +295,33 @@
     </template>
   </ConfirmDialog>
   <!--Feedback Dialog End-->
-  <!--Dialogs Section Start-->
+  <!--User details dialog start-->
+  <Dialog
+    v-model:visible="showSelectedUser"
+    modal
+    header="Client Information"
+    :style="{ width: '30rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+  >
+    <div>
+      <p>
+        <i class="fas fa-user"></i> <strong>Name:</strong>
+        {{ selectedUser.name }}
+      </p>
+      <p>
+        <i class="fas fa-envelope"></i> <strong>Email:</strong>
+        {{ selectedUser.email }}
+      </p>
+      <p>
+        <i class="fas fa-phone"></i> <strong>Phone:</strong>
+        {{ selectedUser.phone }}
+      </p>
+      <!-- <p><i class="fas fa-check-circle mr-2"></i> <strong>Total Completed Bookings:</strong> {{ selectedUser.completedBookings }}</p> -->
+    </div>
+  </Dialog>
+
+  <!--User details dialog end-->
+  <!--Dialogs Section End-->
 </template>
 
 <script setup>
@@ -327,6 +333,7 @@ import { Tag } from "primevue";
 import Button from "primevue/button";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
+import Dialog from "primevue/dialog";
 import Textarea from "primevue/textarea";
 import { Message } from "primevue";
 import Skeleton from "primevue/skeleton";
@@ -352,6 +359,9 @@ let isGettingBookings = computed(() => store.state.admin.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.admin.isUpdatingBooking);
 //the selected booking ID for canceling or any other action
 let selectedBookingId = ref(null);
+//selected user to see more details about the user
+let selectedUser = ref(null);
+let showSelectedUser = ref(false);
 
 onMounted(async () => {
   //get all bookings
@@ -518,12 +528,9 @@ let doesBookingRequireFeedback = (status, rating) => {
   return false;
 };
 
-//format number into a monetary value
-let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: currency,
-  }).format(amount);
+let showUserInfo = (user) => {
+  selectedUser.value = user;
+  showSelectedUser.value = true;
 };
 </script>
 
