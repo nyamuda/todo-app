@@ -424,7 +424,7 @@ let sendFeedback = (id) => {
 //Form validation with Vuelidate end
 
 let filterBookings = () => {
-  const filterValue = filterBookingsBy.value.toLowerCase();
+  const filterValue = filterBookingsBy.value;
   if (filterValue == "completed") {
     store.dispatch("bookings/getCompletedBookings");
   } else if (filterValue == "cancelled") {

@@ -48,30 +48,15 @@ const admin = {
     //load more bookings
     loadAdditionalBookings(state, bookings) {
       //marge original bookings with new loaded bookings
-      let mergedBookings = state.todoTasks.concat(bookings);
-      state.todoTasks = mergedBookings;
+      let mergedBookings = state.bookings.concat(bookings);
+      state.bookings = mergedBookings;
     },
     //set admin statistics such as total bookings
     setAdminStatistics(state, stats) {
       state.adminStatistics = stats;
     },
   },
-  getters: {
-    //formatting the 'scheduleAt' date of the bookings
-    formatAndGetBookings(state) {
-      return state.bookings.map((booking) => {
-        return {
-          id: booking.id,
-          vehicleType: booking.vehicleType,
-          serviceType: booking.serviceType,
-          location: booking.location,
-          scheduledAt: new Date(booking.scheduledAt).toLocaleString(), // Format the 'scheduledAt' date
-          status: booking.status,
-          additionalNotes: booking.additionalNotes,
-        };
-      });
-    },
-  },
+  getters: {},
   actions: {
     //fetch all bookings
     async getBookings({ commit, dispatch, state, rootState }) {
@@ -85,10 +70,11 @@ const admin = {
         //mutate the state with the fetched tasks
         commit("setBookings", response.data.bookings);
 
+        console.log(response.data.bookings);
+
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (ex) {
-        console.log(ex);
         toast.error("Failed to load bookings.");
       } finally {
         state.isGettingBookings = false;

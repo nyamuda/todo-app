@@ -34,7 +34,7 @@ const bookings = {
       let updatedBookings = state.bookings.map((booking) => {
         if (booking.id == id) {
           //change the status
-          booking.status = status;
+          booking.status.name = status;
           return booking;
         }
         return booking;

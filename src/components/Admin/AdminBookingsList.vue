@@ -8,8 +8,10 @@
           style="width: 12rem"
           placeholder="Filter bookings"
           checkmark
+          optionLabel="name"
+          optionValue="name"
           v-model="filterBookingsBy"
-          :options="filters"
+          :options="statuses"
           @change="filterBookings"
           size="small"
         />
@@ -27,6 +29,11 @@
       <div class="card">
         <!--Skeleton table start-->
         <DataTable :value="rowSkeletons" v-if="isGettingBookings">
+          <Column field="user" header="Client">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
           <Column field="vehicleType" header="Vehicle Type">
             <template #body>
               <Skeleton></Skeleton>
@@ -66,6 +73,21 @@
         <!--Skeleton table end-->
         <!--Table start-->
         <DataTable v-else :value="bookings">
+          <Column field="user" header="Client">
+            <template #body="slotProps">
+              <!--Client/User information-->
+              <div class="">
+                <Tag
+                  :icon="
+                    slotProps.data.user ? 'fas fa-user-check' : 'fas fa-user'
+                  "
+                  :value="slotProps.data.user ? 'Member' : 'Guest'"
+                  :severity="slotProps.data.user ? 'success' : 'warn'"
+                />
+                <span>{{ slotProps.data.user?.name }}</span>
+              </div>
+            </template>
+          </Column>
           <Column field="vehicleType" header="Vehicle Type"></Column>
           <Column field="serviceType" header="Service Type">
             <template #body="slotProps">
@@ -88,13 +110,13 @@
               }}
             </template>
           </Column>
-          <Column header="Status">
+          <Column field="status" header="Status">
             <template #body="slotProps">
               <Tag
-                :icon="getIcons(slotProps.data.status)"
+                :icon="getIcons(slotProps.data.status.name)"
                 rounded
-                :value="slotProps.data.status"
-                :severity="getSeverity(slotProps.data.status)"
+                :value="slotProps.data.status.name"
+                :severity="getSeverity(slotProps.data.status.name)"
               />
             </template>
           </Column>
@@ -117,7 +139,7 @@
                 <Button
                   v-else-if="
                     doesBookingRequireFeedback(
-                      slotProps.data.status,
+                      slotProps.data.status.name,
                       slotProps.data?.feedback?.rating
                     )
                   "
@@ -131,7 +153,7 @@
                 <!--Cancel Booking Button-->
                 <Button
                   v-else
-                  :disabled="slotProps.data.status.toLowerCase() == 'cancelled'"
+                  :disabled="slotProps.data.status.name == 'cancelled'"
                   size="small"
                   label="Cancel"
                   icon="fa-solid fa-xmark"
@@ -322,9 +344,10 @@ const rowSkeletons = ref(new Array(10));
 const store = useStore();
 
 let filterBookingsBy = ref("all");
-let filters = ref(["All", "Completed", "Cancelled", "Pending"]);
+
 const confirmDialog = useConfirm();
 let bookings = computed(() => store.state.admin.bookings);
+let statuses = computed(() => store.state.statuses.statuses);
 let isGettingBookings = computed(() => store.state.admin.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.admin.isUpdatingBooking);
 //the selected booking ID for canceling or any other action
@@ -333,6 +356,9 @@ let selectedBookingId = ref(null);
 onMounted(async () => {
   //get all bookings
   store.dispatch("admin/getBookings");
+
+  //get all booking statuses
+  store.dispatch("statuses/getStatuses");
 });
 
 //Form validation with Vuelidate start
@@ -372,21 +398,18 @@ let cancelBooking = (id) => {
     message: "Are you sure you want to cancel this booking?",
     header: "Cancel Booking",
     accept: () => {
-      //update the booking
-      //by first getting the booking with the given ID
-      //and changing the status to "cancelled"
-      let selectedBookingArray = bookings.value.filter((val) => val.id == id);
+      //change the status of the booking
+      //by changing the status to "cancelled"
+      let statusUpdate = {
+        statusName: "cancelled",
+        cancelReason: reasonToCancelForm.value.cancelReason,
+      };
 
-      if (selectedBookingArray.length > 0) {
-        //change the status of the booking to "cancelled" and give the reason
-        let booking = selectedBookingArray[0];
-        booking.status = "cancelled";
-        booking.cancelReason = reasonToCancelForm.value.cancelReason;
-        //add the serviceTypeId field since its required by the API
-        booking.serviceTypeId = booking.serviceType.id;
-        //save the updated booking
-        store.dispatch("bookings/updateBooking", { id, booking });
-      }
+      //save the updated booking
+      store.dispatch("bookings/changeBookingStatus", {
+        bookingId: id,
+        statusUpdate,
+      });
     },
     reject: () => {
       console.log(`Delete booking with ${id} cancelled`);
@@ -421,15 +444,15 @@ let sendFeedback = (id) => {
 //Form validation with Vuelidate end
 
 let filterBookings = () => {
-  const filterValue = filterBookingsBy.value.toLowerCase();
+  const filterValue = filterBookingsBy.value;
   if (filterValue == "completed") {
-    store.dispatch("bookings/getCompletedBookings");
+    store.dispatch("admin/getCompletedBookings");
   } else if (filterValue == "cancelled") {
-    store.dispatch("bookings/getCancelledBookings");
+    store.dispatch("admin/getCancelledBookings");
   } else if (filterValue == "pending") {
-    store.dispatch("bookings/getPendingBookings");
+    store.dispatch("admin/getPendingBookings");
   } else {
-    store.dispatch("bookings/getBookings");
+    store.dispatch("admin/getBookings");
   }
 };
 //load more bookings depending on whether
