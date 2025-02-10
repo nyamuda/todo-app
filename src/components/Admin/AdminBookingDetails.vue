@@ -48,6 +48,23 @@
       </template>
     </Card>
 
+    <!-- Skeleton for Feedback & Rating -->
+    <Card class="mt-4">
+      <template #title>
+        <p class="h4 mb-3 d-flex align-items-center">
+          <Skeleton width="40%" height="1.5rem" />
+        </p>
+      </template>
+
+      <template #content>
+        <Skeleton width="100%" height="20px" class="mb-2"></Skeleton>
+        <Skeleton width="80%" height="20px" class="mb-2"></Skeleton>
+        <div class="d-flex align-items-center">
+          <Skeleton width="120px" height="20px"></Skeleton>
+        </div>
+      </template>
+    </Card>
+
     <!-- Skeleton for Action Buttons -->
     <div class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2">
       <Skeleton width="120px" height="2rem" />
@@ -67,6 +84,7 @@
             <i class="fas fa-calendar-check me-1 text-primary"></i>
             Booking Details
           </p>
+          <Rating :value="booking.feedback?.rating" readonly />
         </template>
 
         <template #content>
@@ -141,6 +159,33 @@
         </template>
       </Card>
 
+      <!-- Feedback & Rating -->
+      <Card v-if="booking.status.name != 'cancelled'" class="mt-4">
+        <template #title>
+          <p class="h4 mb-3 d-flex align-items-center">
+            <i class="fas fa-star text-warning me-1"></i> Client Feedback
+          </p>
+        </template>
+        <template #content>
+          <div v-if="booking.feedback">
+            <p>
+              <i class="fas fa-comment me-1"></i><strong>Feedback:</strong>
+              {{ booking.feedback?.content }}
+            </p>
+            <p>
+              <i class="fas fa-star me-1 text-warning"></i
+              ><strong>Rating:</strong>
+              <Rating :value="booking.feedback.rating" readonly />
+            </p>
+          </div>
+          <div v-else>
+            <p class="text-muted">
+              <i class="fas fa-info-circle me-1"></i>No feedback provided yet.
+            </p>
+          </div>
+        </template>
+      </Card>
+
       <!-- Action Buttons -->
       <div
         class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2"
@@ -203,6 +248,7 @@ import { useToast } from "vue-toastification";
 import Skeleton from "primevue/skeleton";
 import { Tag } from "primevue";
 import dateFormat from "dateformat";
+import Rating from "primevue/rating";
 
 //toast
 const toast = useToast();
