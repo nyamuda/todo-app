@@ -498,7 +498,10 @@ const deleteBooking = (id) => {
       // Dispatch action to delete booking
       store
         .dispatch("admin/deleteBooking", id)
-        .then((response) => toast.success(response))
+        .then((response) => {
+          toast.success(response);
+          route.push("/admin/bookings");
+        })
         .catch((ex) => toast.error(ex));
     },
   });
