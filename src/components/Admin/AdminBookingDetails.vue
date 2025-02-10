@@ -220,7 +220,7 @@
 
         <Button
           v-if="
-            booking?.status.name !== 'cancelled' ||
+            booking?.status.name !== 'cancelled' &&
             booking?.status.name !== 'completed'
           "
           label="Cancel Booking"
@@ -232,7 +232,10 @@
         />
 
         <Button
-          v-if="booking?.status.name !== 'cancelled'"
+          v-if="
+            booking?.status.name !== 'cancelled' &&
+            booking?.status.name !== 'completed'
+          "
           label="Edit Booking"
           icon="fas fa-edit"
           variant="outlined"
@@ -251,6 +254,22 @@
         />
       </div>
     </div>
+    <!-- No Booking Details Start -->
+    <div
+      v-else
+      class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
+    >
+      <div class="mb-2">
+        <!-- Font Awesome Icon for missing booking details -->
+        <i class="fas fa-info-circle fa-3x text-primary"></i>
+      </div>
+      <p class="fs-4 text-muted mb-2">No Booking Details Available</p>
+      <p class="text-muted">
+        The booking information could not be found. It may have been removed or
+        does not exist.
+      </p>
+    </div>
+    <!-- No Booking Details End -->
   </div>
   <!--Confirm dialog-->
   <ConfirmDialog></ConfirmDialog>

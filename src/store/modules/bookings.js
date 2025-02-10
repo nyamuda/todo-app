@@ -102,8 +102,12 @@ const bookings = {
         axios
           .get(`${rootState.apiUrl}/bookings/${id}`)
           .then((response) => resolve(response.data))
-          .catch(() => {
-            reject(rootState.failureMessage);
+          .catch((ex) => {
+            let message =
+              ex.status == 404
+                ? "The booking you're looking for does not exist."
+                : rootState.failureMessage;
+            reject(message);
           });
       });
     },
@@ -125,7 +129,7 @@ const bookings = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        toast.error("Failed to load completed bookings.");
+        toast.error("Failed to fetch completed bookings.");
       } finally {
         state.isGettingBookings = false;
       }
@@ -147,7 +151,7 @@ const bookings = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        toast.error("Failed to load pending bookings.");
+        toast.error("Failed to fetch pending bookings.");
       } finally {
         state.isGettingBookings = false;
       }
@@ -170,7 +174,7 @@ const bookings = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        toast.error("Failed to load cancelled bookings.");
+        toast.error("Failed to fetch cancelled bookings.");
       } finally {
         state.isGettingBookings = false;
       }
