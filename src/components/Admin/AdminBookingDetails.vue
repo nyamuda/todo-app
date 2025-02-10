@@ -143,15 +143,20 @@
                   class="ms-2"
                 />
               </p>
-              <p v-if="booking.additionalNotes">
-                <i class="fas fa-sticky-note me-1"></i
-                ><strong>Additional Notes:</strong>
-                {{ booking.additionalNotes }}
+              <p v-if="booking?.status.name == 'cancelled'">
+                <i class="fas fa-user-xmark me-1"></i
+                ><strong>Cancelled By:</strong>
+                {{ booking.cancelReason }}
               </p>
               <p v-if="booking?.status.name == 'cancelled'">
                 <i class="fas fa-ban me-1"></i
                 ><strong>Cancellation Reason:</strong>
                 {{ booking.cancelReason }}
+              </p>
+              <p v-if="booking.additionalNotes">
+                <i class="fas fa-sticky-note me-1"></i
+                ><strong>Additional Notes:</strong>
+                {{ booking.additionalNotes }}
               </p>
             </div>
           </div>
@@ -280,13 +285,13 @@
         <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
         <p class="mb-3">{{ message.message }}</p>
         <div class="w-100">
-          <FloatLabel variant="in">
+          <FloatLabel variant="on">
             <Textarea
               class="w-100"
               id="cancelReason"
               :invalid="v$.cancelReason.$error"
               v-model="v$.cancelReason.$model"
-              rows="3"
+              rows="4"
             />
             <label for="cancelReason">Please provide a reason</label>
           </FloatLabel>
@@ -430,9 +435,6 @@ const getIcons = (status) => {
 
 //Confirm a pending booking
 const confirmBooking = (id) => {
-  //show loading button
-  changingStatusTo.value = "confirmed";
-
   confirmDialog.require({
     message: "Are you sure you want to confirm this booking?",
     header: "Confirm Booking",
@@ -449,6 +451,8 @@ const confirmBooking = (id) => {
       size: "small",
     },
     accept: () => {
+      //show loading button
+      changingStatusTo.value = "confirmed";
       //change the status of the booking
       //by changing the status to "confirmed"
       let statusUpdate = {
@@ -471,9 +475,6 @@ const confirmBooking = (id) => {
 
 // Mark a confirmed booking as en route
 const enRouteBooking = (id) => {
-  //show loading button
-  changingStatusTo.value = "en route";
-
   confirmDialog.require({
     message:
       "Are you sure you want to mark this booking as en route? This will notify the client that you are on your way.",
@@ -491,6 +492,8 @@ const enRouteBooking = (id) => {
       size: "small",
     },
     accept: () => {
+      //show loading button
+      changingStatusTo.value = "en route";
       // Change the status of the booking
       // by updating the status to "en route"
       let statusUpdate = {
@@ -512,9 +515,6 @@ const enRouteBooking = (id) => {
 };
 // Mark an en route booking as completed
 const completeBooking = (id) => {
-  //show loading button
-  changingStatusTo.value = "completed";
-
   confirmDialog.require({
     message: "Are you sure you want to mark this booking as completed?",
     header: "Complete Booking",
@@ -531,6 +531,8 @@ const completeBooking = (id) => {
       size: "small",
     },
     accept: () => {
+      //show loading button
+      changingStatusTo.value = "completed";
       // Change the status of the booking
       // by updating the status to "completed"
       let statusUpdate = {
@@ -600,8 +602,6 @@ const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
 
 //cancel a booking
 let cancelBooking = (id) => {
-  //show loading button
-  changingStatusTo.value = "cancelled";
   //show text area errors
   v$.value.$touch();
   //show dialog
@@ -610,6 +610,8 @@ let cancelBooking = (id) => {
     message: "Are you sure you want to cancel this booking?",
     header: "Cancel Booking",
     accept: () => {
+      //show loading button
+      changingStatusTo.value = "cancelled";
       //change the status of the booking
       //by changing the status to "cancelled"
       let statusUpdate = {

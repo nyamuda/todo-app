@@ -196,13 +196,13 @@
         <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
         <p class="mb-3">{{ message.message }}</p>
         <div class="w-100">
-          <FloatLabel variant="in">
+          <FloatLabel variant="on">
             <Textarea
               class="w-100"
               id="cancelReason"
               :invalid="v$.cancelReason.$error"
               v-model="v$.cancelReason.$model"
-              rows="3"
+              rows="4"
             />
             <label for="cancelReason">Please provide a reason</label>
           </FloatLabel>
@@ -260,12 +260,12 @@
           >
         </div>
         <div class="w-100">
-          <FloatLabel variant="in">
+          <FloatLabel variant="on">
             <Textarea
               class="w-100"
               id="bookingFeedback"
               v-model="v2$.content.$model"
-              rows="3"
+              rows="4"
             />
             <label for="bookingFeedback">Share your thoughts</label>
           </FloatLabel>
