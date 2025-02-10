@@ -74,7 +74,7 @@ const admin = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (ex) {
-        toast.error("Failed to load bookings.");
+        toast.error("Failed to fetch bookings.");
       } finally {
         state.isGettingBookings = false;
       }
@@ -97,7 +97,7 @@ const admin = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        toast.error("Failed to load completed bookings.");
+        toast.error("Failed to fetch completed bookings.");
       } finally {
         state.isGettingBookings = false;
       }
@@ -119,7 +119,7 @@ const admin = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        toast.error("Failed to load pending bookings.");
+        toast.error("Failed to fetch pending bookings.");
       } finally {
         state.isGettingBookings = false;
       }
@@ -142,7 +142,7 @@ const admin = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
-        toast.error("Failed to load cancelled bookings.");
+        toast.error("Failed to fetch cancelled bookings.");
       } finally {
         state.isGettingBookings = false;
       }
@@ -160,8 +160,11 @@ const admin = {
         );
         //mutate the state with the fetched statistics
         commit("setAdminStatistics", response.data);
-      } catch (error) {
-        toast.error(rootState.failureMessage);
+      } catch (ex) {
+        let message = ex.response
+          ? ex.response.data?.message
+          : rootState.failureMessage;
+        toast.error(message);
       }
     },
 
@@ -192,8 +195,11 @@ const admin = {
 
         //page info
         commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
-        toast.error("Failed to load more bookings.");
+      } catch (ex) {
+        let message = ex.response
+          ? ex.response.data?.message
+          : "Failed to load more bookings.";
+        toast.error(message);
       } finally {
         state.isLoadingMoreBookings = false;
       }
@@ -230,11 +236,29 @@ const admin = {
             toast.error(response.data.message);
           }
         }
-      } catch (err) {
-        toast.error(rootState.failureMessage);
+      } catch (ex) {
+        let message = ex.response
+          ? ex.response.data?.message
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         state.isCreatingBooking = false;
       }
+    },
+    //delete booking
+    deleteBooking({ rootState, dispatch }, id) {
+      dispatch("setAuthorizationHeader");
+      return new Promise((resolve, reject) => {
+        axios
+          .delete(`${rootState.apiUrl}/admin/bookings/${id}`)
+          .then(() => resolve("The booking was successfully deleted."))
+          .catch((ex) => {
+            let message = ex.response
+              ? ex.response.data?.message
+              : rootState.failureMessage;
+            reject(message);
+          });
+      });
     },
 
     //update the booking
@@ -263,8 +287,11 @@ const admin = {
         } else {
           toast.error(rootState.failureMessage);
         }
-      } catch (error) {
-        toast.error(rootState.failureMessage);
+      } catch (ex) {
+        let message = ex.response
+          ? ex.response.data?.message
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         state.isUpdatingBooking = false;
       }
@@ -298,9 +325,11 @@ const admin = {
         } else {
           toast.error(rootState.failureMessage);
         }
-      } catch (error) {
-        console.log(error);
-        toast.error(rootState.failureMessage);
+      } catch (ex) {
+        let message = ex.response
+          ? ex.response.data?.message
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         state.isUpdatingBooking = false;
       }

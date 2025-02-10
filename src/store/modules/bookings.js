@@ -90,8 +90,7 @@ const bookings = {
 
         console.log(response.data);
       } catch (ex) {
-        console.log(ex);
-        toast.error("Failed to load bookings.");
+        toast.error("Failed to fetch bookings.");
       } finally {
         state.isGettingBookings = false;
       }
@@ -262,9 +261,11 @@ const bookings = {
             toast.error(response.data.message);
           }
         }
-      } catch (err) {
-        console.log(err);
-        toast.error(rootState.failureMessage);
+      } catch (ex) {
+        let message = ex.response
+          ? ex.response.data?.message
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         state.isCreatingBooking = false;
       }
@@ -306,9 +307,11 @@ const bookings = {
             toast.error(response.data.message);
           }
         }
-      } catch (err) {
-        console.log(err);
-        toast.error(rootState.failureMessage);
+      } catch (ex) {
+        let message = ex.response
+          ? ex.response.data?.message
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         state.isCreatingBooking = false;
       }
@@ -340,9 +343,11 @@ const bookings = {
         } else {
           toast.error(rootState.failureMessage);
         }
-      } catch (error) {
-        console.log(error);
-        toast.error(rootState.failureMessage);
+      } catch (ex) {
+        let message = ex.response
+          ? ex.response.data?.message
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         state.isUpdatingBooking = false;
       }
@@ -377,9 +382,11 @@ const bookings = {
         } else {
           toast.error(rootState.failureMessage);
         }
-      } catch (error) {
-        console.log(error);
-        toast.error(rootState.failureMessage);
+      } catch (ex) {
+        let message = ex.response
+          ? ex.response.data?.message
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         state.isUpdatingBooking = false;
       }

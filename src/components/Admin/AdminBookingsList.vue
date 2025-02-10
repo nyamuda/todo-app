@@ -137,66 +137,17 @@
                   aria-label="Custom ProgressSpinner"
                 />
                 <!--Button to add feedback-->
-                <div
-                  v-else
-                  class="d-flex flex-column align-items-center justify-content-center gap-2"
-                >
-                  <div>
+                <div v-else>
+                  <router-link
+                    :to="'bookings/' + slotProps.data.id + '/details'"
+                  >
                     <Button
-                      v-if="
-                        slotProps.data.status?.name == 'pending' &&
-                        slotProps.data.status?.name != 'cancelled'
-                      "
-                      size="small"
-                      label="Confirm"
-                      icon="far fa-calendar-check"
-                      severity="info"
-                      aria-label="Confirm"
-                      variant="outlined"
-                      class="no-wrap-btn"
-                      @click="confirmBooking(slotProps.data.id)"
-                    />
-                    <Button
-                      v-else-if="
-                        slotProps.data.status?.name == 'confirmed' &&
-                        slotProps.data.status?.name != 'cancelled'
-                      "
-                      size="small"
-                      label="En route"
-                      icon="fas fa-road"
-                      severity="contrast"
-                      aria-label="En route"
-                      variant="outlined"
-                      class="no-wrap-btn"
-                      @click="sendFeedback(slotProps.data.id)"
-                    />
-                    <Button
-                      v-else-if="
-                        slotProps.data.status?.name == 'en route' &&
-                        slotProps.data.status?.name != 'cancelled'
-                      "
-                      size="small"
-                      label="Complete"
-                      icon="fas fa-circle-check"
-                      severity="success"
-                      aria-label="Complete"
-                      variant="outlined"
-                      class="no-wrap-btn"
-                      @click="sendFeedback(slotProps.data.id)"
-                    />
-                  </div>
-
-                  <div>
-                    <Button
-                      as="router-link"
                       label="More details"
                       severity="secondary"
                       size="small"
                       icon="fas fa-info"
                       class="no-wrap-btn"
-                      :to="'bookings/' + slotProps.data.id + '/details'"
-                    />
-                  </div>
+                  /></router-link>
                 </div>
               </div>
             </template>
@@ -245,7 +196,6 @@
   </div>
 
   <!--Dialogs Section Start-->
-  <ConfirmDialog></ConfirmDialog>
 
   <!--User details dialog start-->
   <Dialog
@@ -273,6 +223,7 @@
   </Dialog>
 
   <!--User details dialog end-->
+
   <!--Dialogs Section End-->
 </template>
 
@@ -283,10 +234,8 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { Tag } from "primevue";
 import Button from "primevue/button";
-import { useConfirm } from "primevue/useconfirm";
-import ConfirmDialog from "primevue/confirmdialog";
-import Dialog from "primevue/dialog";
 
+import Dialog from "primevue/dialog";
 import Skeleton from "primevue/skeleton";
 import Rating from "primevue/rating";
 import ProgressSpinner from "primevue/progressspinner";
@@ -301,7 +250,6 @@ const store = useStore();
 
 let filterBookingsBy = ref("all");
 
-const confirmDialog = useConfirm();
 let bookings = computed(() => store.state.admin.bookings);
 let statuses = computed(() => store.state.statuses.statuses);
 let isGettingBookings = computed(() => store.state.admin.isGettingBookings);
@@ -356,6 +304,8 @@ let hasMoreBookings = computed(
 const getSeverity = (status) => {
   let value = status ? status.toLowerCase() : "";
   switch (value) {
+    case "en route":
+      return "secondary";
     case "completed":
       return "success"; // Green
     case "confirmed":
@@ -373,6 +323,8 @@ const getSeverity = (status) => {
 const getIcons = (status) => {
   let value = status ? status.toLowerCase() : "";
   switch (value) {
+    case "en route":
+      return "fas fa-road";
     case "completed":
       return "fas fa-check-circle";
     case "confirmed":
@@ -389,38 +341,6 @@ const getIcons = (status) => {
 let showUserInfo = (user) => {
   selectedUser.value = user;
   showSelectedUser.value = true;
-};
-
-const confirmBooking = (id) => {
-  selectedBookingId.value = id; //show loader for in the row of the of the booking
-
-  confirmDialog.require({
-    message: "Are you sure you want to confirm this booking?",
-    header: "Confirm Booking",
-    icon: "fas fa-triangle-exclamation",
-    rejectProps: {
-      label: "Cancel",
-      severity: "secondary",
-      outlined: true,
-      size: "small",
-    },
-    acceptProps: {
-      label: "Confirm booking",
-      severity: "info",
-      size: "small",
-    },
-    accept: () => {
-      //change the status of the booking
-      //by changing the status to "confirmed"
-      let statusUpdate = {
-        statusName: "confirmed",
-      };
-      store.dispatch("admin/changeBookingStatus", {
-        bookingId: id,
-        statusUpdate,
-      });
-    },
-  });
 };
 </script>
 

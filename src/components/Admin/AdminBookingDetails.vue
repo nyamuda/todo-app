@@ -84,7 +84,6 @@
             <i class="fas fa-calendar-check me-1 text-primary"></i>
             Booking Details
           </p>
-          <Rating :value="booking.feedback?.rating" readonly />
         </template>
 
         <template #content>
@@ -149,7 +148,7 @@
                 ><strong>Additional Notes:</strong>
                 {{ booking.additionalNotes }}
               </p>
-              <p v-if="booking?.status.name === 'cancelled'">
+              <p v-if="booking?.status.name == 'cancelled'">
                 <i class="fas fa-ban me-1"></i
                 ><strong>Cancellation Reason:</strong>
                 {{ booking.cancelReason }}
@@ -195,7 +194,7 @@
           label="Confirm Booking"
           icon="far fa-calendar-check"
           severity="info"
-          @click="confirmBooking"
+          @click="confirmBooking(booking.id)"
           size="small"
         />
 
@@ -204,7 +203,15 @@
           label="Mark as En Route"
           icon="fas fa-road"
           severity="contrast"
-          @click="markEnRoute"
+          @click="enRouteBooking(booking.id)"
+          size="small"
+        />
+        <Button
+          v-if="booking?.status.name === 'en route'"
+          label="Complete"
+          icon="fas fa-circle-check"
+          severity="success"
+          @click="completeBooking(booking.id)"
           size="small"
         />
 
@@ -213,11 +220,12 @@
           label="Cancel Booking"
           icon="fas fa-times-circle"
           severity="warn"
-          @click="cancelBooking"
+          @click="cancelBooking(booking.id)"
           size="small"
         />
 
         <Button
+          v-if="booking?.status.name !== 'cancelled'"
           label="Edit Booking"
           icon="fas fa-edit"
           variant="outlined"
@@ -230,12 +238,62 @@
           label="Delete Booking"
           icon="fas fa-trash"
           severity="danger"
-          @click="deleteBooking"
+          @click="deleteBooking(booking.id)"
           size="small"
         />
       </div>
     </div>
   </div>
+  <!--Confirm dialog-->
+  <ConfirmDialog></ConfirmDialog>
+  <!--Cancel Dialog Start-->
+  <ConfirmDialog group="cancel">
+    <template #container="{ message, acceptCallback, rejectCallback }">
+      <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
+        <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
+        <p class="mb-3">{{ message.message }}</p>
+        <div class="w-100">
+          <FloatLabel variant="in">
+            <Textarea
+              class="w-100"
+              id="cancelReason"
+              :invalid="v$.cancelReason.$error"
+              v-model="v$.cancelReason.$model"
+              rows="3"
+            />
+            <label for="cancelReason">Please provide a reason</label>
+          </FloatLabel>
+
+          <Message
+            v-if="v$.cancelReason.$error"
+            severity="error"
+            size="small"
+            variant="simple"
+            ><div v-for="error of v$.cancelReason.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div></Message
+          >
+        </div>
+        <div class="d-flex align-items-center justify-content-end mt-2 w-100">
+          <Button
+            class="me-3"
+            label="Never mind"
+            size="small"
+            severity="contrast"
+            @click="rejectCallback"
+          ></Button>
+          <Button
+            :disabled="v$.cancelReason.$error"
+            label="Yes, cancel booking"
+            severity="danger"
+            size="small"
+            @click="acceptCallback"
+          ></Button>
+        </div>
+      </div>
+    </template>
+  </ConfirmDialog>
+  <!--Cancel Dialog End-->
 </template>
 
 <script setup>
@@ -249,6 +307,13 @@ import Skeleton from "primevue/skeleton";
 import { Tag } from "primevue";
 import dateFormat from "dateformat";
 import Rating from "primevue/rating";
+import { useConfirm } from "primevue/useconfirm";
+import ConfirmDialog from "primevue/confirmdialog";
+import { useVuelidate } from "@vuelidate/core";
+import { required, minLength } from "@vuelidate/validators";
+import { FloatLabel } from "primevue";
+import Textarea from "primevue/textarea";
+import { Message } from "primevue";
 
 //toast
 const toast = useToast();
@@ -256,6 +321,7 @@ const toast = useToast();
 const store = useStore();
 //The route
 const route = useRouter();
+const confirmDialog = useConfirm();
 
 let id = ref(null);
 let isGettingBooking = ref(false);
@@ -281,25 +347,8 @@ onMounted(async () => {
   }
 });
 
-// Button action handlers (implement logic here)
-const confirmBooking = () => {
-  // Logic to confirm booking and send email
-};
-
-const markEnRoute = () => {
-  // Logic to mark en route and send email
-};
-
-const cancelBooking = () => {
-  // Logic to cancel booking, ask for reason, and send email
-};
-
 const editBooking = () => {
   // Logic to edit the booking
-};
-
-const deleteBooking = () => {
-  // Logic to delete booking
 };
 
 //Severity of the pills
@@ -335,6 +384,165 @@ const getIcons = (status) => {
       return "";
   }
 };
+
+//Confirm a pending booking
+const confirmBooking = (id) => {
+  confirmDialog.require({
+    message: "Are you sure you want to confirm this booking?",
+    header: "Confirm Booking",
+    icon: "fas fa-triangle-exclamation",
+    rejectProps: {
+      label: "Cancel",
+      severity: "secondary",
+      outlined: true,
+      size: "small",
+    },
+    acceptProps: {
+      label: "Confirm booking",
+      severity: "info",
+      size: "small",
+    },
+    accept: () => {
+      //change the status of the booking
+      //by changing the status to "confirmed"
+      let statusUpdate = {
+        statusName: "confirmed",
+      };
+      store.dispatch("admin/changeBookingStatus", {
+        bookingId: id,
+        statusUpdate,
+      });
+    },
+  });
+};
+
+// Mark a confirmed booking as en route
+const enRouteBooking = (id) => {
+  confirmDialog.require({
+    message:
+      "Are you sure you want to mark this booking as en route? This will notify the client that you are on your way.",
+    header: "Mark as En Route",
+    icon: "fas fa-road",
+    rejectProps: {
+      label: "Cancel",
+      severity: "secondary",
+      outlined: true,
+      size: "small",
+    },
+    acceptProps: {
+      label: "Mark as En Route",
+      severity: "contrast",
+      size: "small",
+    },
+    accept: () => {
+      // Change the status of the booking
+      // by updating the status to "en route"
+      let statusUpdate = {
+        statusName: "en route",
+      };
+      store.dispatch("admin/changeBookingStatus", {
+        bookingId: id,
+        statusUpdate,
+      });
+    },
+  });
+};
+// Mark an en route booking as completed
+const completeBooking = (id) => {
+  confirmDialog.require({
+    message: "Are you sure you want to mark this booking as completed?",
+    header: "Complete Booking",
+    icon: "fas fa-check-circle",
+    rejectProps: {
+      label: "Cancel",
+      severity: "secondary",
+      outlined: true,
+      size: "small",
+    },
+    acceptProps: {
+      label: "Mark as Completed",
+      severity: "success",
+      size: "small",
+    },
+    accept: () => {
+      // Change the status of the booking
+      // by updating the status to "completed"
+      let statusUpdate = {
+        statusName: "completed",
+      };
+      store.dispatch("admin/changeBookingStatus", {
+        bookingId: id,
+        statusUpdate,
+      });
+    },
+  });
+};
+// Delete a booking
+const deleteBooking = (id) => {
+  confirmDialog.require({
+    message: "Are you sure you want to delete this booking?",
+    header: "Delete Booking",
+    icon: "fas fa-trash",
+    rejectProps: {
+      label: "Cancel",
+      severity: "secondary",
+      outlined: true,
+      size: "small",
+    },
+    acceptProps: {
+      label: "Delete",
+      severity: "danger",
+      size: "small",
+    },
+    accept: () => {
+      // Dispatch action to delete booking
+      store
+        .dispatch("admin/deleteBooking", id)
+        .then((response) => toast.success(response))
+        .catch((ex) => toast.error(ex));
+    },
+  });
+};
+
+//Form validation with Vuelidate start
+//cancel reason data
+const reasonToCancelForm = ref({
+  cancelReason: "",
+});
+
+const cancelRules = {
+  cancelReason: { required, minLengthValue: minLength(5) },
+};
+
+//for cancellation
+const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
+
+//cancel a booking
+let cancelBooking = (id) => {
+  //show text area errors
+  v$.value.$touch();
+  //show dialog
+  confirmDialog.require({
+    group: "cancel",
+    message: "Are you sure you want to cancel this booking?",
+    header: "Cancel Booking",
+    accept: () => {
+      //change the status of the booking
+      //by changing the status to "cancelled"
+      let statusUpdate = {
+        statusName: "cancelled",
+        cancelReason: reasonToCancelForm.value.cancelReason,
+      };
+
+      //save the updated booking
+      store.dispatch("admin/changeBookingStatus", {
+        bookingId: id,
+        statusUpdate,
+      });
+    },
+  });
+};
+//Form validation with Vuelidate end
 </script>
 
 <style scoped>
