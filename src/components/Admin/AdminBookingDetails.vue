@@ -219,7 +219,10 @@
         />
 
         <Button
-          v-if="booking?.status.name !== 'cancelled'"
+          v-if="
+            booking?.status.name !== 'cancelled' ||
+            booking?.status.name !== 'completed'
+          "
           label="Cancel Booking"
           icon="fas fa-times-circle"
           severity="warn"
