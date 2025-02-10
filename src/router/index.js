@@ -25,6 +25,7 @@ import StatusesView from "@/views/Statuses/StatusesView.vue";
 import StatusesList from "@/components/Statuses/StatusesList.vue";
 import AddStatus from "@/components/Statuses/AddStatus.vue";
 import UpdateStatus from "@/components/Statuses/UpdateStatus.vue";
+import AdminBookingDetails from "@/components/Admin/AdminBookingDetails.vue";
 
 const routes = [
   {
@@ -227,6 +228,11 @@ const routes = [
         path: "bookings",
         name: "AdminBookingList",
         component: AdminBookingsList,
+      },
+      {
+        path: "bookings/:id/details",
+        name: "AdminBookingDetails",
+        component: AdminBookingDetails,
       },
     ],
   },
