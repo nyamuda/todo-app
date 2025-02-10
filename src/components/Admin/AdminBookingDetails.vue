@@ -1,146 +1,181 @@
 <template>
-  <div class="">
-    <!-- Booking Details Card -->
-    <Card class="">
-      <template #title>
-        <p class="h1 mb-3">
-          <i class="fas fa-calendar-check me-1 text-primary"></i>
-          Booking Details
-        </p>
-      </template>
+  <div v-if="isGettingBooking">
+    <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
+  </div>
+  <div v-else>
+    <div v-if="booking">
+      <!-- Booking Details Card -->
+      <Card class="">
+        <template #title>
+          <p class="h1 mb-3">
+            <i class="fas fa-calendar-check me-1 text-primary"></i>
+            Booking Details
+          </p>
+        </template>
 
-      <template #content>
-        <div class="row">
-          <!-- Left Column -->
-          <div class="col-md-6">
-            <p>
-              <i class="fas fa-car me-1"></i> <strong>Vehicle Type:</strong>
-              {{ booking.vehicleType }}
-            </p>
-            <p>
-              <i class="fas fa-cogs me-1"></i> <strong>Service Type:</strong>
-              {{ booking.serviceType }}
-            </p>
-            <p>
-              <i class="fas fa-envelope me-1"></i>
-              <strong>Client Email:</strong>
-              {{ booking.email }}
-            </p>
-            <p>
-              <i class="fas fa-phone me-1"></i> <strong>Client Phone:</strong>
-              {{ booking.phone }}
-            </p>
+        <template #content>
+          <div class="row">
+            <!-- Left Column -->
+            <div class="col-md-6">
+              <p>
+                <i class="fas fa-user me-1"></i><strong>Client Name:</strong>
+                {{ booking.user ? booking.user.name : booking.guestUser.name }}
+              </p>
+              <p>
+                <i class="fas fa-envelope me-1"></i
+                ><strong>Client Email:</strong>
+                {{
+                  booking.user ? booking.user.email : booking.guestUser.email
+                }}
+              </p>
+              <p>
+                <i class="fas fa-phone me-1"></i><strong>Client Phone:</strong>
+                {{
+                  booking.user ? booking.user.phone : booking.guestUser.phone
+                }}
+              </p>
+              <p>
+                <i class="fas fa-car me-1"></i><strong>Vehicle Type:</strong>
+                {{ booking.vehicleType }}
+              </p>
+              <p>
+                <i class="fas fa-cogs me-1"></i><strong>Service Type:</strong>
+                {{ booking.serviceType.name }}
+              </p>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6">
+              <p>
+                <i class="fas fa-map-marker-alt me-1"></i
+                ><strong>Vehicle Location:</strong> {{ booking.location }}
+              </p>
+              <p>
+                <i class="fas fa-calendar-alt me-1"></i>
+                <strong>Scheduled At:</strong>
+                {{
+                  dateFormat(
+                    booking.scheduledAt,
+                    "dddd, mmmm dS, yyyy, h:MM TT"
+                  )
+                }}
+              </p>
+              <p>
+                <i class="fas fa-info-circle me-1"></i><strong>Status:</strong>
+                <Tag
+                  :icon="getIcons(booking.status?.name)"
+                  rounded
+                  :value="booking.status?.name"
+                  :severity="getSeverity(booking.status?.name)"
+                  class="ms-2"
+                />
+              </p>
+              <p v-if="booking.notes">
+                <i class="fas fa-sticky-note me-1"></i
+                ><strong>Additional Notes:</strong>
+                {{ booking.additionalNotes }}
+              </p>
+              <p v-if="booking?.status.name === 'cancelled'">
+                <i class="fas fa-ban me-1"></i
+                ><strong>Cancellation Reason:</strong>
+                {{ booking.cancelReason }}
+              </p>
+            </div>
           </div>
+        </template>
+      </Card>
 
-          <!-- Right Column -->
-          <div class="col-md-6">
-            <p>
-              <i class="fas fa-map-marker-alt me-1"></i>
-              <strong>Vehicle Location:</strong> {{ booking.location }}
-            </p>
-            <p>
-              <i class="fas fa-calendar-alt me-1"></i>
-              <strong>Scheduled At:</strong>
-              {{ formatDate(booking.scheduledAt) }}
-            </p>
-            <p>
-              <i class="fas fa-info-circle me-1"></i> <strong>Status:</strong>
-              <Badge :value="booking.status" :class="statusBadgeClass" />
-            </p>
-            <p v-if="booking.notes">
-              <i class="fas fa-sticky-note me-1"></i>
-              <strong>Additional Notes:</strong> {{ booking.notes }}
-            </p>
-            <p v-if="booking.status === 'cancelled'">
-              <i class="fas fa-ban me-1"></i>
-              <strong>Cancellation Reason:</strong>
-              {{ booking.cancellationReason }}
-            </p>
-          </div>
-        </div>
-      </template>
-    </Card>
+      <!-- Action Buttons -->
+      <div
+        class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2"
+      >
+        <Button
+          v-if="booking?.status.name === 'pending'"
+          label="Confirm Booking"
+          icon="far fa-calendar-check"
+          severity="info"
+          @click="confirmBooking"
+          size="small"
+        />
 
-    <!-- Action Buttons -->
-    <div class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2">
-      <Button
-        v-if="booking.status === 'pending'"
-        label="Confirm Booking"
-        icon="far fa-calendar-check"
-        severity="info"
-        @click="confirmBooking"
-      />
+        <Button
+          v-if="booking?.status.name === 'confirmed'"
+          label="Mark as En Route"
+          icon="fas fa-road"
+          severity="contrast"
+          @click="markEnRoute"
+          size="small"
+        />
 
-      <Button
-        v-if="booking.status === 'pending'"
-        label="Mark as En Route"
-        icon="fas fa-road"
-        severity="contrast"
-        @click="markEnRoute"
-      />
+        <Button
+          v-if="booking?.status.name !== 'cancelled'"
+          label="Cancel Booking"
+          icon="fas fa-times-circle"
+          severity="warn"
+          @click="cancelBooking"
+          size="small"
+        />
 
-      <Button
-        v-if="booking.status !== 'cancelled'"
-        label="Cancel Booking"
-        icon="fas fa-times-circle"
-        severity="warn"
-        @click="cancelBooking"
-      />
+        <Button
+          label="Edit Booking"
+          icon="fas fa-edit"
+          variant="outlined"
+          severity="contrast"
+          @click="editBooking"
+          size="small"
+        />
 
-      <Button
-        label="Edit Booking"
-        icon="fas fa-edit"
-        variant="outlined"
-        severity="contrast"
-        @click="editBooking"
-      />
-
-      <Button
-        label="Delete Booking"
-        icon="fas fa-trash"
-        severity="danger"
-        @click="deleteBooking"
-      />
+        <Button
+          label="Delete Booking"
+          icon="fas fa-trash"
+          severity="danger"
+          @click="deleteBooking"
+          size="small"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, onMounted } from "vue";
 import Card from "primevue/card";
 import Button from "primevue/button";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { useToast } from "vue-toastification";
+import ProgressBar from "primevue/progressbar";
+import { Tag } from "primevue";
+import dateFormat from "dateformat";
 
-const booking = ref({
-  vehicleType: "Sedan",
-  serviceType: "Full Wash",
-  email: "client@example.com",
-  phone: "+1234567890",
-  location: "123 Main St, Cityville",
-  scheduledAt: "2025-02-10T15:30:00Z",
-  status: "pending", // Options: pending, confirmed, enroute, cancelled
-  notes: "Please be careful with the paint",
-  cancellationReason: "",
-});
+//toast
+const toast = useToast();
+// Access the store
+const store = useStore();
+//The route
+const route = useRouter();
 
-// Format date for better readability
-const formatDate = (dateStr) => {
-  const date = new Date(dateStr);
-  return date.toLocaleString();
-};
+let id = ref(null);
+let isGettingBooking = ref(false);
+let booking = ref(null);
 
-// Dynamic status badge class
-const statusBadgeClass = computed(() => {
-  switch (booking.value.status) {
-    case "pending":
-      return "badge bg-warning text-dark";
-    case "confirmed":
-      return "badge bg-primary";
-    case "enroute":
-      return "badge bg-info";
-    case "cancelled":
-      return "badge bg-danger";
-    default:
-      return "badge bg-secondary";
+onMounted(async () => {
+  //get the route parameter
+  id.value = route.currentRoute.value.params.id;
+
+  //get the booking details from the API
+  if (id.value) {
+    isGettingBooking.value = true;
+    store
+      .dispatch("bookings/getBooking", id.value)
+      .then((data) => {
+        booking.value = data;
+        isGettingBooking.value = false;
+      })
+      .catch((message) => {
+        toast.error(message);
+        isGettingBooking.value = false;
+      });
   }
 });
 
@@ -163,6 +198,40 @@ const editBooking = () => {
 
 const deleteBooking = () => {
   // Logic to delete booking
+};
+
+//Severity of the pills
+const getSeverity = (status) => {
+  let value = status ? status.toLowerCase() : "";
+  switch (value) {
+    case "completed":
+      return "success"; // Green
+    case "confirmed":
+      return "info"; // Blue
+    case "pending":
+      return "warn"; // Yellow
+    case "cancelled":
+      return "danger"; // Red
+    default:
+      return "secondary";
+  }
+};
+
+//Icons for pills
+const getIcons = (status) => {
+  let value = status ? status.toLowerCase() : "";
+  switch (value) {
+    case "completed":
+      return "fas fa-check-circle";
+    case "confirmed":
+      return "fas fa-calendar-check";
+    case "pending":
+      return "fas fa-hourglass-half";
+    case "cancelled":
+      return "fas fa-times-circle";
+    default:
+      return "";
+  }
 };
 </script>
 

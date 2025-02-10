@@ -36,10 +36,10 @@
           </Column>
 
           <!-- <Column field="location" header="Location">
-            <template #body>
-              <Skeleton></Skeleton>
-            </template>
-          </Column> -->
+						<template #body>
+							<Skeleton></Skeleton>
+						</template>
+					</Column> -->
           <Column field="scheduledAt" header="Scheduled At">
             <template #body>
               <Skeleton></Skeleton>
@@ -188,11 +188,13 @@
 
                   <div>
                     <Button
+                      as="router-link"
                       label="More details"
                       severity="secondary"
                       size="small"
                       icon="fas fa-info"
                       class="no-wrap-btn"
+                      :to="'bookings/' + slotProps.data.id + '/details'"
                     />
                   </div>
                 </div>

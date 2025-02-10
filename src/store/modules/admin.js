@@ -9,6 +9,7 @@ const admin = {
     isGettingBookings: false, //to show placeholder bookings
     isCreatingBooking: false, //to show the loading button during task creation
     isUpdatingBooking: false, //to show the loading button during task completion
+
     bookingsPageInfo: {
       //page info for lazy loading
       page: 1, //current page size

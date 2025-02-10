@@ -97,12 +97,15 @@ const bookings = {
       }
     },
     //get booking by ID
-    getBooking({ rootState }, id) {
+    getBooking({ rootState, dispatch }, id) {
+      dispatch("setAuthorizationHeader");
       return new Promise((resolve, reject) => {
         axios
           .get(`${rootState.apiUrl}/bookings/${id}`)
           .then((response) => resolve(response.data))
-          .catch(() => reject(rootState.failureMessage));
+          .catch(() => {
+            reject(rootState.failureMessage);
+          });
       });
     },
 
