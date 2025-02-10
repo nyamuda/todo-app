@@ -1,13 +1,69 @@
 <template>
+  <!--Details skeleton start-->
   <div v-if="isGettingBooking">
-    <ProgressBar mode="indeterminate" style="height: 6px"></ProgressBar>
+    <Card>
+      <template #title>
+        <Skeleton width="30%" height="2.5rem" class="mb-3" />
+      </template>
+      <template #content>
+        <div class="row">
+          <!-- Left Column -->
+          <div class="col-md-6">
+            <p>
+              <Skeleton width="80%" height="1.5rem" />
+            </p>
+            <p>
+              <Skeleton width="70%" height="1.5rem" />
+            </p>
+            <p>
+              <Skeleton width="60%" height="1.5rem" />
+            </p>
+            <p>
+              <Skeleton width="50%" height="1.5rem" />
+            </p>
+            <p>
+              <Skeleton width="50%" height="1.5rem" />
+            </p>
+          </div>
+
+          <!-- Right Column -->
+          <div class="col-md-6">
+            <p>
+              <Skeleton width="80%" height="1.5rem" />
+            </p>
+            <p>
+              <Skeleton width="70%" height="1.5rem" />
+            </p>
+            <p>
+              <Skeleton width="20%" height="1.5rem" />
+            </p>
+            <p>
+              <Skeleton width="90%" height="1.5rem" />
+            </p>
+            <p>
+              <Skeleton width="90%" height="1.5rem" />
+            </p>
+          </div>
+        </div>
+      </template>
+    </Card>
+
+    <!-- Skeleton for Action Buttons -->
+    <div class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2">
+      <Skeleton width="120px" height="2rem" />
+      <Skeleton width="120px" height="2rem" />
+      <Skeleton width="120px" height="2rem" />
+      <Skeleton width="120px" height="2rem" />
+      <Skeleton width="120px" height="2rem" />
+    </div>
   </div>
+  <!--Details skeleton end-->
   <div v-else>
     <div v-if="booking">
       <!-- Booking Details Card -->
       <Card class="">
         <template #title>
-          <p class="h1 mb-3">
+          <p class="h1 mb-3 d-flex align-items-center">
             <i class="fas fa-calendar-check me-1 text-primary"></i>
             Booking Details
           </p>
@@ -70,7 +126,7 @@
                   class="ms-2"
                 />
               </p>
-              <p v-if="booking.notes">
+              <p v-if="booking.additionalNotes">
                 <i class="fas fa-sticky-note me-1"></i
                 ><strong>Additional Notes:</strong>
                 {{ booking.additionalNotes }}
@@ -144,7 +200,7 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { useToast } from "vue-toastification";
-import ProgressBar from "primevue/progressbar";
+import Skeleton from "primevue/skeleton";
 import { Tag } from "primevue";
 import dateFormat from "dateformat";
 
