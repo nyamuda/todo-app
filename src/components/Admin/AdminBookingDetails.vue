@@ -235,6 +235,7 @@
         />
 
         <Button
+          :loading="isDeletingBooking"
           label="Delete Booking"
           icon="fas fa-trash"
           severity="danger"
@@ -285,7 +286,7 @@
           <Button
             :disabled="v$.cancelReason.$error"
             label="Yes, cancel booking"
-            severity="danger"
+            severity="warn"
             size="small"
             @click="acceptCallback"
           ></Button>
@@ -325,6 +326,7 @@ const confirmDialog = useConfirm();
 
 let id = ref(null);
 let isGettingBooking = ref(false);
+let isDeletingBooking = ref(false);
 let booking = ref(null);
 
 onMounted(async () => {
@@ -495,14 +497,19 @@ const deleteBooking = (id) => {
       size: "small",
     },
     accept: () => {
+      isDeletingBooking.value = true;
       // Dispatch action to delete booking
       store
         .dispatch("admin/deleteBooking", id)
         .then((response) => {
+          isDeletingBooking.value = false;
           toast.success(response);
           route.push("/admin/bookings");
         })
-        .catch((ex) => toast.error(ex));
+        .catch((ex) => {
+          isDeletingBooking.value = false;
+          toast.error(ex);
+        });
     },
   });
 };
