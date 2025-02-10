@@ -35,11 +35,11 @@
             </template>
           </Column>
 
-          <Column field="location" header="Location">
+          <!-- <Column field="location" header="Location">
             <template #body>
               <Skeleton></Skeleton>
             </template>
-          </Column>
+          </Column> -->
           <Column field="scheduledAt" header="Scheduled At">
             <template #body>
               <Skeleton></Skeleton>
@@ -82,6 +82,7 @@
                 :badgeSeverity="slotProps.data.user ? 'success' : 'warn'"
                 variant="outlined"
                 severity="secondary"
+                class="no-wrap-btn"
                 @click="
                   showUserInfo(
                     slotProps.data.user
@@ -93,7 +94,7 @@
             </template>
           </Column>
 
-          <Column field="location" header="Location"></Column>
+          <!-- <Column field="location" header="Location"></Column> -->
           <Column field="scheduledAt" header="Scheduled At">
             <!--Format the date-->
             <template #body="slotProps">
@@ -138,54 +139,62 @@
                 <!--Button to add feedback-->
                 <div
                   v-else
-                  class="d-flex justify-content-evenly gap-2 align-items-center"
+                  class="d-flex flex-column align-items-center justify-content-center gap-2"
                 >
-                  <Button
-                    v-if="
-                      slotProps.data.status?.name == 'pending' &&
-                      slotProps.data.status?.name != 'cancelled'
-                    "
-                    size="small"
-                    label="Confirm"
-                    icon="far fa-calendar-check"
-                    severity="info"
-                    aria-label="Confirm"
-                    variant="outlined"
-                    @click="confirmBooking(slotProps.data.id)"
-                  />
-                  <Button
-                    v-else-if="
-                      slotProps.data.status?.name == 'confirmed' &&
-                      slotProps.data.status?.name != 'cancelled'
-                    "
-                    size="small"
-                    label="En route"
-                    icon="fas fa-road"
-                    severity="contrast"
-                    aria-label="En route"
-                    variant="outlined"
-                    @click="sendFeedback(slotProps.data.id)"
-                  />
-                  <Button
-                    v-else-if="
-                      slotProps.data.status?.name == 'en route' &&
-                      slotProps.data.status?.name != 'cancelled'
-                    "
-                    size="small"
-                    label="Complete"
-                    icon="fas fa-circle-check"
-                    severity="success"
-                    aria-label="Complete"
-                    variant="outlined"
-                    @click="sendFeedback(slotProps.data.id)"
-                  />
+                  <div>
+                    <Button
+                      v-if="
+                        slotProps.data.status?.name == 'pending' &&
+                        slotProps.data.status?.name != 'cancelled'
+                      "
+                      size="small"
+                      label="Confirm"
+                      icon="far fa-calendar-check"
+                      severity="info"
+                      aria-label="Confirm"
+                      variant="outlined"
+                      class="no-wrap-btn"
+                      @click="confirmBooking(slotProps.data.id)"
+                    />
+                    <Button
+                      v-else-if="
+                        slotProps.data.status?.name == 'confirmed' &&
+                        slotProps.data.status?.name != 'cancelled'
+                      "
+                      size="small"
+                      label="En route"
+                      icon="fas fa-road"
+                      severity="contrast"
+                      aria-label="En route"
+                      variant="outlined"
+                      class="no-wrap-btn"
+                      @click="sendFeedback(slotProps.data.id)"
+                    />
+                    <Button
+                      v-else-if="
+                        slotProps.data.status?.name == 'en route' &&
+                        slotProps.data.status?.name != 'cancelled'
+                      "
+                      size="small"
+                      label="Complete"
+                      icon="fas fa-circle-check"
+                      severity="success"
+                      aria-label="Complete"
+                      variant="outlined"
+                      class="no-wrap-btn"
+                      @click="sendFeedback(slotProps.data.id)"
+                    />
+                  </div>
 
-                  <Button
-                    label="Details"
-                    severity="secondary"
-                    size="small"
-                    icon="fas fa-info"
-                  />
+                  <div>
+                    <Button
+                      label="More details"
+                      severity="secondary"
+                      size="small"
+                      icon="fas fa-info"
+                      class="no-wrap-btn"
+                    />
+                  </div>
                 </div>
               </div>
             </template>
@@ -419,6 +428,9 @@ const confirmBooking = (id) => {
 }
 .modal {
   animation: fadeIn 0.3s ease-in-out;
+}
+.no-wrap-btn {
+  white-space: nowrap;
 }
 /* Animation */
 @keyframes fadeIn {
