@@ -9,7 +9,6 @@ const admin = {
     isGettingBookings: false, //to show placeholder bookings
     isCreatingBooking: false, //to show the loading button during task creation
     isUpdatingBooking: false, //to show the loading button during task completion
-    isChangingBookingStatus: false,
 
     bookingsPageInfo: {
       //page info for lazy loading
@@ -297,43 +296,32 @@ const admin = {
         state.isUpdatingBooking = false;
       }
     },
-    //change booking status
-    async changeBookingStatus({ dispatch, state, rootState, commit }, payload) {
-      try {
-        state.isChangingBookingStatus = true;
-        let { bookingId, statusUpdate } = payload;
 
+    //change booking status
+    changeBookingStatus({ dispatch, rootState }, payload) {
+      let { bookingId, statusUpdate } = payload;
+
+      return new Promise((resolve, reject) => {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.put(
-          `${rootState.apiUrl}/admin/bookings/${bookingId}/statuses`,
-          statusUpdate
-        );
-        // Check if the request was successful
-        //status code will be 204 from the API
-        if (response.status == 204) {
-          //update the status the of a booking without reloading the bookings from the API
-          commit("updateBookingStatus", {
-            id: bookingId,
-            status: statusUpdate.statusName,
-          });
+        axios
+          .put(
+            `${rootState.apiUrl}/admin/bookings/${bookingId}/statuses`,
+            statusUpdate
+          )
+          .then(() => {
+            let message = `The booking status has been changed to ${statusUpdate.statusName}.`;
+            resolve(message);
+          })
 
-          //show toast success message
-          let message = `The booking status has been changed to ${statusUpdate.statusName}.`;
-          toast.success(message);
-        } else {
-          toast.error(rootState.failureMessage);
-        }
-      } catch (ex) {
-        let message = ex.response
-          ? ex.response.data?.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isChangingBookingStatus = false;
-      }
+          .catch((ex) => {
+            let message = ex.response
+              ? ex.response.data?.message
+              : rootState.failureMessage;
+            reject(message);
+          });
+      });
     },
 
     //Set authorization header for all request to access protected routes from the API

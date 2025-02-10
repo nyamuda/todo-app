@@ -196,7 +196,7 @@
           severity="info"
           @click="confirmBooking(booking.id)"
           size="small"
-          :loading="isChangingBookingStatus"
+          :loading="isChangingBookingStatus == 'confirmed'"
         />
 
         <Button
@@ -206,7 +206,7 @@
           severity="contrast"
           @click="enRouteBooking(booking.id)"
           size="small"
-          :loading="isChangingBookingStatus"
+          :loading="isChangingBookingStatus == 'en route'"
         />
         <Button
           v-if="booking?.status.name === 'en route'"
@@ -215,7 +215,7 @@
           severity="success"
           @click="completeBooking(booking.id)"
           size="small"
-          :loading="isChangingBookingStatus"
+          :loading="isChangingBookingStatus == 'completed'"
         />
 
         <Button
@@ -228,7 +228,7 @@
           severity="warn"
           @click="cancelBooking(booking.id)"
           size="small"
-          :loading="isChangingBookingStatus"
+          :loading="isChangingBookingStatus == 'cancelled'"
         />
 
         <Button
@@ -353,9 +353,21 @@ const confirmDialog = useConfirm();
 let id = ref(null);
 let isGettingBooking = ref(false);
 let isDeletingBooking = ref(false);
-let isChangingBookingStatus = computed(
-  () => store.state.admin.isChangingBookingStatus
-);
+let changingStatusTo = ref(null); // the status that the booking is currently being updated to
+
+//for showing the loader on a button depending on which status the booking is being changed to
+let isChangingBookingStatus = computed(() => {
+  let status = changingStatusTo.value;
+  return status == "en route"
+    ? "en route"
+    : status == "cancelled"
+    ? "cancelled"
+    : status == "confirmed"
+    ? "confirmed"
+    : status == "completed"
+    ? "completed"
+    : null;
+});
 let booking = ref(null);
 
 onMounted(async () => {
@@ -418,6 +430,9 @@ const getIcons = (status) => {
 
 //Confirm a pending booking
 const confirmBooking = (id) => {
+  //show loading button
+  changingStatusTo.value = "confirmed";
+
   confirmDialog.require({
     message: "Are you sure you want to confirm this booking?",
     header: "Confirm Booking",
@@ -439,16 +454,26 @@ const confirmBooking = (id) => {
       let statusUpdate = {
         statusName: "confirmed",
       };
-      store.dispatch("admin/changeBookingStatus", {
-        bookingId: id,
-        statusUpdate,
-      });
+      store
+        .dispatch("admin/changeBookingStatus", {
+          bookingId: id,
+          statusUpdate,
+        })
+        .then((response) => {
+          toast.success(response);
+          //update the status of the current booking without refreshing the page
+          booking.value.status.name = statusUpdate.statusName;
+        })
+        .catch((ex) => toast.error(ex));
     },
   });
 };
 
 // Mark a confirmed booking as en route
 const enRouteBooking = (id) => {
+  //show loading button
+  changingStatusTo.value = "en route";
+
   confirmDialog.require({
     message:
       "Are you sure you want to mark this booking as en route? This will notify the client that you are on your way.",
@@ -471,15 +496,25 @@ const enRouteBooking = (id) => {
       let statusUpdate = {
         statusName: "en route",
       };
-      store.dispatch("admin/changeBookingStatus", {
-        bookingId: id,
-        statusUpdate,
-      });
+      store
+        .dispatch("admin/changeBookingStatus", {
+          bookingId: id,
+          statusUpdate,
+        })
+        .then((response) => {
+          toast.success(response);
+          //update the status of the current booking without refreshing the page
+          booking.value.status.name = statusUpdate.statusName;
+        })
+        .catch((ex) => toast.error(ex));
     },
   });
 };
 // Mark an en route booking as completed
 const completeBooking = (id) => {
+  //show loading button
+  changingStatusTo.value = "completed";
+
   confirmDialog.require({
     message: "Are you sure you want to mark this booking as completed?",
     header: "Complete Booking",
@@ -501,10 +536,17 @@ const completeBooking = (id) => {
       let statusUpdate = {
         statusName: "completed",
       };
-      store.dispatch("admin/changeBookingStatus", {
-        bookingId: id,
-        statusUpdate,
-      });
+      store
+        .dispatch("admin/changeBookingStatus", {
+          bookingId: id,
+          statusUpdate,
+        })
+        .then((response) => {
+          toast.success(response);
+          //update the status of the current booking without refreshing the page
+          booking.value.status.name = statusUpdate.statusName;
+        })
+        .catch((ex) => toast.error(ex));
     },
   });
 };
@@ -558,6 +600,8 @@ const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
 
 //cancel a booking
 let cancelBooking = (id) => {
+  //show loading button
+  changingStatusTo.value = "cancelled";
   //show text area errors
   v$.value.$touch();
   //show dialog
@@ -572,12 +616,17 @@ let cancelBooking = (id) => {
         statusName: "cancelled",
         cancelReason: reasonToCancelForm.value.cancelReason,
       };
-
-      //save the updated booking
-      store.dispatch("admin/changeBookingStatus", {
-        bookingId: id,
-        statusUpdate,
-      });
+      store
+        .dispatch("admin/changeBookingStatus", {
+          bookingId: id,
+          statusUpdate,
+        })
+        .then((response) => {
+          toast.success(response);
+          //update the status of the current booking without refreshing the page
+          booking.value.status.name = statusUpdate.statusName;
+        })
+        .catch((ex) => toast.error(ex));
     },
   });
 };
