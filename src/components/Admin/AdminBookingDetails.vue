@@ -196,6 +196,7 @@
           severity="info"
           @click="confirmBooking(booking.id)"
           size="small"
+          :loading="isChangingBookingStatus"
         />
 
         <Button
@@ -205,14 +206,16 @@
           severity="contrast"
           @click="enRouteBooking(booking.id)"
           size="small"
+          :loading="isChangingBookingStatus"
         />
         <Button
           v-if="booking?.status.name === 'en route'"
-          label="Complete"
+          label="Complete Booking"
           icon="fas fa-circle-check"
           severity="success"
           @click="completeBooking(booking.id)"
           size="small"
+          :loading="isChangingBookingStatus"
         />
 
         <Button
@@ -222,6 +225,7 @@
           severity="warn"
           @click="cancelBooking(booking.id)"
           size="small"
+          :loading="isChangingBookingStatus"
         />
 
         <Button
@@ -298,7 +302,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import Card from "primevue/card";
 import Button from "primevue/button";
 import { useRouter } from "vue-router";
@@ -327,6 +331,9 @@ const confirmDialog = useConfirm();
 let id = ref(null);
 let isGettingBooking = ref(false);
 let isDeletingBooking = ref(false);
+let isChangingBookingStatus = computed(
+  () => store.state.admin.isChangingBookingStatus
+);
 let booking = ref(null);
 
 onMounted(async () => {

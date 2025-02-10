@@ -9,6 +9,7 @@ const admin = {
     isGettingBookings: false, //to show placeholder bookings
     isCreatingBooking: false, //to show the loading button during task creation
     isUpdatingBooking: false, //to show the loading button during task completion
+    isChangingBookingStatus: false,
 
     bookingsPageInfo: {
       //page info for lazy loading
@@ -299,7 +300,7 @@ const admin = {
     //change booking status
     async changeBookingStatus({ dispatch, state, rootState, commit }, payload) {
       try {
-        state.isUpdatingBooking = true;
+        state.isChangingBookingStatus = true;
         let { bookingId, statusUpdate } = payload;
 
         //add authorization header to the request
@@ -331,7 +332,7 @@ const admin = {
           : rootState.failureMessage;
         toast.error(message);
       } finally {
-        state.isUpdatingBooking = false;
+        state.isChangingBookingStatus = false;
       }
     },
 
