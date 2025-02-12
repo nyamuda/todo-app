@@ -68,28 +68,20 @@ const statuses = {
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        const response = await axios.post(
-          `${rootState.apiUrl}/statuses`,
-          payload
-        );
-        // Check if the request was successful
-        //status code will be 201 from the API
-        if (response.status == 201) {
-          //show toast success message
-          let message = "The status has been successfully added";
-          toast.success(message);
+        await axios.post(`${rootState.apiUrl}/statuses`, payload);
+        //show toast success message
+        let message = "The status has been successfully added";
+        toast.success(message);
 
-          router.push("/statuses");
+        router.push("/statuses");
 
-          //refresh the state
-          await dispatch("getStatuses");
-        } else {
-          if (response.data.message) {
-            toast.error(response.data.message);
-          }
-        }
-      } catch (err) {
-        toast.error(rootState.failureMessage);
+        //refresh the state
+        await dispatch("getStatuses");
+      } catch (ex) {
+        let message = ex.response.data?.message
+          ? ex.response.data.message
+          : rootState.failureMessage;
+        toast.error(message);
       } finally {
         state.isCreatingStatus = false;
       }

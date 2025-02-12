@@ -220,22 +220,13 @@ const account = {
         const { email } = payload;
 
         state.isRegistering = true;
-        const response = await axios.post(
-          `${rootState.apiUrl}/account/register`,
-          payload
-        );
+        await axios.post(`${rootState.apiUrl}/account/register`, payload);
 
-        // Check if the request was successful
-        //status code will be 201 from the API
-        if (response.status == 201) {
-          //send verification email
-          await axios.post(`${rootState.apiUrl}/email/verify`, {
-            email: email,
-          });
-          router.push("/email/verify");
-        } else {
-          toast.error(response.data.message);
-        }
+        //send verification email
+        await axios.post(`${rootState.apiUrl}/email/verify`, {
+          email: email,
+        });
+        router.push("/email/verify");
       } catch (ex) {
         console.log(ex);
         let message = ex.response.data?.message

@@ -245,26 +245,15 @@ const bookings = {
         dispatch("setAuthorizationHeader");
 
         //make the request
-        const response = await axios.post(
-          `${rootState.apiUrl}/bookings`,
-          booking
-        );
-        // Check if the request was successful
-        //status code will be 201 from the API
-        if (response.status == 201) {
-          //show toast success message
-          let message = "The booking has been successfully added.";
-          dispatch("showToast", { message: message, severity: "success" });
+        await axios.post(`${rootState.apiUrl}/bookings`, booking);
+        //show toast success message
+        let message = "The booking has been successfully added.";
+        dispatch("showToast", { message: message, severity: "success" });
 
-          router.push("/bookings");
+        router.push("/bookings");
 
-          //refresh the state
-          await dispatch("getBookings");
-        } else {
-          if (response.data.message) {
-            toast.error(response.data.message);
-          }
-        }
+        //refresh the state
+        await dispatch("getBookings");
       } catch (ex) {
         let message = ex.response
           ? ex.response.data?.message

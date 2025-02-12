@@ -143,16 +143,16 @@
                   class="ms-2"
                 />
               </p>
-              <p v-if="booking?.status.name == 'cancelled'">
+              <!-- <p v-if="booking?.status.name == 'cancelled'">
                 <i class="fas fa-user-xmark me-1"></i
                 ><strong>Cancelled By:</strong>
-                {{ booking.cancelReason }}
+                <Chip :label="booking?." />
               </p>
               <p v-if="booking?.status.name == 'cancelled'">
                 <i class="fas fa-ban me-1"></i
                 ><strong>Cancellation Reason:</strong>
                 {{ booking.cancelReason }}
-              </p>
+              </p> -->
               <p v-if="booking.additionalNotes">
                 <i class="fas fa-sticky-note me-1"></i
                 ><strong>Additional Notes:</strong>
@@ -346,6 +346,7 @@ import { required, minLength } from "@vuelidate/validators";
 import { FloatLabel } from "primevue";
 import Textarea from "primevue/textarea";
 import { Message } from "primevue";
+
 
 //toast
 const toast = useToast();
