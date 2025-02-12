@@ -211,8 +211,8 @@ const account = {
 
       //finally, navigate to the homepage and show logged out message
       router.push("/");
-      let message = "You’re now logged out.";
-      toast.success(message);
+      // let message = "You’re now logged out.";
+      // toast.success(message);
     },
     //Register user
     async registerUser({ rootState, state }, payload) {

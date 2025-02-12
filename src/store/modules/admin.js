@@ -311,7 +311,7 @@ const admin = {
             statusUpdate
           )
           .then(() => {
-            let message = `The booking status has been changed to ${statusUpdate.statusName}.`;
+            let message = `Booking is now marked as ${statusUpdate.statusName}.`;
             resolve(message);
           })
 
