@@ -251,7 +251,13 @@ const store = useStore();
 let filterBookingsBy = ref("all");
 
 let bookings = computed(() => store.state.admin.bookings);
-let statuses = computed(() => store.state.statuses.statuses);
+let statuses = computed(() => {
+  let fetchedStatuses = store.state.statuses.statuses;
+  //since statuses are to filter bookings
+  //include the "all" value when filtering bookings
+  //to show all bookings
+  return fetchedStatuses.push("all");
+});
 let isGettingBookings = computed(() => store.state.admin.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.admin.isUpdatingBooking);
 //the selected booking ID for canceling or any other action
