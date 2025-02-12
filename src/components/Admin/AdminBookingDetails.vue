@@ -152,7 +152,7 @@
 
                 <!-- Cancellation Details Row -->
                 <div class="row ms-4 mt-3">
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <p>
                       <i class="fas fa-user-slash me-1"></i>
                       <strong>Cancelled By:</strong>
@@ -163,7 +163,7 @@
                       }}
                     </p>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <p>
                       <i class="fas fa-calendar-times me-1"></i>
                       <strong>Cancelled On:</strong>
