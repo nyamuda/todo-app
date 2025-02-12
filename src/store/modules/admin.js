@@ -60,14 +60,23 @@ const admin = {
   getters: {},
   actions: {
     //fetch all bookings
-    async getBookings({ commit, dispatch, state, rootState }) {
+    async getBookings(
+      { commit, dispatch, state, rootState },
+      filterBy = "all"
+    ) {
       try {
+        let url = `${rootState.apiUrl}/admin/bookings`;
+        //check if there is a filter e.g completed, en route, confirmed etc
+        //check if there is a filter e.g completed, en route, confirmed etc
+        if (filterBy != "all" && !!filterBy) {
+          url += `/${filterBy}`;
+        }
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
 
         state.isGettingBookings = true;
-        const response = await axios.get(`${rootState.apiUrl}/admin/bookings`);
+        const response = await axios.get(url);
         //mutate the state with the fetched tasks
         commit("setBookings", response.data.bookings);
 
@@ -75,74 +84,6 @@ const admin = {
         commit("updatePageInfo", response.data.pageInfo);
       } catch (ex) {
         toast.error("Failed to fetch bookings.");
-      } finally {
-        state.isGettingBookings = false;
-      }
-    },
-
-    //fetch completed bookings
-    async getCompletedBookings({ commit, dispatch, state, rootState }) {
-      try {
-        state.isGettingBookings = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.get(
-          `${rootState.apiUrl}/admin/bookings/completed`
-        );
-        //mutate the state with the fetched tasks
-        commit("setBookings", response.data.bookings);
-
-        //page info
-        commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
-        toast.error("Failed to fetch completed bookings.");
-      } finally {
-        state.isGettingBookings = false;
-      }
-    },
-    //fetch pending bookings
-    async getPendingBookings({ commit, dispatch, state, rootState }) {
-      try {
-        state.isGettingBookings = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.get(
-          `${rootState.apiUrl}/admin/bookings/pending`
-        );
-        //mutate the state with the fetched tasks
-        commit("setBookings", response.data.bookings);
-
-        //page info
-        commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
-        toast.error("Failed to fetch pending bookings.");
-      } finally {
-        state.isGettingBookings = false;
-      }
-    },
-
-    //fetch cancelled booking
-    async getCancelledBookings({ commit, dispatch, state, rootState }) {
-      try {
-        state.isGettingBookings = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.get(
-          `${rootState.apiUrl}/admin/bookings/cancelled`
-        );
-        //mutate the state with the fetched tasks
-        commit("setBookings", response.data.bookings);
-
-        //page info
-        commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
-        toast.error("Failed to fetch cancelled bookings.");
       } finally {
         state.isGettingBookings = false;
       }
@@ -169,27 +110,27 @@ const admin = {
     },
 
     //Load more bookings
-    async loadMoreBookings({ commit, dispatch, state, rootState }, filterBy) {
+    async loadMoreBookings(
+      { commit, dispatch, state, rootState },
+      filterBy = "all"
+    ) {
       try {
-        //check which filter to use
-        let filterValue = "";
-        if (filterBy != "all") {
-          filterValue = filterBy;
+        let url = `${rootState.apiUrl}/admin/bookings`;
+        //check if there is a filter e.g completed, en route, confirmed etc
+        if (filterBy != "all" && !!filterBy) {
+          url += `/${filterBy}`;
         }
         state.isLoadingMoreBookings = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        const response = await axios.get(
-          `${rootState.apiUrl}/admin/bookings/${filterValue}`,
-          {
-            params: {
-              page: state.bookingsPageInfo.page + 1,
-              pageSize: state.bookingsPageInfo.pageSize,
-            },
-          }
-        );
+        const response = await axios.get(url, {
+          params: {
+            page: state.bookingsPageInfo.page + 1,
+            pageSize: state.bookingsPageInfo.pageSize,
+          },
+        });
         //mutate the state with the additional tasks
         commit("loadAdditionalBookings", response.data.bookings);
 

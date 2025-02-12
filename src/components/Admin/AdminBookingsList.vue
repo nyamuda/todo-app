@@ -270,15 +270,7 @@ onMounted(async () => {
 
 let filterBookings = () => {
   const filterValue = filterBookingsBy.value;
-  if (filterValue == "completed") {
-    store.dispatch("admin/getCompletedBookings");
-  } else if (filterValue == "cancelled") {
-    store.dispatch("admin/getCancelledBookings");
-  } else if (filterValue == "pending") {
-    store.dispatch("admin/getPendingBookings");
-  } else {
-    store.dispatch("admin/getBookings");
-  }
+  store.dispatch("admin/getBookings", filterValue);
 };
 //load more bookings depending on whether
 //the current list is for all, completed or uncompleted bookings
