@@ -154,19 +154,30 @@
                 <div class="row ms-4 mt-3">
                   <div class="col-md-12">
                     <p>
-                      <i class="fas fa-user-slash me-1"></i>
-                      <strong>Cancelled By:</strong>
-                      {{
-                        whoCancelledBooking(
-                          booking.cancelDetails?.cancelledByUser
-                        )
-                      }}
+                      <!--The user who cancelled the booking -- Admin or Client -->
+                      <i class="fas fa-user-slash me-1"></i
+                      ><strong>Cancelled By:</strong>
+                      {{ whoCancelledBooking.name }}
+                      <Tag
+                        rounded
+                        severity="info"
+                        :value="
+                          whoCancelledBooking.role == 'Admin'
+                            ? 'Admin'
+                            : 'Client'
+                        "
+                        :icon="
+                          whoCancelledBooking.role == 'Admin'
+                            ? 'fas fa-user-tie'
+                            : 'fa-regular fa-user'
+                        "
+                      />
                     </p>
                   </div>
                   <div class="col-md-12">
                     <p>
-                      <i class="fas fa-calendar-times me-1"></i>
-                      <strong>Cancelled On:</strong>
+                      <i class="fas fa-calendar-times me-1"></i
+                      ><strong>Cancelled On:</strong>
                       {{
                         dateFormat(
                           booking.cancelDetails?.cancelledAt,
@@ -416,6 +427,10 @@ let isChangingBookingStatus = computed(() => {
     : null;
 });
 let booking = ref(null);
+//user who cancelled the booking if the booking was cancelled
+let whoCancelledBooking = computed(
+  () => booking.value?.cancelDetails?.cancelledByUser
+);
 
 onMounted(async () => {
   //get the route parameter
@@ -676,15 +691,6 @@ let cancelBooking = (id) => {
   });
 };
 //Form validation with Vuelidate end
-
-//the user who cancelled the booking --> admin or user
-let whoCancelledBooking = (userInfo) => {
-  if (userInfo?.role == "Admin") {
-    return "Admin";
-  } else {
-    return userInfo?.name;
-  }
-};
 </script>
 
 <style scoped>
