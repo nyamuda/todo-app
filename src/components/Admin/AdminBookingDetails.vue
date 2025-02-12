@@ -435,22 +435,8 @@ let whoCancelledBooking = computed(
 onMounted(async () => {
   //get the route parameter
   id.value = route.currentRoute.value.params.id;
-
-  //get the booking details from the API
-  if (id.value) {
-    isGettingBooking.value = true;
-    store
-      .dispatch("bookings/getBooking", id.value)
-      .then((data) => {
-        booking.value = data;
-        console.log(booking.value);
-        isGettingBooking.value = false;
-      })
-      .catch((message) => {
-        toast.error(message);
-        isGettingBooking.value = false;
-      });
-  }
+  //get booking details from the API
+  getBooking();
 });
 
 const editBooking = () => {
@@ -525,6 +511,9 @@ const confirmBooking = (id) => {
           toast.success(response);
           //update the status of the current booking without refreshing the page
           booking.value.status.name = statusUpdate.statusName;
+
+          //stop loading button
+          changingStatusTo.value = null;
         })
         .catch((ex) => toast.error(ex));
     },
@@ -566,6 +555,9 @@ const enRouteBooking = (id) => {
           toast.success(response);
           //update the status of the current booking without refreshing the page
           booking.value.status.name = statusUpdate.statusName;
+
+          //stop loading button
+          changingStatusTo.value = null;
         })
         .catch((ex) => toast.error(ex));
     },
@@ -605,6 +597,9 @@ const completeBooking = (id) => {
           toast.success(response);
           //update the status of the current booking without refreshing the page
           booking.value.status.name = statusUpdate.statusName;
+
+          //stop loading button
+          changingStatusTo.value = null;
         })
         .catch((ex) => toast.error(ex));
     },
@@ -659,7 +654,7 @@ const cancelRules = {
 const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
 
 //cancel a booking
-let cancelBooking = (id) => {
+let cancelBooking = (bookingId) => {
   //show text area errors
   v$.value.$touch();
   //show dialog
@@ -678,19 +673,40 @@ let cancelBooking = (id) => {
       };
       store
         .dispatch("admin/changeBookingStatus", {
-          bookingId: id,
+          bookingId,
           statusUpdate,
         })
         .then((response) => {
           toast.success(response);
-          //update the status of the current booking without refreshing the page
-          booking.value.status.name = statusUpdate.statusName;
+          //stop loading button
+          changingStatusTo.value = null;
+
+          //get the updated booking
+          getBooking();
         })
         .catch((ex) => toast.error(ex));
     },
   });
 };
 //Form validation with Vuelidate end
+
+let getBooking = () => {
+  //get the booking details from the API
+  if (id.value) {
+    isGettingBooking.value = true;
+    store
+      .dispatch("bookings/getBooking", id.value)
+      .then((data) => {
+        booking.value = data;
+        console.log(booking.value);
+        isGettingBooking.value = false;
+      })
+      .catch((message) => {
+        toast.error(message);
+        isGettingBooking.value = false;
+      });
+  }
+};
 </script>
 
 <style scoped>
