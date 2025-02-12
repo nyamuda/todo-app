@@ -143,16 +143,58 @@
                   class="ms-2"
                 />
               </p>
+              <div v-if="booking.status?.name == 'cancelled'">
+                <!-- Title -->
+                <div class="d-flex align-items-center mb-2">
+                  <i class="fas fa-exclamation-triangle me-1"></i>
+                  <strong>Cancellation Details:</strong>
+                </div>
+
+                <!-- Cancellation Details Row -->
+                <div class="row ms-4 mt-3">
+                  <div class="col-md-6">
+                    <p>
+                      <i class="fas fa-user-slash me-1"></i>
+                      <strong>Cancelled By:</strong>
+                      {{
+                        whoCancelledBooking(
+                          booking.cancelDetails?.cancelledByUser
+                        )
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                      <i class="fas fa-calendar-times me-1"></i>
+                      <strong>Cancelled On:</strong>
+                      {{
+                        dateFormat(
+                          booking.cancelDetails?.cancelledAt,
+                          "dddd, mmmm dS, yyyy, h:MM TT"
+                        )
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-md-12">
+                    <p>
+                      <i class="fas fa-ban me-1"></i>
+                      <strong>Cancellation Reason:</strong>
+                      {{ booking.cancelDetails?.cancelReason }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               <!-- <p v-if="booking?.status.name == 'cancelled'">
-                <i class="fas fa-user-xmark me-1"></i
-                ><strong>Cancelled By:</strong>
-                <Chip :label="booking?." />
-              </p>
-              <p v-if="booking?.status.name == 'cancelled'">
-                <i class="fas fa-ban me-1"></i
-                ><strong>Cancellation Reason:</strong>
-                {{ booking.cancelReason }}
-              </p> -->
+								<i class="fas fa-user-xmark me-1"></i
+								><strong>Cancelled By:</strong>
+								<Chip :label="booking?." />
+							</p>
+							<p v-if="booking?.status.name == 'cancelled'">
+								<i class="fas fa-ban me-1"></i
+								><strong>Cancellation Reason:</strong>
+								{{ booking.cancelReason }}
+							</p> -->
               <p v-if="booking.additionalNotes">
                 <i class="fas fa-sticky-note me-1"></i
                 ><strong>Additional Notes:</strong>
@@ -347,7 +389,6 @@ import { FloatLabel } from "primevue";
 import Textarea from "primevue/textarea";
 import { Message } from "primevue";
 
-
 //toast
 const toast = useToast();
 // Access the store
@@ -387,6 +428,7 @@ onMounted(async () => {
       .dispatch("bookings/getBooking", id.value)
       .then((data) => {
         booking.value = data;
+        console.log(booking.value);
         isGettingBooking.value = false;
       })
       .catch((message) => {
@@ -634,6 +676,15 @@ let cancelBooking = (id) => {
   });
 };
 //Form validation with Vuelidate end
+
+//the user who cancelled the booking --> admin or user
+let whoCancelledBooking = (userInfo) => {
+  if (userInfo?.role == "Admin") {
+    return "Admin";
+  } else {
+    return userInfo?.name;
+  }
+};
 </script>
 
 <style scoped>
