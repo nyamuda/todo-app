@@ -45,7 +45,7 @@
 
           <div class="col-md-4 mb-3">
             <div class="p-3 border rounded bg-light">
-              <h6 class="text-success fw-bold">
+              <h6 class="text-info fw-bold">
                 <i class="fas fa-check-circle me-2"></i>Confirmed Bookings
               </h6>
               <ProgressSpinner

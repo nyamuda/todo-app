@@ -225,7 +225,7 @@
         </template>
         <template #content>
           <div v-if="booking.feedback">
-            <Rating v-model="booking.feedback.rating" readonly />
+            <Rating class="mb-2" v-model="booking.feedback.rating" readonly />
             <p>
               <i class="fas fa-comment me-1"></i><strong>Comment:</strong>
               {{ booking.feedback?.content }}

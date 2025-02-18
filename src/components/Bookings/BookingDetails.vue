@@ -69,9 +69,6 @@
     <div class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2">
       <Skeleton width="120px" height="2rem" />
       <Skeleton width="120px" height="2rem" />
-      <Skeleton width="120px" height="2rem" />
-      <Skeleton width="120px" height="2rem" />
-      <Skeleton width="120px" height="2rem" />
     </div>
   </div>
   <!--Details skeleton end-->
@@ -218,7 +215,7 @@
         </template>
         <template #content>
           <div v-if="booking.feedback">
-            <Rating v-model="booking.feedback.rating" readonly />
+            <Rating class="mb-2" v-model="booking.feedback.rating" readonly />
             <p>
               <i class="fas fa-comment me-1"></i><strong>Comment:</strong>
               {{ booking.feedback?.content }}
@@ -245,7 +242,7 @@
           "
           label="Cancel Booking"
           icon="fas fa-times-circle"
-          severity="warn"
+          severity="danger"
           @click="cancelBooking(booking.id)"
           size="small"
           :loading="isChangingBookingStatus == 'cancelled'"

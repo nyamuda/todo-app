@@ -116,7 +116,7 @@
           </Column>
           <Column field="feedback" header="Feedback">
             <template #body="slotProps">
-              <Rating :value="slotProps.data.feedback?.rating" readonly />
+              <Rating :modelValue="slotProps.data.feedback?.rating" readonly />
             </template>
           </Column>
 
@@ -250,17 +250,20 @@ let filterBookingsBy = ref("all");
 
 let bookings = computed(() => store.state.admin.bookings);
 
-//since statuses are used to filter bookings
-//include the "all" value when filtering bookings
-//to show all bookings
-let statuses = ref([
-  "All",
-  "Pending",
-  "Cancelled",
-  "Confirmed",
-  "En Route",
-  "Completed",
-]);
+//since statuses are used to filter bookings,
+//fetch all the status names and include the "All" value as well
+//to allow the user to view all bookings
+let statuses = computed(() => {
+  let statusNames = ["All"];
+  //get the status names and push them into the statusNames array
+  store.state.statuses.statuses.forEach((status) => {
+    let name = status.name;
+    //capitalize the first letter of the name
+    statusNames.push(`${name[0].toUpperCase()}${name.slice(1)}`);
+  });
+  return statusNames;
+});
+
 let isGettingBookings = computed(() => store.state.admin.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.admin.isUpdatingBooking);
 //the selected booking ID for canceling or any other action

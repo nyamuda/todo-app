@@ -336,14 +336,27 @@ let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
 let isSendingFeedback = computed(() => store.state.bookings.isSendingFeedback);
 //the selected booking ID for canceling or any other action
 let selectedBookingId = ref(null);
-//since statuses are used to filter bookings
-//include the "all" value when filtering bookings
-//to show all bookings
-let statuses = ref(["All", "Pending", "Cancelled", "Confirmed", "Completed"]);
+
+//since statuses are used to filter bookings,
+//fetch all the status names and include the "All" value as well
+//to allow the user to view all bookings
+let statuses = computed(() => {
+  let statusNames = ["All"];
+  //get the status names and push them into the statusNames array
+  store.state.statuses.statuses.forEach((status) => {
+    let name = status.name;
+    //capitalize the first letter of the name
+    statusNames.push(`${name[0].toUpperCase()}${name.slice(1)}`);
+  });
+  return statusNames;
+});
 
 onMounted(async () => {
   //get all bookings
   store.dispatch("bookings/getBookings");
+
+  //get all booking statuses
+  store.dispatch("statuses/getStatuses");
 });
 
 //Form validation with Vuelidate start
