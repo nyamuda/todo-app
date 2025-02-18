@@ -16,7 +16,9 @@
       <div class="row text-center">
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-dark fw-bold">Total Bookings</h6>
+            <h6 class="text-dark fw-bold">
+              <i class="fas fa-list-alt me-2"></i>Total Bookings
+            </h6>
             <ProgressSpinner
               v-if="isGettingStatistics"
               style="width: 50px; height: 50px"
@@ -28,7 +30,9 @@
         </div>
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-warning fw-bold">Pending Bookings</h6>
+            <h6 class="text-warning fw-bold">
+              <i class="fas fa-clock me-2"></i>Pending Bookings
+            </h6>
             <ProgressSpinner
               v-if="isGettingStatistics"
               style="width: 50px; height: 50px"
@@ -40,7 +44,9 @@
         </div>
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-success fw-bold">Confirmed Bookings</h6>
+            <h6 class="text-success fw-bold">
+              <i class="fas fa-check-circle me-2"></i>Confirmed Bookings
+            </h6>
             <ProgressSpinner
               v-if="isGettingStatistics"
               style="width: 50px; height: 50px"
@@ -55,7 +61,9 @@
       <div class="row text-center">
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-success fw-bold">En Route</h6>
+            <h6 class="text-primary fw-bold">
+              <i class="fas fa-road me-2"></i>En Route
+            </h6>
             <ProgressSpinner
               v-if="isGettingStatistics"
               style="width: 50px; height: 50px"
@@ -67,7 +75,9 @@
         </div>
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-primary fw-bold">Completed Bookings</h6>
+            <h6 class="text-success fw-bold">
+              <i class="fas fa-check me-2"></i>Completed Bookings
+            </h6>
             <ProgressSpinner
               v-if="isGettingStatistics"
               style="width: 50px; height: 50px"
@@ -79,7 +89,9 @@
         </div>
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-danger fw-bold">Cancelled Bookings</h6>
+            <h6 class="text-danger fw-bold">
+              <i class="fas fa-times-circle me-2"></i>Cancelled Bookings
+            </h6>
             <ProgressSpinner
               v-if="isGettingStatistics"
               style="width: 50px; height: 50px"
@@ -93,7 +105,9 @@
       <div class="row text-center">
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-dark fw-bold">Total Clients Registered</h6>
+            <h6 class="text-dark fw-bold">
+              <i class="fas fa-users me-2"></i>Total Clients Registered
+            </h6>
             <ProgressSpinner
               v-if="isGettingStatistics"
               style="width: 50px; height: 50px"
@@ -106,7 +120,9 @@
 
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-success fw-bold">Total Revenue</h6>
+            <h6 class="text-dark fw-bold">
+              <i class="fas fa-money-bill-wave me-2"></i>Total Revenue
+            </h6>
             <ProgressSpinner
               v-if="isGettingStatistics"
               style="width: 50px; height: 50px"
