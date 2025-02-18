@@ -23,6 +23,7 @@ const bookings = {
       totalCompletedBookings: 0,
       totalPendingBookings: 0,
       totalCancelledBookings: 0,
+      totalConfirmedBooking: 0,
     },
   }),
   mutations: {
