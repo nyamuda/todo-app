@@ -17,7 +17,11 @@ const statuses = {
       state.statuses = statuses;
     },
   },
-  getters: {},
+  getters: {
+    //since statuses are to filter bookings
+    //include the "all" value when filtering bookings
+    //to show all bookings
+  },
   actions: {
     //fetch all the car wash status types
     async getStatuses({ commit, state, rootState }) {

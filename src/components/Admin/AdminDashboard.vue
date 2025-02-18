@@ -24,17 +24,17 @@
         </div>
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-success fw-bold">Confirmed Bookings</h6>
+            <h6 class="text-warning fw-bold">Pending Bookings</h6>
             <p class="display-6 fw-bold">
-              {{ adminStatistics.totalConfirmedBookings }}
+              {{ adminStatistics.totalPendingBookings }}
             </p>
           </div>
         </div>
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-warning fw-bold">Pending Bookings</h6>
+            <h6 class="text-success fw-bold">Confirmed Bookings</h6>
             <p class="display-6 fw-bold">
-              {{ adminStatistics.totalPendingBookings }}
+              {{ adminStatistics.totalConfirmedBookings }}
             </p>
           </div>
         </div>
@@ -43,9 +43,9 @@
       <div class="row text-center">
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
-            <h6 class="text-danger fw-bold">Cancelled Bookings</h6>
+            <h6 class="text-success fw-bold">En Route</h6>
             <p class="display-6 fw-bold">
-              {{ adminStatistics.totalCancelledBookings }}
+              {{ adminStatistics.totalEnRouteBookings }}
             </p>
           </div>
         </div>
@@ -57,6 +57,25 @@
             </p>
           </div>
         </div>
+        <div class="col-md-4 mb-3">
+          <div class="p-3 border rounded bg-light">
+            <h6 class="text-danger fw-bold">Cancelled Bookings</h6>
+            <p class="display-6 fw-bold">
+              {{ adminStatistics.totalCancelledBookings }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class="col-md-4 mb-3">
+          <div class="p-3 border rounded bg-light">
+            <h6 class="text-dark fw-bold">Total Clients Registered</h6>
+            <p class="display-6 fw-bold">
+              {{ adminStatistics.totalRegisteredUsers }}
+            </p>
+          </div>
+        </div>
+
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
             <h6 class="text-success fw-bold">Total Revenue</h6>
@@ -84,6 +103,6 @@ let adminInfo = computed(() => store.state.account.loggedInUser);
 
 onMounted(() => {
   //get user statistics such as the total number of bookings they have completed
-  store.dispatch("bookings/fetchUserStatistics");
+  store.dispatch("admin/fetchAdminStatistics");
 });
 </script>

@@ -8,8 +8,6 @@
           style="width: 12rem"
           placeholder="Filter bookings"
           checkmark
-          optionLabel="name"
-          optionValue="name"
           v-model="filterBookingsBy"
           :options="statuses"
           @change="filterBookings"
@@ -251,13 +249,18 @@ const store = useStore();
 let filterBookingsBy = ref("all");
 
 let bookings = computed(() => store.state.admin.bookings);
-let statuses = computed(() => {
-  let fetchedStatuses = store.state.statuses.statuses;
-  //since statuses are to filter bookings
-  //include the "all" value when filtering bookings
-  //to show all bookings
-  return fetchedStatuses.push("all");
-});
+
+//since statuses are to filter bookings
+//include the "all" value when filtering bookings
+//to show all bookings
+let statuses = ref([
+  "All",
+  "Pending",
+  "Cancelled",
+  "Confirmed",
+  "En Route",
+  "Completed",
+]);
 let isGettingBookings = computed(() => store.state.admin.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.admin.isUpdatingBooking);
 //the selected booking ID for canceling or any other action
@@ -275,13 +278,16 @@ onMounted(async () => {
 });
 
 let filterBookings = () => {
-  const filterValue = filterBookingsBy.value;
+  const filterValue = filterBookingsBy.value.toLowerCase();
   store.dispatch("admin/getBookings", filterValue);
 };
 //load more bookings depending on whether
 //the current list is for all, completed or uncompleted bookings
 let loadMoreBookings = () => {
-  store.dispatch("admin/loadMoreBookings", filterBookingsBy.value);
+  store.dispatch(
+    "admin/loadMoreBookings",
+    filterBookingsBy.value.toLowerCase()
+  );
 };
 //is an booking being marked as complete
 // let isCompletingBooking = computed(

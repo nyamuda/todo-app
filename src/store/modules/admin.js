@@ -23,6 +23,8 @@ const admin = {
       totalPendingBookings: 0,
       totalConfirmedBookings: 0,
       totalCancelledBookings: 0,
+      totalEnRouteBookings: 0,
+      totalRegisteredUsers: 0,
       totalRevenue: 0,
     },
   }),
@@ -66,17 +68,19 @@ const admin = {
     ) {
       try {
         let url = `${rootState.apiUrl}/admin/bookings`;
-        //check if there is a filter e.g completed, en route, confirmed etc
-        //check if there is a filter e.g completed, en route, confirmed etc
-        if (filterBy != "all" && !!filterBy) {
-          url += `/${filterBy}`;
-        }
+
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
 
         state.isGettingBookings = true;
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          params: {
+            page: state.bookingsPageInfo.page,
+            pageSize: state.bookingsPageInfo.pageSize,
+            status: filterBy,
+          },
+        });
         //mutate the state with the fetched tasks
         commit("setBookings", response.data.bookings);
 
@@ -102,10 +106,8 @@ const admin = {
         //mutate the state with the fetched statistics
         commit("setAdminStatistics", response.data);
       } catch (ex) {
-        let message = ex.response
-          ? ex.response.data?.message
-          : rootState.failureMessage;
-        toast.error(message);
+        console.log(ex);
+        toast.error(rootState.failureMessage);
       }
     },
 
