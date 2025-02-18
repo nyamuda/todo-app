@@ -64,23 +64,21 @@
       <!--Signin, signup & logout button section-->
       <template #end>
         <div class="d-flex">
-          <a
+          <Button
             v-if="isAuthenticated"
             @click.prevent="logout"
-            class="btn btn-secondary w-100 py-2 px-4"
-            >Log out</a
-          >
+            label="Log out"
+            icon="fas fa-arrow-right-from-bracket"
+            severity="secondary"
+          />
+
           <template v-else>
             <router-link to="/account/login"
-              ><button class="btn btn-secondary w-100 py-2 px-4">
-                Log in
-              </button></router-link
-            >
+              ><Button label="Log in" severity="secondary"
+            /></router-link>
             <router-link class="me-0 me-md-2" to="/account/register"
-              ><button class="btn btn-primary w-100 py-2 px-4 ms-2">
-                Sign up
-              </button></router-link
-            >
+              ><Button label="Sign up" class="ms-2"
+            /></router-link>
           </template>
         </div>
       </template>
@@ -93,6 +91,7 @@
 import { useStore } from "vuex";
 const store = useStore();
 import { computed } from "vue";
+import Button from "primevue/button";
 
 import Menubar from "primevue/menubar";
 
