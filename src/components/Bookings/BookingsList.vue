@@ -133,11 +133,15 @@
                   severity="info"
                   aria-label="Rate service"
                   @click="sendFeedback(slotProps.data.id)"
+                  :loading="isSendingFeedback"
                 />
                 <!--Cancel Booking Button-->
                 <Button
                   v-else
-                  v-show="slotProps.data.status.name != 'cancelled'"
+                  v-show="
+                    slotProps.data.status.name != 'cancelled' &&
+                    slotProps.data.status.name != 'completed'
+                  "
                   size="small"
                   label="Cancel"
                   icon="fa-solid fa-xmark"
@@ -269,7 +273,7 @@
               class="w-100"
               id="bookingFeedback"
               v-model="v2$.content.$model"
-              rows="4"
+              rows="5"
             />
             <label for="bookingFeedback">Share your thoughts</label>
           </FloatLabel>
@@ -329,6 +333,7 @@ const confirmDialog = useConfirm();
 let bookings = computed(() => store.state.bookings.bookings);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
+let isSendingFeedback = computed(() => store.state.bookings.isSendingFeedback);
 //the selected booking ID for canceling or any other action
 let selectedBookingId = ref(null);
 //since statuses are used to filter bookings
@@ -339,9 +344,6 @@ let statuses = ref(["All", "Pending", "Cancelled", "Confirmed", "Completed"]);
 onMounted(async () => {
   //get all bookings
   store.dispatch("bookings/getBookings");
-
-  //get all booking statuses
-  store.dispatch("statuses/getStatuses");
 });
 
 //Form validation with Vuelidate start

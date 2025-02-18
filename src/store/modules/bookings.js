@@ -10,6 +10,7 @@ const bookings = {
     isCreatingBooking: false, //to show the loading button during task creation
     isUpdatingBooking: false, //to show the loading button during task completion
     isGettingStatistics: false,
+    isSendingFeedback: false,
     bookingsPageInfo: {
       //page info for lazy loading
       page: 1, //current page size
@@ -99,8 +100,6 @@ const bookings = {
 
         //page info
         commit("updatePageInfo", response.data.pageInfo);
-
-        console.log(response.data);
       } catch (ex) {
         toast.error("Failed to fetch bookings.");
       } finally {
@@ -334,36 +333,31 @@ const bookings = {
     },
 
     //add feedback when a booking is completed
-    async addFeedback({ dispatch, rootState }, payload) {
+    async addFeedback({ dispatch, rootState, state }, payload) {
       try {
         let { feedback } = payload;
+
+        state.isSendingFeedback = true;
 
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
 
         //make the request
-        const response = await axios.post(
-          `${rootState.apiUrl}/feedback`,
-          feedback
-        );
+        await axios.post(`${rootState.apiUrl}/feedback`, feedback);
         // Check if the request was successful
-        //status code will be 201 from the API
-        if (response.status == 201) {
-          //show toast success message
-          let message = "Your feedback has been received. Thank you!";
-          dispatch("showToast", { message: message, severity: "success" });
+        //show toast success message
+        let message = "Your feedback has been received. Thank you!";
+        dispatch("showToast", { message: message, severity: "success" });
 
-          router.push("/bookings");
-          //refresh the state
-          await dispatch("getBookings");
-        } else {
-          if (response.data.message) {
-            toast.error(response.data.message);
-          }
-        }
+        router.push("/bookings");
+        //refresh the state
+        await dispatch("getBookings");
       } catch (err) {
+        console.log(err);
         toast.error(rootState.failureMessage);
+      } finally {
+        state.isSendingFeedback = false;
       }
     },
 
