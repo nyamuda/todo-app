@@ -250,7 +250,7 @@ let filterBookingsBy = ref("all");
 
 let bookings = computed(() => store.state.admin.bookings);
 
-//since statuses are to filter bookings
+//since statuses are used to filter bookings
 //include the "all" value when filtering bookings
 //to show all bookings
 let statuses = ref([

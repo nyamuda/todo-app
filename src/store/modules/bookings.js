@@ -76,14 +76,24 @@ const bookings = {
   },
   actions: {
     //fetch all bookings
-    async getBookings({ commit, dispatch, state, rootState }) {
+    async getBookings(
+      { commit, dispatch, state, rootState },
+      filterBy = "all"
+    ) {
       try {
+        let url = `${rootState.apiUrl}/bookings`;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
 
         state.isGettingBookings = true;
-        const response = await axios.get(`${rootState.apiUrl}/bookings`);
+        const response = await axios.get(url, {
+          params: {
+            page: state.bookingsPageInfo.page,
+            pageSize: state.bookingsPageInfo.pageSize,
+            status: filterBy,
+          },
+        });
         //mutate the state with the fetched bookings
         commit("setBookings", response.data.bookings);
 
@@ -112,74 +122,6 @@ const bookings = {
             reject(message);
           });
       });
-    },
-
-    //fetch completed bookings
-    async getCompletedBookings({ commit, dispatch, state, rootState }) {
-      try {
-        state.isGettingBookings = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.get(
-          `${rootState.apiUrl}/bookings/completed`
-        );
-        //mutate the state with the fetched tasks
-        commit("setBookings", response.data.bookings);
-
-        //page info
-        commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
-        toast.error("Failed to fetch completed bookings.");
-      } finally {
-        state.isGettingBookings = false;
-      }
-    },
-    //fetch pending bookings
-    async getPendingBookings({ commit, dispatch, state, rootState }) {
-      try {
-        state.isGettingBookings = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.get(
-          `${rootState.apiUrl}/bookings/pending`
-        );
-        //mutate the state with the fetched tasks
-        commit("setBookings", response.data.bookings);
-
-        //page info
-        commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
-        toast.error("Failed to fetch pending bookings.");
-      } finally {
-        state.isGettingBookings = false;
-      }
-    },
-
-    //fetch cancelled booking
-    async getCancelledBookings({ commit, dispatch, state, rootState }) {
-      try {
-        state.isGettingBookings = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.get(
-          `${rootState.apiUrl}/bookings/cancelled`
-        );
-        //mutate the state with the fetched tasks
-        commit("setBookings", response.data.bookings);
-
-        //page info
-        commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
-        toast.error("Failed to fetch cancelled bookings.");
-      } finally {
-        state.isGettingBookings = false;
-      }
     },
 
     //fetch user statistics such as the number of completed tasks by the user
@@ -376,7 +318,7 @@ const bookings = {
           });
 
           //show toast success message
-          let message = `The booking status has been changed to ${statusUpdate.statusName}.`;
+          let message = `The booking status is now ${statusUpdate.statusName}.`;
           toast.success(message);
         } else {
           toast.error(rootState.failureMessage);

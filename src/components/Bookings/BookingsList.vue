@@ -8,8 +8,6 @@
           style="width: 12rem"
           placeholder="Filter bookings"
           checkmark
-          optionLabel="name"
-          optionValue="name"
           v-model="filterBookingsBy"
           :options="statuses"
           @change="filterBookings"
@@ -329,11 +327,14 @@ let filterBookingsBy = ref("all");
 
 const confirmDialog = useConfirm();
 let bookings = computed(() => store.state.bookings.bookings);
-let statuses = computed(() => store.state.statuses.statuses);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
 //the selected booking ID for canceling or any other action
 let selectedBookingId = ref(null);
+//since statuses are used to filter bookings
+//include the "all" value when filtering bookings
+//to show all bookings
+let statuses = ref(["All", "Pending", "Cancelled", "Confirmed", "Completed"]);
 
 onMounted(async () => {
   //get all bookings
@@ -422,17 +423,10 @@ let sendFeedback = (id) => {
 };
 //Form validation with Vuelidate end
 
+//Filter bookings by status
 let filterBookings = () => {
-  const filterValue = filterBookingsBy.value;
-  if (filterValue == "completed") {
-    store.dispatch("bookings/getCompletedBookings");
-  } else if (filterValue == "cancelled") {
-    store.dispatch("bookings/getCancelledBookings");
-  } else if (filterValue == "pending") {
-    store.dispatch("bookings/getPendingBookings");
-  } else {
-    store.dispatch("bookings/getBookings");
-  }
+  const filterValue = filterBookingsBy.value.toLowerCase();
+  store.dispatch("bookings/getBookings", filterValue);
 };
 //load more bookings depending on whether
 //the current list is for all, completed or uncompleted bookings
