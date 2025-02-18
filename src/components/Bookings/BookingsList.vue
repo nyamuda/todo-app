@@ -39,11 +39,7 @@
               <Skeleton></Skeleton>
             </template>
           </Column>
-          <Column field="location" header="Location">
-            <template #body>
-              <Skeleton></Skeleton>
-            </template>
-          </Column>
+
           <Column field="scheduledAt" header="Scheduled At">
             <template #body>
               <Skeleton></Skeleton>
@@ -54,11 +50,7 @@
               <Skeleton></Skeleton>
             </template>
           </Column>
-          <Column field="additionalNotes" header="Additional Notes">
-            <template #body>
-              <Skeleton></Skeleton>
-            </template>
-          </Column>
+
           <Column field="actions" header="Actions">
             <template #body>
               <Skeleton></Skeleton>
@@ -78,7 +70,7 @@
               >
             </template>
           </Column>
-          <Column field="location" header="Location"></Column>
+
           <Column field="scheduledAt" header="Scheduled At">
             <!--Format the date-->
             <template #body="slotProps">
@@ -100,10 +92,24 @@
               />
             </template>
           </Column>
-          <Column field="additionalNotes" header="Additional Notes"></Column>
+
           <Column field="id" header="Actions">
             <template #body="slotProps">
               <div class="d-flex justify-content-center align-items-center">
+                <!--Button to see more details-->
+                <router-link
+                  v-if="
+                    !isUpdatingBooking || slotProps.data.id != selectedBookingId
+                  "
+                  :to="'bookings/' + slotProps.data.id + '/details'"
+                >
+                  <Button
+                    label="More details"
+                    severity="secondary"
+                    size="small"
+                    icon="fas fa-info"
+                    class="no-wrap-btn me-2"
+                /></router-link>
                 <!--Spinner if an action is in progress-->
                 <ProgressSpinner
                   v-if="
@@ -133,7 +139,7 @@
                 <!--Cancel Booking Button-->
                 <Button
                   v-else
-                  :disabled="slotProps.data.status.name == 'cancelled'"
+                  v-show="slotProps.data.status.name != 'cancelled'"
                   size="small"
                   label="Cancel"
                   icon="fa-solid fa-xmark"
