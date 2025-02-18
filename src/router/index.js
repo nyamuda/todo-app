@@ -26,6 +26,7 @@ import StatusesList from "@/components/Statuses/StatusesList.vue";
 import AddStatus from "@/components/Statuses/AddStatus.vue";
 import UpdateStatus from "@/components/Statuses/UpdateStatus.vue";
 import AdminBookingDetails from "@/components/Admin/AdminBookingDetails.vue";
+import BookingDetails from "@/components/Bookings/BookingDetails.vue";
 
 const routes = [
   {
@@ -83,9 +84,21 @@ const routes = [
         component: AddBooking,
       },
       {
-        path: "update/:id",
+        path: ":id/update",
         name: "UpdateBooking",
         component: UpdateBooking,
+        beforeEnter: (to) => {
+          if (!store.state.account.isAuthenticated) {
+            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+            return { name: "Login" }; // Redirect to login page
+          }
+          return true;
+        },
+      },
+      {
+        path: ":id/details",
+        name: "UpdateBooking",
+        component: BookingDetails,
         beforeEnter: (to) => {
           if (!store.state.account.isAuthenticated) {
             store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
