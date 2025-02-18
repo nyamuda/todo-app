@@ -9,6 +9,7 @@ const bookings = {
     isGettingBookings: false, //to show placeholder bookings
     isCreatingBooking: false, //to show the loading button during task creation
     isUpdatingBooking: false, //to show the loading button during task completion
+    isGettingStatistics: false,
     bookingsPageInfo: {
       //page info for lazy loading
       page: 1, //current page size
@@ -181,11 +182,13 @@ const bookings = {
     },
 
     //fetch user statistics such as the number of completed tasks by the user
-    async fetchUserStatistics({ commit, dispatch, rootState }) {
+    async fetchUserStatistics({ commit, dispatch, rootState, state }) {
       try {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
+
+        state.isGettingStatistics = true;
 
         const response = await axios.get(
           `${rootState.apiUrl}/bookings/statistics`
@@ -194,6 +197,8 @@ const bookings = {
         commit("setUserStatistics", response.data);
       } catch (error) {
         toast.error(rootState.failureMessage);
+      } finally {
+        state.isGettingStatistics = false;
       }
     },
 
