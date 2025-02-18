@@ -217,22 +217,18 @@
       </Card>
 
       <!-- Feedback & Rating -->
-      <Card v-if="booking.status.name != 'cancelled'" class="mt-4">
+      <Card v-if="booking.status.name == 'completed'" class="mt-4">
         <template #title>
           <p class="h4 mb-3 d-flex align-items-center">
-            <i class="fas fa-star text-warning me-1"></i> Client Feedback
+            <i class="fas fa-comment-alt me-1"></i>Client Feedback
           </p>
         </template>
         <template #content>
           <div v-if="booking.feedback">
+            <Rating v-model="booking.feedback.rating" readonly />
             <p>
-              <i class="fas fa-comment me-1"></i><strong>Feedback:</strong>
+              <i class="fas fa-comment me-1"></i><strong>Comment:</strong>
               {{ booking.feedback?.content }}
-            </p>
-            <p>
-              <i class="fas fa-star me-1 text-warning"></i
-              ><strong>Rating:</strong>
-              <Rating :value="booking.feedback.rating" readonly />
             </p>
           </div>
           <div v-else>

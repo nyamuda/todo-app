@@ -91,18 +91,17 @@
             <!-- Left Column -->
             <div class="col-md-6">
               <p>
-                <i class="fas fa-user me-1"></i><strong>Client Name:</strong>
+                <i class="fas fa-user me-1"></i><strong>Name:</strong>
                 {{ booking.user ? booking.user.name : booking.guestUser.name }}
               </p>
               <p>
-                <i class="fas fa-envelope me-1"></i
-                ><strong>Client Email:</strong>
+                <i class="fas fa-envelope me-1"></i><strong>Email:</strong>
                 {{
                   booking.user ? booking.user.email : booking.guestUser.email
                 }}
               </p>
               <p>
-                <i class="fas fa-phone me-1"></i><strong>Client Phone:</strong>
+                <i class="fas fa-phone me-1"></i><strong>Phone:</strong>
                 {{
                   booking.user ? booking.user.phone : booking.guestUser.phone
                 }}
@@ -196,16 +195,6 @@
                 </div>
               </div>
 
-              <!-- <p v-if="booking?.status.name == 'cancelled'">
-                                  <i class="fas fa-user-xmark me-1"></i
-                                  ><strong>Cancelled By:</strong>
-                                  <Chip :label="booking?." />
-                              </p>
-                              <p v-if="booking?.status.name == 'cancelled'">
-                                  <i class="fas fa-ban me-1"></i
-                                  ><strong>Cancellation Reason:</strong>
-                                  {{ booking.cancelReason }}
-                              </p> -->
               <p v-if="booking.additionalNotes">
                 <i class="fas fa-sticky-note me-1"></i
                 ><strong>Additional Notes:</strong>
@@ -217,27 +206,25 @@
       </Card>
 
       <!-- Feedback & Rating -->
-      <Card v-if="booking.status.name != 'cancelled'" class="mt-4">
+      <Card v-if="booking.status.name == 'completed'" class="mt-4">
         <template #title>
           <p class="h4 mb-3 d-flex align-items-center">
-            <i class="fas fa-star text-warning me-1"></i> Client Feedback
+            <i class="fas fa-comment-alt me-1"></i>Your Feedback
           </p>
         </template>
         <template #content>
           <div v-if="booking.feedback">
+            <Rating v-model="booking.feedback.rating" readonly />
             <p>
-              <i class="fas fa-comment me-1"></i><strong>Feedback:</strong>
+              <i class="fas fa-comment me-1"></i><strong>Comment:</strong>
               {{ booking.feedback?.content }}
-            </p>
-            <p>
-              <i class="fas fa-star me-1 text-warning"></i
-              ><strong>Rating:</strong>
-              <Rating :value="booking.feedback.rating" readonly />
             </p>
           </div>
           <div v-else>
             <p class="text-muted">
-              <i class="fas fa-info-circle me-1"></i>No feedback provided yet.
+              <i class="fas fa-info-circle me-1"></i>You haven't provided any
+              feedback yet. Help us improve our services by sharing your
+              experience.
             </p>
           </div>
         </template>
