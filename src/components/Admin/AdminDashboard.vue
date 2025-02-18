@@ -17,7 +17,11 @@
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
             <h6 class="text-dark fw-bold">Total Bookings</h6>
-            <p class="display-6 fw-bold">
+            <ProgressSpinner
+              v-if="isGettingStatistics"
+              style="width: 50px; height: 50px"
+            />
+            <p v-else class="display-6 fw-bold">
               {{ adminStatistics.totalBookings }}
             </p>
           </div>
@@ -25,7 +29,11 @@
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
             <h6 class="text-warning fw-bold">Pending Bookings</h6>
-            <p class="display-6 fw-bold">
+            <ProgressSpinner
+              v-if="isGettingStatistics"
+              style="width: 50px; height: 50px"
+            />
+            <p v-else class="display-6 fw-bold">
               {{ adminStatistics.totalPendingBookings }}
             </p>
           </div>
@@ -33,7 +41,11 @@
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
             <h6 class="text-success fw-bold">Confirmed Bookings</h6>
-            <p class="display-6 fw-bold">
+            <ProgressSpinner
+              v-if="isGettingStatistics"
+              style="width: 50px; height: 50px"
+            />
+            <p v-else class="display-6 fw-bold">
               {{ adminStatistics.totalConfirmedBookings }}
             </p>
           </div>
@@ -44,7 +56,11 @@
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
             <h6 class="text-success fw-bold">En Route</h6>
-            <p class="display-6 fw-bold">
+            <ProgressSpinner
+              v-if="isGettingStatistics"
+              style="width: 50px; height: 50px"
+            />
+            <p v-else class="display-6 fw-bold">
               {{ adminStatistics.totalEnRouteBookings }}
             </p>
           </div>
@@ -52,7 +68,11 @@
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
             <h6 class="text-primary fw-bold">Completed Bookings</h6>
-            <p class="display-6 fw-bold">
+            <ProgressSpinner
+              v-if="isGettingStatistics"
+              style="width: 50px; height: 50px"
+            />
+            <p v-else class="display-6 fw-bold">
               {{ adminStatistics.totalCompletedBookings }}
             </p>
           </div>
@@ -60,7 +80,11 @@
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
             <h6 class="text-danger fw-bold">Cancelled Bookings</h6>
-            <p class="display-6 fw-bold">
+            <ProgressSpinner
+              v-if="isGettingStatistics"
+              style="width: 50px; height: 50px"
+            />
+            <p v-else class="display-6 fw-bold">
               {{ adminStatistics.totalCancelledBookings }}
             </p>
           </div>
@@ -70,7 +94,11 @@
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
             <h6 class="text-dark fw-bold">Total Clients Registered</h6>
-            <p class="display-6 fw-bold">
+            <ProgressSpinner
+              v-if="isGettingStatistics"
+              style="width: 50px; height: 50px"
+            />
+            <p v-else class="display-6 fw-bold">
               {{ adminStatistics.totalRegisteredUsers }}
             </p>
           </div>
@@ -79,7 +107,13 @@
         <div class="col-md-4 mb-3">
           <div class="p-3 border rounded bg-light">
             <h6 class="text-success fw-bold">Total Revenue</h6>
-            <p class="display-6 fw-bold">R{{ adminStatistics.totalRevenue }}</p>
+            <ProgressSpinner
+              v-if="isGettingStatistics"
+              style="width: 50px; height: 50px"
+            />
+            <p v-else class="display-6 fw-bold">
+              R{{ adminStatistics.totalRevenue }}
+            </p>
           </div>
         </div>
       </div>
@@ -96,10 +130,13 @@
 <script setup>
 import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
+import ProgressSpinner from "primevue/progressspinner";
+
 const store = useStore();
 
 let adminStatistics = computed(() => store.state.admin.adminStatistics);
 let adminInfo = computed(() => store.state.account.loggedInUser);
+let isGettingStatistics = computed(() => store.state.admin.isGettingStatistics);
 
 onMounted(() => {
   //get user statistics such as the total number of bookings they have completed

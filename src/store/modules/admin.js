@@ -9,6 +9,7 @@ const admin = {
     isGettingBookings: false, //to show placeholder bookings
     isCreatingBooking: false, //to show the loading button during task creation
     isUpdatingBooking: false, //to show the loading button during task completion
+    isGettingStatistics: false,
 
     bookingsPageInfo: {
       //page info for lazy loading
@@ -94,11 +95,13 @@ const admin = {
     },
 
     //fetch admin statistics such as the total number of completed bookings
-    async fetchAdminStatistics({ commit, dispatch, rootState }) {
+    async fetchAdminStatistics({ commit, dispatch, rootState, state }) {
       try {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
+
+        state.isGettingStatistics = true;
 
         const response = await axios.get(
           `${rootState.apiUrl}/admin/statistics`
@@ -108,6 +111,8 @@ const admin = {
       } catch (ex) {
         console.log(ex);
         toast.error(rootState.failureMessage);
+      } finally {
+        state.isGettingStatistics = false;
       }
     },
 
