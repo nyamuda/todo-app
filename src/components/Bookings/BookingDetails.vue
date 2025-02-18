@@ -156,14 +156,18 @@
                       <!--The user who cancelled the booking -- Admin or Client -->
                       <i class="fas fa-user-slash me-1"></i
                       ><strong>Cancelled By:</strong>
-                      {{ whoCancelledBooking.name }}
+                      {{
+                        whoCancelledBooking.role == "Admin"
+                          ? "Admin"
+                          : whoCancelledBooking.name
+                      }}
                       <Tag
                         rounded
                         severity="info"
                         :value="
                           whoCancelledBooking.role == 'Admin'
-                            ? 'Admin'
-                            : 'Client'
+                            ? 'Support Team'
+                            : 'Yourself'
                         "
                         :icon="
                           whoCancelledBooking.role == 'Admin'
