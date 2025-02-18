@@ -93,7 +93,7 @@
 
           <Column field="id" header="Actions">
             <template #body="slotProps">
-              <div class="d-flex justify-content-center align-items-center">
+              <div class="d-flex justify-content-start align-items-center">
                 <!--Button to see more details-->
                 <router-link
                   v-if="
@@ -157,22 +157,15 @@
       </div>
       <!--Load more bookings start-->
       <div class="d-grid gap-2 col-md-3 mx-auto mt-3">
-        <button
-          :class="{
-            'btn btn-secondary': !hasMoreBookings,
-            'btn btn-primary': hasMoreBookings,
-          }"
+        <Button
           @click="loadMoreBookings"
+          type="button"
+          :label="isLoadingMoreBookings ? 'Loading more...' : 'Load more'"
+          icon="fas fa-chevron-down"
+          :loading="isLoadingMoreBookings"
           :disabled="isLoadingMoreBookings || !hasMoreBookings"
-        >
-          <span
-            v-if="isLoadingMoreBookings"
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          {{ isLoadingMoreBookings ? "Loading..." : "Load more" }}
-        </button>
+          severity="contrast"
+        />
       </div>
       <!--Load more bookings end-->
     </div>
