@@ -58,20 +58,23 @@
           </div>
         </Message>
       </div>
-      <div class="row">
+      <div class="row gap-3 gap-lg-0">
         <!-- Service type input -->
         <div class="form-group col-md-6">
-          <label for="memberServiceType" class="form-label">Service type</label>
-          <Select
-            id="memberServiceType"
-            v-model="v$.serviceTypeId.$model"
-            :options="services"
-            optionLabel="name"
-            optionValue="id"
-            placeholder="Select a service"
-            :invalid="v$.serviceTypeId.$error"
-            :disabled="status != 'pending'"
-          />
+          <FloatLabel variant="on">
+            <Select
+              class="w-100"
+              id="updateServiceType"
+              v-model="v$.serviceTypeId.$model"
+              :options="services"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="Select a service"
+              :invalid="v$.serviceTypeId.$error"
+              :disabled="status != 'pending'"
+            />
+            <label for="updateServiceType">Service type</label>
+          </FloatLabel>
           <Message
             size="small"
             severity="error"
@@ -85,18 +88,21 @@
         </div>
         <!-- Date and time -->
         <div class="form-group col-md-6">
-          <label for="memberDate" class="form-label">Date and time</label>
-          <DatePicker
-            id="memberDate"
-            v-model="v$.scheduledAt.$model"
-            :disabled="status != 'pending'"
-            showTime
-            hourFormat="12"
-            :invalid="v$.scheduledAt.$error"
-            fluid
-            showIcon
-            iconDisplay="input"
-          />
+          <FloatLabel variant="on">
+            <DatePicker
+              class="w-100"
+              id="updateScheduledAt"
+              v-model="v$.scheduledAt.$model"
+              :disabled="status != 'pending'"
+              showTime
+              hourFormat="12"
+              :invalid="v$.scheduledAt.$error"
+              fluid
+              showIcon
+              iconDisplay="input"
+            />
+            <label for="updateScheduledAt">Date and time</label>
+          </FloatLabel>
           <Message
             size="small"
             severity="error"
