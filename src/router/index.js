@@ -97,7 +97,7 @@ const routes = [
       },
       {
         path: ":id/details",
-        name: "UpdateBooking",
+        name: "BookingDetails",
         component: BookingDetails,
         beforeEnter: (to) => {
           if (!store.state.account.isAuthenticated) {

@@ -1,6 +1,6 @@
 <template>
   <div class="add-booking-container container m-auto">
-    <h2 class="add-booking-title text-start">Book a car wash session</h2>
+    <h2 class="add-booking-title text-start">Update Booking</h2>
 
     <!--For guest users start-->
     <form
@@ -52,7 +52,7 @@
           <label for="memberServiceType" class="form-label">Service type</label>
           <Select
             id="memberServiceType"
-            :defaultValue="defaultServiceType"
+            :modelValue="defaultServiceType"
             v-model="v$.serviceTypeId.$model"
             :options="services"
             optionLabel="name"
@@ -187,6 +187,8 @@ onMounted(() => {
         bookingForm.value.location = booking.location;
         bookingForm.value.scheduledAt = booking.scheduledAt;
         bookingForm.value.additionalNotes = booking.additionalNotes;
+
+        console.log(booking);
 
         //the current service type of the booking
         defaultServiceType.value = booking.serviceType;
