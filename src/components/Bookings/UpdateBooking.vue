@@ -19,7 +19,7 @@
             id="updateVehicleType"
             v-model="v$.vehicleType.$model"
             :invalid="v$.vehicleType.$error"
-            :disabled="status != 'pending'"
+            :disabled="disableUpdates"
           />
           <label for="updateVehicleType">Vehicle type</label>
         </FloatLabel>
@@ -43,7 +43,7 @@
             id="updateLocation"
             v-model="v$.location.$model"
             :invalid="v$.location.$error"
-            :disabled="status != 'pending'"
+            :disabled="disableUpdates"
           />
           <label for="updateLocation">Location</label>
         </FloatLabel>
@@ -69,9 +69,8 @@
               :options="services"
               optionLabel="name"
               optionValue="id"
-              placeholder="Select a service"
               :invalid="v$.serviceTypeId.$error"
-              :disabled="status != 'pending'"
+              :disabled="disableUpdates"
             />
             <label for="updateServiceType">Service type</label>
           </FloatLabel>
@@ -93,13 +92,13 @@
               class="w-100"
               id="updateScheduledAt"
               v-model="v$.scheduledAt.$model"
-              :disabled="status != 'pending'"
               showTime
               hourFormat="12"
               :invalid="v$.scheduledAt.$error"
               fluid
               showIcon
               iconDisplay="input"
+              :disabled="disableUpdates"
             />
             <label for="updateScheduledAt">Date and time</label>
           </FloatLabel>
@@ -126,7 +125,7 @@
             rows="5"
             class="w-100"
             style="resize: none"
-            :disabled="status != 'pending'"
+            :disabled="disableUpdates"
           />
           <label for="updateAdditionalNotes">Additional notes</label>
         </FloatLabel>
@@ -148,7 +147,7 @@
         icon="fas fa-edit"
         :loading="isUpdatingBooking"
         @click="load"
-        :disabled="v$.$errors.length > 0 || status != 'pending'"
+        :disabled="v$.$errors.length > 0 || disableUpdates"
       />
     </form>
     <!--For guest users end-->
@@ -184,10 +183,11 @@ let id = ref(null);
 let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
 //available car wash services
 let services = computed(() => store.state.services.services);
-//get the status of the booking
+let status = ref(null);
+//Check if the booking has "Pending" status
 //since users can only update a booking when its status is 'pending'
 //if the status is not pending, the form fields will be disabled
-let status = ref(null);
+let disableUpdates = computed(() => (status.value == "pending" ? false : true));
 
 onMounted(() => {
   v$._value.$touch();
