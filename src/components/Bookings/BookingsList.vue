@@ -160,11 +160,12 @@
         <Button
           @click="loadMoreBookings"
           type="button"
-          :label="isLoadingMoreBookings ? 'Loading more...' : 'Load more'"
+          :label="isLoadingMoreBookings ? 'Loading...' : 'Load more'"
           icon="fas fa-chevron-down"
           :loading="isLoadingMoreBookings"
           :disabled="isLoadingMoreBookings || !hasMoreBookings"
           severity="contrast"
+          size="small"
         />
       </div>
       <!--Load more bookings end-->

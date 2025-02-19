@@ -90,8 +90,6 @@ const bookings = {
         state.isGettingBookings = true;
         const response = await axios.get(url, {
           params: {
-            page: state.bookingsPageInfo.page,
-            pageSize: state.bookingsPageInfo.pageSize,
             status: filterBy,
           },
         });
@@ -147,18 +145,13 @@ const bookings = {
     //Load more bookings
     async loadMoreBookings({ commit, dispatch, state, rootState }, filterBy) {
       try {
-        //check which filter to use
-        let filterValue = "";
-        if (filterBy != "all") {
-          filterValue = filterBy;
-        }
         state.isLoadingMoreBookings = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
         const response = await axios.get(
-          `${rootState.apiUrl}/bookings/${filterValue}`,
+          `${rootState.apiUrl}/bookings?status=${filterBy}`,
           {
             params: {
               page: state.bookingsPageInfo.page + 1,
@@ -173,6 +166,7 @@ const bookings = {
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (error) {
+        console.log(error);
         toast.error("Failed to load more bookings.");
       } finally {
         state.isLoadingMoreBookings = false;
