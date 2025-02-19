@@ -19,6 +19,7 @@
             id="updateVehicleType"
             v-model="v$.vehicleType.$model"
             :invalid="v$.vehicleType.$error"
+            :disabled="status != 'pending'"
           />
           <label for="updateVehicleType">Vehicle type</label>
         </FloatLabel>
@@ -42,6 +43,7 @@
             id="updateLocation"
             v-model="v$.location.$model"
             :invalid="v$.location.$error"
+            :disabled="status != 'pending'"
           />
           <label for="updateLocation">Location</label>
         </FloatLabel>
@@ -68,6 +70,7 @@
             optionValue="id"
             placeholder="Select a service"
             :invalid="v$.serviceTypeId.$error"
+            :disabled="status != 'pending'"
           />
           <Message
             size="small"
@@ -86,6 +89,7 @@
           <DatePicker
             id="memberDate"
             v-model="v$.scheduledAt.$model"
+            :disabled="status != 'pending'"
             showTime
             hourFormat="12"
             :invalid="v$.scheduledAt.$error"
@@ -107,7 +111,7 @@
       </div>
 
       <!-- Additional notes input -->
-      <div class="form-group mb-3">
+      <div class="form-group">
         <FloatLabel variant="on">
           <Textarea
             id="updateAdditionalNotes"
@@ -116,6 +120,7 @@
             rows="5"
             class="w-100"
             style="resize: none"
+            :disabled="status != 'pending'"
           />
           <label for="updateAdditionalNotes">Additional notes</label>
         </FloatLabel>
@@ -132,12 +137,12 @@
       </div>
 
       <Button
-        type="button"
+        type="submit"
         :label="isUpdatingBooking ? 'Saving changes...' : 'Update booking'"
-        icon="fas fa-save"
+        icon="fas fa-edit"
         :loading="isUpdatingBooking"
         @click="load"
-        :disabled="v$.$errors.length > 0"
+        :disabled="v$.$errors.length > 0 || status != 'pending'"
       />
     </form>
     <!--For guest users end-->
@@ -173,7 +178,9 @@ let id = ref(null);
 let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
 //available car wash services
 let services = computed(() => store.state.services.services);
-//the status of the booking
+//get the status of the booking
+//since users can only update a booking when its status is 'pending'
+//if the status is not pending, the form fields will be disabled
 let status = ref(null);
 
 onMounted(() => {
