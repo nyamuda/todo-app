@@ -8,32 +8,30 @@
       <p>We'll send you a link to reset your password.</p>
       <form @submit.prevent="submitForm" class="form">
         <div class="form-group mb-3">
-          <input
-            id="emailInput"
-            placeholder="email address"
-            class="form-control"
-            type="email"
-            required
-            v-model="email"
-          />
+          <!-- Email input -->
+          <div class="form-group">
+            <FloatLabel variant="on">
+              <InputText
+                class="w-100"
+                id="forgotEmail"
+                v-model="email"
+                type="email"
+                required
+              />
+              <label for="forgotEmail">Email</label>
+            </FloatLabel>
+          </div>
         </div>
         <!-- Submit button -->
-        <button
-          v-if="isSendingPasswordResetLink"
+        <Button
           type="submit"
-          class="btn btn-dark btn-block mb-2 w-100"
-          disabled
-        >
-          <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          Sending reset link...
-        </button>
-        <button v-else type="submit" class="btn btn-dark btn-block mb-2 w-100">
-          Submit
-        </button>
+          :label="
+            isSendingPasswordResetLink ? 'Sending reset link...' : 'Submit'
+          "
+          icon="fas fa-paper-plane"
+          :loading="isSendingPasswordResetLink"
+          :disabled="isSendingPasswordResetLink"
+        />
       </form>
     </div>
   </div>
@@ -42,6 +40,8 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
 const store = useStore();
 
 let email = ref("");

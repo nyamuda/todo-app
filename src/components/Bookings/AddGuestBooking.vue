@@ -38,6 +38,7 @@
             id="bookingEmail"
             v-model="v$.email.$model"
             :invalid="v$.email.$error"
+            type="email"
           />
           <label for="bookingEmail">Email</label>
         </FloatLabel>
@@ -61,6 +62,7 @@
             id="bookingPhone"
             v-model="v$.phone.$model"
             :invalid="v$.phone.$error"
+            type="tel"
           />
           <label for="bookingPhone">Phone</label>
         </FloatLabel>

@@ -19,6 +19,7 @@
               class="w-100"
               v-model="v$.email.$model"
               :invalid="v$.email.$error"
+              type="email"
             />
           </IconField>
           <label for="loginEmail">Email</label>

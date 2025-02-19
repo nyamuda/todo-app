@@ -13,13 +13,12 @@
     <div class="form-group mb-3">
       <FloatLabel variant="on">
         <IconField>
-          <InputIcon class="fas fa-lock" />
+          <InputIcon class="fas fa-user" />
           <InputText
             fluid
             id="registerName"
             v-model="v$.name.$model"
             :invalid="v$.name.$error"
-            type="password"
           />
         </IconField>
         <label for="registerName">Name</label>
@@ -46,6 +45,7 @@
             class="w-100"
             v-model="v$.email.$model"
             :invalid="v$.email.$error"
+            type="email"
           />
         </IconField>
         <label for="registerEmail">Email</label>
@@ -57,33 +57,6 @@
         variant="simple"
       >
         <div v-for="error of v$.email.$errors" :key="error.$uid">
-          <div>{{ error.$message }}</div>
-        </div>
-      </Message>
-    </div>
-
-    <!-- Phone input -->
-    <div class="form-group mb-3">
-      <FloatLabel variant="on">
-        <IconField>
-          <InputIcon class="fas fa-phone" />
-          <InputText
-            fluid
-            id="registerPhone"
-            v-model="v$.phone.$model"
-            :invalid="v$.phone.$error"
-            type="tel"
-          />
-        </IconField>
-        <label for="registerPhone">Phone number</label>
-      </FloatLabel>
-      <Message
-        size="small"
-        severity="error"
-        v-if="v$.phone.$error"
-        variant="simple"
-      >
-        <div v-for="error of v$.phone.$errors" :key="error.$uid">
           <div>{{ error.$message }}</div>
         </div>
       </Message>
@@ -111,6 +84,33 @@
         variant="simple"
       >
         <div v-for="error of v$.password.$errors" :key="error.$uid">
+          <div>{{ error.$message }}</div>
+        </div>
+      </Message>
+    </div>
+
+    <!-- Phone input -->
+    <div class="form-group mb-3">
+      <FloatLabel variant="on">
+        <IconField>
+          <InputIcon class="fas fa-phone" />
+          <InputText
+            fluid
+            id="registerPhone"
+            v-model="v$.phone.$model"
+            :invalid="v$.phone.$error"
+            type="tel"
+          />
+        </IconField>
+        <label for="registerPhone">Phone number</label>
+      </FloatLabel>
+      <Message
+        size="small"
+        severity="error"
+        v-if="v$.phone.$error"
+        variant="simple"
+      >
+        <div v-for="error of v$.phone.$errors" :key="error.$uid">
           <div>{{ error.$message }}</div>
         </div>
       </Message>
