@@ -82,6 +82,13 @@ import { useRouter } from "vue-router";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, helpers, sameAs } from "@vuelidate/validators";
+import { Message } from "primevue";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
+
 const route = useRouter();
 // Access the store
 const store = useStore();
