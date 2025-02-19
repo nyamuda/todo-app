@@ -204,7 +204,7 @@ const admin = {
     },
 
     //update the booking
-    async updateBooking({ dispatch, state, rootState, commit }, payload) {
+    async updateBooking({ dispatch, state, rootState }, payload) {
       try {
         state.isUpdatingBooking = true;
         let { id, booking } = payload;
@@ -213,24 +213,12 @@ const admin = {
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        const response = await axios.put(
-          `${rootState.apiUrl}/bookings/${id}`,
-          booking
-        );
-        // Check if the request was successful
-        //status code will be 204 from the API
-        if (response.status == 204) {
-          //update the status the of a booking without reloading the bookings from the API
-          commit("updateBookingStatus", { id: id, status: booking.status });
-
-          //show toast success message
-          let message = "The booking has been updated.";
-          toast.success(message);
-        } else {
-          toast.error(rootState.failureMessage);
-        }
+        await axios.put(`${rootState.apiUrl}/bookings/${id}`, booking);
+        //show toast success message
+        let message = "The booking has been updated.";
+        toast.success(message);
       } catch (ex) {
-        let message = ex.response
+        let message = ex.response.data?.message
           ? ex.response.data?.message
           : rootState.failureMessage;
         toast.error(message);
