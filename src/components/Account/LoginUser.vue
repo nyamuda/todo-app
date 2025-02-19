@@ -10,15 +10,17 @@
 			</div> -->
 
       <!-- Email input -->
-      <!-- Email input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
-          <InputText
-            class="w-100"
-            id="loginEmail"
-            v-model="v$.email.$model"
-            :invalid="v$.email.$error"
-          />
+          <IconField>
+            <InputIcon class="fas fa-at" />
+            <InputText
+              id="loginEmail"
+              class="w-100"
+              v-model="v$.email.$model"
+              :invalid="v$.email.$error"
+            />
+          </IconField>
           <label for="loginEmail">Email</label>
         </FloatLabel>
         <Message
@@ -33,23 +35,29 @@
         </Message>
       </div>
       <!-- Password input -->
-      <div class="form-outline mb-3">
-        <label for="loginPassword" class="form-label">Password</label>
-        <input
-          type="password"
-          id="loginPassword"
-          class="form-control"
-          v-model="v$.password.$model"
-          :class="{
-            'is-invalid': v$.password.$error,
-            'is-valid': !v$.password.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.password.$error">
+      <div class="form-group mb-3">
+        <FloatLabel variant="on">
+          <IconField>
+            <InputIcon class="fas fa-at" />
+            <InputText
+              id="loginPassword"
+              class="w-100"
+              v-model="v$.password.$model"
+              :invalid="v$.password.$error"
+            />
+          </IconField>
+          <label for="loginPassword">Password</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.password.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.password.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- 2 column grid layout -->
@@ -78,6 +86,8 @@
 
       <!-- Submit button -->
       <Button
+        fluid
+        class="mb-2"
         type="submit"
         :label="isLoggingIn ? 'Please wait...' : 'Sign in'"
         :loading="isLoggingIn"
@@ -106,6 +116,8 @@ import { Message } from "primevue";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 
 // Access the store
 const store = useStore();
