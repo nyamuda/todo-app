@@ -248,18 +248,19 @@
           :loading="isChangingBookingStatus == 'cancelled'"
         />
 
-        <Button
-          v-if="
-            booking?.status.name !== 'cancelled' &&
-            booking?.status.name !== 'completed'
-          "
-          label="Edit Booking"
-          icon="fas fa-edit"
-          variant="outlined"
-          severity="contrast"
-          @click="editBooking"
-          size="small"
-        />
+        <router-link :to="'/bookings/' + id + '/update'">
+          <Button
+            v-if="
+              booking?.status.name !== 'cancelled' &&
+              booking?.status.name !== 'completed'
+            "
+            label="Edit Booking"
+            icon="fas fa-edit"
+            variant="outlined"
+            severity="contrast"
+            size="small"
+          />
+        </router-link>
       </div>
     </div>
     <!-- No Booking Details Start -->
@@ -379,10 +380,6 @@ onMounted(async () => {
   //get booking details from the API
   getBooking();
 });
-
-const editBooking = () => {
-  // Logic to edit the booking
-};
 
 //Severity of the pills
 const getSeverity = (status) => {
