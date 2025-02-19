@@ -137,7 +137,6 @@
         :label="isCreatingBooking ? 'Creating booking...' : 'Book car wash'"
         icon="fas fa-plus"
         :loading="isCreatingBooking"
-        @click="load"
         :disabled="v$.$errors.length > 0 || isCreatingBooking"
       />
     </form>

@@ -1,34 +1,37 @@
 <template>
   <div class="">
-    <form class="login-form m-auto">
+    <form class="login-form m-auto" @submit.prevent="submitForm">
       <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Sign in</h3>
       <!-- <OauthBooking />
-      <div class="d-flex align-bookings-center my-1">
-        <hr class="flex-grow-1" />
-        <p class="text-center fw-bold mx-3 mb-0">Or</p>
-        <hr class="flex-grow-1" />
-      </div> -->
+			<div class="d-flex align-bookings-center my-1">
+				<hr class="flex-grow-1" />
+				<p class="text-center fw-bold mx-3 mb-0">Or</p>
+				<hr class="flex-grow-1" />
+			</div> -->
 
       <!-- Email input -->
-      <div class="mb-3">
-        <label for="loginEmail" class="form-label">Email address</label>
-        <input
-          type="email"
-          id="loginEmail"
-          class="form-control"
-          v-model="v$.email.$model"
-          :class="{
-            'is-invalid': v$.email.$error,
-            'is-valid': !v$.email.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.email.$error">
+      <!-- Email input -->
+      <div class="form-group">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="loginEmail"
+            v-model="v$.email.$model"
+            :invalid="v$.email.$error"
+          />
+          <label for="loginEmail">Email</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.email.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.email.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
-
       <!-- Password input -->
       <div class="form-outline mb-3">
         <label for="loginPassword" class="form-label">Password</label>
@@ -74,28 +77,12 @@
       </div>
 
       <!-- Submit button -->
-      <button
-        v-if="isLoggingIn"
+      <Button
         type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Please wait...
-      </button>
-      <button
-        v-else
-        :disabled="v$.$errors.length > 0"
-        @click.prevent="submitForm"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-      >
-        Sign in
-      </button>
+        :label="isLoggingIn ? 'Please wait...' : 'Sign in'"
+        :loading="isLoggingIn"
+        :disabled="v$.$errors.length > 0 || isLoggingIn"
+      />
 
       <!-- Register buttons -->
       <div class="text-center">
@@ -115,6 +102,10 @@ import { useStore } from "vuex";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";
+import { Message } from "primevue";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
 
 // Access the store
 const store = useStore();

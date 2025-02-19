@@ -206,7 +206,6 @@
         :label="isCreatingBooking ? 'Creating booking...' : 'Book car wash'"
         icon="fas fa-plus"
         :loading="isCreatingBooking"
-        @click="load"
         :disabled="v$.$errors.length > 0 || isCreatingBooking"
       />
     </form>
@@ -223,6 +222,10 @@ import { required, email, helpers, minLength } from "@vuelidate/validators";
 import Select from "primevue/select";
 import { Message } from "primevue";
 import DatePicker from "primevue/datepicker";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import Textarea from "primevue/textarea";
 
 const store = useStore();
 
