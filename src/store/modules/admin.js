@@ -83,8 +83,6 @@ const admin = {
         //mutate the state with the fetched tasks
         commit("setBookings", response.data.bookings);
 
-        console.log(response.data.bookings);
-
         //page info
         commit("updatePageInfo", response.data.pageInfo);
       } catch (ex) {

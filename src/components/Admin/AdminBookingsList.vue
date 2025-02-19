@@ -155,22 +155,16 @@
       </div>
       <!--Load more bookings start-->
       <div class="d-grid gap-2 col-md-3 mx-auto mt-3">
-        <button
-          :class="{
-            'btn btn-secondary': !hasMoreBookings,
-            'btn btn-primary': hasMoreBookings,
-          }"
+        <Button
           @click="loadMoreBookings"
+          type="button"
+          :label="isLoadingMoreBookings ? 'Loading...' : 'Load more'"
+          icon="fas fa-chevron-down"
+          :loading="isLoadingMoreBookings"
           :disabled="isLoadingMoreBookings || !hasMoreBookings"
-        >
-          <span
-            v-if="isLoadingMoreBookings"
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          {{ isLoadingMoreBookings ? "Loading..." : "Load more" }}
-        </button>
+          severity="contrast"
+          size="small"
+        />
       </div>
       <!--Load more bookings end-->
     </div>
