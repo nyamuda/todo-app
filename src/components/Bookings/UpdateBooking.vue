@@ -117,7 +117,7 @@
             class="w-100"
             style="resize: none"
           />
-          <label for="updateAdditionalNotes">On Label</label>
+          <label for="updateAdditionalNotes">Additional notes</label>
         </FloatLabel>
         <Message
           size="small"
@@ -131,27 +131,14 @@
         </Message>
       </div>
 
-      <button
-        v-if="isUpdatingBooking"
-        type="submit"
-        class="submit-button"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Please wait...
-      </button>
-      <button
-        v-else
-        type="submit"
-        class="btn btn-primary submit-button"
+      <Button
+        type="button"
+        :label="isUpdatingBooking ? 'Saving changes...' : 'Update booking'"
+        icon="fas fa-save"
+        :loading="isUpdatingBooking"
+        @click="load"
         :disabled="v$.$errors.length > 0"
-      >
-        Book car wash
-      </button>
+      />
     </form>
     <!--For guest users end-->
   </div>
@@ -171,7 +158,7 @@ import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
-
+import Button from "primevue/button";
 import Textarea from "primevue/textarea";
 
 //toast
