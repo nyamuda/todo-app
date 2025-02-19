@@ -1,7 +1,11 @@
 <template>
   <div class="add-booking-container container m-auto">
     <h2 class="add-booking-title text-start">Update Booking</h2>
-
+    <Message severity="info" :closable="true" class="mb-4">
+      <i class="fas fa-info-circle me-2"></i>You can update your booking while
+      it’s in the <strong>'Pending'</strong> status. Once confirmed or en route,
+      updates are locked, but you may still cancel if needed.
+    </Message>
     <!--For guest users start-->
     <form
       @submit.prevent="submitForm"
@@ -52,7 +56,6 @@
           <label for="memberServiceType" class="form-label">Service type</label>
           <Select
             id="memberServiceType"
-            :modelValue="defaultServiceType"
             v-model="v$.serviceTypeId.$model"
             :options="services"
             optionLabel="name"
@@ -164,8 +167,6 @@ const store = useStore();
 const route = useRouter();
 let id = ref(null);
 
-//default service type of the booking
-let defaultServiceType = ref(null);
 //show loading button or not
 let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
 //available car wash services
@@ -187,14 +188,11 @@ onMounted(() => {
         bookingForm.value.location = booking.location;
         bookingForm.value.scheduledAt = booking.scheduledAt;
         bookingForm.value.additionalNotes = booking.additionalNotes;
-
-        console.log(booking);
-
-        //the current service type of the booking
-        defaultServiceType.value = booking.serviceType;
       })
       .catch((message) => toast.error(message));
   }
+  //get all available car wash services
+  store.dispatch("services/getServices");
 });
 
 // Form data
