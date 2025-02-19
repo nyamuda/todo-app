@@ -136,7 +136,7 @@
         icon="fas fa-edit"
         :loading="isUpdatingBooking"
         @click="load"
-        :disabled="v$.$errors.length > 0"
+        :disabled="v$.$errors.length > 0 || isUpdatingBooking"
       />
     </form>
     <!--For guest users end-->

@@ -250,6 +250,7 @@
           severity="info"
           @click="confirmBooking(booking.id)"
           size="small"
+          :disable="isChangingBookingStatus == 'confirmed'"
           :loading="isChangingBookingStatus == 'confirmed'"
         />
 
@@ -260,6 +261,7 @@
           severity="contrast"
           @click="enRouteBooking(booking.id)"
           size="small"
+          :disabled="isChangingBookingStatus == 'en route'"
           :loading="isChangingBookingStatus == 'en route'"
         />
         <Button
@@ -269,6 +271,7 @@
           severity="success"
           @click="completeBooking(booking.id)"
           size="small"
+          :disabled="isChangingBookingStatus == 'completed'"
           :loading="isChangingBookingStatus == 'completed'"
         />
 
@@ -282,6 +285,7 @@
           severity="warn"
           @click="cancelBooking(booking.id)"
           size="small"
+          :disabled="isChangingBookingStatus == 'cancelled'"
           :loading="isChangingBookingStatus == 'cancelled'"
         />
         <router-link :to="'/admin/bookings/' + id + '/update'">
@@ -300,6 +304,7 @@
 
         <Button
           :loading="isDeletingBooking"
+          :disabled="isDeletingBooking"
           label="Delete Booking"
           icon="fas fa-trash"
           severity="danger"

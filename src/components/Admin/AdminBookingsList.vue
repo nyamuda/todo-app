@@ -33,11 +33,11 @@
             </template>
           </Column>
 
-          <!-- <Column field="location" header="Location">
-						<template #body>
-							<Skeleton></Skeleton>
-						</template>
-					</Column> -->
+          <Column field="vehicleType" header="Vehicle Type">
+            <template #body>
+              <Skeleton></Skeleton>
+            </template>
+          </Column>
           <Column field="scheduledAt" header="Scheduled At">
             <template #body>
               <Skeleton></Skeleton>
@@ -92,7 +92,7 @@
             </template>
           </Column>
 
-          <!-- <Column field="location" header="Location"></Column> -->
+          <Column field="vehicleType" header="Vehicle Type"></Column>
           <Column field="scheduledAt" header="Scheduled At">
             <!--Format the date-->
             <template #body="slotProps">

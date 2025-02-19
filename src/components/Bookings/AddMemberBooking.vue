@@ -2,63 +2,71 @@
   <div class="add-booking-container container m-auto">
     <h2 class="add-booking-title text-start">Book a car wash session</h2>
 
-    <!--For guest users start-->
+    <!--For member users start-->
     <form
       @submit.prevent="submitForm"
       class="add-booking-form needs-validation"
     >
       <!-- Vehicle type input -->
       <div class="form-group">
-        <label for="guestVehicleType" class="form-label"> Vehicle type</label>
-        <input
-          type="text"
-          id="guestVehicleType"
-          class="form-control"
-          v-model="v$.vehicleType.$model"
-          :class="{
-            'is-invalid': v$.vehicleType.$error,
-            'is-valid': !v$.vehicleType.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.vehicleType.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="bookingVehicleType"
+            v-model="v$.vehicleType.$model"
+            :invalid="v$.vehicleType.$error"
+          />
+          <label for="bookingVehicleType">Vehicle type</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.vehicleType.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.vehicleType.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Location input -->
       <div class="form-group">
-        <label for="guestLocation" class="form-label">Location</label>
-        <input
-          type="text"
-          id="guestLocation"
-          class="form-control"
-          v-model="v$.location.$model"
-          :class="{
-            'is-invalid': v$.location.$error,
-            'is-valid': !v$.location.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.location.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="bookingLocation"
+            v-model="v$.location.$model"
+            :invalid="v$.location.$error"
+          />
+          <label for="bookingLocation">Location</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.location.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.location.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
-      <div class="row">
+      <div class="row gap-3 gap-lg-0">
         <!-- Service type input -->
         <div class="form-group col-md-6">
-          <label for="memberServiceType" class="form-label">Service type</label>
-          <Select
-            id="memberServiceType"
-            v-model="v$.serviceTypeId.$model"
-            :options="services"
-            optionLabel="name"
-            optionValue="id"
-            placeholder="Select a service"
-            :invalid="v$.serviceTypeId.$error"
-          />
+          <FloatLabel variant="on">
+            <Select
+              class="w-100"
+              id="bookingServiceType"
+              v-model="v$.serviceTypeId.$model"
+              :options="services"
+              optionLabel="name"
+              optionValue="id"
+              :invalid="v$.serviceTypeId.$error"
+            />
+            <label for="bookingServiceType">Service type</label>
+          </FloatLabel>
           <Message
             size="small"
             severity="error"
@@ -72,17 +80,20 @@
         </div>
         <!-- Date and time -->
         <div class="form-group col-md-6">
-          <label for="memberDate" class="form-label">Date and time</label>
-          <DatePicker
-            id="memberDate"
-            v-model="v$.scheduledAt.$model"
-            showTime
-            hourFormat="12"
-            :invalid="v$.scheduledAt.$error"
-            fluid
-            showIcon
-            iconDisplay="input"
-          />
+          <FloatLabel variant="on">
+            <DatePicker
+              class="w-100"
+              id="bookingScheduledAt"
+              v-model="v$.scheduledAt.$model"
+              showTime
+              hourFormat="12"
+              :invalid="v$.scheduledAt.$error"
+              fluid
+              showIcon
+              iconDisplay="input"
+            />
+            <label for="bookingScheduledAt">Date and time</label>
+          </FloatLabel>
           <Message
             size="small"
             severity="error"
@@ -97,48 +108,40 @@
       </div>
 
       <!-- Additional notes input -->
-      <div class="form-group mb-3">
-        <label for="guestNotes" class="form-label">Additional notes</label>
-        <textarea
-          id="guestNotes"
-          class="form-input"
-          rows="3"
-          v-model="v$.additionalNotes.$model"
-          :class="{
-            'is-invalid': v$.additionalNotes.$error,
-            'is-valid': !v$.additionalNotes.$error,
-          }"
-        ></textarea>
-        <div class="invalid-feedback" v-if="v$.additionalNotes.$error">
+      <div class="form-group">
+        <FloatLabel variant="on">
+          <Textarea
+            id="bookingAdditionalNotes"
+            v-model="v$.additionalNotes.$model"
+            :invalid="v$.additionalNotes.$error"
+            rows="5"
+            class="w-100"
+            style="resize: none"
+          />
+          <label for="bookingAdditionalNotes">Additional notes</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.additionalNotes.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.additionalNotes.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
-      <button
-        v-if="isCreatingBooking"
+      <Button
         type="submit"
-        class="submit-button"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Please wait...
-      </button>
-      <button
-        v-else
-        type="submit"
-        class="btn btn-primary submit-button"
-        :disabled="v$.$errors.length > 0"
-      >
-        Book car wash
-      </button>
+        :label="isCreatingBooking ? 'Creating booking...' : 'Book car wash'"
+        icon="fas fa-plus"
+        :loading="isCreatingBooking"
+        @click="load"
+        :disabled="v$.$errors.length > 0 || isCreatingBooking"
+      />
     </form>
-    <!--For guest users end-->
+    <!--For member users end-->
   </div>
 </template>
 
@@ -152,6 +155,10 @@ import { required } from "@vuelidate/validators";
 import Select from "primevue/select";
 import { Message } from "primevue";
 import DatePicker from "primevue/datepicker";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import Textarea from "primevue/textarea";
 
 const store = useStore();
 

@@ -246,6 +246,7 @@
           @click="cancelBooking(booking.id)"
           size="small"
           :loading="isChangingBookingStatus == 'cancelled'"
+          :disabled="isChangingBookingStatus == 'cancelled'"
         />
 
         <router-link :to="'/bookings/' + id + '/update'">
