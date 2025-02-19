@@ -236,7 +236,10 @@ const v$ = useVuelidate(rules, bookingForm.value);
 //form validation with Vuelidate end
 // Submit form
 const submitForm = () => {
-  store.dispatch("bookings/updateBooking", { booking: bookingForm.value });
+  store.dispatch("bookings/updateBooking", {
+    booking: bookingForm.value,
+    id: id.value,
+  });
 };
 </script>
 
