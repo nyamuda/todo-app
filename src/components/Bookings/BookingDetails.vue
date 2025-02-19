@@ -275,7 +275,7 @@
       <p class="fs-4 text-muted mb-2">No Booking Details Available</p>
       <p class="text-muted">
         The booking information could not be found. It may have been removed or
-        you're not authorized to see it.
+        does not exist.
       </p>
     </div>
     <!-- No Booking Details End -->

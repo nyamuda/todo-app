@@ -213,10 +213,12 @@ const admin = {
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        await axios.put(`${rootState.apiUrl}/bookings/${id}`, booking);
+        await axios.put(`${rootState.apiUrl}/admin/bookings/${id}`, booking);
         //show toast success message
         let message = "The booking has been updated.";
         toast.success(message);
+
+        router.push(`/admin/bookings/${id}/details`);
       } catch (ex) {
         let message = ex.response.data?.message
           ? ex.response.data?.message

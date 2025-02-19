@@ -169,7 +169,7 @@ const route = useRouter();
 let id = ref(null);
 
 //show loading button or not
-let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
+let isUpdatingBooking = computed(() => store.state.admin.isUpdatingBooking);
 //available car wash services
 let services = computed(() => store.state.services.services);
 

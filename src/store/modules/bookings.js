@@ -266,7 +266,7 @@ const bookings = {
         let message = "The booking has been updated.";
         toast.success(message);
 
-        router.push("/bookings");
+        router.push(`/bookings/${id}/details`);
       } catch (ex) {
         console.log(ex);
         let message = ex.response.data?.message
