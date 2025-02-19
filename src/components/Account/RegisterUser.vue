@@ -3,114 +3,129 @@
     <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Sign up</h3>
     <!-- <OauthBooking />
 
-    <div class="d-flex align-bookings-center my-1">
-      <hr class="flex-grow-1" />
-      <p class="text-center fw-bold mx-3 mb-0">Or</p>
-      <hr class="flex-grow-1" />
-    </div> -->
+		<div class="d-flex align-bookings-center my-1">
+			<hr class="flex-grow-1" />
+			<p class="text-center fw-bold mx-3 mb-0">Or</p>
+			<hr class="flex-grow-1" />
+		</div> -->
 
     <!-- Name input -->
-    <div class="mb-3">
-      <label for="registerName" class="form-label">Name</label>
-      <input
-        type="text"
-        id="registerName"
-        class="form-control"
-        v-model="v$.name.$model"
-        :class="{
-          'is-invalid': v$.name.$error,
-          'is-valid': !v$.name.$error,
-        }"
-      />
-      <div class="invalid-feedback" v-if="v$.name.$error">
+    <div class="form-group mb-3">
+      <FloatLabel variant="on">
+        <IconField>
+          <InputIcon class="fas fa-lock" />
+          <InputText
+            fluid
+            id="registerName"
+            v-model="v$.name.$model"
+            :invalid="v$.name.$error"
+            type="password"
+          />
+        </IconField>
+        <label for="registerName">Name</label>
+      </FloatLabel>
+      <Message
+        size="small"
+        severity="error"
+        v-if="v$.name.$error"
+        variant="simple"
+      >
         <div v-for="error of v$.name.$errors" :key="error.$uid">
           <div>{{ error.$message }}</div>
         </div>
-      </div>
+      </Message>
     </div>
 
     <!-- Email input -->
-    <div class="mb-3">
-      <label for="registerEmail" class="form-label">Email address</label>
-      <input
-        type="email"
-        id="registerEmail"
-        class="form-control"
-        v-model="v$.email.$model"
-        :class="{
-          'is-invalid': v$.email.$error,
-          'is-valid': !v$.email.$error,
-        }"
-      />
-      <div class="invalid-feedback" v-if="v$.email.$error">
+    <div class="form-group mb-3">
+      <FloatLabel variant="on">
+        <IconField>
+          <InputIcon class="fas fa-envelope" />
+          <InputText
+            id="registerEmail"
+            class="w-100"
+            v-model="v$.email.$model"
+            :invalid="v$.email.$error"
+          />
+        </IconField>
+        <label for="registerEmail">Email</label>
+      </FloatLabel>
+      <Message
+        size="small"
+        severity="error"
+        v-if="v$.email.$error"
+        variant="simple"
+      >
         <div v-for="error of v$.email.$errors" :key="error.$uid">
           <div>{{ error.$message }}</div>
         </div>
-      </div>
+      </Message>
     </div>
 
     <!-- Phone input -->
-    <div class="mb-3">
-      <label for="registerPhone" class="form-label">Phone Number</label>
-      <input
-        type="tel"
-        id="registerPhone"
-        class="form-control"
-        v-model="v$.phone.$model"
-        :class="{
-          'is-invalid': v$.phone.$error,
-          'is-valid': !v$.phone.$error,
-        }"
-      />
-      <div class="invalid-feedback" v-if="v$.phone.$error">
+    <div class="form-group mb-3">
+      <FloatLabel variant="on">
+        <IconField>
+          <InputIcon class="fas fa-phone" />
+          <InputText
+            fluid
+            id="registerPhone"
+            v-model="v$.phone.$model"
+            :invalid="v$.phone.$error"
+            type="tel"
+          />
+        </IconField>
+        <label for="registerPhone">Phone number</label>
+      </FloatLabel>
+      <Message
+        size="small"
+        severity="error"
+        v-if="v$.phone.$error"
+        variant="simple"
+      >
         <div v-for="error of v$.phone.$errors" :key="error.$uid">
           <div>{{ error.$message }}</div>
         </div>
-      </div>
+      </Message>
     </div>
 
     <!-- Password input -->
-    <div class="form-outline mb-3">
-      <label for="registerPassword" class="form-label">Password</label>
-      <input
-        type="password"
-        id="registerPassword"
-        class="form-control"
-        v-model="v$.password.$model"
-        :class="{
-          'is-invalid': v$.password.$error,
-          'is-valid': !v$.password.$error,
-        }"
-      />
-      <div class="invalid-feedback" v-if="v$.password.$error">
+    <div class="form-group mb-3">
+      <FloatLabel variant="on">
+        <IconField>
+          <InputIcon class="fas fa-lock" />
+          <InputText
+            fluid
+            id="registerPassword"
+            v-model="v$.password.$model"
+            :invalid="v$.password.$error"
+            type="password"
+          />
+        </IconField>
+        <label for="registerPassword">Password</label>
+      </FloatLabel>
+      <Message
+        size="small"
+        severity="error"
+        v-if="v$.password.$error"
+        variant="simple"
+      >
         <div v-for="error of v$.password.$errors" :key="error.$uid">
           <div>{{ error.$message }}</div>
         </div>
-      </div>
+      </Message>
     </div>
 
     <!-- Submit button -->
-    <button
-      v-if="isRegistering"
+    <Button
+      fluid
+      class="mb-2"
+      size="small"
       type="submit"
-      class="btn btn-primary btn-block mb-2 w-100"
-      disabled
-    >
-      <span
-        class="spinner-border spinner-border-sm"
-        role="status"
-        aria-hidden="true"
-      ></span>
-      Please wait...
-    </button>
-    <button
-      v-else
-      :disabled="v$.$errors.length > 0"
-      type="submit"
-      class="btn btn-primary btn-block mb-2 w-100"
-    >
-      Sign up
-    </button>
+      :label="isRegistering ? 'Please wait...' : 'Sign up'"
+      :loading="isRegistering"
+      :disabled="v$.$errors.length > 0 || isRegistering"
+    />
   </form>
 </template>
 
@@ -121,6 +136,12 @@ import { useStore } from "vuex";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers, minLength } from "@vuelidate/validators";
+import { Message } from "primevue";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 
 // Access the store
 const store = useStore();
