@@ -97,7 +97,7 @@
         :disabled="v$.$errors.length > 0 || isLoggingIn"
       />
 
-      <!-- Register buttons -->
+      <!-- Register button -->
       <div class="text-center">
         <p>
           Don't have an account?

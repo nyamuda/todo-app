@@ -1,75 +1,76 @@
 <template>
   <div class="">
-    <form class="reset-password-form m-auto">
+    <form class="reset-password-form m-auto" @submit.prevent="submitForm">
       <div class="text-start">
         <h2 class="fw-bold">Reset Your Password</h2>
         <p>Enter your new password.</p>
       </div>
       <!-- Password input -->
-      <div class="form-outline mb-3">
-        <label for="resetPassword" class="form-label">Password</label>
-        <input
-          type="password"
-          id="resetPassword"
-          class="form-control"
-          v-model="v$.password.$model"
-          :class="{
-            'is-invalid': v$.password.$error,
-            'is-valid': !v$.password.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.password.$error">
+      <div class="form-group mb-3">
+        <FloatLabel variant="on">
+          <IconField>
+            <InputIcon class="fas fa-lock" />
+            <InputText
+              fluid
+              id="resetPassword"
+              v-model="v$.password.$model"
+              :invalid="v$.password.$error"
+              type="password"
+            />
+          </IconField>
+          <label for="resetPassword">Password</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.password.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.password.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Password confirm input -->
-      <div class="form-outline mb-3">
-        <label for="confirmResetPassword" class="form-label"
-          >Confirm Password</label
+      <div class="form-group mb-3">
+        <FloatLabel variant="on">
+          <IconField>
+            <InputIcon class="fas fa-lock" />
+            <InputText
+              fluid
+              id="resetPasswordConfirm"
+              v-model="v$.passwordConfirm.$model"
+              :invalid="v$.passwordConfirm.$error"
+              type="password"
+            />
+          </IconField>
+          <label for="resetPasswordConfirm">Confirm Password</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.passwordConfirm.$error"
+          variant="simple"
         >
-        <input
-          type="password"
-          id="confirmResetPassword"
-          class="form-control"
-          v-model="v$.passwordConfirm.$model"
-          :class="{
-            'is-invalid': v$.passwordConfirm.$error,
-            'is-valid': !v$.passwordConfirm.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.passwordConfirm.$error">
           <div v-for="error of v$.passwordConfirm.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Submit button -->
-      <button
-        v-if="isResettingPassword"
+      <Button
+        fluid
+        class="mb-2"
+        size="small"
         type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Please wait...
-      </button>
-      <button
-        v-else
-        :disabled="v$.$errors.length > 0"
-        @click.prevent="submitForm"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-      >
-        Change password
-      </button>
+        :label="
+          isResettingPassword ? 'Resetting password...' : 'Submit new password'
+        "
+        :loading="isResettingPassword"
+        :disabled="v$.$errors.length > 0 || isResettingPassword"
+      />
     </form>
   </div>
 </template>

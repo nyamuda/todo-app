@@ -24,6 +24,9 @@
         </div>
         <!-- Submit button -->
         <Button
+          fluid
+          severity="contrast"
+          size="small"
           type="submit"
           :label="
             isSendingPasswordResetLink ? 'Sending reset link...' : 'Submit'
@@ -42,6 +45,7 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
 const store = useStore();
 
 let email = ref("");
