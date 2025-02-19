@@ -13,7 +13,7 @@
       <div class="form-group mb-3">
         <FloatLabel variant="on">
           <IconField>
-            <InputIcon class="fas fa-at" />
+            <InputIcon class="fas fa-envelope" />
             <InputText
               id="loginEmail"
               class="w-100"
@@ -38,12 +38,13 @@
       <div class="form-group mb-3">
         <FloatLabel variant="on">
           <IconField>
-            <InputIcon class="fas fa-at" />
+            <InputIcon class="fas fa-lock" />
             <InputText
+              fluid
               id="loginPassword"
-              class="w-100"
               v-model="v$.password.$model"
               :invalid="v$.password.$error"
+              type="password"
             />
           </IconField>
           <label for="loginPassword">Password</label>
@@ -88,6 +89,7 @@
       <Button
         fluid
         class="mb-2"
+        size="small"
         type="submit"
         :label="isLoggingIn ? 'Please wait...' : 'Sign in'"
         :loading="isLoggingIn"
