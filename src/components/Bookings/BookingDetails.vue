@@ -240,7 +240,11 @@
             booking?.status.name !== 'cancelled' &&
             booking?.status.name !== 'completed'
           "
-          label="Cancel Booking"
+          :label="
+            isChangingBookingStatus == 'cancelled'
+              ? 'Cancelling booking...'
+              : 'Cancel Booking'
+          "
           icon="fas fa-times-circle"
           severity="danger"
           @click="cancelBooking(booking.id)"
@@ -474,7 +478,7 @@ let getBooking = () => {
       .dispatch("bookings/getBooking", id.value)
       .then((data) => {
         booking.value = data;
-        console.log(booking.value);
+        
         isGettingBooking.value = false;
       })
       .catch((message) => {

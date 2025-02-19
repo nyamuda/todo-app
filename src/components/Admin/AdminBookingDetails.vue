@@ -245,7 +245,11 @@
       >
         <Button
           v-if="booking?.status.name === 'pending'"
-          label="Confirm Booking"
+          :label="
+            isChangingBookingStatus == 'confirmed'
+              ? 'Confirming booking...'
+              : 'Confirm Booking'
+          "
           icon="far fa-calendar-check"
           severity="info"
           @click="confirmBooking(booking.id)"
@@ -256,7 +260,11 @@
 
         <Button
           v-if="booking?.status.name === 'confirmed'"
-          label="Mark as En Route"
+          :label="
+            isChangingBookingStatus == 'en route'
+              ? 'Marking as en route...'
+              : 'Mark as En Route'
+          "
           icon="fas fa-road"
           severity="contrast"
           @click="enRouteBooking(booking.id)"
@@ -266,7 +274,11 @@
         />
         <Button
           v-if="booking?.status.name === 'en route'"
-          label="Complete Booking"
+          :label="
+            isChangingBookingStatus == 'completed'
+              ? 'Completing booking...'
+              : 'Complete Booking'
+          "
           icon="fas fa-circle-check"
           severity="success"
           @click="completeBooking(booking.id)"
@@ -280,7 +292,11 @@
             booking?.status.name !== 'cancelled' &&
             booking?.status.name !== 'completed'
           "
-          label="Cancel Booking"
+          :label="
+            isChangingBookingStatus == 'cancelled'
+              ? 'Cancelling booking...'
+              : 'Cancel Booking'
+          "
           icon="fas fa-times-circle"
           severity="warn"
           @click="cancelBooking(booking.id)"

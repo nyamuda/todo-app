@@ -9,116 +9,133 @@
     >
       <!-- Name input -->
       <div class="form-group">
-        <label for="guestName" class="form-label">Name</label>
-        <input
-          type="text"
-          id="guestName"
-          class="form-control"
-          v-model="v$.name.$model"
-          :class="{
-            'is-invalid': v$.name.$error,
-            'is-valid': !v$.name.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.name.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="bookingName"
+            v-model="v$.name.$model"
+            :invalid="v$.name.$error"
+          />
+          <label for="bookingName">Name</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.name.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.name.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Email input -->
       <div class="form-group">
-        <label for="guestEmail" class="form-label">Email address</label>
-        <input
-          type="email"
-          id="guestEmail"
-          class="form-control"
-          v-model="v$.email.$model"
-          :class="{
-            'is-invalid': v$.email.$error,
-            'is-valid': !v$.email.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.email.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="bookingEmail"
+            v-model="v$.email.$model"
+            :invalid="v$.email.$error"
+          />
+          <label for="bookingEmail">Email</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.email.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.email.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Phone input -->
       <div class="form-group">
-        <label for="guestPhone" class="form-label">Phone number</label>
-        <input
-          type="tel"
-          id="guestPhone"
-          class="form-control"
-          v-model="v$.phone.$model"
-          :class="{
-            'is-invalid': v$.phone.$error,
-            'is-valid': !v$.phone.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.phone.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="bookingPhone"
+            v-model="v$.phone.$model"
+            :invalid="v$.phone.$error"
+          />
+          <label for="bookingPhone">Phone</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.phone.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.phone.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
-      </div>
-
-      <!-- Location input -->
-      <div class="form-group">
-        <label for="guestLocation" class="form-label">Location</label>
-        <input
-          type="text"
-          id="guestLocation"
-          class="form-control"
-          v-model="v$.location.$model"
-          :class="{
-            'is-invalid': v$.location.$error,
-            'is-valid': !v$.location.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.location.$error">
-          <div v-for="error of v$.location.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Vehicle type input -->
       <div class="form-group">
-        <label for="guestVehicleType" class="form-label"> Vehicle type</label>
-        <input
-          type="text"
-          id="guestVehicleType"
-          class="form-control"
-          v-model="v$.vehicleType.$model"
-          :class="{
-            'is-invalid': v$.vehicleType.$error,
-            'is-valid': !v$.vehicleType.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.vehicleType.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="bookingVehicleType"
+            v-model="v$.vehicleType.$model"
+            :invalid="v$.vehicleType.$error"
+          />
+          <label for="bookingVehicleType">Vehicle type</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.vehicleType.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.vehicleType.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
-      <div class="row">
+
+      <!-- Location input -->
+      <div class="form-group">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="bookingLocation"
+            v-model="v$.location.$model"
+            :invalid="v$.location.$error"
+          />
+          <label for="bookingLocation">Location</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.location.$error"
+          variant="simple"
+        >
+          <div v-for="error of v$.location.$errors" :key="error.$uid">
+            <div>{{ error.$message }}</div>
+          </div>
+        </Message>
+      </div>
+      <div class="row gap-3 gap-lg-0">
         <!-- Service type input -->
         <div class="form-group col-md-6">
-          <label for="guestServiceType" class="form-label">Service type</label>
-          <Select
-            id="guestServiceType"
-            v-model="v$.serviceTypeId.$model"
-            :options="services"
-            optionLabel="name"
-            optionValue="id"
-            placeholder="Select a service"
-            :invalid="v$.serviceTypeId.$error"
-          />
+          <FloatLabel variant="on">
+            <Select
+              class="w-100"
+              id="bookingServiceType"
+              v-model="v$.serviceTypeId.$model"
+              :options="services"
+              optionLabel="name"
+              optionValue="id"
+              :invalid="v$.serviceTypeId.$error"
+            />
+            <label for="bookingServiceType">Service type</label>
+          </FloatLabel>
           <Message
             size="small"
             severity="error"
@@ -132,17 +149,20 @@
         </div>
         <!-- Date and time -->
         <div class="form-group col-md-6">
-          <label for="guestDate" class="form-label">Date and time</label>
-          <DatePicker
-            id="guestDate"
-            v-model="v$.scheduledAt.$model"
-            showTime
-            hourFormat="12"
-            :invalid="v$.scheduledAt.$error"
-            fluid
-            showIcon
-            iconDisplay="input"
-          />
+          <FloatLabel variant="on">
+            <DatePicker
+              class="w-100"
+              id="bookingScheduledAt"
+              v-model="v$.scheduledAt.$model"
+              showTime
+              hourFormat="12"
+              :invalid="v$.scheduledAt.$error"
+              fluid
+              showIcon
+              iconDisplay="input"
+            />
+            <label for="bookingScheduledAt">Date and time</label>
+          </FloatLabel>
           <Message
             size="small"
             severity="error"
@@ -155,47 +175,40 @@
           </Message>
         </div>
       </div>
+
       <!-- Additional notes input -->
       <div class="form-group">
-        <label for="guestNotes" class="form-label">Additional notes</label>
-        <textarea
-          id="guestNotes"
-          class="form-input"
-          rows="3"
-          v-model="v$.additionalNotes.$model"
-          :class="{
-            'is-invalid': v$.additionalNotes.$error,
-            'is-valid': !v$.additionalNotes.$error,
-          }"
-        ></textarea>
-        <div class="invalid-feedback" v-if="v$.additionalNotes.$error">
+        <FloatLabel variant="on">
+          <Textarea
+            id="bookingAdditionalNotes"
+            v-model="v$.additionalNotes.$model"
+            :invalid="v$.additionalNotes.$error"
+            rows="5"
+            class="w-100"
+            style="resize: none"
+          />
+          <label for="bookingAdditionalNotes">Additional notes</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.additionalNotes.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.additionalNotes.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
-      <button
-        v-if="isCreatingBooking"
+      <Button
         type="submit"
-        class="submit-button"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Please wait...
-      </button>
-      <button
-        v-else
-        type="submit"
-        class="btn btn-primary submit-button"
-        :disabled="v$.$errors.length > 0"
-      >
-        Book car wash
-      </button>
+        :label="isCreatingBooking ? 'Creating booking...' : 'Book car wash'"
+        icon="fas fa-plus"
+        :loading="isCreatingBooking"
+        @click="load"
+        :disabled="v$.$errors.length > 0 || isCreatingBooking"
+      />
     </form>
     <!--For guest users end-->
   </div>

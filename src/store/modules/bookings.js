@@ -279,42 +279,30 @@ const bookings = {
     },
 
     //change booking status
-    async changeBookingStatus({ dispatch, state, rootState, commit }, payload) {
-      try {
-        state.isUpdatingBooking = true;
-        let { bookingId, statusUpdate } = payload;
+    async changeBookingStatus({ dispatch, rootState }, payload) {
+      let { bookingId, statusUpdate } = payload;
 
+      return new Promise((resolve, reject) => {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.put(
-          `${rootState.apiUrl}/bookings/${bookingId}/statuses`,
-          statusUpdate
-        );
-        // Check if the request was successful
-        //status code will be 204 from the API
-        if (response.status == 204) {
-          //update the status the of a booking without reloading the bookings from the API
-          commit("updateBookingStatus", {
-            id: bookingId,
-            status: statusUpdate.statusName,
-          });
+        axios
+          .put(
+            `${rootState.apiUrl}/admin/bookings/${bookingId}/statuses`,
+            statusUpdate
+          )
+          .then(() => {
+            let message = `The booking status is now ${statusUpdate.statusName}.`;
+            resolve(message);
+          })
 
-          //show toast success message
-          let message = `The booking status is now ${statusUpdate.statusName}.`;
-          toast.success(message);
-        } else {
-          toast.error(rootState.failureMessage);
-        }
-      } catch (ex) {
-        let message = ex.response
-          ? ex.response.data?.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isUpdatingBooking = false;
-      }
+          .catch((ex) => {
+            let message = ex.response.dat?.message
+              ? ex.response.data?.message
+              : rootState.failureMessage;
+            reject(message);
+          });
+      });
     },
 
     //add feedback when a booking is completed
