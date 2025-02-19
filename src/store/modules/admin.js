@@ -77,8 +77,6 @@ const admin = {
         state.isGettingBookings = true;
         const response = await axios.get(url, {
           params: {
-            page: state.bookingsPageInfo.page,
-            pageSize: state.bookingsPageInfo.pageSize,
             status: filterBy,
           },
         });
@@ -119,16 +117,10 @@ const admin = {
     },
 
     //Load more bookings
-    async loadMoreBookings(
-      { commit, dispatch, state, rootState },
-      filterBy = "all"
-    ) {
+    async loadMoreBookings({ commit, dispatch, state, rootState }, filterBy) {
       try {
-        let url = `${rootState.apiUrl}/admin/bookings`;
-        //check if there is a filter e.g completed, en route, confirmed etc
-        if (filterBy != "all" && !!filterBy) {
-          url += `/${filterBy}`;
-        }
+        let url = `${rootState.apiUrl}/admin/bookings?status=${filterBy}`;
+
         state.isLoadingMoreBookings = true;
         //add authorization header to the request
         //to access the protected route
