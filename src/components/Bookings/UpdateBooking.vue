@@ -108,22 +108,27 @@
 
       <!-- Additional notes input -->
       <div class="form-group mb-3">
-        <label for="guestNotes" class="form-label">Additional notes</label>
-        <textarea
-          id="guestNotes"
-          class="form-input"
-          rows="3"
-          v-model="v$.additionalNotes.$model"
-          :class="{
-            'is-invalid': v$.additionalNotes.$error,
-            'is-valid': !v$.additionalNotes.$error,
-          }"
-        ></textarea>
-        <div class="invalid-feedback" v-if="v$.additionalNotes.$error">
+        <FloatLabel variant="on">
+          <Textarea
+            id="updateAdditionalNotes"
+            v-model="v$.additionalNotes.$model"
+            :invalid="v$.additionalNotes.$error"
+            rows="5"
+            class="w-100"
+            style="resize: none"
+          />
+          <label for="updateAdditionalNotes">On Label</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.additionalNotes.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.additionalNotes.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <button
@@ -166,6 +171,8 @@ import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
+
+import Textarea from "primevue/textarea";
 
 //toast
 const toast = useToast();
