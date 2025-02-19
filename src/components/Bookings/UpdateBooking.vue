@@ -13,42 +13,48 @@
     >
       <!-- Vehicle type input -->
       <div class="form-group">
-        <label for="guestVehicleType" class="form-label"> Vehicle type</label>
-        <input
-          type="text"
-          id="guestVehicleType"
-          class="form-control"
-          v-model="v$.vehicleType.$model"
-          :class="{
-            'is-invalid': v$.vehicleType.$error,
-            'is-valid': !v$.vehicleType.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.vehicleType.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="updateVehicleType"
+            v-model="v$.vehicleType.$model"
+            :invalid="v$.vehicleType.$error"
+          />
+          <label for="updateVehicleType">Vehicle type</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.vehicleType.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.vehicleType.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Location input -->
       <div class="form-group">
-        <label for="guestLocation" class="form-label">Location</label>
-        <input
-          type="text"
-          id="guestLocation"
-          class="form-control"
-          v-model="v$.location.$model"
-          :class="{
-            'is-invalid': v$.location.$error,
-            'is-valid': !v$.location.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.location.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="updateLocation"
+            v-model="v$.location.$model"
+            :invalid="v$.location.$error"
+          />
+          <label for="updateLocation">Location</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.location.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.location.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
       <div class="row">
         <!-- Service type input -->
@@ -158,6 +164,8 @@ import { Message } from "primevue";
 import DatePicker from "primevue/datepicker";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
 
 //toast
 const toast = useToast();
@@ -171,6 +179,8 @@ let id = ref(null);
 let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
 //available car wash services
 let services = computed(() => store.state.services.services);
+//the status of the booking
+let status = ref(null);
 
 onMounted(() => {
   v$._value.$touch();
@@ -188,6 +198,8 @@ onMounted(() => {
         bookingForm.value.location = booking.location;
         bookingForm.value.scheduledAt = booking.scheduledAt;
         bookingForm.value.additionalNotes = booking.additionalNotes;
+        //the status of the booking
+        status.value = booking.status.name;
       })
       .catch((message) => toast.error(message));
   }
