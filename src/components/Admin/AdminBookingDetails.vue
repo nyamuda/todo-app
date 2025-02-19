@@ -284,19 +284,19 @@
           size="small"
           :loading="isChangingBookingStatus == 'cancelled'"
         />
-
-        <Button
-          v-if="
-            booking?.status.name !== 'cancelled' &&
-            booking?.status.name !== 'completed'
-          "
-          label="Edit Booking"
-          icon="fas fa-edit"
-          variant="outlined"
-          severity="contrast"
-          @click="editBooking"
-          size="small"
-        />
+        <router-link :to="'/admin/bookings/' + id + '/update'">
+          <Button
+            v-if="
+              booking?.status.name !== 'cancelled' &&
+              booking?.status.name !== 'completed'
+            "
+            label="Edit Booking"
+            icon="fas fa-edit"
+            variant="outlined"
+            severity="contrast"
+            @click="editBooking"
+            size="small"
+        /></router-link>
 
         <Button
           :loading="isDeletingBooking"
