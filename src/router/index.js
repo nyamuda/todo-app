@@ -27,6 +27,7 @@ import AddStatus from "@/components/Statuses/AddStatus.vue";
 import UpdateStatus from "@/components/Statuses/UpdateStatus.vue";
 import AdminBookingDetails from "@/components/Admin/AdminBookingDetails.vue";
 import BookingDetails from "@/components/Bookings/BookingDetails.vue";
+import AdminBookingUpdate from "@/components/Admin/AdminBookingUpdate.vue";
 
 const routes = [
   {
@@ -246,6 +247,11 @@ const routes = [
         path: "bookings/:id/details",
         name: "AdminBookingDetails",
         component: AdminBookingDetails,
+      },
+      {
+        path: "bookings/:id/update",
+        name: "AdminBookingUpdate",
+        component: AdminBookingUpdate,
       },
     ],
   },
