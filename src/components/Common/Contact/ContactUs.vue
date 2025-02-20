@@ -114,7 +114,11 @@ import { useStore } from "vuex";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
+import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+const toast = useToast();
 // Access the store
 const store = useStore();
 
@@ -141,7 +145,25 @@ let isContactingUs = computed(() => store.state.isContactingUs);
 let submitForm = async () => {
   const isFormCorrect = v$._value.$validate;
   if (isFormCorrect) {
-    store.dispatch("account/contactUs", contactForm.value);
+    store
+      .dispatch("account/contactUs", contactForm.value)
+      .then((message) => {
+        toast.add({
+          severity: "success",
+          summary: "Email Sent",
+          detail: message,
+          life: 10000,
+        });
+        router.push("/");
+      })
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Error Sending Email",
+          detail: message,
+          life: 10000,
+        });
+      });
   }
 };
 </script>

@@ -334,7 +334,11 @@ const account = {
               "We’ve received your message. Our team will get back to you shortly.";
             resolve(message);
           })
-          .catch(() => reject(rootState.failureMessage))
+          .catch((error) => {
+            const message =
+              error.response?.data?.message || rootState.failureMessage;
+            reject(message);
+          })
           .finally(() => {
             state.isContactingUs = false;
           });
