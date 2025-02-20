@@ -230,7 +230,9 @@ const account = {
               });
               resolve("An email has been sent for verification.");
             } catch (error) {
-              reject(rootState.failureMessage);
+              const message =
+                error.response?.data?.message || rootState.failureMessage;
+              reject(message);
             }
           })
           .finally(() => (state.isRegistering = false));

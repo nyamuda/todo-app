@@ -142,9 +142,13 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
+import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
 
 // Access the store
 const store = useStore();
+const toast = useToast();
+const router = useRouter();
 
 onMounted(() => {
   v$._value.$touch();
@@ -183,7 +187,25 @@ const v$ = useVuelidate(rules, registrationForm);
 let submitForm = async () => {
   const isFormCorrect = v$._value.$validate;
   if (isFormCorrect) {
-    store.dispatch("account/registerUser", registrationForm.value);
+    store
+      .dispatch("account/registerUser", registrationForm.value)
+      .then((message) => {
+        toast.add({
+          severity: "contrast",
+          summary: "Verification Needed",
+          detail: message,
+          life: 10000,
+        });
+        router.push("/email/verify");
+      })
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Registration Failed",
+          detail: message,
+          life: 10000,
+        });
+      });
   }
 };
 let isRegistering = computed(() => store.state.account.isRegistering);

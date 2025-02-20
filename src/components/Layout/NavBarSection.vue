@@ -102,6 +102,8 @@ let isAdmin = computed(() => store.state.account.loggedInUser.isAdmin);
 
 const toast = useToast();
 const router = useRouter();
+
+//Log out user
 let logout = () => {
   store
     .dispatch("account/logoutUser")
