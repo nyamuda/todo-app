@@ -94,12 +94,33 @@ import { computed } from "vue";
 import Button from "primevue/button";
 
 import Menubar from "primevue/menubar";
+import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
 
 let isAuthenticated = computed(() => store.state.account.isAuthenticated);
 let isAdmin = computed(() => store.state.account.loggedInUser.isAdmin);
 
+const toast = useToast();
+const router = useRouter();
 let logout = () => {
-  store.dispatch("account/logoutUser");
+  store
+    .dispatch("account/logoutUser")
+    .then((message) => {
+      toast.add({
+        severity: "contrast",
+        detail: message,
+        life: 3000,
+      });
+      router.push("/");
+    })
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Logout Failed",
+        detail: message,
+        life: 10000,
+      });
+    });
 };
 const items = computed(() => {
   //if admin

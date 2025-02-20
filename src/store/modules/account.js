@@ -211,7 +211,7 @@ const account = {
           let message = "You’re now logged out.";
           resolve(message);
         } catch {
-          reject("Logout failed. Please try again.");
+          reject("Something went wrong while logging you out. Please retry.");
         }
       });
     },
