@@ -173,9 +173,9 @@ let submitForm = () => {
       .then((message) => {
         toast.add({
           severity: "success",
-          summary: "Email Sent",
+          summary: "Message Sent",
           detail: message,
-          life: 10000,
+          life: 15000,
         });
         router.push("/");
       })
