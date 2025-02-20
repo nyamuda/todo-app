@@ -107,9 +107,10 @@
                   <!--Submit button-->
                   <div class="col-12">
                     <Button
+                      fluid
                       type="submit"
-                      :label="isContactingUs ? 'Sending message...' : 'Submit'"
-                      icon="fas fa-plus"
+                      :label="isContactingUs ? 'Sending message...' : 'Send'"
+                      icon="fas fa-paper-plane"
                       :loading="isContactingUs"
                       :disabled="v$.$errors.length > 0 || isContactingUs"
                     />
@@ -163,8 +164,8 @@ const rules = {
 
 const v$ = useVuelidate(rules, contactForm);
 //form validation with Vuelidate end
-let isContactingUs = computed(() => store.state.isContactingUs);
-let submitForm = async () => {
+let isContactingUs = computed(() => store.state.account.isContactingUs);
+let submitForm = () => {
   const isFormCorrect = v$._value.$validate;
   if (isFormCorrect) {
     store
