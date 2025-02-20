@@ -20,82 +20,99 @@
           </div>
           <div class="col-md-6 wow fadeInUp" data-wow-delay="0.1s">
             <div class="p-md-4 h-100 d-flex align-bookings-center">
-              <form>
+              <form @submit.prevent="submitForm">
                 <div class="row g-3">
+                  <!--Name field-->
                   <div class="col-12">
-                    <label for="name">Your Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="name"
-                      v-model="v$.name.$model"
-                      :class="{
-                        'is-invalid': v$.name.$error,
-                        'is-valid': !v$.name.$error,
-                      }"
-                    />
-
-                    <div class="invalid-feedback" v-if="v$.name.$error">
-                      <div v-for="error of v$.name.$errors" :key="error.$uid">
-                        <div>{{ error.$message }}</div>
-                      </div>
+                    <div class="form-group">
+                      <FloatLabel variant="on">
+                        <InputText
+                          class="w-100"
+                          id="contactName"
+                          v-model="v$.name.$model"
+                          :invalid="v$.name.$error"
+                        />
+                        <label for="contactName">Your Name</label>
+                      </FloatLabel>
+                      <Message
+                        size="small"
+                        severity="error"
+                        v-if="v$.name.$error"
+                        variant="simple"
+                      >
+                        <div v-for="error of v$.name.$errors" :key="error.$uid">
+                          <div>{{ error.$message }}</div>
+                        </div>
+                      </Message>
+                    </div>
+                  </div>
+                  <!--Email field-->
+                  <div class="col-12">
+                    <div class="form-group">
+                      <FloatLabel variant="on">
+                        <InputText
+                          class="w-100"
+                          id="contactEmail"
+                          v-model="v$.email.$model"
+                          :invalid="v$.email.$error"
+                          type="email"
+                        />
+                        <label for="contactEmail">Email</label>
+                      </FloatLabel>
+                      <Message
+                        size="small"
+                        severity="error"
+                        v-if="v$.email.$error"
+                        variant="simple"
+                      >
+                        <div
+                          v-for="error of v$.email.$errors"
+                          :key="error.$uid"
+                        >
+                          <div>{{ error.$message }}</div>
+                        </div>
+                      </Message>
+                    </div>
+                  </div>
+                  <!--Message field-->
+                  <div class="col-12">
+                    <div class="form-group">
+                      <FloatLabel variant="on">
+                        <Textarea
+                          id="contactMessage"
+                          v-model="v$.message.$model"
+                          :invalid="v$.message.$error"
+                          rows="5"
+                          class="w-100"
+                          style="resize: none"
+                        />
+                        <label for="contactMessage">Message</label>
+                      </FloatLabel>
+                      <Message
+                        size="small"
+                        severity="error"
+                        v-if="v$.message.$error"
+                        variant="simple"
+                      >
+                        <div
+                          v-for="error of v$.message.$errors"
+                          :key="error.$uid"
+                        >
+                          <div>{{ error.$message }}</div>
+                        </div>
+                      </Message>
                     </div>
                   </div>
 
+                  <!--Submit button-->
                   <div class="col-12">
-                    <label for="email">Your Email</label>
-                    <input
-                      type="email"
-                      class="form-control"
-                      id="email"
-                      v-model="v$.email.$model"
-                      :class="{
-                        'is-invalid': v$.email.$error,
-                        'is-valid': !v$.email.$error,
-                      }"
-                    />
-
-                    <div class="invalid-feedback" v-if="v$.email.$error">
-                      <div v-for="error of v$.email.$errors" :key="error.$uid">
-                        <div>{{ error.$message }}</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-12">
-                    <div class="">
-                      <label for="message">Message</label>
-                      <textarea
-                        class="form-control"
-                        id="message"
-                        rows="5"
-                        v-model="v$.message.$model"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <button
-                      v-if="isContactingUs"
-                      disabled
-                      class="btn btn-primary w-100 py-3"
+                    <Button
                       type="submit"
-                    >
-                      <span
-                        class="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Sending message...
-                    </button>
-                    <button
-                      v-else
-                      :disabled="v$.$errors.length > 0"
-                      @click.prevent="submitForm"
-                      class="btn btn-primary w-100 py-3"
-                      type="submit"
-                    >
-                      Send Message
-                    </button>
+                      :label="isContactingUs ? 'Sending message...' : 'Submit'"
+                      icon="fas fa-plus"
+                      :loading="isContactingUs"
+                      :disabled="v$.$errors.length > 0 || isContactingUs"
+                    />
                   </div>
                 </div>
               </form>
@@ -116,6 +133,11 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
 import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import Textarea from "primevue/textarea";
+import { Message } from "primevue";
 
 const router = useRouter();
 const toast = useToast();
