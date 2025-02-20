@@ -46,12 +46,35 @@ import { useStore } from "vuex";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
+import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
+
 const store = useStore();
+const router = useRouter();
+const toast = useToast();
 
 let email = ref("");
 let submitForm = async () => {
   if (email.value) {
-    store.dispatch("account/sendPasswordResetLink", { email: email.value });
+    store
+      .dispatch("account/sendPasswordResetLink", { email: email.value })
+      .then((message) => {
+        toast.add({
+          severity: "contrast",
+          summary: "Password Reset",
+          detail: message,
+          life: 5000,
+        });
+        router.push("/email/password/sent");
+      })
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: message,
+          life: 10000,
+        });
+      });
   }
 };
 let isSendingPasswordResetLink = computed(

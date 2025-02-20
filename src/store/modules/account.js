@@ -258,12 +258,11 @@ const account = {
         axios
           .post(`${rootState.apiUrl}/email/password`, payload)
           .then(() => {
-            resolve(); // Resolve on successful request
+            resolve("Password reset email sent."); // Resolve on successful request
           })
           .catch((error) => {
-            const message = error.response?.data?.message
-              ? error.response.data?.message
-              : rootState.failureMessage;
+            const message =
+              error.response?.data?.message || rootState.failureMessage;
             reject(message); // Reject with the error message
           })
           .finally(() => {
