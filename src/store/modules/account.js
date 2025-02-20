@@ -2,8 +2,6 @@ import axios from "axios";
 import router from "@/router";
 import { jwtDecode } from "jwt-decode";
 import { isJwtExpired } from "jwt-check-expiration";
-import { useToast } from "vue-toastification";
-const toast = useToast();
 
 const account = {
   namespaced: true,
@@ -71,171 +69,173 @@ const account = {
   },
   actions: {
     //login user and get the JWT token
-    async loginUser({ dispatch, state, rootState }, payload) {
-      try {
+
+    loginUser({ dispatch, state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
         const { rememberMe, email, password } = payload;
-        let loginDetails = { email, password };
+        const loginDetails = { email, password };
         state.isLoggingIn = true;
-        const response = await axios.post(
-          `${rootState.apiUrl}/account/login`,
-          loginDetails
-        );
 
-        //get the access token and decode it
-        let accessToken = response.data.token;
-        let decodedToken = jwtDecode(accessToken);
+        axios
+          .post(`${rootState.apiUrl}/account/login`, loginDetails)
+          .then(async (response) => {
+            // Get the access token and decode it
+            const accessToken = response.data.token;
+            const decodedToken = jwtDecode(accessToken);
 
-        // Extract the claims (name, isVerified etc.)
-        let isVerified = decodedToken["isVerified"];
+            // Extract the claims (e.g., isVerified)
+            const isVerified = decodedToken["isVerified"];
 
-        if (isVerified) {
-          //if the user wants to be be remembered on log in
-          //save the JWT token to local storage
-          if (rememberMe) {
-            localStorage.setItem("jwt_token", accessToken);
-          }
+            if (isVerified) {
+              // Store JWT token based on "remember me" option
+              if (rememberMe) {
+                localStorage.setItem("jwt_token", accessToken);
+              } else {
+                sessionStorage.setItem("jwt_token", accessToken);
+              }
 
-          //else save the JWT token to session storage
-          else {
-            sessionStorage.setItem("jwt_token", accessToken);
-          }
-
-          //mark the user as authenticated
-          dispatch("authenticateUser");
-
-          //show toast success message
-          let message = "Login successful";
-
-          toast.success(message);
-
-          router.push(state.attemptedUrl);
-        }
-
-        //if not verified, send verification email
-        else {
-          await axios.post(`${rootState.apiUrl}/email/verify`, {
-            email: email,
+              // Mark the user as authenticated
+              try {
+                await dispatch("authenticateUser");
+                router.push(state.attemptedUrl);
+                resolve("You have successfully logged in."); // Resolve with response data
+              } catch (authError) {
+                reject(authError); // Reject if authentication fails
+              }
+            } else {
+              // If not verified, trigger email verification
+              try {
+                await axios.post(`${rootState.apiUrl}/email/verify`, { email });
+                router.push("/email/verify");
+                resolve("Verification email sent."); // Resolve with a success message
+              } catch (verificationError) {
+                reject(
+                  verificationError.response?.data?.message ||
+                    "Verification failed."
+                );
+              }
+            }
+          })
+          .catch((error) => {
+            const message =
+              error.response?.data?.message || rootState.failureMessage;
+            reject(message); // Reject with the error message
+          })
+          .finally(() => {
+            state.isLoggingIn = false; // Reset loading state
           });
-
-          router.push("/email/verify");
-        }
-      } catch (ex) {
-        console.log(ex);
-        let message = ex.response?.data.message
-          ? ex.response.data.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isLoggingIn = false;
-      }
+      });
     },
-    async loginWithGoogle({ dispatch, state, rootState }, payload) {
-      try {
-        let { code } = payload;
-        console.log(code);
-        const response = await axios.post(
-          `${rootState.apiUrl}/oauth/google`,
-          payload
-        );
 
-        if (response.status == 200) {
-          //get the access token and decode it
-          let accessToken = response.data.token.result;
+    // Google OAuth login
+    loginWithGoogle({ dispatch, state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
+        state.isLoggingIn = true;
+        axios
+          .post(`${rootState.apiUrl}/oauth/google`, payload)
+          .then(async (response) => {
+            // Get the access token and save it to local storage
+            const accessToken = response.data.token.result;
+            localStorage.setItem("jwt_token", accessToken);
 
-          //save the JWT token to local storage
-          localStorage.setItem("jwt_token", accessToken);
-
-          //mark the user as authenticated
-          dispatch("authenticateUser");
-
-          //show toast success message
-          let message = "You’re signed in!";
-
-          toast.success(message);
-
-          router.push(state.attemptedUrl);
-        }
-      } catch (ex) {
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isLoggingIn = false;
-      }
+            try {
+              // Mark the user as authenticated
+              dispatch("authenticateUser");
+              resolve("You have successfully logged in."); // Resolve with response data
+            } catch {
+              reject("Unexpected response from server");
+            }
+          })
+          .catch((error) => {
+            const message =
+              error.response?.data?.message || rootState.failureMessage;
+            reject(message); // Reject with the error message
+          })
+          .finally(() => {
+            state.isLoggingIn = false; // Always reset loading state
+          });
+      });
     },
-    async loginWithFacebook({ dispatch, state, rootState }, payload) {
-      try {
-        const response = await axios.post(
-          `${rootState.apiUrl}/oauth/facebook`,
-          payload
-        );
 
-        if (response.status == 200) {
-          //get the access token and decode it
-          let accessToken = response.data.token.result;
+    // Login user with Facebook OAuth
+    loginWithFacebook({ dispatch, state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
+        state.isLoggingIn = true;
 
-          //save the JWT token to local storage
-          localStorage.setItem("jwt_token", accessToken);
+        axios
+          .post(`${rootState.apiUrl}/oauth/facebook`, payload)
+          .then(async (response) => {
+            // Get the access token
+            const accessToken = response.data.token.result;
 
-          //mark the user as authenticated
-          dispatch("authenticateUser");
+            // Save the JWT token to local storage
+            localStorage.setItem("jwt_token", accessToken);
 
-          //show toast success message
-          let message = "You’re signed in!";
-          toast.success(message);
-          router.push(state.attemptedUrl);
-        }
-      } catch (ex) {
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isLoggingIn = false;
-      }
+            // Mark the user as authenticated
+            try {
+              await dispatch("authenticateUser");
+              resolve("You have successfully logged in."); // Resolve with response data
+            } catch (authError) {
+              reject(authError); // Reject if authentication fails
+            }
+          })
+          .catch((error) => {
+            const message =
+              error.response?.data?.message || rootState.failureMessage;
+            reject(message); // Reject with the error message
+          })
+          .finally(() => {
+            state.isLoggingIn = false; // Reset loading state
+          });
+      });
     },
 
     // When the user logs out
     logoutUser({ commit }) {
-      //first, remove access token from local or session storage
-      localStorage.removeItem("jwt_token");
-      sessionStorage.removeItem("jwt_token");
+      return new Promise((resolve, reject) => {
+        try {
+          //first, remove access token from local or session storage
+          localStorage.removeItem("jwt_token");
+          sessionStorage.removeItem("jwt_token");
 
-      // Clear the default authorization header
-      delete axios.defaults.headers.common["Authorization"];
+          // Clear the default authorization header
+          delete axios.defaults.headers.common["Authorization"];
+          //second, clear the user info from the state
+          let userInfo = {
+            name: "",
+            email: "",
+          };
+          commit("addUserInfo", userInfo);
 
-      //second, clear the user info from the state
-      let userInfo = {
-        name: "",
-        email: "",
-      };
-      commit("addUserInfo", userInfo);
-
-      //third, mark the user as unauthenticated
-      commit("authenticateUser", false);
-
-      //finally, navigate to the homepage and show logged out message
-      router.push("/");
-      // let message = "You’re now logged out.";
-      // toast.success(message);
+          //third, mark the user as unauthenticated
+          commit("authenticateUser", false);
+          let message = "You’re now logged out.";
+          resolve(message);
+        } catch {
+          reject("Logout failed. Please try again.");
+        }
+      });
     },
     //Register user
-    async registerUser({ rootState, state }, payload) {
-      try {
-        const { email } = payload;
-
+    registerUser({ rootState, state }, payload) {
+      return new Promise((resolve, reject) => {
         state.isRegistering = true;
-        await axios.post(`${rootState.apiUrl}/account/register`, payload);
-
-        //send verification email
-        await axios.post(`${rootState.apiUrl}/email/verify`, {
-          email: email,
-        });
-        router.push("/email/verify");
-      } catch (ex) {
-        console.log(ex);
-        let message = ex.response.data?.message
-          ? ex.response.data.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isRegistering = false;
-      }
+        const { email } = payload;
+        axios
+          .post(`${rootState.apiUrl}/account/register`, payload)
+          .then(async () => {
+            try {
+              //send verification email
+              await axios.post(`${rootState.apiUrl}/email/verify`, {
+                email: email,
+              });
+              resolve("An email has been sent for verification.");
+            } catch (error) {
+              reject(rootState.failureMessage);
+            }
+          })
+          .finally(() => (state.isRegistering = false));
+      });
     },
     //verify user email address
     //by verifying the token sent to their email
@@ -246,47 +246,57 @@ const account = {
         state.emailVerificationStatus = "success";
       } catch (ex) {
         state.emailVerificationStatus = "fail";
-        toast.error(ex.response.data.message);
       }
     },
     //send password reset link to user who has forgotten their password
-    async sendPasswordResetLink({ state, rootState }, payload) {
-      try {
+    // Send password reset link
+    sendPasswordResetLink({ state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
         state.isSendingPasswordLink = true;
-        await axios.post(`${rootState.apiUrl}/email/password`, payload);
-        router.push("/email/password/sent");
-      } catch (ex) {
-        let message =
-          ex.status == 400
-            ? ex.response.data?.message
-            : rootState.failureMessage;
 
-        toast.error(message);
-      } finally {
-        state.isSendingPasswordLink = false;
-      }
+        axios
+          .post(`${rootState.apiUrl}/email/password`, payload)
+          .then(() => {
+            resolve(); // Resolve on successful request
+          })
+          .catch((error) => {
+            const message = error.response?.data?.message
+              ? error.response.data?.message
+              : rootState.failureMessage;
+            reject(message); // Reject with the error message
+          })
+          .finally(() => {
+            state.isSendingPasswordLink = false; // Reset loading state
+          });
+      });
     },
+
     //allow user to change their password
     //by verifying the reset password token sent to their email
-    async resetPassword({ state, rootState }, payload) {
-      state.isResettingPassword = true;
-
-      try {
-        await axios.post(`${rootState.apiUrl}/account/password-reset`, payload);
-        let message =
-          "Your password has been successfully reset. You can now log in with your new password.";
-        toast.success(message);
-        router.push("/account/login");
-      } catch (ex) {
-        let message =
-          ex.status == 400
-            ? ex.response.data?.message
-            : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isResettingPassword = false;
-      }
+    // Reset user password
+    resetPassword({ state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
+        state.isResettingPassword = true;
+        axios
+          .post(`${rootState.apiUrl}/account/password-reset`, payload)
+          .then(() => {
+            resolve(
+              "Your password has been successfully reset. You can now log in with your new password."
+            );
+          })
+          .catch((error) => {
+            const message =
+              error.response?.status === 400
+                ? error.response.data?.message
+                : rootState.failureMessage;
+            reject(message); // Reject with the error message
+          })
+          .finally(() => {
+            state.isResettingPassword = false; // Reset loading state
+          });
+      });
     },
+
     //check to see if user is authenticated by using the Jwt token
     authenticateUser({ commit, dispatch }) {
       //check if there is a token in session storage
@@ -318,20 +328,23 @@ const account = {
       }
     },
     //Contact us message from user
-    async contactUs({ state, rootState }, payload) {
-      try {
+    contactUs({ state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
         state.isContactingUs = true;
-        await axios.post(`${rootState.apiUrl}/email/contact`, payload);
-        let message =
-          "We’ve received your message. Our team will get back to you shortly.";
-        toast.success(message);
-        router.push("/");
-      } catch (ex) {
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isContactingUs = false;
-      }
+        axios
+          .post(`${rootState.apiUrl}/email/contact`, payload)
+          .then(() => {
+            let message =
+              "We’ve received your message. Our team will get back to you shortly.";
+            resolve(message);
+          })
+          .catch(() => reject(rootState.failureMessage))
+          .finally(() => {
+            state.isContactingUs = false;
+          });
+      });
     },
+
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage
