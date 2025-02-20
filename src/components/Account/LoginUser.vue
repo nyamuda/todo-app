@@ -121,9 +121,13 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
+import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
 
 // Access the store
 const store = useStore();
+const router = useRouter();
+const toast = useToast();
 
 onMounted(() => {
   v$._value.$touch();
@@ -154,7 +158,36 @@ const v$ = useVuelidate(rules, loginForm.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("account/loginUser", loginForm.value);
+    store
+      .dispatch("account/loginUser", loginForm.value)
+      .then(({ message, isVerified }) => {
+        //if user has been verified
+        if (isVerified) {
+          toast.add({
+            severity: "contrast",
+            summary: "Login",
+            detail: message,
+            life: 3000,
+          });
+          router.push(store.state.account.attemptedUrl);
+        } else {
+          toast.add({
+            severity: "contrast",
+            summary: "Verification",
+            detail: message,
+            life: 5000,
+          });
+          router.push("/email/verify");
+        }
+      })
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Login Failed",
+          detail: message,
+          life: 3000,
+        });
+      });
   }
 };
 let isLoggingIn = computed(() => store.state.account.isLoggingIn);

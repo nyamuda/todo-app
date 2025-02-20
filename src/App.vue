@@ -6,12 +6,15 @@
     </div>
     <FooterSection />
   </div>
+  <!--For all toast notifications within the application-->
+  <Toast />
 </template>
 
 <script setup>
 import NavBarSection from "./components/Layout/NavBarSection.vue";
 import FooterSection from "./components/Layout/FooterSection.vue";
 import { onMounted } from "vue";
+import Toast from "primevue/toast";
 
 import { useStore } from "vuex";
 const store = useStore();

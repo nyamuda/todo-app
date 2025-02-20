@@ -1,5 +1,4 @@
 import axios from "axios";
-import router from "@/router";
 import { jwtDecode } from "jwt-decode";
 import { isJwtExpired } from "jwt-check-expiration";
 
@@ -97,8 +96,8 @@ const account = {
               // Mark the user as authenticated
               try {
                 await dispatch("authenticateUser");
-                router.push(state.attemptedUrl);
-                resolve("You have successfully logged in."); // Resolve with response data
+                let message = "You have successfully logged in.";
+                resolve({ message, isVerified }); // Resolve with response data
               } catch (authError) {
                 reject(authError); // Reject if authentication fails
               }
@@ -106,8 +105,8 @@ const account = {
               // If not verified, trigger email verification
               try {
                 await axios.post(`${rootState.apiUrl}/email/verify`, { email });
-                router.push("/email/verify");
-                resolve("Verification email sent."); // Resolve with a success message
+                let message = "Check your inbox to verify your email.";
+                resolve({ message, isVerified }); // Resolve with response data
               } catch (verificationError) {
                 reject(
                   verificationError.response?.data?.message ||
