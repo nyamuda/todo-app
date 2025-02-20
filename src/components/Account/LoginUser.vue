@@ -165,7 +165,6 @@ let submitForm = async () => {
         if (isVerified) {
           toast.add({
             severity: "contrast",
-            summary: "Login",
             detail: message,
             life: 3000,
           });
@@ -173,9 +172,8 @@ let submitForm = async () => {
         } else {
           toast.add({
             severity: "contrast",
-            summary: "Verification",
+            summary: "Verification Needed",
             detail: message,
-            life: 5000,
           });
           router.push("/email/verify");
         }
@@ -185,7 +183,7 @@ let submitForm = async () => {
           severity: "error",
           summary: "Login Failed",
           detail: message,
-          life: 3000,
+          life: 10000,
         });
       });
   }
