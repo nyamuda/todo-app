@@ -88,8 +88,10 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
+import { useToast } from "primevue/usetoast";
 
-const route = useRouter();
+const router = useRouter();
+const toast = useToast();
 // Access the store
 const store = useStore();
 
@@ -130,7 +132,7 @@ onMounted(() => {
   v$._value.$touch();
   //get the token provided in the URL from
   //when the user clicks the reset button in their confirmation email
-  providedToken.value = route.currentRoute.value.query.token ?? "";
+  providedToken.value = router.currentRoute.value.query.token ?? "";
 });
 
 let isResettingPassword = computed(
@@ -140,10 +142,27 @@ let isResettingPassword = computed(
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect && providedToken.value) {
-    store.dispatch("account/resetPassword", {
-      token: providedToken.value,
-      password: resetPasswordForm.value.password,
-    });
+    store
+      .dispatch("account/resetPassword", {
+        token: providedToken.value,
+        password: resetPasswordForm.value.password,
+      })
+      .then((message) => {
+        toast.add({
+          severity: "success",
+          summary: "Password Reset",
+          detail: message,
+        });
+        router.push(store.state.account.attemptedUrl);
+      })
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Reset Failed",
+          detail: message,
+          life: 10000,
+        });
+      });
   }
 };
 </script>

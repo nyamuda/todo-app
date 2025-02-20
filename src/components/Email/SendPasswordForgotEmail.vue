@@ -60,8 +60,8 @@ let submitForm = async () => {
       .dispatch("account/sendPasswordResetLink", { email: email.value })
       .then((message) => {
         toast.add({
-          severity: "contrast",
-          summary: "Password Reset",
+          severity: "success",
+          summary: "Email Sent",
           detail: message,
           life: 5000,
         });

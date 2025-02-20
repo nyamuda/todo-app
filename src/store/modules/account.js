@@ -280,15 +280,11 @@ const account = {
         axios
           .post(`${rootState.apiUrl}/account/password-reset`, payload)
           .then(() => {
-            resolve(
-              "Your password has been successfully reset. You can now log in with your new password."
-            );
+            resolve("Your password has been successfully reset.");
           })
           .catch((error) => {
             const message =
-              error.response?.status === 400
-                ? error.response.data?.message
-                : rootState.failureMessage;
+              error.response?.data?.message || rootState.failureMessage;
             reject(message); // Reject with the error message
           })
           .finally(() => {
