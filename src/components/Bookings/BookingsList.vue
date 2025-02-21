@@ -452,7 +452,17 @@ let filterBookings = () => {
 //load more bookings depending on whether
 //the current list is for all, completed or uncompleted bookings
 let loadMoreBookings = () => {
-  store.dispatch("bookings/loadMoreBookings", filterBookingsBy.value);
+  store
+    .dispatch("bookings/loadMoreBookings", filterBookingsBy.value)
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+        life: 3000,
+      });
+    });
 };
 //is an booking being marked as complete
 // let isCompletingBooking = computed(
