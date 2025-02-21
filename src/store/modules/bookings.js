@@ -3,353 +3,355 @@ import router from "@/router";
 import { useToast } from "vue-toastification";
 const toast = useToast();
 const bookings = {
-  namespaced: true,
-  state: () => ({
-    bookings: [],
-    isGettingBookings: false, //to show placeholder bookings
-    isCreatingBooking: false, //to show the loading button during task creation
-    isUpdatingBooking: false, //to show the loading button during task completion
-    isGettingStatistics: false,
-    isSendingFeedback: false,
-    bookingsPageInfo: {
-      //page info for lazy loading
-      page: 1, //current page size
-      pageSize: 10, //total bookings per page
-      hasMore: false, //whether there is more tasks to load
-    },
-    isLoadingMoreBookings: false,
-    isGettingServiceTypes: false,
-    userStatistics: {
-      totalBookings: 0,
-      totalCompletedBookings: 0,
-      totalPendingBookings: 0,
-      totalCancelledBookings: 0,
-      totalConfirmedBookings: 0,
-    },
-  }),
-  mutations: {
-    setBookings(state, bookings) {
-      // mutate state by formatting the date
-      state.bookings = bookings;
-    },
-    //update the status the of an updated booking without reloading the bookings from the API
-    updateBookingStatus(state, { id, status }) {
-      let updatedBookings = state.bookings.map((booking) => {
-        if (booking.id == id) {
-          //change the status
-          booking.status.name = status;
-          return booking;
-        }
-        return booking;
-      });
-      state.bookings = updatedBookings;
-    },
+	namespaced: true,
+	state: () => ({
+		bookings: [],
+		isGettingBookings: false, //to show placeholder bookings
+		isCreatingBooking: false, //to show the loading button during task creation
+		isUpdatingBooking: false, //to show the loading button during task completion
+		isGettingStatistics: false,
+		isSendingFeedback: false,
+		bookingsPageInfo: {
+			//page info for lazy loading
+			page: 1, //current page size
+			pageSize: 10, //total bookings per page
+			hasMore: false, //whether there is more tasks to load
+		},
+		isLoadingMoreBookings: false,
+		isGettingServiceTypes: false,
+		userStatistics: {
+			totalBookings: 0,
+			totalCompletedBookings: 0,
+			totalPendingBookings: 0,
+			totalCancelledBookings: 0,
+			totalConfirmedBookings: 0,
+		},
+	}),
+	mutations: {
+		setBookings(state, bookings) {
+			// mutate state by formatting the date
+			state.bookings = bookings;
+		},
+		//update the status the of an updated booking without reloading the bookings from the API
+		updateBookingStatus(state, { id, status }) {
+			let updatedBookings = state.bookings.map((booking) => {
+				if (booking.id == id) {
+					//change the status
+					booking.status.name = status;
+					return booking;
+				}
+				return booking;
+			});
+			state.bookings = updatedBookings;
+		},
 
-    updatePageInfo(state, pageInfo) {
-      state.bookingsPageInfo = pageInfo;
-    },
-    //load more bookings
-    loadAdditionalBookings(state, bookings) {
-      //marge original bookings with new loaded bookings
-      let mergedBookings = state.bookings.concat(bookings);
-      state.bookings = mergedBookings;
-    },
-    //set user statistics such as total uncompleted bookings by the user
-    setUserStatistics(state, stats) {
-      state.userStatistics = stats;
-    },
-  },
-  getters: {
-    //formatting the 'scheduleAt' date of the bookings
-    formatAndGetBookings(state) {
-      return state.bookings.map((booking) => {
-        return {
-          id: booking.id,
-          vehicleType: booking.vehicleType,
-          serviceType: booking.serviceType,
-          location: booking.location,
-          scheduledAt: new Date(booking.scheduledAt).toLocaleString(), // Format the 'scheduledAt' date
-          status: booking.status,
-          additionalNotes: booking.additionalNotes,
-        };
-      });
-    },
-  },
-  actions: {
-    //fetch all bookings
-    getBookings({ commit, dispatch, state, rootState }, filterBy) {
-      return new Promise((resolve, reject) => {
-        let url = `${rootState.apiUrl}/bookings`;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        state.isGettingBookings = true;
-        axios
-          .get(url, {
-            params: {
-              status: filterBy,
-            },
-          })
-          .then((response) => {
-            //mutate the state with the fetched bookings
-            commit("setBookings", response.data.bookings);
+		updatePageInfo(state, pageInfo) {
+			state.bookingsPageInfo = pageInfo;
+		},
+		//load more bookings
+		loadAdditionalBookings(state, bookings) {
+			//marge original bookings with new loaded bookings
+			let mergedBookings = state.bookings.concat(bookings);
+			state.bookings = mergedBookings;
+		},
+		//set user statistics such as total uncompleted bookings by the user
+		setUserStatistics(state, stats) {
+			state.userStatistics = stats;
+		},
+	},
+	getters: {
+		//formatting the 'scheduleAt' date of the bookings
+		formatAndGetBookings(state) {
+			return state.bookings.map((booking) => {
+				return {
+					id: booking.id,
+					vehicleType: booking.vehicleType,
+					serviceType: booking.serviceType,
+					location: booking.location,
+					scheduledAt: new Date(booking.scheduledAt).toLocaleString(), // Format the 'scheduledAt' date
+					status: booking.status,
+					additionalNotes: booking.additionalNotes,
+				};
+			});
+		},
+	},
+	actions: {
+		//fetch all bookings
+		getBookings({ commit, dispatch, state, rootState }, filterBy) {
+			return new Promise((resolve, reject) => {
+				let url = `${rootState.apiUrl}/bookings`;
+				//add authorization header to the request
+				//to access the protected route
+				dispatch("setAuthorizationHeader");
+				state.isGettingBookings = true;
+				axios
+					.get(url, {
+						params: {
+							status: filterBy,
+						},
+					})
+					.then((response) => {
+						//mutate the state with the fetched bookings
+						commit("setBookings", response.data.bookings);
 
-            //save the pagination info
-            commit("updatePageInfo", response.data.pageInfo);
+						//save the pagination info
+						commit("updatePageInfo", response.data.pageInfo);
 
-            resolve(response.data.bookings);
-          })
-          .catch(() => {
-            reject("Something went wrong while fetching bookings.");
-          })
-          .finally(() => {
-            state.isGettingBookings = false;
-          });
-      });
-    },
-    //get booking by ID
-    getBooking({ rootState, dispatch }, id) {
-      dispatch("setAuthorizationHeader");
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`${rootState.apiUrl}/bookings/${id}`)
-          .then((response) => resolve(response.data))
-          .catch((ex) => {
-            let message =
-              ex.status == 404
-                ? "The booking you're looking for does not exist."
-                : rootState.failureMessage;
-            reject(message);
-          });
-      });
-    },
+						resolve(response.data.bookings);
+					})
+					.catch(() => {
+						reject("Something went wrong while fetching bookings.");
+					})
+					.finally(() => {
+						state.isGettingBookings = false;
+					});
+			});
+		},
+		//get booking by ID
+		getBooking({ rootState, dispatch }, id) {
+			dispatch("setAuthorizationHeader");
+			return new Promise((resolve, reject) => {
+				axios
+					.get(`${rootState.apiUrl}/bookings/${id}`)
+					.then((response) => resolve(response.data))
+					.catch((ex) => {
+						let message =
+							ex.status == 404
+								? "The booking you're looking for does not exist."
+								: rootState.failureMessage;
+						reject(message);
+					});
+			});
+		},
 
-    //fetch user statistics such as the number of completed tasks by the user
-    fetchUserStatistics({ commit, dispatch, rootState, state }) {
-      return new Promise((resolve, reject) => {
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        state.isGettingStatistics = true;
-        axios
-          .get(`${rootState.apiUrl}/bookings/statistics`)
-          .then((response) => {
-            //mutate the state with the fetched statistics
-            commit("setUserStatistics", response.data);
-            resolve(response.data);
-          })
-          .catch(() => {
-            reject("Couldn't fetch your booking summary.");
-          })
-          .finally(() => {
-            state.isGettingStatistics = false;
-          });
-      });
-    },
+		//fetch user statistics such as the number of completed tasks by the user
+		fetchUserStatistics({ commit, dispatch, rootState, state }) {
+			return new Promise((resolve, reject) => {
+				//add authorization header to the request
+				//to access the protected route
+				dispatch("setAuthorizationHeader");
+				state.isGettingStatistics = true;
+				axios
+					.get(`${rootState.apiUrl}/bookings/statistics`)
+					.then((response) => {
+						//mutate the state with the fetched statistics
+						commit("setUserStatistics", response.data);
+						resolve(response.data);
+					})
+					.catch(() => {
+						reject("Couldn't fetch your booking summary.");
+					})
+					.finally(() => {
+						state.isGettingStatistics = false;
+					});
+			});
+		},
 
-    //Load more bookings
-    loadMoreBookings({ commit, dispatch, state, rootState }, filterBy) {
-      return new Promise((resolve, reject) => {
-        state.isLoadingMoreBookings = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        axios
-          .get(`${rootState.apiUrl}/bookings?status=${filterBy}`, {
-            params: {
-              page: state.bookingsPageInfo.page + 1,
-              pageSize: state.bookingsPageInfo.pageSize,
-            },
-          })
-          .then((response) => {
-            //mutate the state with the additional tasks
-            commit("loadAdditionalBookings", response.data.bookings);
+		//Load more bookings
+		loadMoreBookings({ commit, dispatch, state, rootState }, filterBy) {
+			return new Promise((resolve, reject) => {
+				state.isLoadingMoreBookings = true;
+				//add authorization header to the request
+				//to access the protected route
+				dispatch("setAuthorizationHeader");
+				//make the request
+				axios
+					.get(`${rootState.apiUrl}/bookings?status=${filterBy}`, {
+						params: {
+							page: state.bookingsPageInfo.page + 1,
+							pageSize: state.bookingsPageInfo.pageSize,
+						},
+					})
+					.then((response) => {
+						//mutate the state with the additional tasks
+						commit("loadAdditionalBookings", response.data.bookings);
 
-            //page info
-            commit("updatePageInfo", response.data.pageInfo);
-            resolve();
-          })
-          .finally(() => {
-            reject("Failed to load more bookings. Please try again.");
-          });
-      });
-    },
+						//page info
+						commit("updatePageInfo", response.data.pageInfo);
+						resolve();
+					})
+					.finally(() => {
+						reject("Failed to load more bookings. Please try again.");
+					});
+			});
+		},
 
-    //add a booking
-    async addBooking({ dispatch, state, rootState }, payload) {
-      try {
-        let { booking } = payload;
-        //convert time to UCT
-        // let localScheduledAt = booking.scheduledAt;
-        // booking.scheduledAt = new Date(localScheduledAt + "Z").toISOString();
-        state.isCreatingBooking = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
+		//add a booking
+		async addBooking({ dispatch, state, rootState }, payload) {
+			return new Promise((resolve, reject) => {
+				let { booking } = payload;
+				//convert time to UCT
+				// let localScheduledAt = booking.scheduledAt;
+				// booking.scheduledAt = new Date(localScheduledAt + "Z").toISOString();
+				state.isCreatingBooking = true;
+				//add authorization header to the request
+				//to access the protected route
+				dispatch("setAuthorizationHeader");
 
-        //make the request
-        await axios.post(`${rootState.apiUrl}/bookings`, booking);
-        //show toast success message
-        let message = "The booking has been successfully added.";
-        dispatch("showToast", { message: message, severity: "success" });
+				//make the request
+				axios
+					.post(`${rootState.apiUrl}/bookings`, booking)
+					.then(async () => {
+						//show toast success message
+						let message = "The booking has been successfully added.";
+						//refresh the state
+						await dispatch("getBookings");
+						
+						resolve(message);
+					})
+					.catch((ex) => {
+						let message =
+							ex.response?.data?.message || rootState.failureMessage;
+						reject(message);
+					})
+					.finally(() => {
+						state.isCreatingBooking = false;
+					});
+			});
+		},
+		//add a booking
+		async addGuestBooking({ dispatch, state, rootState }, payload) {
+			try {
+				let { booking } = payload;
 
-        router.push("/bookings");
+				//all guest booking fields required by the API
+				let guestBooking = {
+					guestName: booking.name,
+					guestEmail: booking.email,
+					guestPhone: booking.phone,
+					location: booking.location,
+					vehicleType: booking.vehicleType,
+					serviceTypeId: booking.serviceTypeId,
+					scheduledAt: booking.scheduledAt,
+					additionalNotes: booking.additionalNotes,
+				};
+				state.isCreatingBooking = true;
 
-        //refresh the state
-        await dispatch("getBookings");
-      } catch (ex) {
-        let message = ex.response
-          ? ex.response.data?.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isCreatingBooking = false;
-      }
-    },
-    //add a booking
-    async addGuestBooking({ dispatch, state, rootState }, payload) {
-      try {
-        let { booking } = payload;
+				//make the request
+				const response = await axios.post(
+					`${rootState.apiUrl}/bookings/guest`,
+					guestBooking
+				);
+				// Check if the request was successful
+				//status code will be 201 from the API
+				if (response.status == 201) {
+					//show toast success message
+					let message =
+						"Your booking has been successfully created. Please check your email.";
+					dispatch("showToast", { message: message, severity: "success" });
 
-        //all guest booking fields required by the API
-        let guestBooking = {
-          guestName: booking.name,
-          guestEmail: booking.email,
-          guestPhone: booking.phone,
-          location: booking.location,
-          vehicleType: booking.vehicleType,
-          serviceTypeId: booking.serviceTypeId,
-          scheduledAt: booking.scheduledAt,
-          additionalNotes: booking.additionalNotes,
-        };
-        state.isCreatingBooking = true;
+					router.push("/");
+				} else {
+					if (response.data.message) {
+						toast.error(response.data.message);
+					}
+				}
+			} catch (ex) {
+				let message = ex.response
+					? ex.response.data?.message
+					: rootState.failureMessage;
+				toast.error(message);
+			} finally {
+				state.isCreatingBooking = false;
+			}
+		},
 
-        //make the request
-        const response = await axios.post(
-          `${rootState.apiUrl}/bookings/guest`,
-          guestBooking
-        );
-        // Check if the request was successful
-        //status code will be 201 from the API
-        if (response.status == 201) {
-          //show toast success message
-          let message =
-            "Your booking has been successfully created. Please check your email.";
-          dispatch("showToast", { message: message, severity: "success" });
+		//update the booking
+		async updateBooking({ dispatch, state, rootState }, payload) {
+			try {
+				state.isUpdatingBooking = true;
+				let { id, booking } = payload;
 
-          router.push("/");
-        } else {
-          if (response.data.message) {
-            toast.error(response.data.message);
-          }
-        }
-      } catch (ex) {
-        let message = ex.response
-          ? ex.response.data?.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isCreatingBooking = false;
-      }
-    },
+				//add authorization header to the request
+				//to access the protected route
+				dispatch("setAuthorizationHeader");
+				//make the request
+				await axios.put(`${rootState.apiUrl}/bookings/${id}`, booking);
+				//show toast success message
+				let message = "The booking has been updated.";
+				toast.success(message);
 
-    //update the booking
-    async updateBooking({ dispatch, state, rootState }, payload) {
-      try {
-        state.isUpdatingBooking = true;
-        let { id, booking } = payload;
+				router.push(`/bookings/${id}/details`);
+			} catch (ex) {
+				console.log(ex);
+				let message = ex.response.data?.message
+					? ex.response.data?.message
+					: rootState.failureMessage;
+				toast.error(message);
+			} finally {
+				state.isUpdatingBooking = false;
+			}
+		},
 
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        await axios.put(`${rootState.apiUrl}/bookings/${id}`, booking);
-        //show toast success message
-        let message = "The booking has been updated.";
-        toast.success(message);
+		//change booking status
+		async changeBookingStatus({ dispatch, rootState }, payload) {
+			let { bookingId, statusUpdate } = payload;
 
-        router.push(`/bookings/${id}/details`);
-      } catch (ex) {
-        console.log(ex);
-        let message = ex.response.data?.message
-          ? ex.response.data?.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isUpdatingBooking = false;
-      }
-    },
+			return new Promise((resolve, reject) => {
+				//add authorization header to the request
+				//to access the protected route
+				dispatch("setAuthorizationHeader");
+				axios
+					.put(
+						`${rootState.apiUrl}/admin/bookings/${bookingId}/statuses`,
+						statusUpdate
+					)
+					.then(() => {
+						let message = `The booking status is now ${statusUpdate.statusName}.`;
+						resolve(message);
+					})
 
-    //change booking status
-    async changeBookingStatus({ dispatch, rootState }, payload) {
-      let { bookingId, statusUpdate } = payload;
+					.catch((ex) => {
+						let message = ex.response.dat?.message
+							? ex.response.data?.message
+							: rootState.failureMessage;
+						reject(message);
+					});
+			});
+		},
 
-      return new Promise((resolve, reject) => {
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        axios
-          .put(
-            `${rootState.apiUrl}/admin/bookings/${bookingId}/statuses`,
-            statusUpdate
-          )
-          .then(() => {
-            let message = `The booking status is now ${statusUpdate.statusName}.`;
-            resolve(message);
-          })
+		//add feedback when a booking is completed
+		async addFeedback({ dispatch, rootState, state }, payload) {
+			try {
+				let { feedback } = payload;
 
-          .catch((ex) => {
-            let message = ex.response.dat?.message
-              ? ex.response.data?.message
-              : rootState.failureMessage;
-            reject(message);
-          });
-      });
-    },
+				state.isSendingFeedback = true;
 
-    //add feedback when a booking is completed
-    async addFeedback({ dispatch, rootState, state }, payload) {
-      try {
-        let { feedback } = payload;
+				//add authorization header to the request
+				//to access the protected route
+				dispatch("setAuthorizationHeader");
 
-        state.isSendingFeedback = true;
+				//make the request
+				await axios.post(`${rootState.apiUrl}/feedback`, feedback);
+				// Check if the request was successful
+				//show toast success message
+				let message = "Your feedback has been received. Thank you!";
+				dispatch("showToast", { message: message, severity: "success" });
 
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
+				router.push("/bookings");
+				//refresh the state
+				await dispatch("getBookings");
+			} catch (err) {
+				console.log(err);
+				toast.error(rootState.failureMessage);
+			} finally {
+				state.isSendingFeedback = false;
+			}
+		},
 
-        //make the request
-        await axios.post(`${rootState.apiUrl}/feedback`, feedback);
-        // Check if the request was successful
-        //show toast success message
-        let message = "Your feedback has been received. Thank you!";
-        dispatch("showToast", { message: message, severity: "success" });
+		//Set authorization header for all request to access protected routes from the API
+		setAuthorizationHeader() {
+			//check if there is a token in session storage
+			let sessionToken = sessionStorage.getItem("jwt_token");
+			//check if there is a token in local storage
+			let localToken = localStorage.getItem("jwt_token");
 
-        router.push("/bookings");
-        //refresh the state
-        await dispatch("getBookings");
-      } catch (err) {
-        console.log(err);
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isSendingFeedback = false;
-      }
-    },
+			//the current token
+			let token = sessionToken ? sessionToken : localToken ? localToken : null;
 
-    //Set authorization header for all request to access protected routes from the API
-    setAuthorizationHeader() {
-      //check if there is a token in session storage
-      let sessionToken = sessionStorage.getItem("jwt_token");
-      //check if there is a token in local storage
-      let localToken = localStorage.getItem("jwt_token");
-
-      //the current token
-      let token = sessionToken ? sessionToken : localToken ? localToken : null;
-
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    },
-  },
+			axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+		},
+	},
 };
 
 export default bookings;
