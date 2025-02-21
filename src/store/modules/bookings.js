@@ -125,24 +125,26 @@ const bookings = {
     },
 
     //fetch user statistics such as the number of completed tasks by the user
-    async fetchUserStatistics({ commit, dispatch, rootState, state }) {
-      try {
+    fetchUserStatistics({ commit, dispatch, rootState, state }) {
+      return new Promise((resolve, reject) => {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
-
         state.isGettingStatistics = true;
-
-        const response = await axios.get(
-          `${rootState.apiUrl}/bookings/statistics`
-        );
-        //mutate the state with the fetched statistics
-        commit("setUserStatistics", response.data);
-      } catch (error) {
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isGettingStatistics = false;
-      }
+        axios
+          .get(`${rootState.apiUrl}/bookings/statistics`)
+          .then((response) => {
+            //mutate the state with the fetched statistics
+            commit("setUserStatistics", response.data);
+            resolve(response.data);
+          })
+          .catch(() => {
+            reject("Couldn't fetch your booking summary.");
+          })
+          .finally(() => {
+            state.isGettingStatistics = false;
+          });
+      });
     },
 
     //Load more bookings
