@@ -148,34 +148,32 @@ const bookings = {
     },
 
     //Load more bookings
-    async loadMoreBookings({ commit, dispatch, state, rootState }, filterBy) {
-      try {
+    loadMoreBookings({ commit, dispatch, state, rootState }, filterBy) {
+      return new Promise((resolve, reject) => {
         state.isLoadingMoreBookings = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        const response = await axios.get(
-          `${rootState.apiUrl}/bookings?status=${filterBy}`,
-          {
+        axios
+          .get(`${rootState.apiUrl}/bookings?status=${filterBy}`, {
             params: {
               page: state.bookingsPageInfo.page + 1,
               pageSize: state.bookingsPageInfo.pageSize,
             },
-          }
-        );
+          })
+          .then((response) => {
+            //mutate the state with the additional tasks
+            commit("loadAdditionalBookings", response.data.bookings);
 
-        //mutate the state with the additional tasks
-        commit("loadAdditionalBookings", response.data.bookings);
-
-        //page info
-        commit("updatePageInfo", response.data.pageInfo);
-      } catch (error) {
-        console.log(error);
-        toast.error("Failed to load more bookings.");
-      } finally {
-        state.isLoadingMoreBookings = false;
-      }
+            //page info
+            commit("updatePageInfo", response.data.pageInfo);
+            resolve();
+          })
+          .finally(() => {
+            reject("Failed to load more bookings. Please try again.");
+          });
+      });
     },
 
     //add a booking
