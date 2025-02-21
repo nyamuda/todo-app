@@ -60,22 +60,7 @@ const bookings = {
       state.userStatistics = stats;
     },
   },
-  getters: {
-    //formatting the 'scheduleAt' date of the bookings
-    formatAndGetBookings(state) {
-      return state.bookings.map((booking) => {
-        return {
-          id: booking.id,
-          vehicleType: booking.vehicleType,
-          serviceType: booking.serviceType,
-          location: booking.location,
-          scheduledAt: new Date(booking.scheduledAt).toLocaleString(), // Format the 'scheduledAt' date
-          status: booking.status,
-          additionalNotes: booking.additionalNotes,
-        };
-      });
-    },
-  },
+  getters: {},
   actions: {
     //fetch all bookings
     getBookings({ commit, dispatch, state, rootState }, filterBy) {
