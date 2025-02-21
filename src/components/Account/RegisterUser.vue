@@ -189,13 +189,7 @@ let submitForm = async () => {
   if (isFormCorrect) {
     store
       .dispatch("account/registerUser", registrationForm.value)
-      .then((message) => {
-        toast.add({
-          severity: "contrast",
-          summary: "Verification Needed",
-          detail: message,
-          life: 10000,
-        });
+      .then(() => {
         router.push("/email/verify");
       })
       .catch((message) => {
@@ -203,7 +197,7 @@ let submitForm = async () => {
           severity: "error",
           summary: "Registration Failed",
           detail: message,
-          life: 10000,
+          life: 20000,
         });
       });
   }

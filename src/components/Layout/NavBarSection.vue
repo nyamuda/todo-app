@@ -109,7 +109,8 @@ let logout = () => {
     .dispatch("account/logoutUser")
     .then((message) => {
       toast.add({
-        severity: "contrast",
+        severity: "success",
+        summary: "Logout Success",
         detail: message,
         life: 3000,
       });

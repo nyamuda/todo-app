@@ -124,7 +124,6 @@ import InputIcon from "primevue/inputicon";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
-
 const store = useStore();
 const router = useRouter();
 const toast = useToast();
@@ -160,20 +159,27 @@ let submitForm = async () => {
   if (isFormCorrect) {
     store
       .dispatch("account/loginUser", loginForm.value)
-      .then(({ message, isVerified }) => {
+      .then(({ isVerified }) => {
         //if user has been verified
-        if (isVerified) {
+        if (isVerified == "true") {
+          //mark the user as authenticated
+          store.dispatch("account/authenticateUser");
+          //success message
           toast.add({
-            severity: "contrast",
-            detail: message,
+            severity: "success",
+            summary: "Login Success",
+            detail: "Welcome back!",
             life: 3000,
           });
           router.push(store.state.account.attemptedUrl);
-        } else {
+        }
+        //else send them an email to verify their email
+        else {
           toast.add({
             severity: "contrast",
-            summary: "Verification Needed",
-            detail: message,
+            summary: "Email Not Verified",
+            detail:
+              "Check your inbox for the verification link to complete your login.",
           });
           router.push("/email/verify");
         }
@@ -183,7 +189,7 @@ let submitForm = async () => {
           severity: "error",
           summary: "Login Failed",
           detail: message,
-          life: 10000,
+          life: 20000,
         });
       });
   }

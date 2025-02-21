@@ -69,7 +69,7 @@ const account = {
   actions: {
     //login user and get the JWT token
 
-    loginUser({ dispatch, state, rootState }, payload) {
+    loginUser({ state, rootState }, payload) {
       return new Promise((resolve, reject) => {
         const { rememberMe, email, password } = payload;
         const loginDetails = { email, password };
@@ -83,37 +83,19 @@ const account = {
             const decodedToken = jwtDecode(accessToken);
 
             // Extract the claims (e.g., isVerified)
-            const isVerified = decodedToken["isVerified"];
+            //the value of isVerified will be a string ---> "true" / "false"
+            //it won't be a boolean
+            const isVerified = decodedToken["isVerified"]?.toLowerCase();
 
-            if (isVerified) {
+            if (isVerified == "true") {
               // Store JWT token based on "remember me" option
               if (rememberMe) {
                 localStorage.setItem("jwt_token", accessToken);
               } else {
                 sessionStorage.setItem("jwt_token", accessToken);
               }
-
-              // Mark the user as authenticated
-              try {
-                await dispatch("authenticateUser");
-                let message = "You have successfully logged in.";
-                resolve({ message, isVerified }); // Resolve with response data
-              } catch (authError) {
-                reject(authError); // Reject if authentication fails
-              }
-            } else {
-              // If not verified, trigger email verification
-              try {
-                await axios.post(`${rootState.apiUrl}/email/verify`, { email });
-                let message = "Check your inbox to verify your email.";
-                resolve({ message, isVerified }); // Resolve with response data
-              } catch (verificationError) {
-                reject(
-                  verificationError.response?.data?.message ||
-                    "Verification failed."
-                );
-              }
             }
+            resolve({ isVerified });
           })
           .catch((error) => {
             const message =

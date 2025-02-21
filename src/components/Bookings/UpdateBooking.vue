@@ -253,7 +253,7 @@ const submitForm = () => {
         severity: "success",
         summary: "Booking Updated",
         detail: message,
-        life: 3000,
+        life: 5000,
       });
       //navigate to the bookings details page
       router.push(`/bookings/${id.value}/details`);

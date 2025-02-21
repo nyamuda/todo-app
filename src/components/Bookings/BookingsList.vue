@@ -357,7 +357,7 @@ onMounted(async () => {
         severity: "error",
         summary: "Bookings",
         detail: message,
-        life: 3000,
+        life: 5000,
       });
     });
 
@@ -477,7 +477,7 @@ let loadMoreBookings = () => {
         severity: "error",
         summary: "Error",
         detail: message,
-        life: 3000,
+        life: 5000,
       });
     });
 };

@@ -198,11 +198,11 @@ const submitForm = () => {
         severity: "success",
         summary: "Success",
         detail: message,
-        life: 3000,
+        life: 5000,
       });
       router.push("/bookings");
     })
-    .then((message) => {
+    .catch((message) => {
       toast.add({
         severity: "error",
         summary: "Booking Failed",
