@@ -228,8 +228,10 @@ import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import Textarea from "primevue/textarea";
+import { useToast } from "primevue/usetoast";
 
 const store = useStore();
+const toast = useToast();
 
 onMounted(() => {
   v$._value.$touch();
@@ -269,7 +271,24 @@ const v$ = useVuelidate(rules, guestUserForm.value);
 //form validation with Vuelidate end
 // Submit form
 const submitForm = () => {
-  store.dispatch("bookings/addGuestBooking", { booking: guestUserForm.value });
+  store
+    .dispatch("bookings/addGuestBooking", { booking: guestUserForm.value })
+    .then((message) => {
+      toast.add({
+        severity: "success",
+        summary: "Booking Created",
+        detail: message,
+        life: 3000,
+      });
+    })
+    .then((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Booking Failed",
+        detail: message,
+        life: 10000,
+      });
+    });
 };
 
 //show loading button or not
