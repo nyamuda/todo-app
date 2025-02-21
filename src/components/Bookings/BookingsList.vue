@@ -438,7 +438,24 @@ let sendFeedback = (id) => {
         bookingId: id,
       };
       //send the feedback
-      store.dispatch("bookings/addFeedback", { feedback });
+      store
+        .dispatch("bookings/addFeedback", { feedback })
+        .then((message) => {
+          toast.add({
+            severity: "error",
+            summary: "Feedback Sent",
+            detail: message,
+            life: 5000,
+          });
+        })
+        .catch((message) => {
+          toast.add({
+            severity: "error",
+            summary: "Feedback Failed",
+            detail: message,
+            life: 10000,
+          });
+        });
     },
   });
 };
