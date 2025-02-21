@@ -175,7 +175,7 @@ let submitForm = () => {
           severity: "success",
           summary: "Message Sent",
           detail: message,
-          life: 15000,
+          life: 20000,
         });
         router.push("/");
       })
@@ -184,7 +184,7 @@ let submitForm = () => {
           severity: "error",
           summary: "Error Sending Email",
           detail: message,
-          life: 10000,
+          life: 15000,
         });
       });
   }
