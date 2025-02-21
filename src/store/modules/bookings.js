@@ -119,7 +119,7 @@ const bookings = {
           .then((response) => {
             //mutate the state with the fetched statistics
             commit("setUserStatistics", response.data);
-            resolve(response.data);
+            resolve();
           })
           .catch(() => {
             reject("Couldn't fetch your booking summary.");
