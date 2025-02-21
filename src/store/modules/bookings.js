@@ -213,7 +213,8 @@ const bookings = {
         axios
           .post(`${rootState.apiUrl}/bookings/guest`, guestBooking)
           .then(() => {
-            let message = "Booking created! We've emailed you the details.";
+            let message =
+              "Your booking was successful. We've emailed you the details.";
             resolve(message);
           })
           .catch(() => {
@@ -238,15 +239,13 @@ const bookings = {
         axios
           .put(`${rootState.apiUrl}/bookings/${id}`, booking)
           .then(() => {
-            //show toast success message
+            //toast success message
             let message = "The booking has been updated.";
             resolve(message);
-            //router.push(`/bookings/${id}/details`);
           })
           .catch((ex) => {
             let message =
               ex.response?.data?.message || rootState.failureMessage;
-
             reject(message);
           })
           .finally(() => {

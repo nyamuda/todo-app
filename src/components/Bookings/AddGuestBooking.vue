@@ -229,9 +229,11 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import Textarea from "primevue/textarea";
 import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
 
 const store = useStore();
 const toast = useToast();
+const router = useRouter();
 
 onMounted(() => {
   v$._value.$touch();
@@ -278,8 +280,9 @@ const submitForm = () => {
         severity: "success",
         summary: "Booking Created",
         detail: message,
-        life: 3000,
+        life: 10000,
       });
+      router.push("/");
     })
     .then((message) => {
       toast.add({
@@ -292,7 +295,9 @@ const submitForm = () => {
 };
 
 //show loading button or not
-let isCreatingBooking = computed(() => store.state.bookings.isCreatingBooking);
+let isCreatingBooking = computed(
+  () => store.state.bookings.isCreatingGuestBooking
+);
 //available car wash services
 let services = computed(() => store.state.services.services);
 </script>
