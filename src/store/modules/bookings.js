@@ -1,7 +1,4 @@
 import axios from "axios";
-import router from "@/router";
-import { useToast } from "vue-toastification";
-const toast = useToast();
 const bookings = {
   namespaced: true,
   state: () => ({
