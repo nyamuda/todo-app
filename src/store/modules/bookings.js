@@ -301,32 +301,28 @@ const bookings = {
     },
 
     //add feedback when a booking is completed
-    async addFeedback({ dispatch, rootState, state }, payload) {
-      try {
+    addFeedback({ dispatch, rootState, state }, payload) {
+      return new Promise((resolve, reject) => {
         let { feedback } = payload;
-
         state.isSendingFeedback = true;
-
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
-
         //make the request
-        await axios.post(`${rootState.apiUrl}/feedback`, feedback);
-        // Check if the request was successful
-        //show toast success message
-        let message = "Your feedback has been received. Thank you!";
-        dispatch("showToast", { message: message, severity: "success" });
-
-        router.push("/bookings");
-        //refresh the state
-        await dispatch("getBookings");
-      } catch (err) {
-        console.log(err);
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isSendingFeedback = false;
-      }
+        axios
+          .post(`${rootState.apiUrl}/feedback`, feedback)
+          .then(() => {
+            //toast success message
+            let message = "Your feedback has been received. Thank you!";
+            resolve(message);
+          })
+          .catch(() => {
+            reject("Failed to submit feedback. Please try again.");
+          })
+          .finally(() => {
+            state.isSendingFeedback = false;
+          });
+      });
     },
 
     //Set authorization header for all request to access protected routes from the API
