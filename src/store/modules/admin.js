@@ -1,7 +1,4 @@
 import axios from "axios";
-import router from "@/router";
-import { useToast } from "vue-toastification";
-const toast = useToast();
 const admin = {
   namespaced: true,
   state: () => ({
@@ -149,46 +146,6 @@ const admin = {
       });
     },
 
-    //add a booking
-    async addBooking({ dispatch, state, rootState }, booking) {
-      try {
-        //convert time to UCT
-        let localScheduledAt = booking.scheduledAt;
-        booking.scheduledAt = new Date(localScheduledAt + "Z").toISOString();
-        state.isCreatingBooking = true;
-        //add authorization header to the request
-        //to access the protected route
-        dispatch("setAuthorizationHeader");
-        //make the request
-        const response = await axios.post(
-          `${rootState.apiUrl}/bookings`,
-          booking
-        );
-        // Check if the request was successful
-        //status code will be 201 from the API
-        if (response.status == 201) {
-          //show toast success message
-          let message = "The booking has been successfully added.";
-          dispatch("showToast", { message: message, severity: "success" });
-
-          router.push("/admin/bookings");
-
-          //refresh the state
-          await dispatch("getBookings");
-        } else {
-          if (response.data.message) {
-            toast.error(response.data.message);
-          }
-        }
-      } catch (ex) {
-        let message = ex.response
-          ? ex.response.data?.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isCreatingBooking = false;
-      }
-    },
     //delete booking
     deleteBooking({ rootState, dispatch }, id) {
       dispatch("setAuthorizationHeader");
@@ -206,29 +163,33 @@ const admin = {
     },
 
     //update the booking
-    async updateBooking({ dispatch, state, rootState }, payload) {
-      try {
+    updateBooking({ dispatch, state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
         state.isUpdatingBooking = true;
         let { id, booking } = payload;
+
+        let url = `${rootState.apiUrl}/admin/bookings/${id}`;
 
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        await axios.put(`${rootState.apiUrl}/admin/bookings/${id}`, booking);
-        //show toast success message
-        let message = "The booking has been updated.";
-        toast.success(message);
-
-        router.push(`/admin/bookings/${id}/details`);
-      } catch (ex) {
-        let message = ex.response.data?.message
-          ? ex.response.data?.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isUpdatingBooking = false;
-      }
+        axios
+          .put(url, booking)
+          .then(() => {
+            //toast success message
+            let message = "The booking has been updated.";
+            resolve(message);
+          })
+          .catch((ex) => {
+            let message =
+              ex.response?.data?.message || rootState.failureMessage;
+            reject(message);
+          })
+          .finally(() => {
+            state.isUpdatingBooking = false;
+          });
+      });
     },
 
     //change booking status
@@ -250,9 +211,7 @@ const admin = {
           })
 
           .catch((ex) => {
-            let message = ex.response
-              ? ex.response.data?.message
-              : rootState.failureMessage;
+            let message = ex.response.data?.message || rootState.failureMessage;
             reject(message);
           });
       });

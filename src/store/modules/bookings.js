@@ -273,9 +273,7 @@ const bookings = {
           })
 
           .catch((ex) => {
-            let message = ex.response.dat?.message
-              ? ex.response.data?.message
-              : rootState.failureMessage;
+            let message = ex.response.data?.message || rootState.failureMessage;
             reject(message);
           });
       });
