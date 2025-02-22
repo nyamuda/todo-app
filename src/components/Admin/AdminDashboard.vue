@@ -147,8 +147,10 @@
 import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import ProgressSpinner from "primevue/progressspinner";
+import { useToast } from "primevue/usetoast";
 
 const store = useStore();
+const toast = useToast();
 
 let adminStatistics = computed(() => store.state.admin.adminStatistics);
 let adminInfo = computed(() => store.state.account.loggedInUser);
@@ -156,6 +158,16 @@ let isGettingStatistics = computed(() => store.state.admin.isGettingStatistics);
 
 onMounted(() => {
   //get user statistics such as the total number of bookings they have completed
-  store.dispatch("admin/fetchAdminStatistics");
+  store
+    .dispatch("admin/fetchAdminStatistics")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+        life: 3000,
+      });
+    });
 });
 </script>

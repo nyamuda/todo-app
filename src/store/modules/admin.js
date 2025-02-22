@@ -106,7 +106,7 @@ const admin = {
             resolve();
           })
           .catch(() => {
-            reject("Couldn't fetch your booking summary.");
+            reject("Failed to load booking statistics.");
           })
           .finally(() => {
             state.isGettingStatistics = false;
