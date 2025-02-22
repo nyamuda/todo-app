@@ -56,6 +56,16 @@ import { computed, ref, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { isJwtExpired } from "jwt-check-expiration";
+//Vuelidate for login form validation
+import { useVuelidate } from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+import { Message } from "primevue";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
+import { useToast } from "primevue/usetoast";
 const route = useRouter();
 // Access the store
 const store = useStore();
@@ -72,10 +82,27 @@ onMounted(() => {
       //verify the authenticity of the token
       store.dispatch("account/verifyUser", { token: providedToken });
     }
-    //check if the token is valid or has expired or not 
+    //check if the token is valid or has expired or not
     hasTokenExpired.value = isJwtExpired(providedToken.value);
-  } catch {}
+  } catch {
+    hasTokenExpired.value = true;
+  }
 });
+
+//form validation with Vuelidate start
+const verificationForm = ref({
+  email: "",
+});
+
+const rules = {
+  email: {
+    required,
+    email,
+  },
+};
+
+const v$ = useVuelidate(rules, verificationForm);
+//form validation with Vuelidate end
 
 let verificationStatus = computed(
   () => store.state.account.emailVerificationStatus
