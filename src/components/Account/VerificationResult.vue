@@ -204,9 +204,6 @@ let requestVerificationLink = () => {
   //show form errors
   v$.value.$touch();
 
-  //email to send the link to
-  let email = verificationForm.value.email;
-
   //show dialog
   confirmDialog.require({
     group: "verification",
@@ -216,9 +213,7 @@ let requestVerificationLink = () => {
     accept: () => {
       //send the email verification link to the the provided email address
       store
-        .dispatch("account/sendEmailVerificationLink", {
-          email,
-        })
+        .dispatch("account/sendEmailVerificationLink", verificationForm.value)
         .then((message) => {
           //success message
           toast.add({
@@ -230,7 +225,7 @@ let requestVerificationLink = () => {
         .catch((message) => {
           toast.add({
             severity: "error",
-            summary: "Error",
+            summary: "Verification Failed",
             detail: message,
             life: 20000,
           });

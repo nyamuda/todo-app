@@ -225,15 +225,16 @@ const account = {
     sendEmailVerificationLink({ state, rootState }, payload) {
       return new Promise((resolve, reject) => {
         state.isSendingVerificationLink = true;
-        const { email } = payload;
+
         axios
-          .post(`${rootState.apiUrl}/email/verify`, { email })
+          .post(`${rootState.apiUrl}/email/verify`, payload)
           .then(() => {
             let message =
               "Email verification link sent. Please check your inbox and follow the instructions to confirm your email.";
             resolve(message); // Resolve on successful request
           })
           .catch((error) => {
+            console.log(error);
             const message =
               error.response?.data?.message || rootState.failureMessage;
             reject(message); // Reject with the error message
