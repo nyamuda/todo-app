@@ -1,6 +1,29 @@
 <template>
   <div class="">
-    <form class="reset-password-form m-auto" @submit.prevent="submitForm">
+    <!--If the reset link has expired-->
+    <div
+      v-if="hasTokenExpired"
+      class="d-flex justify-content-center align-items-center"
+    >
+      <div class="text-center border rounded p-4 shadow-sm bg-white">
+        <i class="fas fa-exclamation-triangle text-danger fs-1"></i>
+        <h4 class="mt-3 text-danger">Reset Link Expired</h4>
+        <p class="text-muted">
+          The password reset link has expired or is invalid. Please request a
+          new password reset link.
+        </p>
+
+        <router-link to="/email/password/send">
+          <Button label=" Request New Link" icon="fas fa-sync-alt" />
+        </router-link>
+      </div>
+    </div>
+    <!--Password reset form-->
+    <form
+      v-else
+      class="reset-password-form m-auto"
+      @submit.prevent="submitForm"
+    >
       <div class="text-start">
         <h2 class="fw-bold">Reset Your Password</h2>
         <p>Enter your new password.</p>
@@ -83,6 +106,7 @@ import { useRouter } from "vue-router";
 import { useVuelidate } from "@vuelidate/core";
 import { required, helpers, sameAs } from "@vuelidate/validators";
 import { Message } from "primevue";
+import { isJwtExpired } from "jwt-check-expiration";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
@@ -97,6 +121,9 @@ const store = useStore();
 
 //provided token from the URL
 let providedToken = ref("");
+
+//check if the reset token has expired or not
+let hasTokenExpired = ref(true);
 
 //form validation with Vuelidate start
 const resetPasswordForm = ref({
@@ -133,6 +160,9 @@ onMounted(() => {
   //get the token provided in the URL from
   //when the user clicks the reset button in their confirmation email
   providedToken.value = router.currentRoute.value.query.token ?? "";
+
+  //check if the token has expired or not
+  hasTokenExpired.value = isJwtExpired(providedToken.value);
 });
 
 let isResettingPassword = computed(
