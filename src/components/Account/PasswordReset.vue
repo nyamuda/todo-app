@@ -161,8 +161,10 @@ onMounted(() => {
     //when the user clicks the reset button in their confirmation email
     providedToken.value = router.currentRoute.value.query.token ?? "";
 
-    //check if the token is valid has expired or not
+    //check if the token has expired or not
     hasTokenExpired.value = isJwtExpired(providedToken.value);
+    //throw an exception if the token has expired
+    if (hasTokenExpired.value) throw new Error();
   } catch {
     hasTokenExpired.value = true;
   }

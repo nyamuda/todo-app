@@ -131,6 +131,7 @@ import InputIcon from "primevue/inputicon";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
+import { jwtDecode } from "jwt-decode";
 
 const route = useRouter();
 // Access the store
@@ -140,6 +141,8 @@ const toast = useToast();
 
 //check if the verification token has expired or not
 let hasTokenExpired = ref(true);
+//email from the provided JWT token
+let tokenEmail = ref("");
 let verificationStatus = computed(
   () => store.state.account.emailVerificationStatus
 );
@@ -154,13 +157,30 @@ onMounted(() => {
     //when the user clicks the verify button in their confirmation email
     let providedToken = route.currentRoute.value.query.token ?? "";
     if (providedToken) {
-      //verify the authenticity of the token
+      //Decode the token
+      let decodedToken = jwtDecode(providedToken);
+      // Extract the claims (email) from the token
+      const email =
+        decodedToken[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+        ];
+      tokenEmail.value = email;
+
+      //check if the token has expired or not
+      hasTokenExpired.value = isJwtExpired(providedToken.value);
+      //throw an exception if the token has expired
+      if (hasTokenExpired.value) throw new Error();
+
+      //verify the authenticity of the token on the backend
       store.dispatch("account/verifyUser", { token: providedToken });
     }
-    //check if the token is valid or has expired or not
-    hasTokenExpired.value = isJwtExpired(providedToken.value);
   } catch {
     hasTokenExpired.value = true;
+
+    //if the token has an email claim
+    //save that email to the verificationForm in case the user requests
+    //to resend the email verification link
+    verificationForm.value.email = tokenEmail.value;
   }
 });
 
@@ -192,7 +212,7 @@ let requestVerificationLink = () => {
     group: "verification",
     message:
       "Enter your email below, and we'll send you a new verification link.",
-    header: "Resend Email Verification Linkem",
+    header: "Resend Email Verification Link",
     accept: () => {
       //send the email verification link to the the provided email address
       store
