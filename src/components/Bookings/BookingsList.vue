@@ -475,7 +475,7 @@ let loadMoreBookings = () => {
     .catch((message) => {
       toast.add({
         severity: "error",
-        summary: "Error",
+        summary: "Load Failed",
         detail: message,
         life: 5000,
       });

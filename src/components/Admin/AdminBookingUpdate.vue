@@ -154,18 +154,18 @@ import Select from "primevue/select";
 import { Message } from "primevue";
 import DatePicker from "primevue/datepicker";
 import { useRouter } from "vue-router";
-import { useToast } from "vue-toastification";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import Textarea from "primevue/textarea";
+import { useToast } from "primevue/usetoast";
 
 //toast
 const toast = useToast();
 // Access the store
 const store = useStore();
 //The route
-const route = useRouter();
+const router = useRouter();
 let id = ref(null);
 
 //show loading button or not
@@ -177,9 +177,9 @@ onMounted(() => {
   v$._value.$touch();
 
   //get the route parameter
-  id.value = route.currentRoute.value.params.id;
+  id.value = router.currentRoute.value.params.id;
 
-  //populate the form with the service data
+  //populate the form with the booking data
   if (id.value) {
     store
       .dispatch("bookings/getBooking", id.value)
@@ -190,7 +190,14 @@ onMounted(() => {
         bookingForm.value.scheduledAt = booking.scheduledAt;
         bookingForm.value.additionalNotes = booking.additionalNotes;
       })
-      .catch((message) => toast.error(message));
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: message,
+          life: 10000,
+        });
+      });
   }
   //get all available car wash services
   store.dispatch("services/getServices");
@@ -218,10 +225,29 @@ const v$ = useVuelidate(rules, bookingForm.value);
 //form validation with Vuelidate end
 // Submit form
 const submitForm = () => {
-  store.dispatch("admin/updateBooking", {
-    booking: bookingForm.value,
-    id: id.value,
-  });
+  store
+    .dispatch("admin/updateBooking", {
+      booking: bookingForm.value,
+      id: id.value,
+    })
+    .then((message) => {
+      toast.add({
+        severity: "success",
+        summary: "Booking Updated",
+        detail: message,
+        life: 5000,
+      });
+      //navigate to the bookings details page
+      router.push(`/bookings/${id.value}/details`);
+    })
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Booking Update Failed",
+        detail: message,
+        life: 10000,
+      });
+    });
 };
 </script>
 

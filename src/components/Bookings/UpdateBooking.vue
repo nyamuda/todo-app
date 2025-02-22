@@ -195,7 +195,7 @@ onMounted(() => {
   //get the route parameter
   id.value = router.currentRoute.value.params.id;
 
-  //populate the form with the service data
+  //populate the form with the booking data
   if (id.value) {
     store
       .dispatch("bookings/getBooking", id.value)
