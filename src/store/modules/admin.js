@@ -63,33 +63,35 @@ const admin = {
   getters: {},
   actions: {
     //fetch all bookings
-    async getBookings(
-      { commit, dispatch, state, rootState },
-      filterBy = "all"
-    ) {
-      try {
+    getBookings({ commit, dispatch, state, rootState }, filterBy) {
+      return new Promise((resolve, reject) => {
         let url = `${rootState.apiUrl}/admin/bookings`;
-
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
-
         state.isGettingBookings = true;
-        const response = await axios.get(url, {
-          params: {
-            status: filterBy,
-          },
-        });
-        //mutate the state with the fetched tasks
-        commit("setBookings", response.data.bookings);
+        axios
+          .get(url, {
+            params: {
+              status: filterBy,
+            },
+          })
+          .then((response) => {
+            //mutate the state with the fetched bookings
+            commit("setBookings", response.data.bookings);
 
-        //page info
-        commit("updatePageInfo", response.data.pageInfo);
-      } catch (ex) {
-        toast.error("Failed to fetch bookings.");
-      } finally {
-        state.isGettingBookings = false;
-      }
+            //save the pagination info
+            commit("updatePageInfo", response.data.pageInfo);
+
+            resolve(response.data.bookings);
+          })
+          .catch(() => {
+            reject("Something went wrong while fetching bookings.");
+          })
+          .finally(() => {
+            state.isGettingBookings = false;
+          });
+      });
     },
 
     //fetch admin statistics such as the total number of completed bookings
