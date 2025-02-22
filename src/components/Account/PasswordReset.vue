@@ -14,7 +14,7 @@
         </p>
 
         <router-link to="/email/password/send">
-          <Button label=" Request New Link" icon="fas fa-sync-alt" />
+          <Button label=" Request new link" icon="fas fa-sync-alt" />
         </router-link>
       </div>
     </div>
@@ -136,33 +136,37 @@ const passwordRule = helpers.regex(
 let passwordErrorMessage =
   "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters";
 let passwordNotMatching = "The passwords you entered do not match";
-const rules = () => {
-  return {
-    password: {
-      required,
-      passwordRule: helpers.withMessage(passwordErrorMessage, passwordRule),
-    },
-    passwordConfirm: {
-      required,
-      sameAsPassword: helpers.withMessage(
-        passwordNotMatching,
-        sameAs(resetPasswordForm.value.password)
-      ),
-    },
-  };
+const rules = {
+  password: {
+    required,
+    passwordRule: helpers.withMessage(passwordErrorMessage, passwordRule),
+  },
+  passwordConfirm: {
+    required,
+    sameAsPassword: helpers.withMessage(
+      passwordNotMatching,
+      sameAs(resetPasswordForm.value.password)
+    ),
+  },
 };
 
-const v$ = useVuelidate(rules, resetPasswordForm.value);
+const v$ = useVuelidate(rules, resetPasswordForm);
 //form validation with Vuelidate end
 
 onMounted(() => {
-  v$._value.$touch();
-  //get the token provided in the URL from
-  //when the user clicks the reset button in their confirmation email
-  providedToken.value = router.currentRoute.value.query.token ?? "";
+  try {
+    //validate the password reset form
+    v$._value.$touch();
 
-  //check if the token has expired or not
-  hasTokenExpired.value = isJwtExpired(providedToken.value);
+    //get the token provided in the URL from
+    //when the user clicks the reset button in their confirmation email
+    providedToken.value = router.currentRoute.value.query.token ?? "";
+
+    //check if the token has expired or not
+    hasTokenExpired.value = isJwtExpired(providedToken.value);
+  } catch (error) {
+    hasTokenExpired.value = true;
+  }
 });
 
 let isResettingPassword = computed(
