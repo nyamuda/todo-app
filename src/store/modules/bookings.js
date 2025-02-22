@@ -101,7 +101,7 @@ const bookings = {
             let message =
               ex.status == 404
                 ? "The booking you're looking for does not exist."
-                : rootState.failureMessage;
+                : "Something went wrong. Unable to fetch the booking.";
             reject(message);
           });
       });

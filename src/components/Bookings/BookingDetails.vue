@@ -495,7 +495,7 @@ let getBooking = () => {
       .catch((message) => {
         toast.add({
           severity: "error",
-          summary: "Error",
+          summary: "Fetch Failed",
           detail: message,
           life: 10000,
         });

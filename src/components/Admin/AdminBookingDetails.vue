@@ -765,11 +765,15 @@ let getBooking = () => {
       .dispatch("bookings/getBooking", id.value)
       .then((data) => {
         booking.value = data;
-        console.log(booking.value);
         isGettingBooking.value = false;
       })
       .catch((message) => {
-        toast.error(message);
+        toast.add({
+          severity: "error",
+          summary: "Fetch Failed",
+          detail: message,
+          life: 10000,
+        });
         isGettingBooking.value = false;
       });
   }
