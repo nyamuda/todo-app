@@ -581,15 +581,28 @@ const enRouteBooking = (id) => {
           bookingId: id,
           statusUpdate,
         })
-        .then((response) => {
-          toast.success(response);
+        .then((message) => {
+          //success message
+          toast.add({
+            severity: "success",
+            summary: "En Route",
+            detail: message,
+            life: 5000,
+          });
           //update the status of the current booking without refreshing the page
           booking.value.status.name = statusUpdate.statusName;
 
           //stop loading button
           changingStatusTo.value = null;
         })
-        .catch((ex) => toast.error(ex));
+        .catch((message) => {
+          toast.add({
+            severity: "error",
+            summary: "Action Failed",
+            detail: message,
+            life: 10000,
+          });
+        });
     },
   });
 };
@@ -623,15 +636,28 @@ const completeBooking = (id) => {
           bookingId: id,
           statusUpdate,
         })
-        .then((response) => {
-          toast.success(response);
+        .then((message) => {
+          //success message
+          toast.add({
+            severity: "success",
+            summary: "Booking Completed",
+            detail: message,
+            life: 5000,
+          });
           //update the status of the current booking without refreshing the page
           booking.value.status.name = statusUpdate.statusName;
 
           //stop loading button
           changingStatusTo.value = null;
         })
-        .catch((ex) => toast.error(ex));
+        .catch((message) => {
+          toast.add({
+            severity: "error",
+            summary: "Completion Failed",
+            detail: message,
+            life: 10000,
+          });
+        });
     },
   });
 };
@@ -657,14 +683,25 @@ const deleteBooking = (id) => {
       // Dispatch action to delete booking
       store
         .dispatch("admin/deleteBooking", id)
-        .then((response) => {
+        .then((message) => {
           isDeletingBooking.value = false;
-          toast.success(response);
-          route.push("/admin/bookings");
+          //success message
+          toast.add({
+            severity: "success",
+            summary: "Booking Deleted",
+            detail: message,
+            life: 5000,
+          });
+          router.push("/admin/bookings");
         })
-        .catch((ex) => {
+        .catch((message) => {
           isDeletingBooking.value = false;
-          toast.error(ex);
+          toast.add({
+            severity: "error",
+            summary: "Delete Failed",
+            detail: message,
+            life: 10000,
+          });
         });
     },
   });
