@@ -5,14 +5,13 @@
       v-if="hasTokenExpired"
       class="d-flex justify-content-center align-items-center"
     >
-      <div class="text-center border rounded p-4 shadow-sm bg-white">
-        <i class="fas fa-exclamation-triangle text-danger fs-1"></i>
-        <h4 class="mt-3 text-danger">Reset Link Expired</h4>
+      <div class="text-center">
+        <i class="fas fa-exclamation-triangle text-danger fa-4x"></i>
+        <h4 class="mt-2 text-danger">Reset Link Expired</h4>
         <p class="text-muted">
-          The password reset link has expired or is invalid. Please request a
-          new password reset link.
+          The password reset link has expired or is invalid.
         </p>
-
+        <p class="text-muted">Please request a new password reset link.</p>
         <router-link to="/email/password/send">
           <Button label=" Request new link" icon="fas fa-sync-alt" />
         </router-link>
@@ -162,9 +161,9 @@ onMounted(() => {
     //when the user clicks the reset button in their confirmation email
     providedToken.value = router.currentRoute.value.query.token ?? "";
 
-    //check if the token has expired or not
+    //check if the token is valid has expired or not
     hasTokenExpired.value = isJwtExpired(providedToken.value);
-  } catch (error) {
+  } catch {
     hasTokenExpired.value = true;
   }
 });
