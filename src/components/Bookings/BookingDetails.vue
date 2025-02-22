@@ -460,7 +460,7 @@ let cancelBooking = (bookingId) => {
             severity: "success",
             summary: "Booking Cancelled",
             detail: message,
-            life: 3000,
+            life: 5000,
           });
           //stop loading button
           changingStatusTo.value = null;
@@ -473,7 +473,7 @@ let cancelBooking = (bookingId) => {
             severity: "error",
             summary: "Cancel Failed",
             detail: message,
-            life: 20000,
+            life: 10000,
           });
         });
     },
@@ -493,7 +493,12 @@ let getBooking = () => {
         isGettingBooking.value = false;
       })
       .catch((message) => {
-        toast.error(message);
+        toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: message,
+          life: 10000,
+        });
         isGettingBooking.value = false;
       });
   }

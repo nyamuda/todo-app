@@ -402,9 +402,7 @@
 import { ref, onMounted, computed } from "vue";
 import Card from "primevue/card";
 import Button from "primevue/button";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { useToast } from "vue-toastification";
 import Skeleton from "primevue/skeleton";
 import { Tag } from "primevue";
 import dateFormat from "dateformat";
@@ -416,13 +414,15 @@ import { required, minLength } from "@vuelidate/validators";
 import { FloatLabel } from "primevue";
 import Textarea from "primevue/textarea";
 import { Message } from "primevue";
+import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
 
 //toast
 const toast = useToast();
 // Access the store
 const store = useStore();
 //The route
-const route = useRouter();
+const router = useRouter();
 const confirmDialog = useConfirm();
 
 let id = ref(null);
@@ -451,7 +451,7 @@ let whoCancelledBooking = computed(
 
 onMounted(async () => {
   //get the route parameter
-  id.value = route.currentRoute.value.params.id;
+  id.value = router.currentRoute.value.params.id;
   //get booking details from the API
   getBooking();
 });
@@ -524,15 +524,28 @@ const confirmBooking = (id) => {
           bookingId: id,
           statusUpdate,
         })
-        .then((response) => {
-          toast.success(response);
+        .then((message) => {
+          //success message
+          toast.add({
+            severity: "success",
+            summary: "Booking Confirmed",
+            detail: message,
+            life: 5000,
+          });
           //update the status of the current booking without refreshing the page
           booking.value.status.name = statusUpdate.statusName;
 
           //stop loading button
           changingStatusTo.value = null;
         })
-        .catch((ex) => toast.error(ex));
+        .catch((message) => {
+          toast.add({
+            severity: "error",
+            summary: "Confirm Failed",
+            detail: message,
+            life: 10000,
+          });
+        });
     },
   });
 };
