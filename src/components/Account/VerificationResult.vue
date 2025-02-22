@@ -13,8 +13,14 @@
 
         <Button
           @click="requestVerificationLink"
-          label=" Request new link"
+          :label="
+            isSendingVerificationLink
+              ? 'Sending verification link...'
+              : 'Request new link'
+          "
           icon="fas fa-sync-alt"
+          :disabled="isSendingVerificationLink"
+          :loading="isSendingVerificationLink"
         />
       </div>
     </div>
@@ -138,6 +144,9 @@ let verificationStatus = computed(
   () => store.state.account.emailVerificationStatus
 );
 let attemptedUrl = computed(() => store.state.account.attemptedUrl);
+let isSendingVerificationLink = computed(
+  () => store.state.account.isSendingVerificationLink
+);
 
 onMounted(() => {
   try {
