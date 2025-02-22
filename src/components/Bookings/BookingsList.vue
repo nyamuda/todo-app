@@ -355,7 +355,7 @@ onMounted(async () => {
     .catch((message) => {
       toast.add({
         severity: "error",
-        summary: "Bookings",
+        summary: "Bookings Error",
         detail: message,
         life: 5000,
       });

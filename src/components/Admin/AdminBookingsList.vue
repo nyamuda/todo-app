@@ -234,11 +234,12 @@ import ProgressSpinner from "primevue/progressspinner";
 
 import { useStore } from "vuex";
 import dateFormat from "dateformat";
-
+import { useToast } from "primevue/usetoast";
 //table row skeletons
 const rowSkeletons = ref(new Array(10));
-// Access the store
+
 const store = useStore();
+const toast = useToast();
 
 let filterBookingsBy = ref("all");
 
@@ -268,7 +269,17 @@ let showSelectedUser = ref(false);
 
 onMounted(async () => {
   //get all bookings
-  store.dispatch("admin/getBookings");
+  store
+    .dispatch("admin/getBookings")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Bookings Error",
+        detail: message,
+        life: 5000,
+      });
+    });
 
   //get all booking statuses
   store.dispatch("statuses/getStatuses");
