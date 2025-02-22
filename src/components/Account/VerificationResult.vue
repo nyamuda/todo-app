@@ -8,7 +8,9 @@
       <div class="text-center">
         <i class="fas fa-exclamation-triangle text-danger fa-4x"></i>
         <h4 class="mt-2 text-danger">Verification Link Expired</h4>
-        <p class="text-muted">Your email verification link has expired.</p>
+        <p class="text-muted">
+          Your email verification link has expired or is invalid.
+        </p>
         <p class="text-muted">Please request a new verification link.</p>
 
         <Button
@@ -97,14 +99,19 @@
         <div class="d-flex align-items-center justify-content-end mt-3 w-100">
           <Button
             class="me-3"
+            icon="fas fa-xmark"
             label="Cancel"
             severity="secondary"
+            variant="outlined"
+            size="small"
             @click="rejectCallback"
           ></Button>
           <Button
             :disabled="v$.email.$error"
             label="Send verification link"
+            icon="fas fa-paper-plane"
             severity="success"
+            size="small"
             @click="acceptCallback"
           ></Button>
         </div>
