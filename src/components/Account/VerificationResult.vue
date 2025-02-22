@@ -10,9 +10,12 @@
 				<h4 class="mt-2 text-danger">Verification Link Expired</h4>
 				<p class="text-muted">Your email verification link has expired.</p>
 				<p class="text-muted">Please request a new verification email.</p>
-				
-					<Button label=" Request new link" icon="fas fa-sync-alt" />
-			
+
+				<Button
+					@click="requestVerificationLink"
+					label=" Request new link"
+					icon="fas fa-sync-alt"
+				/>
 			</div>
 		</div>
 		<!--If the verification link is valid-->
@@ -126,8 +129,8 @@ import ConfirmDialog from "primevue/confirmdialog";
 const route = useRouter();
 // Access the store
 const store = useStore();
-
 const confirmDialog = useConfirm();
+const toast = useToast();
 
 //check if the verification token has expired or not
 let hasTokenExpired = ref(true);
@@ -168,9 +171,12 @@ const v$ = useVuelidate(rules, verificationForm);
 //form validation with Vuelidate end
 
 //request email verification email
-let requestVerificationEmail = () => {
-	//show text area errors
+let requestVerificationLink = () => {
+	//show form errors
 	v$._value.$touch();
+
+	//email to send the link to
+	let email = verificationForm.value.email;
 
 	//show dialog
 	confirmDialog.require({
@@ -178,21 +184,20 @@ let requestVerificationEmail = () => {
 		message: "Please enter your email",
 		header: "Verification Link",
 		accept: () => {
-			//change the status of the booking
-			//by changing the status to "cancelled"
-			let statusUpdate = {
-				statusName: "cancelled",
-				cancelReason: reasonToCancelForm.value.cancelReason,
-			};
-
-			//save the updated booking
-			store.dispatch("bookings/changeBookingStatus", {
-				bookingId: id,
-				statusUpdate,
-			});
-		},
-		reject: () => {
-			console.log(`Delete booking with ${id} cancelled`);
+			//send the email verification link to the the provided email address
+			store
+				.dispatch("account/sendEmailVerificationLink", {
+					email,
+				})
+				.then((message) => {
+					//success message
+					toast.add({
+						severity: "success",
+						summary: "Login Success",
+						detail: message,
+						life: 3000,
+					});
+				});
 		},
 	});
 };

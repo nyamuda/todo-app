@@ -10,6 +10,7 @@ const account = {
     isResettingPassword: false, //to show loading button during password reset process
     emailVerificationStatus: "fail",
     isSendingPasswordLink: false,
+    isSendingVerificationLink: false,
     googleOauth: {
       clientId:
         "966223459862-8scq77jsqaf7ue1028bt4psl4jp7t04k.apps.googleusercontent.com",
@@ -220,6 +221,29 @@ const account = {
           .finally(() => (state.isRegistering = false));
       });
     },
+    //send verification link to user to verify their email
+    sendEmailVerificationLink({ state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
+        state.isSendingVerificationLink = true;
+        const { email } = payload;
+        axios
+          .post(`${rootState.apiUrl}/email/verify`, { email })
+          .then(() => {
+            let message =
+              "Email verification link sent. Please check your inbox and follow the instructions to confirm your email.";
+            resolve(message); // Resolve on successful request
+          })
+          .catch((error) => {
+            const message =
+              error.response?.data?.message || rootState.failureMessage;
+            reject(message); // Reject with the error message
+          })
+          .finally(() => {
+            state.isSendingVerificationLink = false; // Reset loading state
+          });
+      });
+    },
+
     //verify user email address
     //by verifying the token sent to their email
     async verifyUser({ state, rootState }, payload) {
