@@ -9,7 +9,7 @@
         <i class="fas fa-exclamation-triangle text-danger fa-4x"></i>
         <h4 class="mt-2 text-danger">Verification Link Expired</h4>
         <p class="text-muted">Your email verification link has expired.</p>
-        <p class="text-muted">Please request a new verification email.</p>
+        <p class="text-muted">Please request a new verification link.</p>
 
         <Button
           @click="requestVerificationLink"
@@ -54,7 +54,9 @@
           >
             <span class="visually-hidden">Loading...</span>
           </div>
-          <div class="ms-1 fw-bold">Verifying...</div>
+          <div class="ms-1 fw-bold">
+            Please wait while we verify your email.
+          </div>
         </div>
       </div>
     </div>
@@ -62,7 +64,7 @@
   <!--Verification Dialog Start-->
   <ConfirmDialog group="verification">
     <template #container="{ message, acceptCallback, rejectCallback }">
-      <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
+      <div class="d-flex flex-column align-items-start p-3 bg-light rounded">
         <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
         <p class="mb-3">{{ message.message }}</p>
         <div class="w-100">
@@ -92,19 +94,17 @@
             </div>
           </Message>
         </div>
-        <div class="d-flex align-items-center justify-content-end mt-2 w-100">
+        <div class="d-flex align-items-center justify-content-end mt-3 w-100">
           <Button
             class="me-3"
             label="Cancel"
-            size="small"
             severity="secondary"
             @click="rejectCallback"
           ></Button>
           <Button
-            :disabled="v$.cancelReason.$error"
+            :disabled="v$.email.$error"
             label="Send verification link"
             severity="success"
-            size="small"
             @click="acceptCallback"
           ></Button>
         </div>
@@ -182,7 +182,7 @@ const v$ = useVuelidate(rules, verificationForm);
 //request email verification email
 let requestVerificationLink = () => {
   //show form errors
-  v$._value.$touch();
+  v$.value.$touch();
 
   //email to send the link to
   let email = verificationForm.value.email;
@@ -190,8 +190,9 @@ let requestVerificationLink = () => {
   //show dialog
   confirmDialog.require({
     group: "verification",
-    message: "Please enter your email",
-    header: "Verification Link",
+    message:
+      "Enter your email below, and we'll send you a new verification link.",
+    header: "Resend Email Verification Linkem",
     accept: () => {
       //send the email verification link to the the provided email address
       store
