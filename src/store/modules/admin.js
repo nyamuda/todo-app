@@ -95,25 +95,26 @@ const admin = {
     },
 
     //fetch admin statistics such as the total number of completed bookings
-    async fetchAdminStatistics({ commit, dispatch, rootState, state }) {
-      try {
+    fetchAdminStatistics({ commit, dispatch, rootState, state }) {
+      return new Promise((resolve, reject) => {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
-
         state.isGettingStatistics = true;
-
-        const response = await axios.get(
-          `${rootState.apiUrl}/admin/statistics`
-        );
-        //mutate the state with the fetched statistics
-        commit("setAdminStatistics", response.data);
-      } catch (ex) {
-        console.log(ex);
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isGettingStatistics = false;
-      }
+        axios
+          .get(`${rootState.apiUrl}/admin/statistics`)
+          .then((response) => {
+            //mutate the state with the fetched statistics
+            commit("setAdminStatistics", response.data);
+            resolve();
+          })
+          .catch(() => {
+            reject("Couldn't fetch your booking summary.");
+          })
+          .finally(() => {
+            state.isGettingStatistics = false;
+          });
+      });
     },
 
     //Load more bookings
