@@ -81,13 +81,17 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
+import FileUpload from "primevue/fileupload";
 //import OauthBooking from "./OauthBooking.vue";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, numeric } from "@vuelidate/validators";
+import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
 
-// Access the store
 const store = useStore();
+const router = useRouter();
+const toast = useToast();
 
 onMounted(() => {
   v$._value.$touch();
@@ -113,7 +117,25 @@ const v$ = useVuelidate(rules, formData.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("services/addService", formData.value);
+    store
+      .dispatch("services/addService", formData.value)
+      .then((message) => {
+        //success message
+        toast.add({
+          severity: "success",
+          summary: "Service Added",
+          detail: message,
+          life: 3000,
+        });
+        router.push("/admin/services");
+      })
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Error Adding",
+          detail: message,
+        });
+      });
   }
 };
 let isCreatingService = computed(() => store.state.services.isCreatingService);
