@@ -155,18 +155,18 @@ let submitForm = async () => {
     const isFormCorrect = await v$._value.$validate();
     if (isFormCorrect) {
       //First, upload the image
-      let formData = new FormData();
-      formData.append("File", serviceImage.value);
-      formData.append("Category", "services");
+      let imageFormData = new FormData();
+      imageFormData.append("File", serviceImage.value);
+      imageFormData.append("Category", "services");
 
       //upload the image and get the uploaded image information
       //such the public access URL of the image
       let uploadedImageInfo = await store.dispatch(
         "images/uploadImage",
-        formData
+        imageFormData
       );
       //Second, save the service along with its image information
-      formData.value.image = uploadedImageInfo;
+      formData.value.imageId = uploadedImageInfo.id;
       let message = await store.dispatch("services/addService", formData.value);
       //success message
       toast.add({
