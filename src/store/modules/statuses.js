@@ -1,8 +1,4 @@
 import axios from "axios";
-import router from "@/router";
-import { useToast } from "vue-toastification";
-import { reject, resolve } from "core-js/fn/promise";
-const toast = useToast();
 //Booking statuses e.g "cancelled", "confirmed", "en route" etc
 const statuses = {
   namespaced: true,
@@ -74,7 +70,7 @@ const statuses = {
     },
     //add a status
     addStatus({ dispatch, state, rootState }, payload) {
-      return new Promise((resolve, resolve) => {
+      return new Promise((resolve, reject) => {
         state.isCreatingStatus = true;
         //add authorization header to the request
         //to access the protected route
@@ -99,7 +95,7 @@ const statuses = {
       });
     },
     // Delete a status
-    deleteStatus({ dispatch, rootState }, id) {
+    deleteStatus({ dispatch, state, rootState }, id) {
       return new Promise((resolve, reject) => {
         state.isDeletingStatus = true;
         //add authorization header to the request

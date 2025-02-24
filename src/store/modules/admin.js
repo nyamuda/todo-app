@@ -154,7 +154,8 @@ const admin = {
           .delete(`${rootState.apiUrl}/admin/bookings/${id}`)
           .then(() => resolve("The booking was successfully deleted."))
           .catch((ex) => {
-            let message = ex.response.data?.message || rootState.failureMessage;
+            let message =
+              ex.response.data?.message || "Failed to delete the booking.";
             reject(message);
           });
       });
@@ -181,7 +182,8 @@ const admin = {
           })
           .catch((ex) => {
             let message =
-              ex.response?.data?.message || rootState.failureMessage;
+              ex.response?.data?.message ||
+              "Couldn’t update the booking. Please try again.";
             reject(message);
           })
           .finally(() => {

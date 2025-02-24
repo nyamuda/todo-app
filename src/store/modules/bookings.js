@@ -183,7 +183,8 @@ const bookings = {
           })
           .catch((ex) => {
             let message =
-              ex.response?.data?.message || rootState.failureMessage;
+              ex.response?.data?.message ||
+              "Couldn’t create the booking. Please try again.";
             reject(message);
           })
           .finally(() => {
@@ -245,7 +246,8 @@ const bookings = {
           })
           .catch((ex) => {
             let message =
-              ex.response?.data?.message || rootState.failureMessage;
+              ex.response?.data?.message ||
+              "Couldn’t update the booking. Please try again.";
             reject(message);
           })
           .finally(() => {
