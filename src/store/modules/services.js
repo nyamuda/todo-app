@@ -95,9 +95,9 @@ const services = {
           });
       });
     },
-    //mark a task as completed
-    async updateService({ dispatch, state, rootState }, payload) {
-      try {
+    //Update a car wash service
+    updateService({ dispatch, state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
         let { id, updatedService } = payload;
         state.isUpdatingService = true;
 
@@ -105,26 +105,18 @@ const services = {
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        const response = await axios.put(
-          `${rootState.apiUrl}/services/${id}`,
-          updatedService
-        );
-        // Check if the request was successful
-        //status code will be 204 from the API
-        if (response.status == 204) {
-          //show toast success message
-          let message = "The service has been updated.";
-          toast.success(message);
-
-          router.push("/services");
-        } else {
-          toast.error(rootState.failureMessage);
-        }
-      } catch (error) {
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isUpdatingService = false;
-      }
+        axios
+          .put(`${rootState.apiUrl}/services/${id}`, updatedService)
+          .then(() => resolve("The service has been updated."))
+          .catch((ex) => {
+            let message =
+              ex.response?.data?.message || rootState.failureMessage;
+            reject(message);
+          })
+          .finally(() => {
+            state.isUpdatingService = false;
+          });
+      });
     },
 
     //Set authorization header for all request to access protected routes from the API
