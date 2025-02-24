@@ -61,14 +61,20 @@
       </div>
 
       <!--Image upload section-->
-      <div class="d-flex flex-column align-items-center gap-3 mb-3">
+      <div class="d-flex flex-column align-items-start gap-1 mb-3">
+        <p style="font-size: 0.9rem" class="fst-italic text-muted mb-0">
+          Max file size is 5MB
+        </p>
         <FileUpload
           mode="basic"
           @select="onFileSelect"
+          accept="image/*"
           customUpload
-          auto
+          show-cancel-button="true"
           severity="secondary"
-          class="p-button-outlined"
+          choose-icon="fas fa-image"
+          choose-label="Select image"
+          class="p-button-outlined p-button-secondary mb-2"
         />
         <Image v-if="src" :src="src" alt="Service image" width="250" preview />
       </div>
