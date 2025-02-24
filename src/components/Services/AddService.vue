@@ -99,7 +99,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import FileUpload from "primevue/fileupload";
 import Image from "primevue/image";
@@ -119,10 +119,12 @@ const store = useStore();
 const router = useRouter();
 const toast = useToast();
 
-let isCreatingService = computed(() => store.state.services.isCreatingService);
+let isCreatingService = ref(false);
 
 //image src
 const src = ref(null);
+//service image
+const serviceImage = ref(null);
 
 onMounted(() => {
   v$._value.$touch();
@@ -145,38 +147,57 @@ const rules = {
 const v$ = useVuelidate(rules, formData.value);
 //form validation with Vuelidate end
 
+//Add the service
 let submitForm = async () => {
-  const isFormCorrect = await v$._value.$validate();
-  if (isFormCorrect) {
-    store
-      .dispatch("services/addService", formData.value)
-      .then((message) => {
-        //success message
-        toast.add({
-          severity: "success",
-          summary: "Service Added",
-          detail: message,
-          life: 3000,
-        });
-        router.push("/admin/services");
-      })
-      .catch((message) => {
-        toast.add({
-          severity: "error",
-          summary: "Error Adding",
-          detail: message,
-        });
+  try {
+    //show loader
+    isCreatingService.value = true;
+    const isFormCorrect = await v$._value.$validate();
+    if (isFormCorrect) {
+      //First, upload the image
+      let formData = new FormData();
+      formData.append("File", serviceImage.value);
+      formData.append("Category", "services");
+
+      //upload the image and get the uploaded image information
+      //such the public access URL of the image
+      let uploadedImageInfo = await store.dispatch(
+        "images/uploadImage",
+        formData
+      );
+      //Second, save the service along with its image information
+      formData.value.image = uploadedImageInfo;
+      let message = await store.dispatch("services/addService", formData.value);
+      //success message
+      toast.add({
+        severity: "success",
+        summary: "Service Added",
+        detail: message,
+        life: 3000,
       });
+      router.push("/admin/services");
+    }
+  } catch (err) {
+    toast.add({
+      severity: "error",
+      summary: "Error Adding",
+      detail: err,
+    });
+  } finally {
+    //show loader
+    isCreatingService.value = false;
   }
 };
-
 //Service image upload
 function onFileSelect(event) {
   const file = event.files[0];
-  const reader = new FileReader();
+  if (!file) return;
 
+  serviceImage.value = file; // Store the actual file,
+
+  const reader = new FileReader();
   reader.onload = async (e) => {
-    src.value = e.target.result;
+    src.value = e.target.result; // Store preview URL
   };
 
   reader.readAsDataURL(file);

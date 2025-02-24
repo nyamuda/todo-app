@@ -10,15 +10,16 @@ const images = {
   getters: {},
   actions: {
     //upload image
-    uploadImage({ state, dispatch }, payload) {
+    uploadImage({ rootState, dispatch }, payload) {
       return new Promise((resolve, reject) => {
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         axios
-          .post(`${state.apiUrl}/images`, payload)
+          .post(`${rootState.apiUrl}/images`, payload)
           .then((response) => resolve(response.data))
           .catch((ex) => {
+            console.log(ex);
             let message =
               ex.response?.data?.message ||
               "Something went wrong. Unable to upload the image.";
