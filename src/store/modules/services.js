@@ -1,6 +1,7 @@
 import axios from "axios";
 import router from "@/router";
 import { useToast } from "vue-toastification";
+import { reject } from "core-js/fn/promise";
 const toast = useToast();
 const services = {
   namespaced: true,
@@ -19,17 +20,23 @@ const services = {
   getters: {},
   actions: {
     //fetch all the car wash service types
-    async getServices({ commit, state, rootState }) {
-      try {
+    getServices({ commit, state, rootState }) {
+      return new Promise((resolve, reject) => {
         state.isGettingServices = true;
-        const response = await axios.get(`${rootState.apiUrl}/services`);
-        //mutate the state with the fetched service types
-        commit("setServices", response.data);
-        state.isGettingServices = false;
-      } catch (error) {
-        toast.error("Failed to fetch car wash services.");
-        state.isGettingServices = false;
-      }
+        axios
+          .get(`${rootState.apiUrl}/services`)
+          .then((response) => {
+            //mutate the state with the fetched service types
+            commit("setServices", response.data);
+            resolve();
+          })
+          .catch(() => {
+            reject(rootState.failureMessage);
+          })
+          .finally(() => {
+            state.isGettingServices = true;
+          });
+      });
     },
     //fetch service by ID
     async getService({ rootState }, id) {
