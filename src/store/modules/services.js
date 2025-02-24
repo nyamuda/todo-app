@@ -10,6 +10,7 @@ const services = {
     isCreatingService: false,
     isUpdatingService: false,
     isGettingServices: false,
+    isDeletingService: false,
   }),
   mutations: {
     //set the car wash services
@@ -34,7 +35,7 @@ const services = {
             reject(rootState.failureMessage);
           })
           .finally(() => {
-            state.isGettingServices = true;
+            state.isGettingServices = false;
           });
       });
     },
@@ -53,63 +54,46 @@ const services = {
       });
     },
     //add a service
-    async addService({ dispatch, state, rootState }, payload) {
-      try {
+    addService({ dispatch, state, rootState }, payload) {
+      return new Promise((resolve, reject) => {
         state.isCreatingService = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        const response = await axios.post(
-          `${rootState.apiUrl}/services`,
-          payload
-        );
-        // Check if the request was successful
-        //status code will be 201 from the API
-        if (response.status == 201) {
-          //show toast success message
-          let message = "The service has been successfully added";
-          toast.success(message);
-
-          router.push("/services");
-
-          //refresh the state
-          await dispatch("getServices");
-        } else {
-          if (response.data.message) {
-            toast.error(response.data.message);
-          }
-        }
-      } catch (err) {
-        toast.error(rootState.failureMessage);
-      } finally {
-        state.isCreatingService = false;
-      }
+        axios
+          .post(`${rootState.apiUrl}/services`, payload)
+          .then(() => resolve("The service has been successfully added."))
+          .catch((ex) => {
+            let message =
+              ex.response?.data?.message || rootState.failureMessage;
+            reject(message);
+          })
+          .finally(() => {
+            state.isCreatingService = false;
+          });
+      });
     },
     // Delete a service
-    async deleteService({ dispatch, rootState }, id) {
-      try {
+    deleteService({ dispatch, state, rootState }, id) {
+      return new Promise((resolve, reject) => {
+        state.isDeletingService = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         // Send a DELETE request to the API
-        let response = await axios.delete(`${rootState.apiUrl}/services/${id}`);
-
-        // Check if the request was successful
-        //status code will be 204 from the API
-        if (response.status == 204) {
-          //show toast success message
-          let message = "The service has been successfully deleted.";
-          toast.success(message);
-
-          //refresh the state
-          await dispatch("getServices");
-        } else {
-          toast.error(rootState.failureMessage);
-        }
-      } catch (error) {
-        toast.error(rootState.failureMessage);
-      }
+        axios
+          .delete(`${rootState.apiUrl}/services/${id}`)
+          .then(() => resolve("The service has been successfully deleted."))
+          .catch((ex) => {
+            let message =
+              ex.response?.data?.message || rootState.failureMessage;
+            reject(message);
+          })
+          .finally(() => {
+            state.isDeletingService = false;
+          });
+      });
     },
     //mark a task as completed
     async updateService({ dispatch, state, rootState }, payload) {
