@@ -17,15 +17,17 @@ import BookingsList from "@/components/Bookings/BookingsList.vue";
 import AddBooking from "@/components/Bookings/AddBooking.vue";
 import UpdateBooking from "@/components/Bookings/UpdateBooking.vue";
 import AdminBookingsList from "@/components/Admin/AdminBookingsList.vue";
+import ServicesView from "@/views/Services/ServicesView.vue";
+import ServicesList from "@/components/Services/ServicesList.vue";
+import AddService from "@/components/Services/AddService.vue";
+import UpdateService from "@/components/Services/UpdateService.vue";
+import StatusesView from "@/views/Statuses/StatusesView.vue";
+import StatusesList from "@/components/Statuses/StatusesList.vue";
+import AddStatus from "@/components/Statuses/AddStatus.vue";
+import UpdateStatus from "@/components/Statuses/UpdateStatus.vue";
 import AdminBookingDetails from "@/components/Admin/AdminBookingDetails.vue";
 import BookingDetails from "@/components/Bookings/BookingDetails.vue";
 import AdminBookingUpdate from "@/components/Admin/AdminBookingUpdate.vue";
-import AddStatus from "@/components/Admin/Statuses/AddStatus.vue";
-import UpdateStatus from "@/components/Admin/Statuses/UpdateStatus.vue";
-import ServicesList from "@/components/Admin/Services/ServicesList.vue";
-import AddService from "@/components/Admin/Services/AddService.vue";
-import UpdateService from "@/components/Admin/Services/UpdateService.vue";
-import StatusesList from "@/components/Admin/Statuses/StatusesList.vue";
 
 const routes = [
   {
@@ -109,6 +111,73 @@ const routes = [
     ],
   },
 
+  //Car wash services routes
+  //Only admins have access to these routes
+  {
+    path: "/services",
+    name: "Services",
+    component: ServicesView,
+    beforeEnter: (to) => {
+      if (!store.state.account.loggedInUser.isAdmin) {
+        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+        return { name: "Login" }; // Redirect to login page
+      }
+      return true;
+    },
+    children: [
+      {
+        path: "",
+        name: "ServicesList",
+        component: ServicesList,
+      },
+
+      {
+        path: "add",
+        name: "AddService",
+        component: AddService,
+      },
+
+      {
+        path: "update/:id",
+        name: " UpdateService",
+        component: UpdateService,
+      },
+    ],
+  },
+  //Booking statuses routes
+  //Only admins have access to these routes
+  {
+    path: "/statuses",
+    name: "Statuses",
+    component: StatusesView,
+    beforeEnter: (to) => {
+      if (!store.state.account.loggedInUser.isAdmin) {
+        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+        return { name: "Login" }; // Redirect to login page
+      }
+      return true;
+    },
+    children: [
+      {
+        path: "",
+        name: "StatusesList",
+        component: StatusesList,
+      },
+      //only admins can add a booking status
+      {
+        path: "add",
+        name: "AddStatus",
+        component: AddStatus,
+      },
+      //only admins can update a booking status
+      {
+        path: "update/:id",
+        name: " UpdateStatus",
+        component: UpdateStatus,
+      },
+    ],
+  },
+
   //Account Routes
   {
     path: "/account",
@@ -169,12 +238,6 @@ const routes = [
 
     children: [
       { path: "", name: "AdminDashboard", component: AdminDashboard },
-      //admin bookings
-      {
-        path: "bookings",
-        name: "AdminBookingList",
-        component: AdminBookingsList,
-      },
       {
         path: "bookings",
         name: "AdminBookingList",
@@ -189,42 +252,6 @@ const routes = [
         path: "bookings/:id/update",
         name: "AdminBookingUpdate",
         component: AdminBookingUpdate,
-      },
-      //admin statuses
-      {
-        path: "statuses",
-        name: "StatusesList",
-        component: StatusesList,
-      },
-
-      {
-        path: "add",
-        name: "AddStatus",
-        component: AddStatus,
-      },
-
-      {
-        path: "update/:id",
-        name: " UpdateStatus",
-        component: UpdateStatus,
-      },
-      //admin services
-      {
-        path: "",
-        name: "ServicesList",
-        component: ServicesList,
-      },
-
-      {
-        path: "add",
-        name: "AddService",
-        component: AddService,
-      },
-
-      {
-        path: "update/:id",
-        name: " UpdateService",
-        component: UpdateService,
       },
     ],
   },

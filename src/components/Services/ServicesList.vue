@@ -2,7 +2,7 @@
   <div>
     <h1 class="display-6 mb-4">Car wash services</h1>
     <div class="d-flex justify-content-end">
-      <router-link to="/services/add">
+      <router-link to="/admin/services/add">
         <button type="button" class="btn btn-primary">Add service</button>
       </router-link>
     </div>
@@ -126,7 +126,7 @@ let deleteService = (id) => {
   });
 };
 let updateService = (id) => {
-  route.push(`services/update/${id}`);
+  route.push(`/admin/services/update/${id}`);
 };
 
 //format number into a monetary value

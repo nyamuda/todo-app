@@ -175,7 +175,7 @@ let submitForm = async () => {
         detail: message,
         life: 3000,
       });
-      router.push("/admin/services");
+      router.push("/services");
     }
   } catch (err) {
     toast.add({
