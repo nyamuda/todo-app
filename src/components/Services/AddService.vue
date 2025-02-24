@@ -70,13 +70,18 @@
           @select="onFileSelect"
           accept="image/*"
           customUpload
-          show-cancel-button="true"
           severity="secondary"
           choose-icon="fas fa-image"
           choose-label="Select image"
           class="p-button-outlined p-button-secondary mb-2"
         />
-        <Image v-if="src" :src="src" alt="Service image" width="250" preview />
+        <Image
+          v-if="src"
+          :src="src"
+          alt="Car wash service image"
+          width="250"
+          preview
+        />
       </div>
 
       <!-- Submit button -->
