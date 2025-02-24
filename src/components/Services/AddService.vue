@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <form class="service-form m-auto">
+    <form class="service-form m-auto" @submit.prevent="submitForm">
       <h3 class="fw-normal mb-3" style="letter-spacing: 1px">
         Add car wash service
       </h3>
@@ -13,67 +13,76 @@
 
       <!-- Name input -->
       <div class="mb-3">
-        <label for="serviceName" class="form-label">Service name</label>
-        <input
-          type="email"
-          id="serviceName"
-          class="form-control"
-          v-model="v$.name.$model"
-          :class="{
-            'is-invalid': v$.name.$error,
-            'is-valid': !v$.name.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.name.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="serviceName"
+            v-model="v$.name.$model"
+            :invalid="v$.name.$error"
+          />
+          <label for="serviceName">Service name</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.name.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.name.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Price input -->
-      <div class="form-outline mb-3">
-        <label for="servicePrice" class="form-label">Price</label>
-        <input
-          type="number"
-          id="servicePrice"
-          class="form-control"
-          v-model="v$.price.$model"
-          :class="{
-            'is-invalid': v$.price.$error,
-            'is-valid': !v$.price.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.price.$error">
+      <div class="mb-3">
+        <FloatLabel variant="on">
+          <InputNumber
+            v-model="v$.price.$model"
+            inputId="servicePrice"
+            mode="currency"
+            currency="ZAR"
+            locale="en-ZA"
+            :invalid="v$.price.$error"
+            fluid
+          />
+          <label for="servicePrice">Price</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.price.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.price.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
+      </div>
+
+      <!--Image upload section-->
+      <div class="d-flex flex-column align-items-center gap-3 mb-3">
+        <FileUpload
+          mode="basic"
+          @select="onFileSelect"
+          customUpload
+          auto
+          severity="secondary"
+          class="p-button-outlined"
+        />
+        <Image v-if="src" :src="src" alt="Service image" width="250" preview />
       </div>
 
       <!-- Submit button -->
-      <button
-        v-if="isCreatingService"
+      <Button
+        fluid
+        class="mb-2"
+        size="small"
         type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Please wait...
-      </button>
-      <button
-        v-else
-        :disabled="v$.$errors.length > 0"
-        @click.prevent="submitForm"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-      >
-        Add service
-      </button>
+        :label="isCreatingService ? 'Please wait...' : 'Add service'"
+        :loading="isCreatingService"
+        :disabled="v$.$errors.length > 0 || isCreatingService"
+      />
     </form>
   </div>
 </template>
@@ -82,8 +91,14 @@
 import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
 import FileUpload from "primevue/fileupload";
-//import OauthBooking from "./OauthBooking.vue";
-//Vuelidate for login form validation
+import Image from "primevue/image";
+import { Message } from "primevue";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+
+import InputNumber from "primevue/inputnumber";
+
 import { useVuelidate } from "@vuelidate/core";
 import { required, numeric } from "@vuelidate/validators";
 import { useRouter } from "vue-router";
@@ -92,6 +107,11 @@ import { useToast } from "primevue/usetoast";
 const store = useStore();
 const router = useRouter();
 const toast = useToast();
+
+let isCreatingService = computed(() => store.state.services.isCreatingService);
+
+//image src
+const src = ref(null);
 
 onMounted(() => {
   v$._value.$touch();
@@ -138,7 +158,18 @@ let submitForm = async () => {
       });
   }
 };
-let isCreatingService = computed(() => store.state.services.isCreatingService);
+
+//Service image upload
+function onFileSelect(event) {
+  const file = event.files[0];
+  const reader = new FileReader();
+
+  reader.onload = async (e) => {
+    src.value = e.target.result;
+  };
+
+  reader.readAsDataURL(file);
+}
 </script>
 
 <style scoped>

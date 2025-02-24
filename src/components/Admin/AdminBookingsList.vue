@@ -161,7 +161,9 @@
           :label="isLoadingMoreBookings ? 'Loading...' : 'Load more'"
           icon="fas fa-chevron-down"
           :loading="isLoadingMoreBookings"
-          :disabled="isLoadingMoreBookings || !hasMoreBookings"
+          :disabled="
+            isLoadingMoreBookings || !hasMoreBookings || isGettingBookings
+          "
           severity="contrast"
           size="small"
         />
