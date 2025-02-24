@@ -62,7 +62,8 @@ const services = {
           .then(() => resolve("The service has been successfully added."))
           .catch((ex) => {
             let message =
-              ex.response?.data?.message || rootState.failureMessage;
+              ex.response?.data?.message ||
+              "Something went wrong while adding the service.";
             reject(message);
           })
           .finally(() => {
@@ -83,7 +84,8 @@ const services = {
           .then(() => resolve("The service has been successfully deleted."))
           .catch((ex) => {
             let message =
-              ex.response?.data?.message || rootState.failureMessage;
+              ex.response?.data?.message ||
+              "Couldn’t delete the service. Please try again.";
             reject(message);
           })
           .finally(() => {
@@ -106,7 +108,8 @@ const services = {
           .then(() => resolve("The service has been updated."))
           .catch((ex) => {
             let message =
-              ex.response?.data?.message || rootState.failureMessage;
+              ex.response?.data?.message ||
+              "Something went wrong. Unable to update the service.";
             reject(message);
           })
           .finally(() => {

@@ -89,7 +89,8 @@ const statuses = {
           })
           .catch((ex) => {
             let message =
-              ex.response?.data?.message || rootState.failureMessage;
+              ex.response?.data?.message ||
+              "Something went wrong while adding the status.";
             reject(message);
           })
           .finally(() => {
@@ -113,7 +114,8 @@ const statuses = {
           })
           .catch((ex) => {
             let message =
-              ex.response?.data?.message || rootState.failureMessage;
+              ex.response?.data?.message ||
+              "Couldn’t delete the status. Please try again.";
             reject(message);
           })
           .finally(() => {
@@ -123,7 +125,27 @@ const statuses = {
     },
     //mark a task as completed
     updateStatus({ dispatch, state, rootState }, payload) {
-      
+      return new Promise((resolve, reject) => {
+        let { id, updatedStatus } = payload;
+        state.isUpdatingStatus = true;
+
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
+        axios
+          .put(`${rootState.apiUrl}/statuses/${id}`, updatedStatus)
+          .then(() => resolve("The status has been updated."))
+          .catch((ex) => {
+            let message =
+              ex.response?.data?.message ||
+              "Something went wrong. Unable to update the status";
+            reject(message);
+          })
+          .finally(() => {
+            state.isDeletingStatus = false;
+          });
+      });
     },
 
     //Set authorization header for all request to access protected routes from the API
