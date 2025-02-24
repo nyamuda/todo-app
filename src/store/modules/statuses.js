@@ -1,6 +1,7 @@
 import axios from "axios";
 import router from "@/router";
 import { useToast } from "vue-toastification";
+import { resolve } from "core-js/fn/promise";
 const toast = useToast();
 //Booking statuses e.g "cancelled", "confirmed", "en route" etc
 const statuses = {
@@ -24,17 +25,23 @@ const statuses = {
   },
   actions: {
     //fetch all the car wash status types
-    async getStatuses({ commit, state, rootState }) {
-      try {
+    getStatuses({ commit, state, rootState }) {
+      return new Promise((resolve, reject) => {
         state.isGettingStatuses = true;
-        const response = await axios.get(`${rootState.apiUrl}/statuses`);
-        //mutate the state with the fetched status types
-        commit("setStatuses", response.data);
-        state.isGettingStatuses = false;
-      } catch (error) {
-        toast.error("Failed to fetch car wash statuses.");
-        state.isGettingStatuses = false;
-      }
+        axios
+          .get(`${rootState.apiUrl}/statuses`)
+          .then((response) => {
+            //mutate the state with the fetched status types
+            commit("setStatuses", response.data);
+            resolve();
+          })
+          .catch(() => {
+            reject(rootState.failureMessage);
+          })
+          .finally(() => {
+            state.isGettingStatuses = false;
+          });
+      });
     },
     //fetch status by ID
     async getStatus({ rootState }, id) {
@@ -65,30 +72,29 @@ const statuses = {
       });
     },
     //add a status
-    async addStatus({ dispatch, state, rootState }, payload) {
-      try {
+    addStatus({ dispatch, state, rootState }, payload) {
+      return new Promise((resolve, resolve) => {
         state.isCreatingStatus = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         //make the request
-        await axios.post(`${rootState.apiUrl}/statuses`, payload);
-        //show toast success message
-        let message = "The status has been successfully added";
-        toast.success(message);
-
-        router.push("/statuses");
-
-        //refresh the state
-        await dispatch("getStatuses");
-      } catch (ex) {
-        let message = ex.response.data?.message
-          ? ex.response.data.message
-          : rootState.failureMessage;
-        toast.error(message);
-      } finally {
-        state.isCreatingStatus = false;
-      }
+        axios
+          .post(`${rootState.apiUrl}/statuses`, payload)
+          .then(() => {
+            //show toast success message
+            let message = "The status has been successfully added.";
+            resolve(message);
+          })
+          .catch((ex) => {
+            let message =
+              ex.response?.data?.message || rootState.failureMessage;
+            reject(message);
+          })
+          .finally(() => {
+            state.isCreatingStatus = false;
+          });
+      });
     },
     // Delete a status
     async deleteStatus({ dispatch, rootState }, id) {
