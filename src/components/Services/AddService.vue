@@ -10,7 +10,6 @@
         <p class="text-center fw-bold mx-3 mb-0">Or</p>
         <hr class="flex-grow-1" />
       </div> -->
-
       <!-- Name input -->
       <div class="mb-3">
         <FloatLabel variant="on">
@@ -33,45 +32,71 @@
           </div>
         </Message>
       </div>
+      <div class="row">
+        <!-- Duration input -->
 
-      <!-- Price input -->
-      <div class="mb-3">
-        <FloatLabel variant="on">
-          <InputNumber
-            v-model="v$.price.$model"
-            inputId="servicePrice"
-            mode="currency"
-            currency="ZAR"
-            locale="en-ZA"
-            :invalid="v$.price.$error"
-            fluid
-          />
-          <label for="servicePrice">Price</label>
-        </FloatLabel>
-        <Message
-          size="small"
-          severity="error"
-          v-if="v$.price.$error"
-          variant="simple"
-        >
-          <div v-for="error of v$.price.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </Message>
+        <div class="col-md-7 mb-3">
+          <FloatLabel variant="on">
+            <InputNumber
+              v-model="v$.duration.$model"
+              inputId="serviceDuration"
+              :invalid="v$.duration.$error"
+              prefix="Takes about "
+              suffix=" minutes"
+              fluid
+            />
+            <label for="serviceDuration">Duration</label>
+          </FloatLabel>
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.duration.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.duration.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
+        </div>
+
+        <!-- Price input -->
+        <div class="col-md-5 mb-3">
+          <FloatLabel variant="on">
+            <InputNumber
+              v-model="v$.price.$model"
+              inputId="servicePrice"
+              mode="currency"
+              currency="ZAR"
+              locale="en-ZA"
+              :invalid="v$.price.$error"
+              fluid
+            />
+            <label for="servicePrice">Price</label>
+          </FloatLabel>
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.price.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.price.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
+        </div>
       </div>
-
       <!-- Overview input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <Textarea
             id="serviceOverview"
             v-model="v$.overview.$model"
             :invalid="v$.overview.$error"
-            rows="5"
+            rows="2"
             class="w-100"
             style="resize: none"
           />
-          <label for="serviceOverview">Overview</label>
+          <label for="serviceOverview">Short summary</label>
         </FloatLabel>
         <Message
           size="small"
@@ -86,7 +111,7 @@
       </div>
 
       <!-- Description input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <Textarea
             id="serviceDescription"
@@ -96,7 +121,7 @@
             class="w-100"
             style="resize: none"
           />
-          <label for="serviceDescription">Additional notes</label>
+          <label for="serviceDescription">Full description</label>
         </FloatLabel>
         <Message
           size="small"
@@ -167,9 +192,8 @@ import { Message } from "primevue";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
-
+import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
-
 import { useVuelidate } from "@vuelidate/core";
 import { required, numeric, helpers } from "@vuelidate/validators";
 import { useRouter } from "vue-router";
@@ -195,6 +219,7 @@ const serviceForm = ref({
   overview: "",
   description: "",
   imageFile: null,
+  duration: 0,
 });
 
 //Image required error message
@@ -205,6 +230,7 @@ const rules = {
     required,
     numeric,
   },
+  duration: { required },
   overview: { required },
   description: { required },
   imageFile: { required: helpers.withMessage(imageRequiredError, required) },
@@ -235,6 +261,8 @@ let submitForm = async () => {
       let payload = {
         name: serviceForm.value.name,
         price: serviceForm.value.price,
+        overview: serviceForm.value.overview,
+        description: serviceForm.value.description,
         imageId: uploadedImageInfo.id,
       };
       let message = await store.dispatch("services/addService", payload);
@@ -280,7 +308,7 @@ a {
 }
 @media (min-width: 768px) {
   .service-form {
-    max-width: 30rem;
+    max-width: 35rem;
   }
 }
 </style>
