@@ -75,6 +75,16 @@
           choose-label="Select image"
           class="p-button-outlined p-button-secondary mb-2"
         />
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.imageFile.$error"
+          variant="simple"
+        >
+          <div v-for="error of v$.imageFile.$errors" :key="error.$uid">
+            <div>{{ error.$message }}</div>
+          </div>
+        </Message>
         <Image
           v-if="src"
           :src="src"
@@ -111,7 +121,7 @@ import Button from "primevue/button";
 import InputNumber from "primevue/inputnumber";
 
 import { useVuelidate } from "@vuelidate/core";
-import { required, numeric } from "@vuelidate/validators";
+import { required, numeric, helpers } from "@vuelidate/validators";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
@@ -123,28 +133,30 @@ let isCreatingService = ref(false);
 
 //image src
 const src = ref(null);
-//service image
-const serviceImage = ref(null);
 
 onMounted(() => {
   v$._value.$touch();
 });
 
 //form validation with Vuelidate start
-const formData = ref({
+const serviceForm = ref({
   name: "",
   price: 0,
+  imageFile: null,
 });
 
+//Image required error message
+let imageRequiredError = "An image is required. Please select a file.";
 const rules = {
   name: { required },
   price: {
     required,
     numeric,
   },
+  imageFile: { required: helpers.withMessage(imageRequiredError, required) },
 };
 
-const v$ = useVuelidate(rules, formData.value);
+const v$ = useVuelidate(rules, serviceForm.value);
 //form validation with Vuelidate end
 
 //Add the service
@@ -156,18 +168,22 @@ let submitForm = async () => {
     if (isFormCorrect) {
       //First, upload the image
       let imageFormData = new FormData();
-      imageFormData.append("File", serviceImage.value);
+      imageFormData.append("File", serviceForm.value.imageFile);
       imageFormData.append("Category", "services");
 
       //upload the image and get the uploaded image information
-      //such the public access URL of the image
+      //such the public URL of the image, the ID etc
       let uploadedImageInfo = await store.dispatch(
         "images/uploadImage",
         imageFormData
       );
-      //Second, save the service along with its image information
-      formData.value.imageId = uploadedImageInfo.id;
-      let message = await store.dispatch("services/addService", formData.value);
+      //Second, save the service along with its image information -> the ID
+      let payload = {
+        name: serviceForm.value.name,
+        price: serviceForm.value.price,
+        imageId: uploadedImageInfo.id,
+      };
+      let message = await store.dispatch("services/addService", payload);
       //success message
       toast.add({
         severity: "success",
@@ -193,7 +209,7 @@ function onFileSelect(event) {
   const file = event.files[0];
   if (!file) return;
 
-  serviceImage.value = file; // Store the actual file,
+  serviceForm.value.imageFile = file; // Store the actual file,
 
   const reader = new FileReader();
   reader.onload = async (e) => {
