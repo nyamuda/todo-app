@@ -60,6 +60,56 @@
         </Message>
       </div>
 
+      <!-- Overview input -->
+      <div class="form-group">
+        <FloatLabel variant="on">
+          <Textarea
+            id="serviceOverview"
+            v-model="v$.overview.$model"
+            :invalid="v$.overview.$error"
+            rows="5"
+            class="w-100"
+            style="resize: none"
+          />
+          <label for="serviceOverview">Overview</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.overview.$error"
+          variant="simple"
+        >
+          <div v-for="error of v$.overview.$errors" :key="error.$uid">
+            <div>{{ error.$message }}</div>
+          </div>
+        </Message>
+      </div>
+
+      <!-- Description input -->
+      <div class="form-group">
+        <FloatLabel variant="on">
+          <Textarea
+            id="serviceDescription"
+            v-model="v$.description.$model"
+            :invalid="v$.description.$error"
+            rows="5"
+            class="w-100"
+            style="resize: none"
+          />
+          <label for="serviceDescription">Additional notes</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.description.$error"
+          variant="simple"
+        >
+          <div v-for="error of v$.description.$errors" :key="error.$uid">
+            <div>{{ error.$message }}</div>
+          </div>
+        </Message>
+      </div>
+
       <!--Image upload section-->
       <div class="d-flex flex-column align-items-start gap-1 mb-3">
         <p style="font-size: 0.9rem" class="fst-italic text-muted mb-0">
@@ -142,6 +192,8 @@ onMounted(() => {
 const serviceForm = ref({
   name: "",
   price: 0,
+  overview: "",
+  description: "",
   imageFile: null,
 });
 
@@ -153,6 +205,8 @@ const rules = {
     required,
     numeric,
   },
+  overview: { required },
+  description: { required },
   imageFile: { required: helpers.withMessage(imageRequiredError, required) },
 };
 
