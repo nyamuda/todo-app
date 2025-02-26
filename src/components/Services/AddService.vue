@@ -92,6 +92,7 @@
             id="serviceFeatures"
             v-model="v$.features.$model"
             :options="features"
+            display="chip"
             optionLabel="name"
             filter
             fluid
