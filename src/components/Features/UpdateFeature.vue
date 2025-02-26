@@ -1,20 +1,20 @@
 <template>
   <div class="">
-    <form class="status-form m-auto">
-      <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Update status</h3>
+    <form class="feature-form m-auto">
+      <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Update feature</h3>
       <!-- <OauthBooking />-->
       <!-- <div class="d-flex align-bookings-center my-1">
-				<hr class="flex-grow-1" />
-				<p class="text-center fw-bold mx-3 mb-0">Or</p>
-				<hr class="flex-grow-1" />
-			</div> -->
+        <hr class="flex-grow-1" />
+        <p class="text-center fw-bold mx-3 mb-0">Or</p>
+        <hr class="flex-grow-1" />
+      </div> -->
 
       <!-- Name input -->
       <div class="mb-3">
-        <label for="statusName" class="form-label">Status name</label>
+        <label for="featureName" class="form-label">Feature name</label>
         <input
           type="email"
-          id="statusName"
+          id="featureName"
           class="form-control"
           v-model="v$.name.$model"
           :class="{
@@ -31,7 +31,7 @@
 
       <!-- Submit button -->
       <button
-        v-if="isUpdatingStatus"
+        v-if="isUpdatingFeature"
         type="submit"
         class="btn btn-primary btn-block mb-2 w-100"
         disabled
@@ -50,7 +50,7 @@
         type="submit"
         class="btn btn-primary btn-block mb-2 w-100"
       >
-        Update status
+        Update feature
       </button>
     </form>
   </div>
@@ -61,7 +61,7 @@ import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 //import OauthBooking from "./OauthBooking.vue";
-//Vuelidate for login form validation
+//Vuelidate for form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { useToast } from "vue-toastification";
@@ -80,12 +80,12 @@ onMounted(async () => {
   //get the route parameter
   id.value = route.currentRoute.value.params.id;
 
-  //populate the form with the status data
+  //populate the form with the feature data
   if (id.value) {
     store
-      .dispatch("statuses/getStatus", id.value)
-      .then((status) => {
-        formData.value.name = status.name;
+      .dispatch("features/getFeature", id.value)
+      .then((feature) => {
+        formData.value.name = feature.name;
       })
       .catch((message) => toast.error(message));
   }
@@ -106,13 +106,13 @@ const v$ = useVuelidate(rules, formData.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("statuss/updateStatus", {
+    store.dispatch("features/updateFeature", {
       id: id.value,
-      updatedStatus: formData.value,
+      updatedFeature: formData.value,
     });
   }
 };
-let isUpdatingStatus = computed(() => store.state.statuses.isUpdatingStatus);
+let isUpdatingFeature = computed(() => store.state.features.isUpdatingFeature);
 </script>
 
 <style scoped>
@@ -120,7 +120,7 @@ a {
   text-decoration: none;
 }
 @media (min-width: 768px) {
-  .status-form {
+  .feature-form {
     max-width: 30rem;
   }
 }

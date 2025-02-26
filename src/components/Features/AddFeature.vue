@@ -1,22 +1,16 @@
 <template>
   <div class="">
-    <form class="status-form m-auto">
+    <form class="feature-form m-auto">
       <h3 class="fw-normal mb-3" style="letter-spacing: 1px">
-        Add booking status
+        Add car wash feature
       </h3>
-      <!-- <OauthBooking />
-      <div class="d-flex align-bookings-center my-1">
-        <hr class="flex-grow-1" />
-        <p class="text-center fw-bold mx-3 mb-0">Or</p>
-        <hr class="flex-grow-1" />
-      </div> -->
-
+      
       <!-- Name input -->
       <div class="mb-3">
-        <label for="statusName" class="form-label">Status name</label>
+        <label for="featureName" class="form-label">Feature name</label>
         <input
           type="email"
-          id="statusName"
+          id="featureName"
           class="form-control"
           v-model="v$.name.$model"
           :class="{
@@ -33,7 +27,7 @@
 
       <!-- Submit button -->
       <button
-        v-if="isCreatingStatus"
+        v-if="isCreatingFeature"
         type="submit"
         class="btn btn-primary btn-block mb-2 w-100"
         disabled
@@ -52,7 +46,7 @@
         type="submit"
         class="btn btn-primary btn-block mb-2 w-100"
       >
-        Add status
+        Add feature
       </button>
     </form>
   </div>
@@ -88,10 +82,11 @@ const v$ = useVuelidate(rules, formData.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("statuses/addStatus", formData.value);
+    store.dispatch("features/addFeature", formData.value); 
   }
 };
-let isCreatingStatus = computed(() => store.state.statuses.isCreatingStatus);
+
+let isCreatingFeature = computed(() => store.state.features.isCreatingFeature); 
 </script>
 
 <style scoped>
@@ -99,7 +94,7 @@ a {
   text-decoration: none;
 }
 @media (min-width: 768px) {
-  .status-form {
+  .feature-form {
     max-width: 30rem;
   }
 }

@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h1 class="display-6 mb-4">Booking statuses</h1>
+    <h1 class="display-6 mb-4">Car Wash Features</h1>
     <div class="d-flex justify-content-end">
-      <router-link to="/statuses/add">
-        <button type="button" class="btn btn-primary">Add status</button>
+      <router-link to="/features/add">
+        <button type="button" class="btn btn-primary">Add feature</button>
       </router-link>
     </div>
-    <div class="card mt-4" v-if="statuses.length > 0 || isGettingStatuses">
+    <div class="card mt-4" v-if="features.length > 0 || isGettingFeatures">
       <!--Skeleton table start-->
-      <DataTable :value="rowSkeletons" v-if="isGettingStatuses">
+      <DataTable :value="rowSkeletons" v-if="isGettingFeatures">
         <Column field="name" header="Name">
           <template #body>
             <Skeleton></Skeleton>
@@ -23,7 +23,7 @@
       </DataTable>
       <!--Skeleton table end-->
       <!--Table Start-->
-      <DataTable :value="statuses" v-else>
+      <DataTable :value="features" v-else>
         <Column field="name" header="Name"></Column>
 
         <Column field="id" header="Actions">
@@ -33,41 +33,41 @@
               severity="contrast"
               variant="text"
               rounded
-              label="Update status"
+              label="Update feature"
               aria-label="update"
-              @click="updateStatus(slotProps.data.id)"
+              @click="updateFeature(slotProps.data.id)"
             />
             <Button
               icon="fas fa-trash"
               severity="danger"
               variant="text"
-              label="Delete status"
+              label="Delete feature"
               rounded
               aria-label="delete"
-              @click="deleteStatus(slotProps.data.id)"
+              @click="deleteFeature(slotProps.data.id)"
             />
           </template>
         </Column>
       </DataTable>
       <!--Table End-->
     </div>
-    <!--No Statuses Start-->
+    <!--No Features Start-->
     <div
       v-else
       class="d-flex justify-content-center align-bookings-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
     >
       <div class="mb-2">
-        <!-- Font Awesome Icon for no bookings -->
+        <!-- Font Awesome Icon for no features -->
         <i class="fas fa-0 fa-3x text-primary"></i>
       </div>
       <p class="fs-4 text-muted mb-2">
-        There are no available statuses at the moment.
+        There are no available features at the moment.
       </p>
       <p class="text-muted">
-        Add a status and let clients start booking car wash sessions.
+        Add a feature and let clients book car wash sessions.
       </p>
     </div>
-    <!--No Status End-->
+    <!--No Features End-->
     <!--Delete confirmation dialog start-->
     <ConfirmDialog></ConfirmDialog>
     <!--Delete confirmation dialog end-->
@@ -90,17 +90,17 @@ let store = useStore();
 let route = useRouter();
 
 onMounted(async () => {
-  store.dispatch("statuses/getStatuses");
+  store.dispatch("features/getFeatures");
 });
 
-let statuses = computed(() => store.state.statuses.statuses);
+let features = computed(() => store.state.features.features);
 let rowSkeletons = new Array(4);
-let isGettingStatuses = computed(() => store.state.statuses.isGettingStatuses);
+let isGettingFeatures = computed(() => store.state.features.isGettingFeatures);
 
-let deleteStatus = (id) => {
+let deleteFeature = (id) => {
   confirm.require({
-    message: "Do you want to delete this status?",
-    header: "Delete Status",
+    message: "Do you want to delete this feature?",
+    header: "Delete Feature",
     icon: "fas fa-circle-info",
     rejectLabel: "Cancel",
     rejectProps: {
@@ -113,12 +113,13 @@ let deleteStatus = (id) => {
       severity: "danger",
     },
     accept: () => {
-      store.dispatch("statuses/deleteStatus", id);
+      store.dispatch("features/deleteFeature", id);
     },
     reject: () => {},
   });
 };
-let updateStatus = (id) => {
-  route.push(`statuses/update/${id}`);
+
+let updateFeature = (id) => {
+  route.push(`features/update/${id}`);
 };
 </script>
