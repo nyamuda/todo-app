@@ -85,6 +85,32 @@
           </Message>
         </div>
       </div>
+      <!-- Price input -->
+      <div class="col-md-5 mb-3">
+        <FloatLabel variant="on">
+          <MultiSelect
+            id="serviceFeatures"
+            v-model="v$.features.$model"
+            :options="features"
+            optionLabel="name"
+            filter
+            class="w-full"
+            :invalid="v$.features.$error"
+          />
+          <label for="serviceFeatures">Features</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.features.$error"
+          variant="simple"
+        >
+          <div v-for="error of v$.features.$errors" :key="error.$uid">
+            <div>{{ error.$message }}</div>
+          </div>
+        </Message>
+      </div>
+
       <!-- Overview input -->
       <div class="form-group mb-3">
         <FloatLabel variant="on">
@@ -190,7 +216,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
 import FileUpload from "primevue/fileupload";
 import Image from "primevue/image";
@@ -201,9 +227,10 @@ import Button from "primevue/button";
 import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
 import { useVuelidate } from "@vuelidate/core";
-import { required, numeric, helpers } from "@vuelidate/validators";
+import { required, numeric, helpers, minLength } from "@vuelidate/validators";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
+import MultiSelect from "primevue/multiselect";
 
 const store = useStore();
 const router = useRouter();
@@ -212,12 +239,17 @@ const toast = useToast();
 //Show the loader by showing the current stage of the process
 //uploading image or adding the service
 let isAddingServiceOrUploadingImage = ref(null);
+let features = computed(() => store.state.features.features);
 
 //image src
 const src = ref(null);
 
-onMounted(() => {
+onMounted(async () => {
+  //show validation errors
   v$._value.$touch();
+
+  //get service features
+  await store.dispatch("features/getFeatures");
 });
 
 //form validation with Vuelidate start
@@ -228,10 +260,13 @@ const serviceForm = ref({
   description: "",
   imageFile: null,
   duration: 0,
+  features: [],
 });
 
 //Image required error message
 let imageRequiredError = "An image is required. Please select a file.";
+//at least one service feature required
+let featuresLengthError = "Please select at least one feature.";
 const rules = {
   name: { required },
   price: {
@@ -242,6 +277,10 @@ const rules = {
   overview: { required },
   description: { required },
   imageFile: { required: helpers.withMessage(imageRequiredError, required) },
+  features: {
+    required,
+    minLengthValue: helpers.withMessage(featuresLengthError, minLength(1)),
+  },
 };
 
 const v$ = useVuelidate(rules, serviceForm.value);

@@ -28,6 +28,10 @@ import UpdateStatus from "@/components/Statuses/UpdateStatus.vue";
 import AdminBookingDetails from "@/components/Admin/AdminBookingDetails.vue";
 import BookingDetails from "@/components/Bookings/BookingDetails.vue";
 import AdminBookingUpdate from "@/components/Admin/AdminBookingUpdate.vue";
+import FeaturesView from "@/views/Features/FeaturesView.vue";
+import FeaturesList from "@/components/Features/FeaturesList.vue";
+import AddFeature from "@/components/Features/AddFeature.vue";
+import UpdateFeature from "@/components/Features/UpdateFeature.vue";
 
 const routes = [
   {
@@ -174,6 +178,39 @@ const routes = [
         path: "update/:id",
         name: " UpdateStatus",
         component: UpdateStatus,
+      },
+    ],
+  },
+  //Car wash features routes
+  //Only admins have access to these routes
+  {
+    path: "/features",
+    name: "Features",
+    component: FeaturesView,
+    beforeEnter: (to) => {
+      if (!store.state.account.loggedInUser.isAdmin) {
+        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+        return { name: "Login" }; // Redirect to login page
+      }
+      return true;
+    },
+    children: [
+      {
+        path: "",
+        name: "FeaturesList",
+        component: FeaturesList,
+      },
+
+      {
+        path: "add",
+        name: "AddFeature",
+        component: AddFeature,
+      },
+
+      {
+        path: "update/:id",
+        name: " UpdateFeature",
+        component: UpdateFeature,
       },
     ],
   },
