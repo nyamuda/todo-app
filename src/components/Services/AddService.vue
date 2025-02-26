@@ -90,23 +90,27 @@
         <FloatLabel variant="on">
           <MultiSelect
             id="serviceFeatures"
-            v-model="v$.features.$model"
+            v-model="v$.featureIds.$model"
             :options="features"
             display="chip"
+            showClear
             optionLabel="name"
+            optionValue="id"
             filter
             fluid
-            :invalid="v$.features.$model.length == 0"
+            :invalid="v$.featureIds.$error"
           />
           <label for="serviceFeatures">Features</label>
         </FloatLabel>
         <Message
           size="small"
           severity="error"
-          v-if="v$.features.$model.length == 0"
+          v-if="v$.featureIds.$error"
           variant="simple"
         >
-          <div>{{ featuresLengthError }}</div>
+          <div v-for="error of v$.featureIds.$errors" :key="error.$uid">
+            <div>{{ error.$message }}</div>
+          </div>
         </Message>
       </div>
 
@@ -212,6 +216,7 @@
       />
     </form>
   </div>
+  {{ serviceForm.features }}
 </template>
 
 <script setup>
@@ -259,7 +264,7 @@ const serviceForm = ref({
   description: "",
   imageFile: null,
   duration: 0,
-  features: [],
+  featureIds: [],
 });
 
 //Image required error message
@@ -276,7 +281,9 @@ const rules = {
   overview: { required },
   description: { required },
   imageFile: { required: helpers.withMessage(imageRequiredError, required) },
-  features: {},
+  featureIds: {
+    required: helpers.withMessage(featuresLengthError, required),
+  },
 };
 
 const v$ = useVuelidate(rules, serviceForm.value);
