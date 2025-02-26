@@ -85,8 +85,8 @@
           </Message>
         </div>
       </div>
-      <!-- Price input -->
-      <div class="col-md-5 mb-3">
+      <!-- Features input -->
+      <div class="mb-3">
         <FloatLabel variant="on">
           <MultiSelect
             id="serviceFeatures"
@@ -94,20 +94,18 @@
             :options="features"
             optionLabel="name"
             filter
-            class="w-full"
-            :invalid="v$.features.$error"
+            fluid
+            :invalid="v$.features.$model.length == 0"
           />
           <label for="serviceFeatures">Features</label>
         </FloatLabel>
         <Message
           size="small"
           severity="error"
-          v-if="v$.features.$error"
+          v-if="v$.features.$model.length == 0"
           variant="simple"
         >
-          <div v-for="error of v$.features.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
+          <div>{{ featuresLengthError }}</div>
         </Message>
       </div>
 
@@ -227,7 +225,7 @@ import Button from "primevue/button";
 import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
 import { useVuelidate } from "@vuelidate/core";
-import { required, numeric, helpers, minLength } from "@vuelidate/validators";
+import { required, numeric, helpers } from "@vuelidate/validators";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import MultiSelect from "primevue/multiselect";
@@ -266,7 +264,7 @@ const serviceForm = ref({
 //Image required error message
 let imageRequiredError = "An image is required. Please select a file.";
 //at least one service feature required
-let featuresLengthError = "Please select at least one feature.";
+let featuresLengthError = "Please select at least one feature";
 const rules = {
   name: { required },
   price: {
@@ -277,10 +275,7 @@ const rules = {
   overview: { required },
   description: { required },
   imageFile: { required: helpers.withMessage(imageRequiredError, required) },
-  features: {
-    required,
-    minLengthValue: helpers.withMessage(featuresLengthError, minLength(1)),
-  },
+  features: {},
 };
 
 const v$ = useVuelidate(rules, serviceForm.value);
