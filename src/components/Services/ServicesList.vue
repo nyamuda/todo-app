@@ -9,85 +9,67 @@
 
     <div class="row">
       <div v-for="service in services" :key="service.id" class="col-md-6 mb-4">
-        <div class="card mb-3">
+        <div
+          class="card shadow-sm h-100"
+          @mouseover="displayPopover($event, service)"
+          @mouseleave="hidePopover(service.id)"
+        >
           <div class="row g-0">
+            <!-- Image Section -->
             <div class="col-md-4">
               <img
                 :src="
-                  service.image?.url
-                    ? service.image.url
-                    : 'https://primefaces.org/cdn/primevue/images/usercard.png'
+                  service.image?.url ||
+                  'https://primefaces.org/cdn/primevue/images/usercard.png'
                 "
                 alt="Car wash service"
                 class="img-fluid rounded-start"
                 style="height: 100%; object-fit: cover"
               />
             </div>
+
+            <!-- Content Section -->
             <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">{{ service.name }}</h5>
-                <p class="card-text">
-                  <small class="text-muted">{{
-                    formatCurrency(service.price)
-                  }}</small>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-bold">{{ service.name }}</h5>
+
+                <!-- Price & Duration -->
+                <p class="card-text text-muted mb-1">
+                  {{ formatCurrency(service.price) }}
                 </p>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Inventore sed consequuntur error repudiandae numquam deserunt
-                  quisquam repellat libero asperiores earum nam nobis, culpa
-                  ratione quam perferendis esse, cupiditate neque quas!
+                <p class="card-text text-muted mb-2">
+                  <i class="fas fa-clock"></i> Duration:
+                  {{ service.duration }} minutes
                 </p>
-                <div class="d-flex gap-4 mt-1">
+
+                <!-- Overview -->
+                <p class="card-text text-truncate">
+                  {{ service.overview }}
+                </p>
+
+                <!-- Buttons -->
+                <div class="mt-auto d-flex gap-3">
                   <Button
                     size="small"
-                    icon="fas fa-info"
-                    label="More details"
+                    icon="fas fa-info-circle"
+                    label="Details"
                     severity="secondary"
                     outlined
                     fluid
                   />
-                  <Button size="small" label="Book" fluid />
+                  <Button size="small" label="Book Now" fluid />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- <Card class="w-100">
-          <template #header>
-            <Image
-              :src="
-                service.image?.url
-                  ? service.image.url
-                  : 'https://primefaces.org/cdn/primevue/images/usercard.png'
-              "
-              alt="service header"
-              height="250"
-            />
-          </template>
-          <template #title>{{ service.name }}</template>
-          <template #subtitle> {{ formatCurrency(service.price) }}</template>
-          <template #content>
-            <p class="m-0">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Inventore sed consequuntur error repudiandae numquam deserunt
-              quisquam repellat libero asperiores earum nam nobis, culpa ratione
-              quam perferendis esse, cupiditate neque quas!
-            </p>
-          </template>
-          <template #footer>
-            <div class="d-flex gap-4 mt-1">
-              <Button
-                size="small"
-                label="Cancel"
-                severity="secondary"
-                outlined
-                fluid
-              />
-              <Button size="small" label="Save" fluid />
-            </div>
-          </template>
-        </Card> -->
       </div>
+      <!-- Popover for Full Overview -->
+      <Popover ref="op">
+        <div v-if="selectedService" class="p-3">
+          <p class="text-muted">{{ selectedService.overview }}</p>
+        </div>
+      </Popover>
     </div>
 
     <div class="card mt-4" v-if="services.length > 0 || isGettingServices">
@@ -166,7 +148,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref, nextTick } from "vue";
 import { useStore } from "vuex";
 import { Skeleton } from "primevue";
 import DataTable from "primevue/datatable";
@@ -175,6 +157,8 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
+import Popover from "primevue/popover";
+
 // import Image from "primevue/image";
 
 // import Card from "primevue/card";
@@ -191,6 +175,27 @@ onMounted(async () => {
 let services = computed(() => store.state.services.services);
 let rowSkeletons = new Array(4);
 let isGettingServices = computed(() => store.state.services.isGettingServices);
+//Service information to show on hover with a popover
+const selectedService = ref();
+//The ref of the the popover
+const op = ref();
+
+const displayPopover = async (event, service) => {
+  op.value?.hide();
+
+  if (selectedService.value?.id === service.id) {
+    selectedService.value = null;
+  } else {
+    selectedService.value = service;
+
+    await nextTick(); // Ensure DOM updates before showing popover
+    op.value?.show(event);
+  }
+};
+
+const hidePopover = () => {
+  op.value?.hide();
+};
 
 let deleteService = (id) => {
   confirm.require({
