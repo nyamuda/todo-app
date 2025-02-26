@@ -83,6 +83,7 @@ const services = {
           .delete(`${rootState.apiUrl}/services/${id}`)
           .then(() => resolve("The service has been successfully deleted."))
           .catch((ex) => {
+            console.log(ex);
             let message =
               ex.response?.data?.message ||
               "Couldn’t delete the service. Please try again.";

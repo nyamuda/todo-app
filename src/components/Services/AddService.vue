@@ -175,9 +175,15 @@
         class="mb-2"
         size="small"
         type="submit"
-        :label="isCreatingService ? 'Please wait...' : 'Add service'"
-        :loading="isCreatingService"
-        :disabled="v$.$errors.length > 0 || isCreatingService"
+        :label="
+          isAddingServiceOrUploadingImage == 'uploading'
+            ? 'Uploading image, please wait...'
+            : isAddingServiceOrUploadingImage == 'adding'
+            ? 'Saving the service details...'
+            : 'Create new service'
+        "
+        :loading="isAddingServiceOrUploadingImage"
+        :disabled="v$.$errors.length > 0 || isAddingServiceOrUploadingImage"
       />
     </form>
   </div>
@@ -203,7 +209,9 @@ const store = useStore();
 const router = useRouter();
 const toast = useToast();
 
-let isCreatingService = ref(false);
+//Show the loader by showing the current stage of the process
+//uploading image or adding the service
+let isAddingServiceOrUploadingImage = ref(null);
 
 //image src
 const src = ref(null);
@@ -242,11 +250,11 @@ const v$ = useVuelidate(rules, serviceForm.value);
 //Add the service
 let submitForm = async () => {
   try {
-    //show loader
-    isCreatingService.value = true;
     const isFormCorrect = await v$._value.$validate();
     if (isFormCorrect) {
       //First, upload the image
+      //show the loader
+      isAddingServiceOrUploadingImage.value = "uploading";
       let imageFormData = new FormData();
       imageFormData.append("File", serviceForm.value.imageFile);
       imageFormData.append("Category", "services");
@@ -263,8 +271,11 @@ let submitForm = async () => {
         price: serviceForm.value.price,
         overview: serviceForm.value.overview,
         description: serviceForm.value.description,
+        duration: serviceForm.value.duration,
         imageId: uploadedImageInfo.id,
       };
+      //show the loader
+      isAddingServiceOrUploadingImage.value = "adding";
       let message = await store.dispatch("services/addService", payload);
       //success message
       toast.add({
@@ -283,7 +294,7 @@ let submitForm = async () => {
     });
   } finally {
     //show loader
-    isCreatingService.value = false;
+    isAddingServiceOrUploadingImage.value = null;
   }
 };
 //Service image upload

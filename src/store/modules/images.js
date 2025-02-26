@@ -19,7 +19,6 @@ const images = {
           .post(`${rootState.apiUrl}/images`, payload)
           .then((response) => resolve(response.data))
           .catch((ex) => {
-            console.log(ex);
             let message =
               ex.response?.data?.message ||
               "Something went wrong. Unable to upload the image.";
