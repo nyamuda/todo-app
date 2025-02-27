@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="feedback" class="">
     <div class="d-flex flex-column align-items-start mb-2">
       <span class="fw-bold d-flex">Tatenda Pierce</span>
 

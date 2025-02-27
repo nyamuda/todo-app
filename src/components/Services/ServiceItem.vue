@@ -58,10 +58,16 @@
           </ul>
 
           <!-- Recent customer feedback (Mobile Only) -->
-          <p class="text-muted small d-md-none">
+          <div
+            class="d-md-none bg-light p-3 rounded mb-3"
+            style="font-size: 0.95rem"
+          >
+            <FeedbackItem :feedback="service.feedback[0]" />
+          </div>
+          <!-- <p class="text-muted small d-md-none">
             <i class="fas fa-quote-left"></i>
-            {{ service.feedback[0]?.content }}...
-          </p>
+            {{ service.feedback[0]?.content }}
+          </p> -->
 
           <!-- Buttons -->
           <div class="mt-auto d-flex gap-3">
