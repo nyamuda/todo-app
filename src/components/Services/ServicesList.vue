@@ -228,6 +228,9 @@ const selectedService = ref();
 const op = ref();
 
 const displayPopover = async (event, service) => {
+  // Prevent popover on mobile devices
+  if (window.innerWidth <= 768) return;
+
   op.value?.hide();
 
   if (selectedService.value?.id === service.id) {
@@ -288,11 +291,3 @@ const calculateAverageRating = (feedbacks) => {
   return (totalRating / feedbacks.length).toFixed(1); // Round to 1 decimal place
 };
 </script>
-
-<style scoped>
-@media (min-width: 768px) {
-  .service-popover {
-    max-width: 20rem;
-  }
-}
-</style>
