@@ -22,8 +22,10 @@
       <!-- Content Section -->
       <div class="col-md-8">
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title h3 fw-bold">{{ service.name }}</h5>
-
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title fs-5 fw-bold">{{ service.name }}</h5>
+            <Tag severity="success" value="Most Popular"></Tag>
+          </div>
           <!-- Star Rating & Review Count -->
           <div class="text-muted mb-1 d-flex align-items-center">
             <span class="me-2">
@@ -44,17 +46,18 @@
             {{ formatCurrency(service.price) }}
           </p>
           <p class="card-text text-muted mb-2">
-            <i class="fas fa-clock"></i> Duration:
+            <i class="fa-regular fa-clock"></i> Duration:
             {{ service.duration }} minutes
           </p>
 
           <!-- Features (Max 4) (Mobile Only) -->
-          <ul class="list-unstyled mb-2 d-md-none">
+          <ul class="list-unstyled mb-2 row d-md-none">
             <li
+              class="col-6"
               v-for="(feature, index) in service.features.slice(0, 4)"
               :key="index"
             >
-              <i class="fas fa-check-circle text-success"></i>
+              <i class="fas fa-check-circle"></i>
               {{ feature.name }}
             </li>
           </ul>
@@ -81,7 +84,7 @@
               outlined
               fluid
             />
-            <Button size="small" label="Book Now" fluid />
+            <Button severity="contrast" size="small" label="Book Now" fluid />
           </div>
         </div>
       </div>
@@ -124,6 +127,7 @@ import FeedbackItem from "../Feedback/FeedbackItem.vue";
 import Rating from "primevue/rating";
 import Button from "primevue/button";
 import { useRouter } from "vue-router";
+import Tag from "primevue/tag";
 
 let router = useRouter();
 //Props
