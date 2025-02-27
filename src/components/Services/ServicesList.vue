@@ -87,10 +87,20 @@
 
       <!-- Popover for Full Overview & Customer Quote -->
       <Popover ref="op">
-        <div v-if="selectedService" class="p-3">
+        <div v-if="selectedService" class="p-1">
           <p class="h3">{{ selectedService.name }}</p>
           <p class="text-muted">{{ selectedService.overview }}</p>
-          <hr />
+          <!-- Features (Max 4) -->
+          <ul class="list-unstyled mb-2">
+            <li
+              v-for="(feature, index) in selectedService?.features?.slice(0, 4)"
+              :key="index"
+            >
+              <i class="fas fa-check"></i>
+              {{ feature.name }}
+            </li>
+          </ul>
+          <Divider />
           <p class="fst-italic">
             <i class="fas fa-quote-left"></i>
             {{ selectedService.feedback[0]?.content }}
@@ -224,6 +234,7 @@ const displayPopover = async (event, service) => {
 
 const hidePopover = () => {
   op.value?.hide();
+  selectedService.value = null; // Reset selection to allow re-triggering
 };
 
 let deleteService = (id) => {
