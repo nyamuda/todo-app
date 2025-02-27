@@ -315,6 +315,7 @@ let submitForm = async () => {
         description: serviceForm.value.description,
         duration: serviceForm.value.duration,
         imageId: uploadedImageInfo.id,
+        featureIds: serviceForm.value.featureIds,
       };
       //show the loader
       isAddingServiceOrUploadingImage.value = "adding";

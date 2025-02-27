@@ -11,7 +11,7 @@
       <div v-for="service in services" :key="service.id" class="col-md-6 mb-4">
         <div
           class="card shadow-sm h-100"
-          @mouseover="displayPopover($event, service)"
+          @mouseenter="displayPopover($event, service)"
           @mouseleave="hidePopover(service.id)"
         >
           <div class="row g-0">
@@ -33,6 +33,14 @@
               <div class="card-body d-flex flex-column">
                 <h5 class="card-title fw-bold">{{ service.name }}</h5>
 
+                <!-- Star Rating & Review Count -->
+                <p class="text-muted mb-1">
+                  <span class="text-warning">
+                    <i class="fas fa-star"></i>
+                  </span>
+                  ({{ service.feedback.length }} reviews)
+                </p>
+
                 <!-- Price & Duration -->
                 <p class="card-text text-muted mb-1">
                   {{ formatCurrency(service.price) }}
@@ -42,9 +50,21 @@
                   {{ service.duration }} minutes
                 </p>
 
-                <!-- Overview -->
-                <p class="card-text text-truncate">
-                  {{ service.overview }}
+                <!-- Features (Max 4) -->
+                <ul class="list-unstyled mb-2">
+                  <li
+                    v-for="(feature, index) in service.features.slice(0, 4)"
+                    :key="index"
+                  >
+                    <i class="fas fa-check-circle text-success"></i>
+                    {{ feature.name }}
+                  </li>
+                </ul>
+
+                <!-- Recent Customer Quote (Mobile Only) -->
+                <p class="text-muted small d-lg-none">
+                  <i class="fas fa-quote-left"></i>
+                  {{ service.feedback[0]?.content }}...
                 </p>
 
                 <!-- Buttons -->
@@ -64,10 +84,18 @@
           </div>
         </div>
       </div>
-      <!-- Popover for Full Overview -->
+
+      <!-- Popover for Full Overview & Customer Quote -->
       <Popover ref="op">
         <div v-if="selectedService" class="p-3">
+          <p class="h3">{{ selectedService.name }}</p>
           <p class="text-muted">{{ selectedService.overview }}</p>
+          <hr />
+          <p class="fst-italic">
+            <i class="fas fa-quote-left"></i>
+            {{ selectedService.feedback[0]?.content }}
+          </p>
+          <p class="fw-bold mb-0">- Tatenda</p>
         </div>
       </Popover>
     </div>
@@ -158,6 +186,7 @@ import { useRouter } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import Popover from "primevue/popover";
+import Divider from "primevue/divider";
 
 // import Image from "primevue/image";
 

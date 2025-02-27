@@ -444,7 +444,7 @@ let sendFeedback = (id) => {
         .dispatch("bookings/addFeedback", { feedback })
         .then((message) => {
           toast.add({
-            severity: "error",
+            severity: "success",
             summary: "Feedback Sent",
             detail: message,
             life: 5000,
