@@ -120,6 +120,21 @@ const services = {
       });
     },
 
+    //fetch the most popular service
+    async getPopularService({ rootState }) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${rootState.apiUrl}/services/popular`)
+          .then((response) => resolve(response.data))
+          .catch((ex) => {
+            let message = ex.response?.data.message
+              ? ex.response.data.message
+              : rootState.failureMessage;
+            reject(message);
+          });
+      });
+    },
+
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage

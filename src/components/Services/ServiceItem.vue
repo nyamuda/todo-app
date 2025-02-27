@@ -22,7 +22,9 @@
       <!-- Content Section -->
       <div class="col-md-8">
         <div class="card-body d-flex flex-column">
-          <div class="d-flex justify-content-between align-items-center">
+          <div
+            class="d-flex justify-content-between align-items-center flex-wrap-reverse"
+          >
             <h5 class="card-title fs-5 fw-bold">{{ service.name }}</h5>
             <Tag severity="success" value="Most Popular"></Tag>
           </div>
@@ -134,6 +136,11 @@ let router = useRouter();
 defineProps({
   service: Object,
 });
+
+//the popular service
+//this is used to show which service is the popular one
+//by putting a tag on it
+let popularService = ref({ id: 0 });
 
 //Service information to show on hover with a popover
 const selectedService = ref();
