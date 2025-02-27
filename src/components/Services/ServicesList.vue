@@ -112,27 +112,8 @@
             style="font-size: 0.9rem"
             v-if="selectedService.feedback?.length > 0"
           >
-            <div class="d-flex flex-column align-items-start mb-2">
-              <span class="fw-bold d-flex">Tatenda Pierce</span>
-
-              <span class="d-flex">
-                <Rating
-                  class="me-2"
-                  :model-value="selectedService.feedback[0]?.rating"
-                  readonly
-                />
-                {{
-                  dateFormat(
-                    selectedService.feedback[0]?.createdAt,
-                    "mmmm dS, yyyy"
-                  )
-                }}
-              </span>
-            </div>
-            <p class="text-muted">
-              <i class="fas fa-quote-left pe-1"></i>
-              {{ selectedService.feedback[0]?.content }}
-            </p>
+            <!--Review Item-->
+            <FeedbackItem :feedback="selectedService.feedback[0]" />
           </div>
         </div>
       </Popover>
@@ -221,12 +202,11 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import { useRouter } from "vue-router";
-import dateFormat from "dateformat";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import Popover from "primevue/popover";
 import Divider from "primevue/divider";
-
+import FeedbackItem from "../Feedback/FeedbackItem.vue";
 import Rating from "primevue/rating";
 
 // import Image from "primevue/image";
