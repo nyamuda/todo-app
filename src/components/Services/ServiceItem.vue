@@ -22,20 +22,22 @@
       <!-- Content Section -->
       <div class="col-md-8">
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title fw-bold">{{ service.name }}</h5>
+          <h5 class="card-title h3 fw-bold">{{ service.name }}</h5>
 
           <!-- Star Rating & Review Count -->
-          <p class="text-muted mb-1">
-            <span>
+          <div class="text-muted mb-1 d-flex align-items-center">
+            <span class="me-2">
               <Rating
                 severity="contrast"
                 :model-value="calculateAverageRating(service.feedback)"
                 readonly
               />
             </span>
-            ({{ service.feedback.length }}
-            {{ service.feedback.length == 1 ? " review" : "reviews" }})
-          </p>
+            <span>
+              ({{ service.feedback.length }}
+              {{ service.feedback.length == 1 ? " review" : "reviews" }})</span
+            >
+          </div>
 
           <!-- Price & Duration -->
           <p class="card-text text-muted mb-1">
@@ -60,7 +62,7 @@
           <!-- Recent customer feedback (Mobile Only) -->
           <div
             class="d-md-none bg-light p-3 rounded mb-3"
-            style="font-size: 0.95rem"
+            style="font-size: 0.9rem"
           >
             <FeedbackItem :feedback="service.feedback[0]" />
           </div>
