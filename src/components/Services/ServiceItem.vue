@@ -26,7 +26,13 @@
             class="d-flex justify-content-between align-items-center flex-wrap-reverse"
           >
             <h5 class="card-title fs-5 fw-bold">{{ service.name }}</h5>
-            <Tag severity="success" value="Most Popular"></Tag>
+
+            <!--Check if the service is the most popular-->
+            <Tag
+              v-if="service?.id == popularService.id"
+              severity="success"
+              value="Most Popular"
+            ></Tag>
           </div>
           <!-- Star Rating & Review Count -->
           <div class="text-muted mb-1 d-flex align-items-center">
@@ -122,16 +128,25 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from "vue";
+import { ref, nextTick, onMounted } from "vue";
 import Popover from "primevue/popover";
 import Divider from "primevue/divider";
 import FeedbackItem from "../Feedback/FeedbackItem.vue";
 import Rating from "primevue/rating";
 import Button from "primevue/button";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import Tag from "primevue/tag";
 
 let router = useRouter();
+let store = useStore();
+
+onMounted(async () => {
+  await store
+    .dispatch("services/getPopularService")
+    .then((service) => (popularService.value = service))
+    .catch(() => {});
+});
 //Props
 defineProps({
   service: Object,

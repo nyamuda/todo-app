@@ -106,7 +106,7 @@ let store = useStore();
 let route = useRouter();
 
 onMounted(async () => {
-  store.dispatch("services/getServices");
+  await store.dispatch("services/getServices");
 });
 
 let services = computed(() => store.state.services.services);
