@@ -35,8 +35,13 @@
 
                 <!-- Star Rating & Review Count -->
                 <p class="text-muted mb-1">
-                  <span class="text-warning">
-                    <i class="fas fa-star"></i>
+                  <span>
+                    <Rating
+                      :style="{ color: 'red' }"
+                      severity="contrast"
+                      :model-value="calculateAverageRating(service.feedback)"
+                      readonly
+                    />
                   </span>
                   ({{ service.feedback.length }} reviews)
                 </p>
@@ -50,8 +55,8 @@
                   {{ service.duration }} minutes
                 </p>
 
-                <!-- Features (Max 4) -->
-                <ul class="list-unstyled mb-2">
+                <!-- Features (Max 4) (Mobile Only) -->
+                <ul class="list-unstyled mb-2 d-md-none">
                   <li
                     v-for="(feature, index) in service.features.slice(0, 4)"
                     :key="index"
@@ -62,7 +67,7 @@
                 </ul>
 
                 <!-- Recent Customer Quote (Mobile Only) -->
-                <p class="text-muted small d-lg-none">
+                <p class="text-muted small d-md-none">
                   <i class="fas fa-quote-left"></i>
                   {{ service.feedback[0]?.content }}...
                 </p>
@@ -86,13 +91,14 @@
       </div>
 
       <!-- Popover for Full Overview & Customer Quote -->
-      <Popover ref="op">
+      <Popover ref="op" style="max-width: 25rem">
         <div v-if="selectedService" class="p-1">
-          <p class="h3">{{ selectedService.name }}</p>
+          <p class="h5 fw-bold">{{ selectedService.name }}</p>
           <p class="text-muted">{{ selectedService.overview }}</p>
           <!-- Features (Max 4) -->
-          <ul class="list-unstyled mb-2">
+          <ul class="list-unstyled mb-2 row">
             <li
+              class="col-6"
               v-for="(feature, index) in selectedService?.features?.slice(0, 4)"
               :key="index"
             >
@@ -102,7 +108,7 @@
           </ul>
           <Divider />
           <p class="fst-italic">
-            <i class="fas fa-quote-left"></i>
+            <i class="fas fa-quote-left pe-2"></i>
             {{ selectedService.feedback[0]?.content }}
           </p>
           <p class="fw-bold mb-0">- Tatenda</p>
@@ -198,6 +204,8 @@ import ConfirmDialog from "primevue/confirmdialog";
 import Popover from "primevue/popover";
 import Divider from "primevue/divider";
 
+import Rating from "primevue/rating";
+
 // import Image from "primevue/image";
 
 // import Card from "primevue/card";
@@ -269,4 +277,22 @@ let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
     currency: currency,
   }).format(amount);
 };
+//Calculate the average star rating
+const calculateAverageRating = (feedbacks) => {
+  if (!feedbacks.length) return 0; // Return 0 if no feedbacks are provided
+
+  const totalRating = feedbacks.reduce(
+    (sum, feedback) => sum + feedback.rating,
+    0
+  );
+  return (totalRating / feedbacks.length).toFixed(1); // Round to 1 decimal place
+};
 </script>
+
+<style scoped>
+@media (min-width: 768px) {
+  .service-popover {
+    max-width: 20rem;
+  }
+}
+</style>

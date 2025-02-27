@@ -23,6 +23,7 @@ createApp(App)
     theme: {
       preset: Aura,
     },
+    ripple: true,
   })
   .use(ConfirmationService)
   .use(ToastService)
