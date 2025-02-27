@@ -43,7 +43,8 @@
                       readonly
                     />
                   </span>
-                  ({{ service.feedback.length }} reviews)
+                  ({{ service.feedback.length }}
+                  {{ service.feedback.length == 1 ? " review" : "reviews" }})
                 </p>
 
                 <!-- Price & Duration -->
@@ -90,11 +91,11 @@
         </div>
       </div>
 
-      <!-- Popover for Full Overview & Customer Quote -->
+      <!-- Popover for full overview & customer review -->
       <Popover ref="op" style="max-width: 25rem">
         <div v-if="selectedService" class="p-1">
-          <p class="h5 fw-bold">{{ selectedService.name }}</p>
-          <p class="text-muted">{{ selectedService.overview }}</p>
+          <p class="h4 fw-bold">{{ selectedService.name }}</p>
+          <p>{{ selectedService.overview }}</p>
           <!-- Features (Max 4) -->
           <ul class="list-unstyled mb-2 row">
             <li
@@ -107,11 +108,32 @@
             </li>
           </ul>
           <Divider />
-          <p class="fst-italic">
-            <i class="fas fa-quote-left pe-2"></i>
-            {{ selectedService.feedback[0]?.content }}
-          </p>
-          <p class="fw-bold mb-0">- Tatenda</p>
+          <div
+            style="font-size: 0.9rem"
+            v-if="selectedService.feedback?.length > 0"
+          >
+            <div class="d-flex flex-column align-items-start mb-2">
+              <span class="fw-bold d-flex">Tatenda Pierce</span>
+
+              <span class="d-flex">
+                <Rating
+                  class="me-2"
+                  :model-value="selectedService.feedback[0]?.rating"
+                  readonly
+                />
+                {{
+                  dateFormat(
+                    selectedService.feedback[0]?.createdAt,
+                    "mmmm dS, yyyy"
+                  )
+                }}
+              </span>
+            </div>
+            <p class="text-muted">
+              <i class="fas fa-quote-left pe-1"></i>
+              {{ selectedService.feedback[0]?.content }}
+            </p>
+          </div>
         </div>
       </Popover>
     </div>
@@ -199,6 +221,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import { useRouter } from "vue-router";
+import dateFormat from "dateformat";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import Popover from "primevue/popover";
@@ -282,7 +305,7 @@ let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
 };
 //Calculate the average star rating
 const calculateAverageRating = (feedbacks) => {
-  if (!feedbacks.length) return 0; // Return 0 if no feedbacks are provided
+  if (feedbacks.length == 0) return 0; // Return 0 if no feedbacks are provided
 
   const totalRating = feedbacks.reduce(
     (sum, feedback) => sum + feedback.rating,
@@ -290,4 +313,18 @@ const calculateAverageRating = (feedbacks) => {
   );
   return (totalRating / feedbacks.length).toFixed(1); // Round to 1 decimal place
 };
+
+//Get the latest 5 or 4 star review
+// const latestBestReview = (feedbacks) => {
+//   //if the feedback array is empty, return false
+//   if (!feedbacks.length == 0) return false;
+
+//   let bestReviews = feedbacks.filter(
+//     (feedback) => feedback.rating == 5 || feedback.rating == 4
+//   );
+
+//   if (bestReviews.length > 0) return bestReviews[0];
+//   //if there are not 5 or 4 star reviews, return false
+//   else return false;
+// };
 </script>
