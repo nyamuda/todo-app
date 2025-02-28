@@ -32,6 +32,7 @@ import FeaturesView from "@/views/Features/FeaturesView.vue";
 import FeaturesList from "@/components/Features/FeaturesList.vue";
 import AddFeature from "@/components/Features/AddFeature.vue";
 import UpdateFeature from "@/components/Features/UpdateFeature.vue";
+import ServiceDetails from "@/components/Services/ServiceDetails.vue";
 
 const routes = [
   {
@@ -116,35 +117,47 @@ const routes = [
   },
 
   //Car wash services routes
-  //Only admins have access to these routes
   {
     path: "/services",
     name: "Services",
     component: ServicesView,
-    beforeEnter: (to) => {
-      if (!store.state.account.loggedInUser.isAdmin) {
-        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
-        return { name: "Login" }; // Redirect to login page
-      }
-      return true;
-    },
+
     children: [
       {
         path: "",
         name: "ServicesList",
         component: ServicesList,
       },
-
+      //Only admins can add services
       {
         path: "add",
         name: "AddService",
         component: AddService,
+        beforeEnter: (to) => {
+          if (!store.state.account.loggedInUser.isAdmin) {
+            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+            return { name: "Login" }; // Redirect to login page
+          }
+          return true;
+        },
       },
-
+      //Only admins can update services
       {
-        path: "update/:id",
+        path: ":id/update",
         name: " UpdateService",
         component: UpdateService,
+        beforeEnter: (to) => {
+          if (!store.state.account.loggedInUser.isAdmin) {
+            store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+            return { name: "Login" }; // Redirect to login page
+          }
+          return true;
+        },
+      },
+      {
+        path: ":id/details",
+        name: " ServiceDetails",
+        component: ServiceDetails,
       },
     ],
   },
