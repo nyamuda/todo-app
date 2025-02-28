@@ -26,18 +26,25 @@
         alt="Car wash service"
         class="img-fluid rounded service-image"
       />
-      <!--Description & Price -->
+      <!--Description, Price & Duration  -->
       <div class="text-start mt-4 row">
+        <!--Description-->
         <div class="col-md-8">
           <p class="h3">Description</p>
           <p>{{ service.description }}</p>
         </div>
-        <!--Price-->
-        <div
-          class="bg-light p-3 col-md-4 fs-5 fw-bold"
-          style="height: fit-content"
-        >
-          <p>{{ formatCurrency(service.price) }}</p>
+        <!--Price & Duration-->
+        <div class="bg-light p-3 col-md-4" style="height: fit-content">
+          <p class="fs-5 fw-bold">{{ formatCurrency(service.price) }}</p>
+          <div class="bg-white mb-3 d-flex justify-content-start gap-2 p-3">
+            <div>
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="d-flex flex-column align-items-start">
+              <span>Estimated time</span>
+              <span class="fw-bold"> {{ service.duration }} minutes</span>
+            </div>
+          </div>
           <Button
             rounded
             severity="contrast"
