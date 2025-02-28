@@ -1,6 +1,6 @@
 <template>
   <div
-    @click="goToServiceDetails"
+    @click="goToServiceDetails(service?.id)"
     class="card shadow-sm h-100 cursor-pointer"
     @mouseenter="displayPopover($event, service)"
     @mouseleave="hidePopover(service.id)"
@@ -224,8 +224,8 @@ let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
   }).format(amount);
 };
 //navigate to the service details
-let goToServiceDetails = () => {
-  router.push("/");
+let goToServiceDetails = (id) => {
+  router.push(`services/${id}/details`);
 };
 
 //Delete the service
