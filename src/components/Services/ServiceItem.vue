@@ -75,7 +75,8 @@
             <i class="fa-regular fa-clock"></i> Duration:
             {{ service.duration }} minutes
           </p>
-
+          <!-- Overview(Mobile Only) -->
+          <p class="mb-2 d-md-none">{{ service.overview }}</p>
           <!-- Features (Max 4) (Mobile Only) -->
           <ul class="list-unstyled mb-2 row d-md-none">
             <li
@@ -89,12 +90,11 @@
           </ul>
 
           <!-- Recent customer feedback (Mobile Only) -->
-          <div
+          <FeedbackItem
             class="d-md-none bg-light p-3 rounded mb-3"
             style="font-size: 0.9rem"
-          >
-            <FeedbackItem :feedback="getLatestBestFeedback" />
-          </div>
+            :feedback="getLatestBestFeedback(service.feedback)"
+          />
 
           <!-- Buttons -->
           <div class="mt-auto d-flex gap-3">
@@ -135,7 +135,9 @@
         style="font-size: 0.9rem"
         v-if="selectedService.feedback?.length > 0"
       >
-        <FeedbackItem :feedback="getLatestBestFeedback" />
+        <FeedbackItem
+          :feedback="getLatestBestFeedback(selectedService.feedback)"
+        />
       </div>
     </div>
   </Popover>
@@ -145,7 +147,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted, computed } from "vue";
+import { ref, nextTick, onMounted } from "vue";
 import Popover from "primevue/popover";
 import Divider from "primevue/divider";
 import FeedbackItem from "../Feedback/FeedbackItem.vue";
@@ -255,18 +257,15 @@ let updateService = (id) => {
 };
 
 //Get the latest best feedback to show
-const getLatestBestFeedback = computed(() => {
-  let feedbacks = selectedService?.value?.feedback;
-  if (!feedbacks?.length) return null;
+const getLatestBestFeedback = (feedbacks) => {
+  if (!feedbacks || feedbacks.length === 0) return null;
 
   return (
     feedbacks
       .filter(({ rating }) => rating === 5 || rating === 4) // Keep only 5 or 4-star reviews
-      // Sort by latest
-      // Return the first one or null if none found
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0] || null
-  );
-});
+  ); // Sort and return latest
+};
 </script>
 
 <style scoped>

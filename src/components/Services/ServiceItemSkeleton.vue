@@ -38,6 +38,10 @@
             <Skeleton width="30%" height="1rem" />
             <Skeleton width="50%" height="1rem" />
           </div>
+          <!-- Overview -->
+          <div class="mb-3 mt-2">
+            <Skeleton width="1000%" height="1rem" />
+          </div>
           <!-- Features (Mobile Only) -->
           <ul class="list-unstyled mb-2 row d-md-none">
             <li class="col-6 my-2" v-for="index in 4" :key="index">
