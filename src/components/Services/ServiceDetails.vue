@@ -53,6 +53,20 @@
             fluid
           />
         </div>
+        <!--Features-->
+        <div class="mt-4">
+          <p class="h3">Features</p>
+          <ul class="list-unstyled mb-2 row col-md-6">
+            <li
+              class="col-md-6"
+              v-for="(feature, index) in service.features"
+              :key="index"
+            >
+              <i class="fas fa-square-check"></i>
+              {{ feature.name }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
