@@ -93,7 +93,7 @@
             class="d-md-none bg-light p-3 rounded mb-3"
             style="font-size: 0.9rem"
           >
-            <FeedbackItem :feedback="getLatestBestFeedback()" />
+            <FeedbackItem :feedback="getLatestBestFeedback" />
           </div>
 
           <!-- Buttons -->
@@ -135,7 +135,7 @@
         style="font-size: 0.9rem"
         v-if="selectedService.feedback?.length > 0"
       >
-        <FeedbackItem :feedback="getLatestBestFeedback()" />
+        <FeedbackItem :feedback="getLatestBestFeedback" />
       </div>
     </div>
   </Popover>
@@ -256,7 +256,7 @@ let updateService = (id) => {
 
 //Get the latest best feedback to show
 const getLatestBestFeedback = computed(() => {
-  let feedbacks = selectedService.value.feedback;
+  let feedbacks = selectedService?.value?.feedback;
   if (!feedbacks?.length) return null;
 
   return (

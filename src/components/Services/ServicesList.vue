@@ -16,13 +16,13 @@
     </div>
 
     <!--Service item skeletons-->
-    <div class="row" v-if="isGettingServices">
+    <div class="row" v-if="!isGettingServices">
       <div v-for="val in serviceItemSkeletons" :key="val" class="col-md-6 mb-4">
         <ServiceItemSkeleton />
       </div>
     </div>
     <!--Car wash services-->
-    <div class="row" v-else-if="services.length > 0 && !isGettingServices">
+    <div class="row" v-else-if="services.length > 0">
       <!--Service items-->
       <div v-for="service in services" :key="service.id" class="col-md-6 mb-4">
         <ServiceItem :service="service" />
