@@ -23,7 +23,7 @@ const services = {
         axios
           .get(`${rootState.apiUrl}/services`)
           .then((response) => {
-            console.log(response.data);
+           
             //mutate the state with the fetched service types
             commit("setServices", response.data);
             resolve();

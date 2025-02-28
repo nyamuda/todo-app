@@ -83,9 +83,7 @@
       </p>
     </div>
     <!--No Service End-->
-    <!--Delete confirmation dialog start-->
-    <ConfirmDialog></ConfirmDialog>
-    <!--Delete confirmation dialog end-->
+    
   </div>
 </template>
 
@@ -100,43 +98,30 @@ import { useRouter } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import ServiceItem from "./ServiceItem.vue";
+import { useToast } from "primevue/usetoast";
 
-const confirm = useConfirm();
 let store = useStore();
 let route = useRouter();
-
-onMounted(async () => {
-  await store.dispatch("services/getServices");
+const toast = useToast();
+onMounted(() => {
+  store
+    .dispatch("services/getServices")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error Fetching Services",
+        detail: message,
+        life: 20000,
+      });
+    });
 });
 
 let services = computed(() => store.state.services.services);
 let rowSkeletons = new Array(4);
 let isGettingServices = computed(() => store.state.services.isGettingServices);
 
-let deleteService = (id) => {
-  confirm.require({
-    message: "Do you want to delete this service?",
-    header: "Delete Car Wash Service",
-    icon: "fas fa-circle-info",
-    rejectLabel: "Cancel",
-    rejectProps: {
-      label: "Cancel",
-      severity: "secondary",
-      outlined: true,
-    },
-    acceptProps: {
-      label: "Delete",
-      severity: "danger",
-    },
-    accept: () => {
-      store.dispatch("services/deleteService", id);
-    },
-    reject: () => {},
-  });
-};
-let updateService = (id) => {
-  route.push(`/admin/services/update/${id}`);
-};
+
 
 //format number into a monetary value
 let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
