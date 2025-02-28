@@ -3,69 +3,23 @@
     <h1 class="display-6 mb-4">Car wash services</h1>
     <div class="d-flex justify-content-end">
       <router-link to="/services/add">
-        <button type="button" class="btn btn-primary">Add service</button>
+        <Button
+          icon="fas fa-pen"
+          variant="text"
+          label="Add new service"
+          rounded
+          aria-label="update"
+        />
       </router-link>
     </div>
 
     <!--Car wash services-->
-    <div class="row">
+    <div class="row" v-if="services.length > 0 || isGettingServices">
       <div v-for="service in services" :key="service.id" class="col-md-6 mb-4">
         <ServiceItem :service="service" />
       </div>
     </div>
 
-    <div class="card mt-4" v-if="services.length > 0 || isGettingServices">
-      <!--Skeleton table start-->
-      <DataTable :value="rowSkeletons" v-if="isGettingServices">
-        <Column field="name" header="Name">
-          <template #body>
-            <Skeleton></Skeleton>
-          </template>
-        </Column>
-        <Column field="price" header="Price">
-          <template #body>
-            <Skeleton></Skeleton>
-          </template>
-        </Column>
-
-        <Column field="actions" header="Actions">
-          <template #body>
-            <Skeleton></Skeleton>
-          </template>
-        </Column>
-      </DataTable>
-      <!--Skeleton table end-->
-      <!--Table Start-->
-      <DataTable :value="services" v-else>
-        <Column field="name" header="Name"></Column>
-        <Column field="price" header="Price">
-          <template #body="slotProps">
-            {{ formatCurrency(slotProps.data.price) }}
-          </template>
-        </Column>
-        <Column field="id" header="Actions">
-          <template #body="slotProps">
-            <Button
-              icon="fas fa-pen"
-              severity="contrast"
-              variant="text"
-              rounded
-              aria-label="update"
-              @click="updateService(slotProps.data.id)"
-            />
-            <Button
-              icon="fas fa-trash"
-              severity="danger"
-              variant="text"
-              rounded
-              aria-label="delete"
-              @click="deleteService(slotProps.data.id)"
-            />
-          </template>
-        </Column>
-      </DataTable>
-      <!--Table End-->
-    </div>
     <!--No Services Start-->
     <div
       v-else
@@ -83,25 +37,78 @@
       </p>
     </div>
     <!--No Service End-->
-    
   </div>
+  <!--Service card skeleton start-->
+  <div class="card shadow-sm h-100">
+    <div class="row g-0">
+      <!-- Image Skeleton -->
+      <div class="col-md-4">
+        <Skeleton class="w-100 h-100 rounded-start" style="height: 180px" />
+      </div>
+
+      <!-- Content Section -->
+      <div class="col-md-8">
+        <div class="card-body d-flex flex-column">
+          <!-- Title & Badge -->
+          <div
+            class="d-flex justify-content-between align-items-center flex-wrap-reverse"
+          >
+            <Skeleton width="60%" height="1.5rem" class="mb-2" />
+            <Skeleton width="20%" height="1.5rem" class="mb-2" />
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-flex justify-content-end gap-2">
+            <Skeleton shape="circle" size="2rem" />
+            <Skeleton shape="circle" size="2rem" />
+          </div>
+
+          <!-- Star Rating & Review Count -->
+          <div class="text-muted mb-1 d-flex align-items-center">
+            <Skeleton width="40%" height="1rem" class="me-2" />
+            <Skeleton width="10%" height="1rem" />
+          </div>
+
+          <!-- Price & Duration -->
+          <Skeleton width="30%" height="1rem" class="mb-1" />
+          <Skeleton width="50%" height="1rem" class="mb-2" />
+
+          <!-- Features (Mobile Only) -->
+          <ul class="list-unstyled mb-2 row d-md-none">
+            <li class="col-6" v-for="index in 4" :key="index">
+              <Skeleton width="80px" height="1rem" />
+            </li>
+          </ul>
+
+          <!-- Recent Feedback (Mobile Only) -->
+          <div class="d-md-none bg-light p-3 rounded mb-3">
+            <Skeleton width="100%" height="2rem" />
+          </div>
+
+          <!-- Buttons -->
+          <div class="mt-auto d-flex gap-3">
+            <Skeleton height="2rem" fluid />
+            <Skeleton height="2rem" fluid />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Service card skeleton end-->
 </template>
 
 <script setup>
 import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { Skeleton } from "primevue";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
+
 import Button from "primevue/button";
-import { useRouter } from "vue-router";
-import { useConfirm } from "primevue/useconfirm";
-import ConfirmDialog from "primevue/confirmdialog";
+
 import ServiceItem from "./ServiceItem.vue";
 import { useToast } from "primevue/usetoast";
 
 let store = useStore();
-let route = useRouter();
+
 const toast = useToast();
 onMounted(() => {
   store
@@ -118,18 +125,8 @@ onMounted(() => {
 });
 
 let services = computed(() => store.state.services.services);
-let rowSkeletons = new Array(4);
+//let rowSkeletons = new Array(4);
 let isGettingServices = computed(() => store.state.services.isGettingServices);
-
-
-
-//format number into a monetary value
-let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: currency,
-  }).format(amount);
-};
 
 //Get the latest 5 or 4 star review
 // const latestBestReview = (feedbacks) => {

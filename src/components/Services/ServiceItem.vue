@@ -161,8 +161,8 @@ let router = useRouter();
 let store = useStore();
 const confirm = useConfirm();
 
-onMounted(async () => {
-  await store
+onMounted(() => {
+  store
     .dispatch("services/getPopularService")
     .then((service) => (popularService.value = service))
     .catch(() => {});
@@ -251,7 +251,7 @@ let deleteService = (id) => {
 
 //Navigate to the service update page
 let updateService = (id) => {
-  router.push(`/admin/services/update/${id}`);
+  router.push(`/services/update/${id}`);
 };
 </script>
 
