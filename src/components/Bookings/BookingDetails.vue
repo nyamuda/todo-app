@@ -489,8 +489,6 @@ let getBooking = () => {
       .dispatch("bookings/getBooking", id.value)
       .then((data) => {
         booking.value = data;
-
-        isGettingBooking.value = false;
       })
       .catch((message) => {
         toast.add({
@@ -499,6 +497,8 @@ let getBooking = () => {
           detail: message,
           life: 10000,
         });
+      })
+      .finally(() => {
         isGettingBooking.value = false;
       });
   }
