@@ -1,5 +1,10 @@
 <template>
-  <div></div>
+  <div>
+    <!--Service name and rating-->
+    <div class="d-flex flex-column">
+      <p class="h1">{{ service.name }}</p>
+    </div>
+  </div>
 </template>
 
 <script setup>
