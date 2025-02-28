@@ -93,7 +93,7 @@
             class="d-md-none bg-light p-3 rounded mb-3"
             style="font-size: 0.9rem"
           >
-            <FeedbackItem :feedback="service.feedback[0]" />
+            <FeedbackItem :feedback="getLatestBestFeedback()" />
           </div>
 
           <!-- Buttons -->
@@ -135,7 +135,7 @@
         style="font-size: 0.9rem"
         v-if="selectedService.feedback?.length > 0"
       >
-        <FeedbackItem :feedback="selectedService.feedback[0]" />
+        <FeedbackItem :feedback="getLatestBestFeedback()" />
       </div>
     </div>
   </Popover>
@@ -145,7 +145,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted } from "vue";
+import { ref, nextTick, onMounted, computed } from "vue";
 import Popover from "primevue/popover";
 import Divider from "primevue/divider";
 import FeedbackItem from "../Feedback/FeedbackItem.vue";
@@ -253,6 +253,20 @@ let deleteService = (id) => {
 let updateService = (id) => {
   router.push(`/services/update/${id}`);
 };
+
+//Get the latest best feedback to show
+const getLatestBestFeedback = computed(() => {
+  let feedbacks = selectedService.value.feedback;
+  if (!feedbacks?.length) return null;
+
+  return (
+    feedbacks
+      .filter(({ rating }) => rating === 5 || rating === 4) // Keep only 5 or 4-star reviews
+      // Sort by latest
+      // Return the first one or null if none found
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0] || null
+  );
+});
 </script>
 
 <style scoped>

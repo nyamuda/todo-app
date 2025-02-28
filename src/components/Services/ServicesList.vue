@@ -1,20 +1,29 @@
 <template>
   <div>
-    <h1 class="display-6 mb-4">Car wash services</h1>
-    <div class="d-flex justify-content-end">
+    <div class="text-center pb-2">
+      <h6 class="text-primary text-uppercase font-weight-bold">Services</h6>
+      <h1 class="mb-4">What We Offer</h1>
+    </div>
+    <div class="d-flex justify-content-end mb-4">
       <router-link to="/services/add">
         <Button
-          icon="fas fa-pen"
-          variant="text"
+          icon="fas fa-plus"
           label="Add new service"
-          rounded
           aria-label="update"
+          size="small"
         />
       </router-link>
     </div>
 
+    <!--Service item skeletons-->
+    <div class="row" v-if="isGettingServices">
+      <div v-for="val in serviceItemSkeletons" :key="val" class="col-md-6 mb-4">
+        <ServiceItemSkeleton />
+      </div>
+    </div>
     <!--Car wash services-->
-    <div class="row" v-if="services.length > 0 || isGettingServices">
+    <div class="row" v-else-if="services.length > 0 && !isGettingServices">
+      <!--Service items-->
       <div v-for="service in services" :key="service.id" class="col-md-6 mb-4">
         <ServiceItem :service="service" />
       </div>
@@ -43,9 +52,8 @@
 <script setup>
 import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
-
+import ServiceItemSkeleton from "./ServiceItemSkeleton.vue";
 import Button from "primevue/button";
-
 import ServiceItem from "./ServiceItem.vue";
 import { useToast } from "primevue/usetoast";
 
@@ -67,20 +75,6 @@ onMounted(() => {
 });
 
 let services = computed(() => store.state.services.services);
-//let rowSkeletons = new Array(4);
+let serviceItemSkeletons = new Array(6);
 let isGettingServices = computed(() => store.state.services.isGettingServices);
-
-//Get the latest 5 or 4 star review
-// const latestBestReview = (feedbacks) => {
-//   //if the feedback array is empty, return false
-//   if (!feedbacks.length == 0) return false;
-
-//   let bestReviews = feedbacks.filter(
-//     (feedback) => feedback.rating == 5 || feedback.rating == 4
-//   );
-
-//   if (bestReviews.length > 0) return bestReviews[0];
-//   //if there are not 5 or 4 star reviews, return false
-//   else return false;
-// };
 </script>
