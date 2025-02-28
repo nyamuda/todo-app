@@ -29,6 +29,11 @@
         alt="Car wash service"
         class="img-fluid rounded service-image"
       />
+      <!--Description-->
+      <div class="text-start mt-4">
+        <p class="h3">Description</p>
+        <p>{{ service.description }}</p>
+      </div>
     </div>
   </div>
 </template>
