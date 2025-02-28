@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--Service name and rating-->
-    <div v-if="service" class="d-flex flex-column container">
+    <div v-if="service" class="container">
       <p class="h1">{{ service.name }}</p>
 
       <!-- Star Rating & Review Count -->
@@ -13,10 +13,7 @@
             readonly
           />
         </span>
-        <span>
-          ({{ service.feedback.length }}
-          {{ service.feedback.length == 1 ? " review" : "reviews" }})</span
-        >
+        <span>({{ service.feedback.length }})</span>
       </div>
       <!--Service overview-->
       <p>{{ service.overview }}</p>
@@ -29,10 +26,26 @@
         alt="Car wash service"
         class="img-fluid rounded service-image"
       />
-      <!--Description-->
-      <div class="text-start mt-4">
-        <p class="h3">Description</p>
-        <p>{{ service.description }}</p>
+      <!--Description & Price -->
+      <div class="text-start mt-4 row">
+        <div class="col-md-8">
+          <p class="h3">Description</p>
+          <p>{{ service.description }}</p>
+        </div>
+        <!--Price-->
+        <div
+          class="bg-light p-3 col-md-4 fs-5 fw-bold"
+          style="height: fit-content"
+        >
+          <p>{{ formatCurrency(service.price) }}</p>
+          <Button
+            rounded
+            severity="contrast"
+            size="small"
+            label="Book Now"
+            fluid
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -44,6 +57,7 @@ import Rating from "primevue/rating";
 import { useStore } from "vuex";
 import { useToast } from "primevue";
 import { useRouter } from "vue-router";
+import Button from "primevue/button";
 //import Image from "primevue/image";
 
 let store = useStore();
@@ -91,6 +105,14 @@ const calculateAverageRating = (feedbacks) => {
     0
   );
   return (totalRating / feedbacks.length).toFixed(1); // Round to 1 decimal place
+};
+
+//format number into a monetary value
+let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(amount);
 };
 </script>
 
