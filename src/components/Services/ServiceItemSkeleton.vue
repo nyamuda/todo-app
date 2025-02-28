@@ -9,7 +9,7 @@
           style="height: 180px"
         />
         <img
-          src="https://placehold.co/600x400"
+          src="https://placehold.co/600x400?text=Fetching+data..."
           alt="Placeholder image"
           class="img-fluid rounded-start d-md-none"
           style="height: 100%; object-fit: cover"
