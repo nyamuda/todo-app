@@ -75,7 +75,7 @@
           <div class="row">
             <!--Rating-->
             <div class="d-flex flex-column align-items-start">
-              <p class="fs-3 fw-bold">
+              <p class="fs-3 fw-bold mb-1">
                 {{ calculateAverageRating(service.feedback) }}
               </p>
               <div class="d-flex flex-column">
@@ -86,10 +86,21 @@
                     readonly
                   />
                 </span>
-                <span>{{ service.feedback.length }} Ratings</span>
+                <span class="text-muted"
+                  >{{ service.feedback.length }} Ratings</span
+                >
               </div>
             </div>
             <!--Reviews-->
+            <div class="col-md-8 flex flex-column gap-3">
+              <div
+                class="col"
+                v-for="(feedback, index) in service.feedback"
+                :key="index"
+              >
+                <FeedbackItem :feedback="feedback" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -104,6 +115,7 @@ import { useStore } from "vuex";
 import { useToast } from "primevue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
+import FeedbackItem from "../Feedback/FeedbackItem.vue";
 //import Image from "primevue/image";
 
 let store = useStore();
