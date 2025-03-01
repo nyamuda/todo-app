@@ -67,6 +67,12 @@
             </li>
           </ul>
         </div>
+
+        <!--Features-->
+        <div class="mt-4">
+          <p class="h3">Ratings and Reviews</p>
+          <p>Take a quick look at what our clients think about our service</p>
+        </div>
       </div>
     </div>
   </div>
