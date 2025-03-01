@@ -3,10 +3,12 @@
     <div class="d-flex flex-column align-items-start mb-2">
       <span class="fw-bold d-flex">Tatenda Pierce</span>
 
-      <span class="d-flex">
+      <div class="d-flex">
         <Rating class="me-2" :model-value="feedback.rating" readonly />
-        {{ dateFormat(feedback.createdAt, "mmmm dS, yyyy") }}
-      </span>
+        <span class="text-muted">{{
+          dateFormat(feedback.createdAt, "mmmm dS, yyyy")
+        }}</span>
+      </div>
     </div>
     <p class="text-muted">
       <i class="fas fa-quote-left pe-1"></i>

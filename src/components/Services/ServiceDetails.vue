@@ -54,7 +54,7 @@
           />
         </div>
         <!--Features-->
-        <div class="mt-4">
+        <div class="col-12 mt-5">
           <p class="h3">Features</p>
           <ul class="list-unstyled mb-2 row col-md-6">
             <li
@@ -68,13 +68,13 @@
           </ul>
         </div>
 
-        <!--Features-->
-        <div class="mt-4">
+        <!--Ratings and Reviews-->
+        <div class="col-12 mt-5">
           <p class="h3">Ratings and Reviews</p>
           <p>Take a quick look at what our clients think about our service</p>
-          <div class="row">
+          <div class="row gap-4">
             <!--Rating-->
-            <div class="d-flex flex-column align-items-start">
+            <div class="col-md-4 d-flex flex-column align-items-start">
               <p class="fs-3 fw-bold mb-1">
                 {{ calculateAverageRating(service.feedback) }}
               </p>
@@ -92,12 +92,8 @@
               </div>
             </div>
             <!--Reviews-->
-            <div class="col-md-8 flex flex-column gap-3">
-              <div
-                class="col"
-                v-for="(feedback, index) in service.feedback"
-                :key="index"
-              >
+            <div class="col-md-8 d-flex flex-column gap-3">
+              <div v-for="(feedback, index) in service.feedback" :key="index">
                 <FeedbackItem :feedback="feedback" />
               </div>
             </div>

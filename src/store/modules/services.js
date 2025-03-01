@@ -23,7 +23,6 @@ const services = {
         axios
           .get(`${rootState.apiUrl}/services`)
           .then((response) => {
-           
             //mutate the state with the fetched service types
             commit("setServices", response.data);
             resolve();
@@ -45,7 +44,7 @@ const services = {
           .catch((ex) => {
             let message = ex.response?.data.message
               ? ex.response.data.message
-              : rootState.failureMessage;
+              : "Something went wrong while fetching the car wash service details.";
             reject(message);
           });
       });
