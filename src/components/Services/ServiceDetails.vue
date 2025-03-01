@@ -72,6 +72,25 @@
         <div class="mt-4">
           <p class="h3">Ratings and Reviews</p>
           <p>Take a quick look at what our clients think about our service</p>
+          <div class="row">
+            <!--Rating-->
+            <div class="d-flex flex-column align-items-start">
+              <p class="fs-3 fw-bold">
+                {{ calculateAverageRating(service.feedback) }}
+              </p>
+              <div class="d-flex flex-column">
+                <span>
+                  <Rating
+                    severity="contrast"
+                    :model-value="calculateAverageRating(service.feedback)"
+                    readonly
+                  />
+                </span>
+                <span>{{ service.feedback.length }} Ratings</span>
+              </div>
+            </div>
+            <!--Reviews-->
+          </div>
         </div>
       </div>
     </div>
