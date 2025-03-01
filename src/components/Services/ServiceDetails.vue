@@ -87,7 +87,7 @@
                   />
                 </span>
                 <span class="text-muted"
-                  >{{ service.feedback.length }} Ratings</span
+                  >Based on {{ service.feedback.length }} ratings</span
                 >
               </div>
             </div>
