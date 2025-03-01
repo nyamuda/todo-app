@@ -28,6 +28,7 @@ const props = defineProps({
     default: () => [],
   },
 });
+
 let starValues = new Array(4);
 //get the total number of reviews with given stars
 //e.g how many reviews have 5 stars

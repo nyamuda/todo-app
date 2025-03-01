@@ -75,9 +75,11 @@
           <div class="row gap-4">
             <!--Rating-->
             <div class="col-md-4 d-flex flex-column align-items-start">
+              <!--Average rating-->
               <p class="fs-3 fw-bold mb-1">
                 {{ calculateAverageRating(service.feedback) }}
               </p>
+              <!--Stars-->
               <div class="d-flex flex-column">
                 <span>
                   <Rating
@@ -89,6 +91,11 @@
                 <span class="text-muted"
                   >Based on {{ service.feedback.length }} ratings</span
                 >
+              </div>
+              <Divider />
+              <!--Feedback statistics-->
+              <div>
+                <FeedbackStatistics :feedback="service.feedback" />
               </div>
             </div>
             <!--Reviews-->
@@ -112,6 +119,8 @@ import { useToast } from "primevue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
 import FeedbackItem from "../Feedback/FeedbackItem.vue";
+import FeedbackStatistics from "../Feedback/FeedbackStatistics.vue";
+import Divider from "primevue";
 //import Image from "primevue/image";
 
 let store = useStore();
