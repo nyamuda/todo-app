@@ -5,9 +5,9 @@
       <div class="rating-bar mb-3">
         <!--5 ,4, 3, 2, or 1 star label-->
         <div class="d-flex justify-content-between align-items-center mb-1">
-          <div>
-            <span>{{ stars }}</span>
-            <Rating modelValue="0" :stars="1" readonly />
+          <div class="d-flex">
+            <span class="me-1">{{ stars }}</span>
+            <Rating modelValue="1" :stars="1" readonly />
           </div>
           <small class="text-muted">
             {{ getTotalReviewsWithStars(stars) }}
