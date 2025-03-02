@@ -16,7 +16,7 @@
         <!--Percentage of the number of reviews with that star rating as a horizontal bar-->
         <div class="progress" style="height: 10px">
           <div
-            class="progress-bar bg-warning"
+            class="progress-bar bg-success"
             role="progressbar"
             :style="{ width: getStarPercentage(stars) + '%' }"
             :aria-valuenow="getStarPercentage(stars)"
