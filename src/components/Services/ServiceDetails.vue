@@ -120,7 +120,8 @@ import { useRouter } from "vue-router";
 import Button from "primevue/button";
 import FeedbackItem from "../Feedback/FeedbackItem.vue";
 import StarsDistribution from "../Feedback/StarsDistribution.vue";
-import Divider from "primevue";
+import Divider from "primevue/divider";
+
 //import Image from "primevue/image";
 
 let store = useStore();
