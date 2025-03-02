@@ -72,7 +72,7 @@
         <div class="col-12 mt-5">
           <p class="h3">Ratings and Reviews</p>
           <p>Take a quick look at what our clients think about our service</p>
-          <div class="row">
+          <div class="row row-cols-1 row-cols-md-2 g-5">
             <!--Rating-->
             <div class="col-md-4 d-flex flex-column align-items-start">
               <!--Average rating-->
@@ -99,7 +99,7 @@
               </div>
             </div>
             <!--Reviews-->
-            <div class="col-md-8 d-flex flex-column gap-3">
+            <div class="col-md-8 d-flex flex-column gap-2">
               <div v-for="(feedback, index) in service.feedback" :key="index">
                 <FeedbackItem :feedback="feedback" />
               </div>
