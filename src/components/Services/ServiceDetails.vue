@@ -72,7 +72,7 @@
         <div class="col-12 mt-5">
           <p class="h3">Ratings and Reviews</p>
           <p>Take a quick look at what our clients think about our service</p>
-          <div class="row gap-4">
+          <div class="row">
             <!--Rating-->
             <div class="col-md-4 d-flex flex-column align-items-start">
               <!--Average rating-->
@@ -94,8 +94,8 @@
               </div>
               <Divider />
               <!--Feedback statistics-->
-              <div>
-                <FeedbackStatistics :feedback="service.feedback" />
+              <div class="w-100">
+                <StarsDistribution :feedback="service.feedback" />
               </div>
             </div>
             <!--Reviews-->
@@ -119,7 +119,7 @@ import { useToast } from "primevue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
 import FeedbackItem from "../Feedback/FeedbackItem.vue";
-import FeedbackStatistics from "../Feedback/FeedbackStatistics.vue";
+import StarsDistribution from "../Feedback/StarsDistribution.vue";
 import Divider from "primevue";
 //import Image from "primevue/image";
 
