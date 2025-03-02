@@ -1,8 +1,8 @@
 <template>
-  <div class="container-fluid" v-if="feedback">
+  <div v-if="feedback">
     <!---Star Review -->
     <div v-for="stars in starValues" class="row" :key="stars">
-      <div class="rating-bar mb-3">
+      <div class="rating-bar mb-2">
         <!--5 ,4, 3, 2, or 1 star label-->
         <div class="d-flex justify-content-between align-items-center mb-1">
           <div class="d-flex">
@@ -14,7 +14,7 @@
           </small>
         </div>
         <!--Percentage of the number of reviews with that star rating as a horizontal bar-->
-        <div class="progress" style="height: 10px">
+        <div class="progress" style="height: 0.5rem">
           <div
             class="progress-bar bg-success"
             role="progressbar"
