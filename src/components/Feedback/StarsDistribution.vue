@@ -5,7 +5,10 @@
       <div class="rating-bar mb-3">
         <!--5 ,4, 3, 2, or 1 star label-->
         <div class="d-flex justify-content-between align-items-center mb-1">
-          <span>{{ stars }} stars</span>
+          <div>
+            <span>{{ stars }}</span>
+            <Rating modelValue="0" :stars="1" readonly />
+          </div>
           <small class="text-muted">
             {{ getTotalReviewsWithStars(stars) }}
           </small>
@@ -27,6 +30,8 @@
 </template>
 
 <script setup>
+import Rating from "primevue/rating";
+
 const props = defineProps({
   feedback: {
     type: Array,
