@@ -104,7 +104,7 @@
             </div>
             <!--Reviews-->
             <div class="col-md-8 d-flex flex-column gap-2">
-              <FeedbackList target="service" :target-id="service.id" />
+              <FeedbackList :service-id="service.id" />
             </div>
           </div>
         </div>
@@ -138,8 +138,6 @@ let toast = useToast();
 let router = useRouter();
 
 let service = ref(null);
-//service reviews
-let feedback = ref([]);
 let isGettingService = ref(false);
 let id = ref(null);
 //message to show if the item is not found

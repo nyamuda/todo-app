@@ -1,6 +1,6 @@
 <template>
   <div v-for="item in feedback" :key="item.id">
-    <FeedbackItem :feedback="feedback" />
+    <FeedbackItem :feedback="item" />
   </div>
   <!--Load more Feedback start-->
   <div class="d-grid gap-2 col-md-3 mx-auto mt-3">
@@ -23,6 +23,7 @@ import { ref, onMounted, computed } from "vue";
 import FeedbackItem from "./FeedbackItem.vue";
 import { useStore } from "vuex";
 import { useToast } from "primevue";
+import Button from "primevue/button";
 
 let store = useStore();
 let toast = useToast();

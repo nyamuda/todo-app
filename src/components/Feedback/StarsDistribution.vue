@@ -58,7 +58,6 @@ let getTotalReviewsWithStars = (stars) => {
 let getStarPercentage = (stars) => {
   let percentage =
     (getTotalReviewsWithStars(stars) / props.feedback.length) * 100;
-  console.log(percentage);
   return percentage;
 };
 </script>
