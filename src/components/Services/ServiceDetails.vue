@@ -113,22 +113,12 @@
       </div>
     </div>
     <!-- If the service does not exist -->
-    <!-- No Service Details Start -->
-    <div
+    <!-- No Service Details-->
+    <ItemNotFound
       v-else
-      class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
-    >
-      <div class="mb-2">
-        <!-- Font Awesome Icon for missing booking details -->
-        <i class="fas fa-info-circle fa-3x text-primary"></i>
-      </div>
-      <p class="fs-4 text-muted mb-2">No Service Details Available</p>
-      <p class="text-muted">
-        The service information could not be found. It may have been removed or
-        does not exist.
-      </p>
-    </div>
-    <!-- No Booking Details End -->
+      :title="itemNotFound.title"
+      :message="itemNotFound.message"
+    />
   </div>
 </template>
 
@@ -143,7 +133,7 @@ import FeedbackItem from "../Feedback/FeedbackItem.vue";
 import StarsDistribution from "../Feedback/StarsDistribution.vue";
 import Divider from "primevue/divider";
 import ServiceDetailsSkeleton from "./Skeletons/ServiceDetailsSkeleton.vue";
-
+import ItemNotFound from "../Common/NotFound/ItemNotFound.vue";
 //import Image from "primevue/image";
 let store = useStore();
 let toast = useToast();
@@ -152,6 +142,12 @@ let router = useRouter();
 let service = ref(null);
 let isGettingService = ref(false);
 let id = ref(null);
+//message to show if the item is not found
+const itemNotFound = ref({
+  title: "No Service Details Available",
+  message:
+    " The service information could not be found. It may have been removed on does not exist.",
+});
 
 onMounted(() => {
   //get the id of the service we want to show the details of
