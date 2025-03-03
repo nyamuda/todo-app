@@ -146,7 +146,7 @@ let id = ref(null);
 const itemNotFound = ref({
   title: "No Service Details Available",
   message:
-    " The service information could not be found. It may have been removed on does not exist.",
+    " The service information could not be found. It may have been removed or does not exist.",
 });
 
 onMounted(() => {

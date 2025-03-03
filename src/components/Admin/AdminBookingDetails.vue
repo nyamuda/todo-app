@@ -330,20 +330,11 @@
       </div>
     </div>
     <!-- No Booking Details Start -->
-    <div
+    <ItemNotFound
       v-else
-      class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
-    >
-      <div class="mb-2">
-        <!-- Font Awesome Icon for missing booking details -->
-        <i class="fas fa-info-circle fa-3x text-primary"></i>
-      </div>
-      <p class="fs-4 text-muted mb-2">No Booking Details Available</p>
-      <p class="text-muted">
-        The booking information could not be found. It may have been removed or
-        does not exist.
-      </p>
-    </div>
+      :title="itemNotFound.title"
+      :message="itemNotFound.message"
+    />
     <!-- No Booking Details End -->
   </div>
   <!--Confirm dialog-->
@@ -416,6 +407,7 @@ import Textarea from "primevue/textarea";
 import { Message } from "primevue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
+import ItemNotFound from "../Common/NotFound/ItemNotFound.vue";
 
 //toast
 const toast = useToast();
@@ -448,6 +440,12 @@ let booking = ref(null);
 let whoCancelledBooking = computed(
   () => booking.value?.cancelDetails?.cancelledByUser
 );
+//message to show if the item is not found
+const itemNotFound = ref({
+  title: "No Booking Details Available",
+  message:
+    " The booking information could not be found. It may have been removed or does not exist.",
+});
 
 onMounted(async () => {
   //get the route parameter
