@@ -27,25 +27,20 @@ const feedback = {
   },
   getters: {},
   actions: {
-    // Fetch all feedback
-    getFeedback({ commit, dispatch, state, rootState }, serviceId) {
+    // Fetch all feedback for a particular service
+    getFeedback({ commit, state, rootState }, serviceId) {
       return new Promise((resolve, reject) => {
-        let url = `${rootState.apiUrl}/feedback`;
-        dispatch("setAuthorizationHeader");
+        let url = `${rootState.apiUrl}/services/${serviceId}`;
         state.isGettingFeedback = true;
         axios
-          .get(url, {
-            params: {
-              serviceTypeId: serviceId,
-            },
-          })
+          .get(url)
           .then((response) => {
             commit("setFeedback", response.data.feedback);
             commit("updatePageInfo", response.data.pageInfo);
             resolve(response.data.feedback);
           })
           .catch(() => {
-            reject("Something went wrong while fetching feedback.");
+            reject("Something went wrong while fetching reviews.");
           })
           .finally(() => {
             state.isGettingFeedback = false;
@@ -53,13 +48,13 @@ const feedback = {
       });
     },
 
-    // Load more feedback
-    loadMoreFeedback({ commit, dispatch, state, rootState }, serviceId) {
+    // Load more feedback for a particular service
+    loadMoreFeedback({ commit, state, rootState }, serviceId) {
       return new Promise((resolve, reject) => {
         state.isLoadingMoreFeedback = true;
-        dispatch("setAuthorizationHeader");
+        let url = `${rootState.apiUrl}/services/${serviceId}`;
         axios
-          .get(`${rootState.apiUrl}/feedback`, {
+          .get(url, {
             params: {
               page: state.feedbackPageInfo.page + 1,
               pageSize: state.feedbackPageInfo.pageSize,
@@ -85,6 +80,8 @@ const feedback = {
       return new Promise((resolve, reject) => {
         let { feedback } = payload;
         state.isSendingFeedback = true;
+        //add authorization header to the request
+        //to access the protected route
         dispatch("setAuthorizationHeader");
 
         axios

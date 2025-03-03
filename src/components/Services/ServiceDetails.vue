@@ -75,8 +75,9 @@
         <!--Ratings and Reviews-->
         <div class="col-12 mt-5">
           <p class="h3">Ratings and Reviews</p>
-      <p>Take a quick look at what our clients think about our service</p>
-<FeedbackList :service-id="service.id"/>
+          <p>Take a quick look at what our clients think about our service</p>
+          <FeedbackList :service-id="service.id" />
+        </div>
       </div>
     </div>
     <!-- If the service does not exist -->
@@ -96,7 +97,6 @@ import { useStore } from "vuex";
 import { useToast } from "primevue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
-
 
 import ServiceDetailsSkeleton from "./Skeletons/ServiceDetailsSkeleton.vue";
 import ItemNotFound from "../Common/NotFound/ItemNotFound.vue";

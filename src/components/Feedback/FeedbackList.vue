@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Feedback list skeleton start -->
-    <div v-if="isLoadingMoreFeedback">
+    <div v-if="isGettingFeedback">
       <FeedbackListSkeleton />
     </div>
     <!-- Feedback list skeleton end -->
@@ -19,7 +19,7 @@
             <span>
               <Rating
                 severity="contrast"
-                :model-value="calculateAverageRating(service.feedback)"
+                :model-value="calculateAverageRating(feedback)"
                 readonly
               />
             </span>
@@ -38,7 +38,7 @@
           <div v-for="item in feedback" :key="item.id">
             <FeedbackItem :feedback="item" />
           </div>
-          <!--Load more Feedback start-->
+          <!--Load more reviews start-->
           <div class="d-grid gap-2 col-md-3 mx-auto mt-3">
             <Button
               @click="loadMoreFeedback"
@@ -53,7 +53,7 @@
               size="small"
             />
           </div>
-          <!--Load more Feedback end-->
+          <!--Load more reviews end-->
         </div>
       </div>
     </div>
