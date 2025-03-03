@@ -37,7 +37,7 @@ const feedback = {
           .then((response) => {
             commit("setFeedback", response.data.feedback);
             commit("updatePageInfo", response.data.pageInfo);
-            resolve(response.data.feedback);
+            resolve(response.data);
           })
           .catch(() => {
             reject("Something went wrong while fetching reviews.");

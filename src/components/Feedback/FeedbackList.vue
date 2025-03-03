@@ -12,14 +12,14 @@
         <div class="col-md-4 d-flex flex-column align-items-start">
           <!--Average rating-->
           <p class="fs-3 fw-bold mb-1">
-            {{ calculateAverageRating(feedback) }}
+            {{ averageRating }}
           </p>
           <!--Stars-->
           <div class="d-flex flex-column">
             <span>
               <Rating
                 severity="contrast"
-                :model-value="calculateAverageRating(feedback)"
+                :model-value="averageRating"
                 readonly
               />
             </span>
@@ -74,6 +74,8 @@ import Divider from "primevue/divider";
 let store = useStore();
 let toast = useToast();
 let feedback = ref([]);
+//average rating for all the feedback
+let averageRating = ref(0);
 let isGettingFeedback = ref(false);
 let props = defineProps({
   // The ID of the entity(service) the feedback is associated with
@@ -99,7 +101,10 @@ let getFeedback = () => {
   isGettingFeedback.value = true;
   store
     .dispatch("feedback/getFeedback", props.serviceId)
-    .then((data) => (feedback.value = data))
+    .then((data) => {
+      feedback.value = data.feedback;
+      averageRating.value = data.averageRating;
+    })
     .catch((message) => {
       toast.add({
         severity: "error",
@@ -126,16 +131,5 @@ let loadMoreFeedback = () => {
         life: 5000,
       });
     });
-};
-
-//Calculate the average star rating
-const calculateAverageRating = (feedbacks) => {
-  if (feedbacks.length == 0) return 0; // Return 0 if no feedbacks are provided
-
-  const totalRating = feedbacks.reduce(
-    (sum, feedback) => sum + feedback.rating,
-    0
-  );
-  return (totalRating / feedbacks.length).toFixed(1); // Round to 1 decimal place
 };
 </script>
