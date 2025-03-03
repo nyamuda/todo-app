@@ -24,7 +24,10 @@
         </div>
 
         <!-- Price & Duration Skeleton -->
-        <div class="col-md-4 bg-light p-3" style="height: fit-content">
+        <div
+          class="col-md-4 bg-light p-3 mt-3 mt-md-0"
+          style="height: fit-content"
+        >
           <Skeleton width="45%" height="1.7rem" class="mb-3" />
           <div class="bg-white p-3 d-flex align-items-start mb-3">
             <Skeleton width="10%" height="20px" />

@@ -6,6 +6,7 @@ import services from "./modules/services";
 import statuses from "./modules/statuses";
 import images from "./modules/images";
 import features from "./modules/features";
+import feedback from "./modules/feedback";
 
 export default createStore({
   state() {
@@ -20,5 +21,14 @@ export default createStore({
   getters: {},
   mutations: {},
   actions: {},
-  modules: { account, bookings, admin, services, statuses, images, features },
+  modules: {
+    account,
+    bookings,
+    admin,
+    services,
+    statuses,
+    images,
+    features,
+    feedback,
+  },
 });
