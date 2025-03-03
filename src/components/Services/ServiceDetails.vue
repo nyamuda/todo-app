@@ -75,39 +75,8 @@
         <!--Ratings and Reviews-->
         <div class="col-12 mt-5">
           <p class="h3">Ratings and Reviews</p>
-          <p>Take a quick look at what our clients think about our service</p>
-          <div class="row row-cols-1 row-cols-md-2 g-5">
-            <!--Rating-->
-            <div class="col-md-4 d-flex flex-column align-items-start">
-              <!--Average rating-->
-              <p class="fs-3 fw-bold mb-1">
-                {{ calculateAverageRating(service.feedback) }}
-              </p>
-              <!--Stars-->
-              <div class="d-flex flex-column">
-                <span>
-                  <Rating
-                    severity="contrast"
-                    :model-value="calculateAverageRating(service.feedback)"
-                    readonly
-                  />
-                </span>
-                <span class="text-muted"
-                  >Based on {{ service.feedback.length }} ratings</span
-                >
-              </div>
-              <Divider />
-              <!--Feedback statistics-->
-              <div class="w-100">
-                <StarsDistribution :feedback="service.feedback" />
-              </div>
-            </div>
-            <!--Reviews-->
-            <div class="col-md-8 d-flex flex-column gap-2">
-              <FeedbackList :service-id="service.id" />
-            </div>
-          </div>
-        </div>
+      <p>Take a quick look at what our clients think about our service</p>
+<FeedbackList :service-id="service.id"/>
       </div>
     </div>
     <!-- If the service does not exist -->
@@ -127,8 +96,8 @@ import { useStore } from "vuex";
 import { useToast } from "primevue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
-import StarsDistribution from "../Feedback/StarsDistribution.vue";
-import Divider from "primevue/divider";
+
+
 import ServiceDetailsSkeleton from "./Skeletons/ServiceDetailsSkeleton.vue";
 import ItemNotFound from "../Common/NotFound/ItemNotFound.vue";
 import FeedbackList from "../Feedback/FeedbackList.vue";
