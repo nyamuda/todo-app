@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted,computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import FeedbackItem from "./FeedbackItem.vue";
 import { useStore } from "vuex";
 import { useToast } from "primevue";
@@ -35,7 +35,7 @@ let props = defineProps({
   },
 });
 onMounted(() => {
-  isGettingFeedback();
+  getFeedback();
 });
 //is there more currently being loaded
 let isLoadingMoreFeedback = computed(
@@ -47,6 +47,7 @@ let hasMoreFeedback = computed(
   () => store.state.feedback.feedbackPageInfo.hasMore
 );
 
+//get all feedback for a particular service
 let getFeedback = () => {
   isGettingFeedback.value = true;
   store
@@ -62,6 +63,21 @@ let getFeedback = () => {
     })
     .finally(() => {
       isGettingFeedback.value = false;
+    });
+};
+
+//load more feedback
+let loadMoreFeedback = () => {
+  store
+    .dispatch("feedback/loadMoreFeedback", props.serviceId)
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Load Failed",
+        detail: message,
+        life: 5000,
+      });
     });
 };
 </script>
