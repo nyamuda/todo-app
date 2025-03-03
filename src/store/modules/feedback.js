@@ -28,13 +28,17 @@ const feedback = {
   getters: {},
   actions: {
     // Fetch all feedback
-    getFeedback({ commit, dispatch, state, rootState }) {
+    getFeedback({ commit, dispatch, state, rootState }, serviceId) {
       return new Promise((resolve, reject) => {
         let url = `${rootState.apiUrl}/feedback`;
         dispatch("setAuthorizationHeader");
         state.isGettingFeedback = true;
         axios
-          .get(url)
+          .get(url, {
+            params: {
+              serviceTypeId: serviceId,
+            },
+          })
           .then((response) => {
             commit("setFeedback", response.data.feedback);
             commit("updatePageInfo", response.data.pageInfo);
@@ -50,7 +54,7 @@ const feedback = {
     },
 
     // Load more feedback
-    loadMoreFeedback({ commit, dispatch, state, rootState }) {
+    loadMoreFeedback({ commit, dispatch, state, rootState }, serviceId) {
       return new Promise((resolve, reject) => {
         state.isLoadingMoreFeedback = true;
         dispatch("setAuthorizationHeader");
@@ -59,6 +63,7 @@ const feedback = {
             params: {
               page: state.feedbackPageInfo.page + 1,
               pageSize: state.feedbackPageInfo.pageSize,
+              serviceTypeId: serviceId,
             },
           })
           .then((response) => {

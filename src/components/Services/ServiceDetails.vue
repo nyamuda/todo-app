@@ -104,7 +104,7 @@
             </div>
             <!--Reviews-->
             <div class="col-md-8 d-flex flex-column gap-2">
-             
+              <FeedbackList target="service" :target-id="service.id" />
             </div>
           </div>
         </div>
@@ -127,17 +127,19 @@ import { useStore } from "vuex";
 import { useToast } from "primevue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
-import FeedbackItem from "../Feedback/FeedbackItem.vue";
 import StarsDistribution from "../Feedback/StarsDistribution.vue";
 import Divider from "primevue/divider";
 import ServiceDetailsSkeleton from "./Skeletons/ServiceDetailsSkeleton.vue";
 import ItemNotFound from "../Common/NotFound/ItemNotFound.vue";
-//import Image from "primevue/image";
+import FeedbackList from "../Feedback/FeedbackList.vue";
+
 let store = useStore();
 let toast = useToast();
 let router = useRouter();
 
 let service = ref(null);
+//service reviews
+let feedback = ref([]);
 let isGettingService = ref(false);
 let id = ref(null);
 //message to show if the item is not found
@@ -156,35 +158,21 @@ onMounted(() => {
 
 //get a service with a given ID
 let getService = async (id) => {
-try {
-  isGettingService.value = true;
-//first, get the service
-let data= await dispatch("services/getService", id);
-service.value = data;
-
-//and then get the feedback for that service
-
-
-}
-catch {
-}
-
-  store
-    .
-    .then((data) => {
-
-    })
-    .catch((message) => {
-      toast.add({
-        severity: "error",
-        summary: "Fetch Failed",
-        detail: message,
-        life: 10000,
-      });
-    })
-    .finally(() => {
-      isGettingService.value = false;
+  try {
+    isGettingService.value = true;
+    // get the service information
+    let data = await store.dispatch("services/getService", id);
+    service.value = data;
+  } catch (message) {
+    toast.add({
+      severity: "error",
+      summary: "Fetch Failed",
+      detail: message,
+      life: 10000,
     });
+  } finally {
+    isGettingService.value = false;
+  }
 };
 //Calculate the average star rating
 const calculateAverageRating = (feedbacks) => {
