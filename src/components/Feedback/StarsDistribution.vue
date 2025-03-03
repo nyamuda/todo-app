@@ -1,5 +1,5 @@
 <template>
-  <div v-if="feedback">
+  <div v-if="feedback.length > 0">
     <!---Star Review -->
     <div v-for="stars in starValues" class="row" :key="stars">
       <div class="rating-bar mb-2">

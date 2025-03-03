@@ -10,7 +10,7 @@
         }}</span>
       </div>
     </div>
-    <p class="text-muted">
+    <p class="">
       <i class="fas fa-quote-left pe-1"></i>
       {{ feedback.content }}
     </p>

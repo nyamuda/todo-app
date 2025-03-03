@@ -109,6 +109,7 @@
       </div>
     </div>
   </div>
+  <ServiceDetailsSkeleton />
 </template>
 
 <script setup>
@@ -121,6 +122,7 @@ import Button from "primevue/button";
 import FeedbackItem from "../Feedback/FeedbackItem.vue";
 import StarsDistribution from "../Feedback/StarsDistribution.vue";
 import Divider from "primevue/divider";
+import ServiceDetailsSkeleton from "./Skeletons/ServiceDetailsSkeleton.vue";
 
 //import Image from "primevue/image";
 
