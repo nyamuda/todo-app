@@ -104,9 +104,7 @@
             </div>
             <!--Reviews-->
             <div class="col-md-8 d-flex flex-column gap-2">
-              <div v-for="(feedback, index) in service.feedback" :key="index">
-                <FeedbackItem :feedback="feedback" />
-              </div>
+             
             </div>
           </div>
         </div>
@@ -157,12 +155,24 @@ onMounted(() => {
 });
 
 //get a service with a given ID
-let getService = (id) => {
+let getService = async (id) => {
+try {
   isGettingService.value = true;
+//first, get the service
+let data= await dispatch("services/getService", id);
+service.value = data;
+
+//and then get the feedback for that service
+
+
+}
+catch {
+}
+
   store
-    .dispatch("services/getService", id)
+    .
     .then((data) => {
-      service.value = data;
+
     })
     .catch((message) => {
       toast.add({
