@@ -1,7 +1,11 @@
 <template>
   <div>
-    <!--Service name and rating-->
-    <div v-if="service" class="container">
+    <!-- Show service details skeleton when the service is being fetched -->
+    <ServiceDetailsSkeleton v-if="isGettingService" />
+
+    <!--Show the service with a given ID-->
+    <div v-else-if="service && !isGettingService">
+      <!--Service name -->
       <p class="h1">{{ service.name }}</p>
 
       <!-- Star Rating & Review Count -->
@@ -108,8 +112,24 @@
         </div>
       </div>
     </div>
+    <!-- If the service does not exist -->
+    <!-- No Service Details Start -->
+    <div
+      v-else
+      class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
+    >
+      <div class="mb-2">
+        <!-- Font Awesome Icon for missing booking details -->
+        <i class="fas fa-info-circle fa-3x text-primary"></i>
+      </div>
+      <p class="fs-4 text-muted mb-2">No Service Details Available</p>
+      <p class="text-muted">
+        The service information could not be found. It may have been removed or
+        does not exist.
+      </p>
+    </div>
+    <!-- No Booking Details End -->
   </div>
-  <ServiceDetailsSkeleton />
 </template>
 
 <script setup>
@@ -125,7 +145,6 @@ import Divider from "primevue/divider";
 import ServiceDetailsSkeleton from "./Skeletons/ServiceDetailsSkeleton.vue";
 
 //import Image from "primevue/image";
-
 let store = useStore();
 let toast = useToast();
 let router = useRouter();
@@ -147,7 +166,6 @@ let getService = (id) => {
   store
     .dispatch("services/getService", id)
     .then((data) => {
-      console.log(data);
       service.value = data;
     })
     .catch((message) => {
