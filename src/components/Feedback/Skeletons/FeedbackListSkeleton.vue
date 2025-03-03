@@ -23,4 +23,5 @@
 </template>
 <script setup>
 import Skeleton from "primevue/skeleton";
+import Divider from "primevue/divider";
 </script>

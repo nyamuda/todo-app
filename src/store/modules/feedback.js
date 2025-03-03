@@ -30,11 +30,12 @@ const feedback = {
     // Fetch all feedback for a particular service
     getFeedback({ commit, state, rootState }, serviceId) {
       return new Promise((resolve, reject) => {
-        let url = `${rootState.apiUrl}/services/${serviceId}`;
+        let url = `${rootState.apiUrl}/services/${serviceId}/feedback`;
         state.isGettingFeedback = true;
         axios
           .get(url)
           .then((response) => {
+            console.log(response);
             commit("setFeedback", response.data.feedback);
             commit("updatePageInfo", response.data.pageInfo);
             resolve(response.data);
@@ -52,7 +53,7 @@ const feedback = {
     loadMoreFeedback({ commit, state, rootState }, serviceId) {
       return new Promise((resolve, reject) => {
         state.isLoadingMoreFeedback = true;
-        let url = `${rootState.apiUrl}/services/${serviceId}`;
+        let url = `${rootState.apiUrl}/services/${serviceId}/feedback`;
         axios
           .get(url, {
             params: {

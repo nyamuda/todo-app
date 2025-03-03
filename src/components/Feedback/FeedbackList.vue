@@ -70,6 +70,7 @@ import { useStore } from "vuex";
 import { useToast } from "primevue";
 import Button from "primevue/button";
 import Divider from "primevue/divider";
+import Rating from "primevue/rating";
 
 let store = useStore();
 let toast = useToast();
@@ -93,7 +94,7 @@ let isLoadingMoreFeedback = computed(
 
 //is there still more feedback that can be loaded
 let hasMoreFeedback = computed(
-  () => store.state.feedback.feedbackPageInfo.hasMore
+  () => store.state.feedback.feedbackPageInfo?.hasMore
 );
 
 //get all feedback for a particular service
