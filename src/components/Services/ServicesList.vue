@@ -4,7 +4,8 @@
       <h6 class="text-primary text-uppercase font-weight-bold">Services</h6>
       <h1 class="mb-4">What We Offer</h1>
     </div>
-    <div class="d-flex justify-content-end mb-4">
+    <!-- Add new service button (for only admins) -->
+    <div v-if="isAdmin" class="d-flex justify-content-end mb-4">
       <router-link to="/services/add">
         <Button
           icon="fas fa-plus"
@@ -77,4 +78,5 @@ onMounted(() => {
 let services = computed(() => store.state.services.services);
 let serviceItemSkeletons = new Array(6);
 let isGettingServices = computed(() => store.state.services.isGettingServices);
+let isAdmin = computed(() => store.state.account.loggedInUser.isAdmin);
 </script>

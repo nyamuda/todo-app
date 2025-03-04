@@ -223,7 +223,7 @@ let deleteService = (id) => {
           });
           router.push("/services");
         })
-        .then((message) => {
+        .catch((message) => {
           toast.add({
             severity: "error",
             summary: "Delete Failed",

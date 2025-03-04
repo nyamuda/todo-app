@@ -165,8 +165,19 @@ const store = useStore();
 const toast = useToast();
 const router = useRouter();
 
+//service type ID prop from the query parameter
+let props = defineProps({
+  serviceTypeId: {
+    type: Number,
+    default: () => null,
+  },
+});
+
 onMounted(() => {
   v$._value.$touch();
+
+  //service type ID from the query parameter
+  bookingForm.value.serviceTypeId = props.serviceTypeId;
 });
 
 // Form data
