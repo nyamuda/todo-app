@@ -34,7 +34,9 @@
       <div class="text-start mt-4 row">
         <!--Description-->
         <div class="col-md-8">
-          <div class="d-flex justify-content-between">
+          <div
+            class="d-flex justify-content-between align-items-center flex-wrap"
+          >
             <p class="h3">Description</p>
             <!--Update & delete service buttons(For only admins)-->
             <div v-if="isAdmin" class="d-flex">
@@ -44,6 +46,7 @@
                 variant="text"
                 rounded
                 aria-label="update"
+                label="Update"
                 @click="updateService(service.id)"
               />
               <Button
@@ -52,6 +55,7 @@
                 variant="text"
                 rounded
                 aria-label="delete"
+                label="Delete"
                 @click="deleteService(service.id)"
               />
             </div>
