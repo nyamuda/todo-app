@@ -89,9 +89,14 @@
               fluid
               @click="goToServiceDetails(service?.id)"
             />
-            <router-link :to="'/bookings/add?serviceTypeId=' + service?.id">
-              <Button severity="contrast" size="small" label="Book Now" fluid />
-            </router-link>
+
+            <Button
+              @click="bookService(service?.id)"
+              severity="contrast"
+              size="small"
+              label="Book Now"
+              fluid
+            />
           </div>
         </div>
       </div>
@@ -217,6 +222,10 @@ const getLatestBestFeedback = (feedbacks) => {
       .filter(({ rating }) => rating === 5 || rating === 4) // Keep only 5 or 4-star reviews
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0] || null
   ); // Sort and return latest
+};
+
+let bookService = (id) => {
+  router.push(`/bookings/add?serviceTypeId=${id}`);
 };
 </script>
 

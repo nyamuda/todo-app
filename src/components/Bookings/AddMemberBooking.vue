@@ -165,19 +165,20 @@ const store = useStore();
 const toast = useToast();
 const router = useRouter();
 
-//service type ID prop from the query parameter
-let props = defineProps({
-  serviceTypeId: {
-    type: Number,
-    default: () => null,
-  },
-});
-
-onMounted(() => {
+onMounted(async () => {
   v$._value.$touch();
 
-  //service type ID from the query parameter
-  bookingForm.value.serviceTypeId = props.serviceTypeId;
+  //get all available car wash services
+  await store.dispatch("services/getServices");
+
+  // Get the service type ID from the query parameter and ensure it's a number
+  const queryServiceTypeId = Number(
+    router.currentRoute.value.query.serviceTypeId
+  );
+  //populate the form with the service type with the given ID
+  if (queryServiceTypeId) {
+    bookingForm.value.serviceTypeId = queryServiceTypeId;
+  }
 });
 
 // Form data
@@ -229,7 +230,6 @@ let isCreatingBooking = computed(
 );
 //available car wash services
 let services = computed(() => store.state.services.services);
-//let isAuthenticated = computed(() => store.state.account.isAuthenticated);
 </script>
 
 <style scoped></style>

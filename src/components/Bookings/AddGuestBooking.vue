@@ -235,19 +235,16 @@ const store = useStore();
 const toast = useToast();
 const router = useRouter();
 
-//service type ID prop from the query parameter
-let props = defineProps({
-  serviceTypeId: {
-    type: Number,
-    default: () => null,
-  },
-});
-
 onMounted(() => {
   v$._value.$touch();
-
-  //service type ID from the query parameter
-  guestUserForm.value.serviceTypeId = props.serviceTypeId;
+  // Get the service type ID from the query parameter and ensure it's a number
+  const queryServiceTypeId = Number(
+    router.currentRoute.value.query.serviceTypeId
+  );
+  //populate the form with the service type with the given ID
+  if (queryServiceTypeId) {
+    guestUserForm.value.serviceTypeId = queryServiceTypeId;
+  }
 });
 
 // Form data
