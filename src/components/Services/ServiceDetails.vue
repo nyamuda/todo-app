@@ -37,7 +37,7 @@
           <div class="d-flex justify-content-between">
             <p class="h3">Description</p>
             <!--Update & delete service buttons(For only admins)-->
-            <div class="d-flex">
+            <div v-if="isAdmin" class="d-flex">
               <Button
                 icon="fas fa-pen"
                 severity="contrast"
@@ -115,7 +115,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import Rating from "primevue/rating";
 import { useStore } from "vuex";
 import { useToast } from "primevue";
@@ -135,6 +135,8 @@ const confirm = useConfirm();
 let service = ref(null);
 let isGettingService = ref(false);
 let id = ref(null);
+let isAdmin = computed(() => store.state.account.loggedInUser.isAdmin);
+
 //message to show if the item is not found
 const itemNotFound = ref({
   title: "No Service Details Available",
