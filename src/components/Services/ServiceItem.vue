@@ -34,24 +34,7 @@
               value="Most Popular"
             ></Tag>
           </div>
-          <div class="d-flex justify-content-end">
-            <Button
-              icon="fas fa-pen"
-              severity="contrast"
-              variant="text"
-              rounded
-              aria-label="update"
-              @click="updateService(service.id)"
-            />
-            <Button
-              icon="fas fa-trash"
-              severity="danger"
-              variant="text"
-              rounded
-              aria-label="delete"
-              @click="deleteService(service.id)"
-            />
-          </div>
+
           <!-- Star Rating & Review Count -->
           <div class="text-muted mb-1 d-flex align-items-center">
             <span class="me-2">
@@ -141,9 +124,6 @@
       </div>
     </div>
   </Popover>
-  <!--confirmation dialog start-->
-  <ConfirmDialog></ConfirmDialog>
-  <!--confirmation dialog end-->
 </template>
 
 <script setup>
@@ -155,13 +135,11 @@ import Rating from "primevue/rating";
 import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { useConfirm } from "primevue/useconfirm";
-import ConfirmDialog from "primevue/confirmdialog";
+
 import Tag from "primevue/tag";
 
 let router = useRouter();
 let store = useStore();
-const confirm = useConfirm();
 
 onMounted(() => {
   store
@@ -226,34 +204,6 @@ let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
 //navigate to the service details
 let goToServiceDetails = (id) => {
   router.push(`services/${id}/details`);
-};
-
-//Delete the service
-let deleteService = (id) => {
-  confirm.require({
-    message: "Do you want to delete this service?",
-    header: "Delete Car Wash Service",
-    icon: "fas fa-circle-info",
-    rejectLabel: "Cancel",
-    rejectProps: {
-      label: "Cancel",
-      severity: "secondary",
-      outlined: true,
-    },
-    acceptProps: {
-      label: "Delete",
-      severity: "danger",
-    },
-    accept: () => {
-      store.dispatch("services/deleteService", id);
-    },
-    reject: () => {},
-  });
-};
-
-//Navigate to the service update page
-let updateService = (id) => {
-  router.push(`/services/update/${id}`);
 };
 
 //Get the latest best feedback to show

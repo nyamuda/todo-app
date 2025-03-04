@@ -34,7 +34,28 @@
       <div class="text-start mt-4 row">
         <!--Description-->
         <div class="col-md-8">
-          <p class="h3">Description</p>
+          <div class="d-flex justify-content-between">
+            <p class="h3">Description</p>
+            <!--Update & delete service buttons(For only admins)-->
+            <div class="d-flex">
+              <Button
+                icon="fas fa-pen"
+                severity="contrast"
+                variant="text"
+                rounded
+                aria-label="update"
+                @click="updateService(service.id)"
+              />
+              <Button
+                icon="fas fa-trash"
+                severity="danger"
+                variant="text"
+                rounded
+                aria-label="delete"
+                @click="deleteService(service.id)"
+              />
+            </div>
+          </div>
           <p>{{ service.description }}</p>
         </div>
         <!--Price & Duration-->
@@ -88,6 +109,9 @@
       :message="itemNotFound.message"
     />
   </div>
+  <!--confirmation dialog start-->
+  <ConfirmDialog></ConfirmDialog>
+  <!--confirmation dialog end-->
 </template>
 
 <script setup>
@@ -97,7 +121,8 @@ import { useStore } from "vuex";
 import { useToast } from "primevue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
-
+import { useConfirm } from "primevue/useconfirm";
+import ConfirmDialog from "primevue/confirmdialog";
 import ServiceDetailsSkeleton from "./Skeletons/ServiceDetailsSkeleton.vue";
 import ItemNotFound from "../Common/NotFound/ItemNotFound.vue";
 import FeedbackList from "../Feedback/FeedbackList.vue";
@@ -105,6 +130,7 @@ import FeedbackList from "../Feedback/FeedbackList.vue";
 let store = useStore();
 let toast = useToast();
 let router = useRouter();
+const confirm = useConfirm();
 
 let service = ref(null);
 let isGettingService = ref(false);
@@ -158,6 +184,34 @@ let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
     style: "currency",
     currency: currency,
   }).format(amount);
+};
+
+//Delete the service
+let deleteService = (id) => {
+  confirm.require({
+    message: "Do you want to delete this service?",
+    header: "Delete Car Wash Service",
+    icon: "fas fa-circle-info",
+    rejectLabel: "Cancel",
+    rejectProps: {
+      label: "Cancel",
+      severity: "secondary",
+      outlined: true,
+    },
+    acceptProps: {
+      label: "Delete",
+      severity: "danger",
+    },
+    accept: () => {
+      store.dispatch("services/deleteService", id);
+    },
+    reject: () => {},
+  });
+};
+
+//Navigate to the service update page
+let updateService = (id) => {
+  router.push(`/services/update/${id}`);
 };
 </script>
 

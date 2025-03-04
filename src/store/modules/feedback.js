@@ -40,7 +40,8 @@ const feedback = {
             commit("updatePageInfo", response.data.pageInfo);
             resolve(response.data);
           })
-          .catch(() => {
+          .catch((ex) => {
+            console.log(ex);
             reject("Something went wrong while fetching reviews.");
           })
           .finally(() => {

@@ -11,7 +11,7 @@
         <!--Rating-->
         <div class="col-md-4 d-flex flex-column align-items-start">
           <!--Average rating-->
-          <p class="fs-3 fw-bold mb-1">
+          <p class="h3 fw-bold mb-1">
             {{ averageRating }}
           </p>
           <!--Stars-->
@@ -34,7 +34,10 @@
           </div>
         </div>
         <!--Reviews-->
-        <div class="col-md-8 d-flex flex-column gap-2">
+        <div
+          v-if="feedback.length > 0"
+          class="col-md-8 d-flex flex-column gap-2"
+        >
           <div v-for="item in feedback" :key="item.id">
             <FeedbackItem :feedback="item" />
           </div>
