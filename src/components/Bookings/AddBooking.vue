@@ -1,10 +1,10 @@
 <template>
   <div class="mt-5">
     <div v-if="isAuthenticated">
-      <AddMemberBooking />
+      <AddMemberBooking :service-type-id="serviceTypeId" />
     </div>
     <div v-else>
-      <AddGuestBooking />
+      <AddGuestBooking :service-type-id="serviceTypeId" />
     </div>
   </div>
 </template>
@@ -19,14 +19,14 @@ const store = useStore();
 const router = useRouter();
 let isAuthenticated = computed(() => store.state.account.isAuthenticated);
 
-//service id
-let serviceId = ref(null);
+//service type ID from the query parameter
+let serviceTypeId = ref(null);
 
 onMounted(() => {
   //get all available car wash services
   store.dispatch("services/getServices");
 
   //get the service ID from the query parameter
-  serviceId.value = router.currentRoute.value.query.serviceId;
+  serviceTypeId.value = router.currentRoute.value.query.serviceTypeId;
 });
 </script>

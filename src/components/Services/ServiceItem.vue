@@ -89,7 +89,9 @@
               fluid
               @click="goToServiceDetails(service?.id)"
             />
-            <Button severity="contrast" size="small" label="Book Now" fluid />
+            <router-link :to="'/bookings/add?serviceTypeId=' + service?.id">
+              <Button severity="contrast" size="small" label="Book Now" fluid />
+            </router-link>
           </div>
         </div>
       </div>

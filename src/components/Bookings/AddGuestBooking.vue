@@ -245,6 +245,9 @@ let props = defineProps({
 
 onMounted(() => {
   v$._value.$touch();
+
+  //service type ID from the query parameter
+  guestUserForm.value.serviceTypeId = props.serviceTypeId;
 });
 
 // Form data
