@@ -143,7 +143,7 @@ const items = computed(() => {
       { label: "Home", route: "/" },
       { label: "Dashboard", route: "/account/user" },
       { label: "Bookings", route: "/bookings" },
-      { label: "Add Booking", route: "/bookings/add" },
+      { label: "Services", route: "/services" },
       { label: "Contact", route: "/contact" },
     ];
   }
@@ -151,7 +151,7 @@ const items = computed(() => {
   else {
     return [
       { label: "Home", route: "/" },
-      { label: "Book Session", route: "/bookings/add" },
+      { label: "Services", route: "/services" },
       { label: "Contact", route: "/contact" },
     ];
   }

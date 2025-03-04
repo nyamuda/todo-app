@@ -1,6 +1,6 @@
 <template>
   <div
-    class="card shadow-sm h-100 cursor-pointer"
+    class="card shadow-sm h-100"
     @mouseenter="displayPopover($event, service)"
     @mouseleave="hidePopover(service.id)"
   >
@@ -103,34 +103,40 @@
     </div>
   </div>
 
+  <!-- Popover start -->
   <!-- Popover for full overview & customer review -->
-  <Popover ref="op" style="max-width: 25rem">
-    <div v-if="selectedService" class="p-1">
-      <p class="h4 fw-bold">{{ selectedService.name }}</p>
-      <p>{{ selectedService.overview }}</p>
-      <!-- Features (Max 4) -->
-      <ul class="list-unstyled mb-2 row">
-        <li
-          class="col-6"
-          v-for="(feature, index) in selectedService?.features?.slice(0, 4)"
-          :key="index"
+  <!-- If the Popover is glitching or shaking, try adjusting the width.
+You can try increasing the column with, set a max width style  -->
+  <div class="row">
+    <Popover class="col-5" ref="op">
+      <div v-if="selectedService" class="p-1">
+        <p class="h4 fw-bold">{{ selectedService.name }}</p>
+        <p>{{ selectedService.overview }}</p>
+        <!-- Features (Max 4) -->
+        <ul class="list-unstyled mb-2 row">
+          <li
+            class="col-6"
+            v-for="(feature, index) in selectedService?.features?.slice(0, 4)"
+            :key="index"
+          >
+            <i class="fas fa-check"></i>
+            {{ feature.name }}
+          </li>
+        </ul>
+        <Divider />
+        <!--Feedback section-->
+        <div
+          style="font-size: 0.9rem"
+          v-if="selectedService.feedback?.length > 0"
         >
-          <i class="fas fa-check"></i>
-          {{ feature.name }}
-        </li>
-      </ul>
-      <Divider />
-      <!--Feedback section-->
-      <div
-        style="font-size: 0.9rem"
-        v-if="selectedService.feedback?.length > 0"
-      >
-        <FeedbackItem
-          :feedback="getLatestBestFeedback(selectedService.feedback)"
-        />
+          <FeedbackItem
+            :feedback="getLatestBestFeedback(selectedService.feedback)"
+          />
+        </div>
       </div>
-    </div>
-  </Popover>
+    </Popover>
+  </div>
+  <!-- Popover end -->
 </template>
 
 <script setup>
@@ -173,16 +179,14 @@ const displayPopover = async (event, service) => {
   // Prevent popover on mobile devices
   if (window.innerWidth <= 768) return;
 
-  op.value?.hide();
+  // If the same service is already selected, do nothing
+  if (selectedService.value?.id === service.id) return;
 
-  if (selectedService.value?.id === service.id) {
-    selectedService.value = null;
-  } else {
-    selectedService.value = service;
+  // Update the selected service
+  selectedService.value = service;
 
-    await nextTick(); // Ensure DOM updates before showing popover
-    op.value?.show(event);
-  }
+  await nextTick(); // Ensure DOM updates before showing popover
+  op.value?.show(event);
 };
 
 const hidePopover = () => {
@@ -229,8 +233,4 @@ let bookService = (id) => {
 };
 </script>
 
-<style scoped>
-.cursor-pointer {
-  cursor: pointer;
-}
-</style>
+<style scoped></style>
