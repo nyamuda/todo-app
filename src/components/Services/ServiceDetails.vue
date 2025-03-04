@@ -55,7 +55,8 @@
                 variant="text"
                 rounded
                 aria-label="delete"
-                label="Delete"
+                :label="isDeletingService ? 'Deleting...' : 'Delete'"
+                :loading="isDeletingService"
                 @click="deleteService(service.id)"
               />
             </div>
@@ -140,6 +141,7 @@ let service = ref(null);
 let isGettingService = ref(false);
 let id = ref(null);
 let isAdmin = computed(() => store.state.account.loggedInUser.isAdmin);
+let isDeletingService = computed(() => store.state.services.isDeletingService);
 
 //message to show if the item is not found
 const itemNotFound = ref({
@@ -209,9 +211,27 @@ let deleteService = (id) => {
       severity: "danger",
     },
     accept: () => {
-      store.dispatch("services/deleteService", id);
+      store
+        .dispatch("services/deleteService", id)
+        .then((message) => {
+          //success message
+          toast.add({
+            severity: "success",
+            summary: "Delete Success",
+            detail: message,
+            life: 3000,
+          });
+          router.push("/services");
+        })
+        .then((message) => {
+          toast.add({
+            severity: "error",
+            summary: "Delete Failed",
+            detail: message,
+            life: 20000,
+          });
+        });
     },
-    reject: () => {},
   });
 };
 

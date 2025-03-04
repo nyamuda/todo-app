@@ -36,10 +36,10 @@
           <!-- Price & Duration -->
           <div class="mb-3 d-flex flex-column gap-2 mt-2">
             <Skeleton width="30%" height="1rem" />
-            <Skeleton width="50%" height="1rem" />
+            <Skeleton width="60%" height="1rem" />
           </div>
           <!-- Overview -->
-          <div class="mb-3 d-flex flex-column gap-2 mt-2">
+          <div class="mb-3 d-flex flex-column gap-2 mt-2 d-md-none">
             <Skeleton width="100%" height="1rem" />
             <Skeleton width="80%" height="1rem" />
           </div>

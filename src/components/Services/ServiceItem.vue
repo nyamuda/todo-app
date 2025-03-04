@@ -1,6 +1,5 @@
 <template>
   <div
-    @click="goToServiceDetails(service?.id)"
     class="card shadow-sm h-100 cursor-pointer"
     @mouseenter="displayPopover($event, service)"
     @mouseleave="hidePopover(service.id)"
@@ -88,6 +87,7 @@
               severity="secondary"
               outlined
               fluid
+              @click="goToServiceDetails(service?.id)"
             />
             <Button severity="contrast" size="small" label="Book Now" fluid />
           </div>
