@@ -26,6 +26,24 @@ const images = {
           });
       });
     },
+
+    //delete an image
+    deleteImage({ rootState, dispatch }, id) {
+      return new Promise((resolve, reject) => {
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        axios
+          .delete(`${rootState.apiUrl}/images/${id}`)
+          .then(() => resolve())
+          .catch((ex) => {
+            let message =
+              ex.response?.data?.message ||
+              "Something went wrong. Unable to delete the image.";
+            reject(message);
+          });
+      });
+    },
     //Set authorization header for all request to access protected routes from the API
     setAuthorizationHeader() {
       //check if there is a token in session storage

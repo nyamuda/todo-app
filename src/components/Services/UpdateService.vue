@@ -249,6 +249,8 @@ let id = ref(null);
 
 //Uploaded image src (just for preview)
 const imageUrl = ref(null);
+//ID of the current image(the one saved on the database)
+const currentImageId = ref(null);
 
 onMounted(async () => {
   //show validation errors
@@ -304,41 +306,53 @@ const rules = {
 const v$ = useVuelidate(rules, serviceForm.value);
 //form validation with Vuelidate end
 
-//Add the service
+//Update the service
 let submitForm = async () => {
   try {
     const isFormCorrect = await v$._value.$validate();
     if (isFormCorrect) {
-      //First, upload the image
       //show the loader
       isUpdatingServiceOrUploadingImage.value = "uploading";
-      let imageFormData = new FormData();
-      imageFormData.append("File", serviceForm.value.imageFile);
-      imageFormData.append("Category", "services");
 
-      //upload the image and get the uploaded image information
-      //such the public URL of the image, the ID etc
-      let uploadedImageInfo = await store.dispatch(
-        "images/uploadImage",
-        imageFormData
-      );
-      //Second, save the service along with its image information -> the ID
+      //First, check if a new image has been uploaded
+      //if there is a new image uploaded, delete the old image
+      //and then upload the new added image
+      if (serviceForm.value.imageFile) {
+        //delete the old image
+        await store.dispatch("images/deleteImage", currentImageId.value);
+
+        //upload the new one
+        let imageFormData = new FormData();
+        imageFormData.append("File", serviceForm.value.imageFile);
+        imageFormData.append("Category", "services");
+
+        //upload the image and get the uploaded image information
+        //such the public URL of the image, the ID etc
+        let uploadedImageInfo = await store.dispatch(
+          "images/uploadImage",
+          imageFormData
+        );
+        //save the ID of the new image
+        currentImageId.value = uploadedImageInfo.id;
+      }
+
+      //Second, save the updated service along with its image information -> the ID
       let payload = {
         name: serviceForm.value.name,
         price: serviceForm.value.price,
         overview: serviceForm.value.overview,
         description: serviceForm.value.description,
         duration: serviceForm.value.duration,
-        imageId: uploadedImageInfo.id,
+        imageId: currentImageId.value,
         featureIds: serviceForm.value.featureIds,
       };
       //show the loader
-      isUpdatingServiceOrUploadingImage.value = "adding";
-      let message = await store.dispatch("services/addService", payload);
+      isUpdatingServiceOrUploadingImage.value = "updating";
+      let message = await store.dispatch("services/updateService", payload);
       //success message
       toast.add({
         severity: "success",
-        summary: "Service Added",
+        summary: "Service Updated",
         detail: message,
         life: 3000,
       });
@@ -386,7 +400,10 @@ let getService = (id) => {
       //get feature IDs and save them to the form data
       serviceForm.value.featureIds = getFeatureIds(service.features);
 
-      //the image url
+      //save the image ID
+      currentImageId.value = service.image.id;
+
+      //save the image url
       imageUrl.value = service.image.url;
     })
     .catch((message) => {
