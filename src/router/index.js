@@ -34,6 +34,11 @@ import UpdateFeature from "@/components/Features/UpdateFeature.vue";
 import ServiceDetails from "@/components/Services/ServiceDetails.vue";
 import UpdateService from "@/components/Services/UpdateService.vue";
 import AdminDrawer from "@/components/Admin/AdminDrawer.vue";
+import UserDashboard from "@/components/Account/UserDashboard.vue";
+import LoginUser from "@/components/Account/LoginUser.vue";
+import RegisterUser from "@/components/Account/RegisterUser.vue";
+import PasswordReset from "@/components/Account/PasswordReset.vue";
+import VerificationResult from "@/components/Account/VerificationResult.vue";
 
 const routes = [
   {
@@ -234,8 +239,8 @@ const routes = [
     path: "/account",
     children: [
       {
-        path: "user",
-        component: UserDashboardView,
+        path: "",
+        component: UserDashboard,
         name: "UserDashboard",
         beforeEnter: (to) => {
           if (!store.state.account.isAuthenticated) {
@@ -248,29 +253,30 @@ const routes = [
       {
         path: "login",
         name: "Login",
-        component: LoginView,
+        component: LoginUser
+,
       },
       {
         path: "register",
         name: "Register",
-        component: RegisterView,
+        component: RegisterUser,
       },
 
       {
         path: "verify",
         name: "VerificationResult",
-        component: VerificationResultView,
+        component:VerificationResult,
       },
 
       {
         path: "password-reset",
         name: "PasswordReset",
-        component: PasswordResetView,
+        component: PasswordReset,
       },
       {
         path: "login/oauth/google/callback", //Google Oauth redirect URL
         name: "GoogleLogin",
-        component: LoginView,
+        component: LoginUser,
       },
     ],
   },

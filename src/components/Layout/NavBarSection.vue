@@ -216,11 +216,29 @@ const items = computed(() => {
   //if normal user
   else if (isAuthenticated.value) {
     return [
-      { label: "Home", route: "/" },
-      { label: "Dashboard", route: "/account/user" },
-      { label: "Bookings", route: "/bookings" },
-      { label: "Services", route: "/services" },
-      { label: "Contact", route: "/contact" },
+      { label: "Home", icon: "fas fa-house", route: "/" },
+      { label: "Dashboard", icon: "fas fa-gauge", route: "/account" },
+      {
+        label: "Bookings",
+        items: [
+          {
+            label: "Booking List",
+            icon: "fas fa-list-ul",
+            route: "/bookings",
+          },
+          {
+            label: "Add Booking",
+            icon: "fas fa-plus-circle",
+            route: "bookings/add",
+          },
+        ],
+      },
+      {
+        label: "Services",
+        icon: "fa-solid fa-car",
+        route: "/services",
+      },
+      { label: "Contact", icon: "fas fa-envelope", route: "/contact" },
     ];
   }
   //if not logged in
