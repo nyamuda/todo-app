@@ -1,146 +1,404 @@
 <template>
   <div class="">
-    <form class="service-form m-auto">
+    <form class="service-form m-auto" @submit.prevent="submitForm">
       <h3 class="fw-normal mb-3" style="letter-spacing: 1px">
-        Add car wash service
+        Update car wash service
       </h3>
-      <!-- <OauthBooking />-->
-      <!-- <div class="d-flex align-bookings-center my-1">
-				<hr class="flex-grow-1" />
-				<p class="text-center fw-bold mx-3 mb-0">Or</p>
-				<hr class="flex-grow-1" />
-			</div> -->
-
+      <!-- <OauthBooking />
+      <div class="d-flex align-bookings-center my-1">
+        <hr class="flex-grow-1" />
+        <p class="text-center fw-bold mx-3 mb-0">Or</p>
+        <hr class="flex-grow-1" />
+      </div> -->
       <!-- Name input -->
       <div class="mb-3">
-        <label for="serviceName" class="form-label">Service name</label>
-        <input
-          type="email"
-          id="serviceName"
-          class="form-control"
-          v-model="v$.name.$model"
-          :class="{
-            'is-invalid': v$.name.$error,
-            'is-valid': !v$.name.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.name.$error">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="serviceName"
+            v-model="v$.name.$model"
+            :invalid="v$.name.$error"
+          />
+          <label for="serviceName">Service name</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.name.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.name.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
+        </Message>
+      </div>
+      <div class="row">
+        <!-- Duration input -->
+
+        <div class="col-md-7 mb-3">
+          <FloatLabel variant="on">
+            <InputNumber
+              v-model="v$.duration.$model"
+              inputId="serviceDuration"
+              :invalid="v$.duration.$error"
+              prefix="Takes about "
+              suffix=" minutes"
+              fluid
+            />
+            <label for="serviceDuration">Duration</label>
+          </FloatLabel>
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.duration.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.duration.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
+        </div>
+
+        <!-- Price input -->
+        <div class="col-md-5 mb-3">
+          <FloatLabel variant="on">
+            <InputNumber
+              v-model="v$.price.$model"
+              inputId="servicePrice"
+              mode="currency"
+              currency="ZAR"
+              locale="en-ZA"
+              :invalid="v$.price.$error"
+              fluid
+            />
+            <label for="servicePrice">Price</label>
+          </FloatLabel>
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.price.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.price.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
         </div>
       </div>
-
-      <!-- Price input -->
-      <div class="form-outline mb-3">
-        <label for="servicePrice" class="form-label">Price</label>
-        <input
-          type="number"
-          id="servicePrice"
-          class="form-control"
-          v-model="v$.price.$model"
-          :class="{
-            'is-invalid': v$.price.$error,
-            'is-valid': !v$.price.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.price.$error">
-          <div v-for="error of v$.price.$errors" :key="error.$uid">
+      <!-- Features input -->
+      <div class="mb-3">
+        <FloatLabel variant="on">
+          <MultiSelect
+            id="serviceFeatures"
+            v-model="v$.featureIds.$model"
+            :options="features"
+            display="chip"
+            showClear
+            optionLabel="name"
+            optionValue="id"
+            filter
+            fluid
+            :invalid="v$.featureIds.$error"
+          />
+          <label for="serviceFeatures">Features</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.featureIds.$error"
+          variant="simple"
+        >
+          <div v-for="error of v$.featureIds.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
+      </div>
+
+      <!-- Overview input -->
+      <div class="form-group mb-3">
+        <FloatLabel variant="on">
+          <Textarea
+            id="serviceOverview"
+            v-model="v$.overview.$model"
+            :invalid="v$.overview.$error"
+            rows="2"
+            class="w-100"
+            style="resize: none"
+          />
+          <label for="serviceOverview">Short summary</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.overview.$error"
+          variant="simple"
+        >
+          <div v-for="error of v$.overview.$errors" :key="error.$uid">
+            <div>{{ error.$message }}</div>
+          </div>
+        </Message>
+      </div>
+
+      <!-- Description input -->
+      <div class="form-group mb-3">
+        <FloatLabel variant="on">
+          <Textarea
+            id="serviceDescription"
+            v-model="v$.description.$model"
+            :invalid="v$.description.$error"
+            rows="5"
+            class="w-100"
+            style="resize: none"
+          />
+          <label for="serviceDescription">Full description</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.description.$error"
+          variant="simple"
+        >
+          <div v-for="error of v$.description.$errors" :key="error.$uid">
+            <div>{{ error.$message }}</div>
+          </div>
+        </Message>
+      </div>
+
+      <!--Image upload section-->
+      <div class="d-flex flex-column align-items-start gap-1 mb-3">
+        <p style="font-size: 0.9rem" class="fst-italic text-muted mb-0">
+          Max file size is 5MB
+        </p>
+        <FileUpload
+          mode="basic"
+          @select="onFileSelect"
+          accept="image/*"
+          customUpload
+          severity="secondary"
+          choose-icon="fas fa-image"
+          choose-label="Select image"
+          class="p-button-outlined p-button-secondary mb-2"
+        />
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.imageFile.$error"
+          variant="simple"
+        >
+          <div v-for="error of v$.imageFile.$errors" :key="error.$uid">
+            <div>{{ error.$message }}</div>
+          </div>
+        </Message>
+        <Image
+          v-if="imageUrl"
+          :src="imagUrl"
+          alt="Car wash service image"
+          width="250"
+          preview
+        />
       </div>
 
       <!-- Submit button -->
-      <button
-        v-if="isUpdatingService"
+      <Button
+        fluid
+        class="mb-2"
+        size="small"
         type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Updating...
-      </button>
-      <button
-        v-else
-        :disabled="v$.$errors.length > 0"
-        @click.prevent="submitForm"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-      >
-        Update service
-      </button>
+        :label="
+          isAddingServiceOrUploadingImage == 'uploading'
+            ? 'Uploading image, please wait...'
+            : isAddingServiceOrUploadingImage == 'adding'
+            ? 'Saving the service details...'
+            : 'Create new service'
+        "
+        :loading="isAddingServiceOrUploadingImage"
+        :disabled="v$.$errors.length > 0 || isAddingServiceOrUploadingImage"
+      />
     </form>
   </div>
+  {{ serviceForm.features }}
 </template>
 
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
-//import OauthBooking from "./OauthBooking.vue";
-//Vuelidate for login form validation
+import FileUpload from "primevue/fileupload";
+import Image from "primevue/image";
+import { Message } from "primevue";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import Textarea from "primevue/textarea";
+import InputNumber from "primevue/inputnumber";
 import { useVuelidate } from "@vuelidate/core";
-import { required, numeric } from "@vuelidate/validators";
-import { useToast } from "vue-toastification";
+import { required, numeric, helpers } from "@vuelidate/validators";
+import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
+import MultiSelect from "primevue/multiselect";
 
-//toast
-const toast = useToast();
-// Access the store
 const store = useStore();
-//The route
-const route = useRouter();
+const router = useRouter();
+const toast = useToast();
+
+//Show the loader by showing the current stage of the process
+//uploading image or adding the service
+let isAddingServiceOrUploadingImage = ref(null);
+let features = computed(() => store.state.features.features);
+//ID of the service to be updated
 let id = ref(null);
 
+//Uploaded image src (just for preview)
+const imageUrl = ref(null);
+
 onMounted(async () => {
+  //show validation errors
   v$._value.$touch();
 
-  //get the route parameter
-  id.value = route.currentRoute.value.params.id;
+  //get the ID of the service from the route parameter
+  id.value = router.currentRoute.value.params.id;
 
-  //populate the form with the service data
-  if (id.value) {
-    store
-      .dispatch("services/getService", id.value)
-      .then((service) => {
-        formData.value.name = service.name;
-        formData.value.price = service.price;
-      })
-      .catch((message) => toast.error(message));
-  }
+  //get information about the service with the given ID
+  getService(id.value);
+
+  //get service features
+  await store.dispatch("features/getFeatures");
 });
 
 //form validation with Vuelidate start
-const formData = ref({
+const serviceForm = ref({
   name: "",
   price: 0,
+  overview: "",
+  description: "",
+  imageFile: null,
+  duration: 0,
+  featureIds: [],
 });
 
+//Image required error message
+let imageRequiredError = "An image is required. Please select a file.";
+//at least one service feature required
+let featuresLengthError = "Please select at least one feature";
 const rules = {
   name: { required },
   price: {
     required,
     numeric,
   },
+  duration: { required },
+  overview: { required },
+  description: { required },
+  imageFile: isImageFileRequiredOrNot,
+  featureIds: {
+    required: helpers.withMessage(featuresLengthError, required),
+  },
 };
 
-const v$ = useVuelidate(rules, formData.value);
+const v$ = useVuelidate(rules, serviceForm.value);
 //form validation with Vuelidate end
 
+//Add the service
 let submitForm = async () => {
-  const isFormCorrect = await v$._value.$validate();
-  if (isFormCorrect) {
-    store.dispatch("services/updateService", {
-      id: id.value,
-      updatedService: formData.value,
+  try {
+    const isFormCorrect = await v$._value.$validate();
+    if (isFormCorrect) {
+      //First, upload the image
+      //show the loader
+      isAddingServiceOrUploadingImage.value = "uploading";
+      let imageFormData = new FormData();
+      imageFormData.append("File", serviceForm.value.imageFile);
+      imageFormData.append("Category", "services");
+
+      //upload the image and get the uploaded image information
+      //such the public URL of the image, the ID etc
+      let uploadedImageInfo = await store.dispatch(
+        "images/uploadImage",
+        imageFormData
+      );
+      //Second, save the service along with its image information -> the ID
+      let payload = {
+        name: serviceForm.value.name,
+        price: serviceForm.value.price,
+        overview: serviceForm.value.overview,
+        description: serviceForm.value.description,
+        duration: serviceForm.value.duration,
+        imageId: uploadedImageInfo.id,
+        featureIds: serviceForm.value.featureIds,
+      };
+      //show the loader
+      isAddingServiceOrUploadingImage.value = "adding";
+      let message = await store.dispatch("services/addService", payload);
+      //success message
+      toast.add({
+        severity: "success",
+        summary: "Service Added",
+        detail: message,
+        life: 3000,
+      });
+      router.push("/services");
+    }
+  } catch (err) {
+    toast.add({
+      severity: "error",
+      summary: "Error Adding",
+      detail: err,
     });
+  } finally {
+    //show loader
+    isAddingServiceOrUploadingImage.value = null;
   }
 };
-let isUpdatingService = computed(() => store.state.services.isUpdatingService);
+//Service image upload
+function onFileSelect(event) {
+  const file = event.files[0];
+  if (!file) return;
+
+  serviceForm.value.imageFile = file; // Store the actual file,
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    imageUrl.value = e.target.result; // Store preview URL
+  };
+
+  reader.readAsDataURL(file);
+}
+
+//Get all the information about the service
+let getService = (id) => {
+  store
+    //populate the form with the service information
+    .dispatch("bookings/getBooking", id.value)
+    .then((service) => {
+      serviceForm.value.name = service.name;
+      serviceForm.value.price = service.price;
+      serviceForm.value.duration = service.duration;
+      serviceForm.value.overview = service.overview;
+      serviceForm.value.description = service.description;
+
+      //the image url
+      imageUrl.value = service.image.url;
+    })
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+        life: 10000,
+      });
+    });
+};
+
+//check if the image file is required or not (for use in serviceForm)
+//image file is required => if the imageUrl is empty
+//image file not required => if the imageUrl is not empty
+let isImageFileRequiredOrNot = computed(() => {
+  //not required, return an empty object
+  if (imageUrl.value) {
+    return {};
+  } else {
+    return { required: helpers.withMessage(imageRequiredError, required) };
+  }
+});
 </script>
 
 <style scoped>
@@ -149,7 +407,7 @@ a {
 }
 @media (min-width: 768px) {
   .service-form {
-    max-width: 30rem;
+    max-width: 35rem;
   }
 }
 </style>

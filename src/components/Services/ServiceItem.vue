@@ -128,15 +128,15 @@ You can try increasing the column with, set a max width style  -->
             {{ feature.name }}
           </li>
         </ul>
-        <Divider />
+        <!-- <Divider /> -->
         <!--Feedback section-->
         <div
           style="font-size: 0.9rem"
           v-if="selectedService.feedback?.length > 0"
         >
-          <FeedbackItem
+          <!-- <FeedbackItem
             :feedback="getLatestBestFeedback(selectedService.feedback)"
-          />
+          /> -->
         </div>
       </div>
     </Popover>
@@ -147,7 +147,7 @@ You can try increasing the column with, set a max width style  -->
 <script setup>
 import { ref, nextTick, onMounted } from "vue";
 import Popover from "primevue/popover";
-import Divider from "primevue/divider";
+// import Divider from "primevue/divider";
 import FeedbackItem from "../Feedback/FeedbackItem.vue";
 import Rating from "primevue/rating";
 import Button from "primevue/button";
