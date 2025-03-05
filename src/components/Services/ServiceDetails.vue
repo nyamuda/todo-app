@@ -76,6 +76,7 @@
             </div>
           </div>
           <Button
+            @click="bookService(service.id)"
             rounded
             severity="contrast"
             size="small"
@@ -238,6 +239,11 @@ let deleteService = (id) => {
 //Navigate to the service update page
 let updateService = (id) => {
   router.push(`/services/update/${id}`);
+};
+
+//book car wash service
+let bookService = (id) => {
+  router.push(`/bookings/add?serviceTypeId=${id}`);
 };
 </script>
 

@@ -107,8 +107,8 @@
   <!-- Popover for full overview & customer review -->
   <!-- If the Popover is glitching or shaking, try adjusting the width.
 You can try increasing the column with, set a max width style  -->
-  <div class="row">
-    <Popover class="col-5" ref="op">
+  <div>
+    <Popover ref="op">
       <div v-if="selectedService" class="p-1">
         <p class="h4 fw-bold">{{ selectedService.name }}</p>
         <p>{{ selectedService.overview }}</p>
