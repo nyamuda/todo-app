@@ -108,7 +108,12 @@
   <!-- If the Popover is glitching or shaking, try adjusting the width.
 You can try increasing the column with, set a max width style  -->
   <div>
-    <Popover ref="op">
+    <Popover
+      ref="op"
+      :pt="{
+        root: { style: 'max-width: 30rem;' }, // Apply styles to the root element
+      }"
+    >
       <div v-if="selectedService" class="p-1">
         <p class="h4 fw-bold">{{ selectedService.name }}</p>
         <p>{{ selectedService.overview }}</p>
@@ -233,4 +238,9 @@ let bookService = (id) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Add this to style the Popover */
+:deep(.p-popover) {
+  max-width: 25rem !important; /* Adjust as needed */
+}
+</style>
