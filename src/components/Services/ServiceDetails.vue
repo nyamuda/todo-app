@@ -243,7 +243,7 @@ let bookService = (id) => {
 
 //update car wash service
 let updateService = (id) => {
-  router.push(`/bookings/${id}/update`);
+  router.push(`/services/${id}/update`);
 };
 </script>
 

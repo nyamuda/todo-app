@@ -231,7 +231,7 @@ import Button from "primevue/button";
 import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
 import { useVuelidate } from "@vuelidate/core";
-import { required, numeric, helpers } from "@vuelidate/validators";
+import { required, numeric, helpers, requiredIf } from "@vuelidate/validators";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import MultiSelect from "primevue/multiselect";
@@ -288,7 +288,14 @@ const rules = {
   duration: { required },
   overview: { required },
   description: { required },
-  imageFile: isImageFileRequiredOrNot,
+  //image file is required => if the imageUrl is empty
+  //image file not required => if the imageUrl is not empty
+  imageFile: {
+    required: helpers.withMessage(
+      imageRequiredError,
+      requiredIf(() => !imageUrl.value)
+    ),
+  },
   featureIds: {
     required: helpers.withMessage(featuresLengthError, required),
   },
@@ -367,7 +374,7 @@ function onFileSelect(event) {
 let getService = (id) => {
   store
     //populate the form with the service information
-    .dispatch("bookings/getBooking", id.value)
+    .dispatch("services/getService", id)
     .then((service) => {
       serviceForm.value.name = service.name;
       serviceForm.value.price = service.price;
@@ -387,18 +394,6 @@ let getService = (id) => {
       });
     });
 };
-
-//check if the image file is required or not (for use in serviceForm)
-//image file is required => if the imageUrl is empty
-//image file not required => if the imageUrl is not empty
-let isImageFileRequiredOrNot = computed(() => {
-  //not required, return an empty object
-  if (imageUrl.value) {
-    return {};
-  } else {
-    return { required: helpers.withMessage(imageRequiredError, required) };
-  }
-});
 </script>
 
 <style scoped>
