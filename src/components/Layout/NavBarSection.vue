@@ -186,26 +186,26 @@ const items = computed(() => {
         items: [
           {
             label: "Service List",
-            icon: "fa-list-ul",
+            icon: "fas fa-list-ul",
             route: "/services",
           },
           {
             label: "Add Service",
-            icon: "fa-solid fa-plus-circle",
+            icon: "fas fa-plus-circle",
             route: "/services/add",
           },
           {
             label: "Features",
             items: [
               {
-                label: "View Features",
-                icon: "fa-solid fa-eye",
-                route: "/services",
+                label: "Feature List",
+                icon: "fas fa-list-ul",
+                route: "/features",
               },
               {
                 label: "Add Feature",
-                icon: "fa-solid fa-plus-circle",
-                route: "/services/add",
+                icon: "fas fa-plus-circle",
+                route: "/features/add",
               },
             ],
           },
