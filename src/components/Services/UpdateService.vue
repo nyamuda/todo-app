@@ -376,11 +376,15 @@ let getService = (id) => {
     //populate the form with the service information
     .dispatch("services/getService", id)
     .then((service) => {
+      console.log(service);
       serviceForm.value.name = service.name;
       serviceForm.value.price = service.price;
       serviceForm.value.duration = service.duration;
       serviceForm.value.overview = service.overview;
       serviceForm.value.description = service.description;
+
+      //get feature IDs and save them to the form data
+      serviceForm.value.featureIds = getFeatureIds(service.features);
 
       //the image url
       imageUrl.value = service.image.url;
@@ -393,6 +397,13 @@ let getService = (id) => {
         life: 10000,
       });
     });
+};
+
+//get an array of service feature Ids from an array of features
+let getFeatureIds = (features) => {
+  return features.reduce((ids, feature) => {
+    ids.push(feature.id);
+  }, []);
 };
 </script>
 
