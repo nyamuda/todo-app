@@ -216,7 +216,6 @@
       />
     </form>
   </div>
-  {{ serviceForm.features }}
 </template>
 
 <script setup>

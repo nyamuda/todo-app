@@ -191,7 +191,7 @@
         </Message>
         <Image
           v-if="imageUrl"
-          :src="imagUrl"
+          :src="imageUrl"
           alt="Car wash service image"
           width="250"
           preview
@@ -202,21 +202,21 @@
       <Button
         fluid
         class="mb-2"
+        icon="fas fa-pen"
         size="small"
         type="submit"
         :label="
-          isAddingServiceOrUploadingImage == 'uploading'
+          isUpdatingServiceOrUploadingImage == 'uploading'
             ? 'Uploading image, please wait...'
-            : isAddingServiceOrUploadingImage == 'adding'
-            ? 'Saving the service details...'
-            : 'Create new service'
+            : isUpdatingServiceOrUploadingImage == 'adding'
+            ? 'Updating the service details...'
+            : 'Update service'
         "
-        :loading="isAddingServiceOrUploadingImage"
-        :disabled="v$.$errors.length > 0 || isAddingServiceOrUploadingImage"
+        :loading="isUpdatingServiceOrUploadingImage"
+        :disabled="v$.$errors.length > 0 || isUpdatingServiceOrUploadingImage"
       />
     </form>
   </div>
-  {{ serviceForm.features }}
 </template>
 
 <script setup>
@@ -242,7 +242,7 @@ const toast = useToast();
 
 //Show the loader by showing the current stage of the process
 //uploading image or adding the service
-let isAddingServiceOrUploadingImage = ref(null);
+let isUpdatingServiceOrUploadingImage = ref(null);
 let features = computed(() => store.state.features.features);
 //ID of the service to be updated
 let id = ref(null);
@@ -311,7 +311,7 @@ let submitForm = async () => {
     if (isFormCorrect) {
       //First, upload the image
       //show the loader
-      isAddingServiceOrUploadingImage.value = "uploading";
+      isUpdatingServiceOrUploadingImage.value = "uploading";
       let imageFormData = new FormData();
       imageFormData.append("File", serviceForm.value.imageFile);
       imageFormData.append("Category", "services");
@@ -333,7 +333,7 @@ let submitForm = async () => {
         featureIds: serviceForm.value.featureIds,
       };
       //show the loader
-      isAddingServiceOrUploadingImage.value = "adding";
+      isUpdatingServiceOrUploadingImage.value = "adding";
       let message = await store.dispatch("services/addService", payload);
       //success message
       toast.add({
@@ -352,7 +352,7 @@ let submitForm = async () => {
     });
   } finally {
     //show loader
-    isAddingServiceOrUploadingImage.value = null;
+    isUpdatingServiceOrUploadingImage.value = null;
   }
 };
 //Service image upload
