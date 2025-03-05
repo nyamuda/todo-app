@@ -20,7 +20,6 @@ import AdminBookingsList from "@/components/Admin/AdminBookingsList.vue";
 import ServicesView from "@/views/Services/ServicesView.vue";
 import ServicesList from "@/components/Services/ServicesList.vue";
 import AddService from "@/components/Services/AddService.vue";
-import UpdateService from "@/components/Services/UpdateService.vue";
 import StatusesView from "@/views/Statuses/StatusesView.vue";
 import StatusesList from "@/components/Statuses/StatusesList.vue";
 import AddStatus from "@/components/Statuses/AddStatus.vue";
@@ -33,6 +32,7 @@ import FeaturesList from "@/components/Features/FeaturesList.vue";
 import AddFeature from "@/components/Features/AddFeature.vue";
 import UpdateFeature from "@/components/Features/UpdateFeature.vue";
 import ServiceDetails from "@/components/Services/ServiceDetails.vue";
+import UpdateService from "@/components/Services/UpdateService.vue";
 
 const routes = [
   {
