@@ -403,6 +403,7 @@ let getService = (id) => {
 let getFeatureIds = (features) => {
   return features.reduce((ids, feature) => {
     ids.push(feature.id);
+    return ids;
   }, []);
 };
 </script>
