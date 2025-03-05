@@ -33,6 +33,7 @@ import AddFeature from "@/components/Features/AddFeature.vue";
 import UpdateFeature from "@/components/Features/UpdateFeature.vue";
 import ServiceDetails from "@/components/Services/ServiceDetails.vue";
 import UpdateService from "@/components/Services/UpdateService.vue";
+import AdminDrawer from "@/components/Admin/AdminDrawer.vue";
 
 const routes = [
   {
@@ -302,6 +303,11 @@ const routes = [
         path: "bookings/:id/update",
         name: "AdminBookingUpdate",
         component: AdminBookingUpdate,
+      },
+      {
+        path: "drawer",
+        name: "AdminDrawer",
+        component: AdminDrawer,
       },
     ],
   },

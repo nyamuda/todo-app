@@ -54,11 +54,28 @@
       </template>
       <!--Nav Links-->
       <template #item="{ item, props }">
-        <router-link v-slot="{ href, navigate }" :to="item.route" custom>
+        <router-link
+          v-if="item.route"
+          v-slot="{ href, navigate }"
+          :to="item.route"
+          custom
+        >
           <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+            <span :class="item.icon" />
             <span>{{ item.label }}</span>
           </a>
         </router-link>
+        <a
+          v-else
+          v-ripple
+          :href="item.route"
+          :target="item.target"
+          v-bind="props.action"
+        >
+          <span :class="item.icon" />
+          <span>{{ item.label }}</span>
+          <span class="fas fa-angle-down"></span>
+        </a>
       </template>
 
       <!--Signin, signup & logout button section-->
@@ -129,12 +146,71 @@ const items = computed(() => {
   //if admin
   if (isAuthenticated.value && isAdmin.value) {
     return [
-      { label: "Home", route: "/" },
-      { label: "Dashboard", route: "/admin" },
-      { label: "Bookings", route: "/admin/bookings" },
-      { label: "Services", route: "/services" },
-      { label: "Features", route: "/features" },
-      { label: "Booking Statuses", route: "/statuses" },
+      { label: "Home", on: "fas fa-house", route: "/" },
+      { label: "Dashboard", icon: "fas fa-gauge", route: "/admin" },
+      {
+        label: "Bookings",
+
+        items: [
+          {
+            label: "Booking List",
+            icon: "fas fa-list-ul",
+            route: "/admin/bookings",
+          },
+          {
+            label: "Add Booking",
+            icon: "fas fa-plus-circle",
+            route: "bookings/add",
+          },
+          {
+            label: "Statuses",
+            icon: "fas fa-clipboard-check",
+            items: [
+              {
+                label: "Status List",
+                icon: "fas fa-list-ul",
+                route: "/statuses",
+              },
+              {
+                label: "Add Status",
+                icon: "fas fa-plus-circle",
+                route: "/statuses/add",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        label: "Services",
+        icon: "fa-solid fa-car",
+        items: [
+          {
+            label: "Service List",
+            icon: "fa-list-ul",
+            route: "/services",
+          },
+          {
+            label: "Add Service",
+            icon: "fa-solid fa-plus-circle",
+            route: "/services/add",
+          },
+          {
+            label: "Features",
+            items: [
+              {
+                label: "View Features",
+                icon: "fa-solid fa-eye",
+                route: "/services",
+              },
+              {
+                label: "Add Feature",
+                icon: "fa-solid fa-plus-circle",
+                route: "/services/add",
+              },
+            ],
+          },
+        ],
+      },
     ];
   }
   //if normal user
