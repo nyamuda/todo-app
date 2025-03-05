@@ -33,7 +33,7 @@ const statuses = {
             resolve();
           })
           .catch(() => {
-            reject(rootState.failureMessage);
+            reject("Something went wrong while fetching statuses.");
           })
           .finally(() => {
             state.isGettingStatuses = false;
@@ -47,9 +47,9 @@ const statuses = {
           .get(`${rootState.apiUrl}/statuses/${id}`)
           .then((response) => resolve(response.data))
           .catch((ex) => {
-            let message = ex.response?.data.message
-              ? ex.response.data.message
-              : rootState.failureMessage;
+            let message =
+              ex.response.data?.message ||
+              "Something went wrong. Unable to fetch the status.";
             reject(message);
           });
       });
@@ -61,9 +61,9 @@ const statuses = {
           .get(`${rootState.apiUrl}/statuses/name/${name}`)
           .then((response) => resolve(response.data))
           .catch((ex) => {
-            let message = ex.response?.data.message
-              ? ex.response.data.message
-              : rootState.failureMessage;
+            let message =
+              ex.response.data?.message ||
+              "Something went wrong. Unable to fetch the status.";
             reject(message);
           });
       });

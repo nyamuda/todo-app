@@ -44,7 +44,7 @@
                 icon="fas fa-pen"
                 severity="contrast"
                 variant="text"
-                rounded
+                size="small"
                 aria-label="update"
                 label="Update"
                 @click="updateService(service.id)"
@@ -53,7 +53,7 @@
                 icon="fas fa-trash"
                 severity="danger"
                 variant="text"
-                rounded
+                size="small"
                 aria-label="delete"
                 :label="isDeletingService ? 'Deleting...' : 'Delete'"
                 :loading="isDeletingService"

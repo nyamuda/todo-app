@@ -284,7 +284,17 @@ onMounted(async () => {
     });
 
   //get all booking statuses
-  store.dispatch("statuses/getStatuses");
+  store
+    .dispatch("statuses/getStatuses")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+        life: 5000,
+      });
+    });
 });
 
 let filterBookings = () => {
