@@ -207,12 +207,12 @@
         type="submit"
         :label="
           isUpdatingServiceOrUploadingImage == 'uploading'
-            ? 'Uploading image, please wait...'
-            : isUpdatingServiceOrUploadingImage == 'adding'
+            ? 'Uploading new image, please wait...'
+            : isUpdatingServiceOrUploadingImage == 'updating'
             ? 'Updating the service details...'
             : 'Update service'
         "
-        :loading="isUpdatingServiceOrUploadingImage"
+        :loading="isUpdatingServiceOrUploadingImage != null"
         :disabled="v$.$errors.length > 0 || isUpdatingServiceOrUploadingImage"
       />
     </form>
@@ -311,13 +311,13 @@ let submitForm = async () => {
   try {
     const isFormCorrect = await v$._value.$validate();
     if (isFormCorrect) {
-      //show the loader
-      isUpdatingServiceOrUploadingImage.value = "uploading";
-
       //First, check if a new image has been uploaded
-      //if there is a new image uploaded, delete the old image
+      //if there is a new image uploaded, delete the old image using its ID
       //and then upload the new added image
       if (serviceForm.value.imageFile) {
+        //show the loader
+        isUpdatingServiceOrUploadingImage.value = "uploading";
+
         //delete the old image
         await store.dispatch("images/deleteImage", currentImageId.value);
 
@@ -326,7 +326,7 @@ let submitForm = async () => {
         imageFormData.append("File", serviceForm.value.imageFile);
         imageFormData.append("Category", "services");
 
-        //upload the image and get the uploaded image information
+        //upload the new image and get the uploaded image information
         //such the public URL of the image, the ID etc
         let uploadedImageInfo = await store.dispatch(
           "images/uploadImage",
@@ -337,7 +337,7 @@ let submitForm = async () => {
       }
 
       //Second, save the updated service along with its image information -> the ID
-      let payload = {
+      let updatedService = {
         name: serviceForm.value.name,
         price: serviceForm.value.price,
         overview: serviceForm.value.overview,
@@ -348,7 +348,11 @@ let submitForm = async () => {
       };
       //show the loader
       isUpdatingServiceOrUploadingImage.value = "updating";
-      let message = await store.dispatch("services/updateService", payload);
+
+      let message = await store.dispatch("services/updateService", {
+        id: id.value,
+        updatedService,
+      });
       //success message
       toast.add({
         severity: "success",
@@ -361,7 +365,7 @@ let submitForm = async () => {
   } catch (err) {
     toast.add({
       severity: "error",
-      summary: "Error Adding",
+      summary: "Error Updating Service",
       detail: err,
     });
   } finally {
