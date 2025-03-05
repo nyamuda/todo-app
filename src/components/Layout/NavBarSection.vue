@@ -146,7 +146,7 @@ const items = computed(() => {
   //if admin
   if (isAuthenticated.value && isAdmin.value) {
     return [
-      { label: "Home", on: "fas fa-house", route: "/" },
+      { label: "Home", icon: "fas fa-house", route: "/" },
       { label: "Dashboard", icon: "fas fa-gauge", route: "/admin" },
       {
         label: "Bookings",
