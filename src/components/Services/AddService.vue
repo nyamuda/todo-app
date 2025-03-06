@@ -251,8 +251,8 @@ onMounted(async () => {
   //show validation errors
   v$._value.$touch();
 
-  //get service features
-  await store.dispatch("features/getFeatures");
+  //get all service features
+  getAllFeatures();
 });
 
 //form validation with Vuelidate start
@@ -353,6 +353,32 @@ function onFileSelect(event) {
 
   reader.readAsDataURL(file);
 }
+
+//get all car wash service features
+//that can be added to the service
+let getAllFeatures = () => {
+  //get all service features
+  //since, we're getting all features,
+  //set the page and pageSize query parameter all to 0
+  let pageInfo = {
+    page: 0,
+    pageSize: 0,
+    hasMore: false,
+  };
+  //mutate the state
+  store.commit("features/updatePageInfo", pageInfo);
+  //get the features
+  store
+    .dispatch("features/getFeatures")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+      });
+    });
+};
 </script>
 
 <style scoped>

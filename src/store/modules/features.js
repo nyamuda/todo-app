@@ -38,14 +38,18 @@ const features = {
       return new Promise((resolve, reject) => {
         state.isGettingFeatures = true;
         axios
-          .get(`${rootState.apiUrl}/features`)
+          .get(`${rootState.apiUrl}/features`, {
+            params: {
+              page: state.pageInfo.page,
+              pageSize: state.pageInfo.pageSize,
+            },
+          })
           .then((response) => {
             //mutate the state with the fetched feature types
             commit("setFeatures", response.data.features);
 
             //save the pagination info
             commit("updatePageInfo", response.data.pageInfo);
-            console.log(response);
 
             resolve();
           })

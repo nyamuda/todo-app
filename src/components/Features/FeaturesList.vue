@@ -60,7 +60,7 @@
           </Column>
         </DataTable>
         <!--Load more features start-->
-        <div class="d-grid gap-2 col-md-3 mx-auto mt-3">
+        <div class="d-grid gap-2 col-md-3 mx-auto mt-4">
           <Button
             @click="loadMoreFeatures"
             type="button"
