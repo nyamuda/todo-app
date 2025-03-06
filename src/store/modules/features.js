@@ -53,6 +53,38 @@ const features = {
           });
       });
     },
+
+    //Load more features
+    loadMoreFeatures({ commit, dispatch, state, rootState }) {
+      return new Promise((resolve, reject) => {
+        state.isLoadingMoreBookings = true;
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        //make the request
+        axios
+          .get(`${rootState.apiUrl}/features`, {
+            params: {
+              page: state.pageInfo.page + 1,
+              pageSize: state.pageInfo.pageSize,
+            },
+          })
+          .then((response) => {
+            //mutate the state with the additional tasks
+            commit("loadAdditionalBookings", response.data.bookings);
+            //page info
+            commit("updatePageInfo", response.data.pageInfo);
+            resolve();
+          })
+          .catch(() => {
+            reject("Failed to load more bookings. Please try again.");
+          })
+          .finally(() => {
+            state.isLoadingMoreBookings = false;
+          });
+      });
+    },
+
     //fetch feature by ID
     async getFeature({ rootState }, id) {
       return new Promise((resolve, reject) => {
