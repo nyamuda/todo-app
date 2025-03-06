@@ -115,6 +115,7 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
+import ProgressSpinner from "primevue/progressspinner";
 import { useToast } from "primevue/usetoast";
 const confirm = useConfirm();
 
@@ -122,18 +123,8 @@ let store = useStore();
 let route = useRouter();
 const toast = useToast();
 
-onMounted(async () => {
-  store
-    .dispatch("features/getFeatures")
-    .then()
-    .catch((message) => {
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: message,
-        life: 5000,
-      });
-    });
+onMounted(() => {
+  getFeatures();
 });
 
 let features = computed(() => store.state.features.features);
@@ -152,6 +143,20 @@ let isLoadingMoreFeatures = computed(
 //are there still more features that can be loaded
 let hasMoreFeatures = computed(() => store.state.features.pageInfo.hasMore);
 
+//get features
+let getFeatures = () => {
+  store
+    .dispatch("features/getFeatures")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+        life: 5000,
+      });
+    });
+};
 //load more features
 let loadMoreFeatures = () => {
   store
@@ -187,7 +192,6 @@ let deleteFeature = (id) => {
     accept: () => {
       store
         .dispatch("features/deleteFeature", id)
-        .dispatch("features/loadMoreFeatures")
         .then((message) => {
           toast.add({
             severity: "success",
@@ -195,6 +199,7 @@ let deleteFeature = (id) => {
             detail: message,
             life: 5000,
           });
+          getFeatures();
         })
         .catch((message) => {
           toast.add({
