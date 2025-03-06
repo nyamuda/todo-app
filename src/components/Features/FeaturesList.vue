@@ -29,24 +29,13 @@
 
           <Column field="id" header="Actions">
             <template #body="slotProps">
-              <!--Spinner if an action is in progress-->
-              <ProgressSpinner
-                v-if="
-                  isDeletingFeature && slotProps.data.id == selectedFeatureId
-                "
-                style="width: 32px; height: 32px"
-                strokeWidth="8"
-                fill="transparent"
-                animationDuration=".5s"
-                aria-label="Custom ProgressSpinner"
-              />
-              <div v-else>
+              <div>
                 <Button
                   icon="fas fa-pen"
                   severity="contrast"
                   variant="text"
-                  rounded
-                  label="Update feature"
+                  size="small"
+                  label="Update"
                   aria-label="update"
                   @click="updateFeature(slotProps.data.id)"
                 />
@@ -54,8 +43,15 @@
                   icon="fas fa-trash"
                   severity="danger"
                   variant="text"
-                  label="Delete feature"
-                  rounded
+                  size="small"
+                  :label="
+                    isDeletingFeature && slotProps.data.id == selectedFeatureId
+                      ? 'Deleting...'
+                      : 'Delete'
+                  "
+                  :loading="
+                    isDeletingFeature && slotProps.data.id == selectedFeatureId
+                  "
                   aria-label="delete"
                   @click="deleteFeature(slotProps.data.id)"
                 />
@@ -115,7 +111,6 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
-import ProgressSpinner from "primevue/progressspinner";
 import { useToast } from "primevue/usetoast";
 const confirm = useConfirm();
 
@@ -183,10 +178,12 @@ let deleteFeature = (id) => {
     rejectProps: {
       label: "Cancel",
       severity: "secondary",
+      size: "small",
       outlined: true,
     },
     acceptProps: {
       label: "Delete",
+      size: "small",
       severity: "danger",
     },
     accept: () => {
