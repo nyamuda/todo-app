@@ -56,21 +56,21 @@ import Button from "primevue/button";
 import { Message } from "primevue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import { useToast } from "vue-toastification";
+import { useToast } from "primevue/usetoast";
 
 //toast
 const toast = useToast();
 // Access the store
 const store = useStore();
-//The route
-const route = useRouter();
+//The router
+const router = useRouter();
 let id = ref(null);
 
 onMounted(async () => {
   v$._value.$touch();
 
   //get the route parameter
-  id.value = route.currentRoute.value.params.id;
+  id.value = router.currentRoute.value.params.id;
 
   //populate the form with the feature data
   if (id.value) {
@@ -98,10 +98,28 @@ const v$ = useVuelidate(rules, formData.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("features/updateFeature", {
-      id: id.value,
-      updatedFeature: formData.value,
-    });
+    store
+      .dispatch("features/updateFeature", {
+        id: id.value,
+        updatedFeature: formData.value,
+      })
+      .then((message) => {
+        toast.add({
+          severity: "success",
+          summary: "Update Success",
+          detail: message,
+          life: 5000,
+        });
+        router.push("/features");
+      })
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Updated Failed",
+          detail: message,
+          life: 10000,
+        });
+      });
   }
 };
 let isUpdatingFeature = computed(() => store.state.features.isUpdatingFeature);
