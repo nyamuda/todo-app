@@ -3,7 +3,7 @@
     <h1 class="display-6 mb-4">Car Wash Features</h1>
     <div class="d-flex justify-content-end">
       <router-link to="/features/add">
-        <button type="button" class="btn btn-primary">Add feature</button>
+        <Button label="Add new feature" icon="fas fa-plus" size="small" />
       </router-link>
     </div>
     <div class="card mt-4" v-if="features.length > 0 || isGettingFeatures">
