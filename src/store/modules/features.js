@@ -24,6 +24,12 @@ const features = {
     updatePageInfo(state, pageInfo) {
       state.pageInfo = pageInfo;
     },
+    //load more bookings
+    loadAdditionalBookings(state, bookings) {
+      //marge original bookings with new loaded bookings
+      let mergedBookings = state.bookings.concat(bookings);
+      state.bookings = mergedBookings;
+    },
   },
   getters: {
     //since features are to filter bookings
@@ -39,10 +45,11 @@ const features = {
           .get(`${rootState.apiUrl}/features`)
           .then((response) => {
             //mutate the state with the fetched feature types
-            commit("setFeatures", response.data);
+            commit("setFeatures", response.data.features);
 
             //save the pagination info
             commit("updatePageInfo", response.data.pageInfo);
+            console.log(response);
 
             resolve();
           })

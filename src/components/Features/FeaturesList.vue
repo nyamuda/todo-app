@@ -6,7 +6,7 @@
         <Button label="Add new feature" icon="fas fa-plus" size="small" />
       </router-link>
     </div>
-    <div class="card mt-4" v-if="features.length > 0 || isGettingFeatures">
+    <div class="" v-if="features.length > 0 || isGettingFeatures">
       <!--Skeleton table start-->
       <DataTable :value="rowSkeletons" v-if="isGettingFeatures">
         <Column field="name" header="Name">
@@ -102,13 +102,25 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
+import { useToast } from "primevue/usetoast";
 const confirm = useConfirm();
 
 let store = useStore();
 let route = useRouter();
+const toast = useToast();
 
 onMounted(async () => {
-  store.dispatch("features/getFeatures");
+  store
+    .dispatch("features/getFeatures")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+        life: 5000,
+      });
+    });
 });
 
 let features = computed(() => store.state.features.features);
@@ -121,9 +133,22 @@ let isLoadingMoreFeatures = computed(
 );
 
 //are there still more features that can be loaded
-let hasMoreFeatures = computed(
-  () => store.state.features.featuresPageInfo.hasMore
-);
+let hasMoreFeatures = computed(() => store.state.features.pageInfo.hasMore);
+
+//load more features
+let loadMoreFeatures = () => {
+  store
+    .dispatch("features/loadMoreFeatures")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Load Failed",
+        detail: message,
+        life: 5000,
+      });
+    });
+};
 
 let deleteFeature = (id) => {
   confirm.require({
