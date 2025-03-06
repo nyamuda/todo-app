@@ -24,20 +24,16 @@ const features = {
     updatePageInfo(state, pageInfo) {
       state.pageInfo = pageInfo;
     },
-    //load more bookings
-    loadAdditionalBookings(state, bookings) {
-      //marge original bookings with new loaded bookings
-      let mergedBookings = state.bookings.concat(bookings);
-      state.bookings = mergedBookings;
+    //load more features
+    loadAdditionalFeatures(state, features) {
+      //marge original features with new loaded features
+      let mergedFeatures = state.features.concat(features);
+      state.features = mergedFeatures;
     },
   },
-  getters: {
-    //since features are to filter bookings
-    //include the "all" value when filtering bookings
-    //to show all bookings
-  },
+  getters: {},
   actions: {
-    //fetch all the car wash feature types
+    //fetch all the car wash service features
     getFeatures({ commit, state, rootState }) {
       return new Promise((resolve, reject) => {
         state.isGettingFeatures = true;

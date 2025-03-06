@@ -29,24 +29,37 @@
 
           <Column field="id" header="Actions">
             <template #body="slotProps">
-              <Button
-                icon="fas fa-pen"
-                severity="contrast"
-                variant="text"
-                rounded
-                label="Update feature"
-                aria-label="update"
-                @click="updateFeature(slotProps.data.id)"
+              <!--Spinner if an action is in progress-->
+              <ProgressSpinner
+                v-if="
+                  isDeletingFeature && slotProps.data.id == selectedFeatureId
+                "
+                style="width: 32px; height: 32px"
+                strokeWidth="8"
+                fill="transparent"
+                animationDuration=".5s"
+                aria-label="Custom ProgressSpinner"
               />
-              <Button
-                icon="fas fa-trash"
-                severity="danger"
-                variant="text"
-                label="Delete feature"
-                rounded
-                aria-label="delete"
-                @click="deleteFeature(slotProps.data.id)"
-              />
+              <div v-else>
+                <Button
+                  icon="fas fa-pen"
+                  severity="contrast"
+                  variant="text"
+                  rounded
+                  label="Update feature"
+                  aria-label="update"
+                  @click="updateFeature(slotProps.data.id)"
+                />
+                <Button
+                  icon="fas fa-trash"
+                  severity="danger"
+                  variant="text"
+                  label="Delete feature"
+                  rounded
+                  aria-label="delete"
+                  @click="deleteFeature(slotProps.data.id)"
+                />
+              </div>
             </template>
           </Column>
         </DataTable>
@@ -93,7 +106,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { Skeleton } from "primevue";
 import DataTable from "primevue/datatable";
@@ -126,6 +139,10 @@ onMounted(async () => {
 let features = computed(() => store.state.features.features);
 let rowSkeletons = new Array(4);
 let isGettingFeatures = computed(() => store.state.features.isGettingFeatures);
+let isDeletingFeature = computed(() => store.state.features.isDeletingFeature);
+//ID of feature recording in action(e.g currently being deleted)
+// this is used to show a loader to the row of the item currently being deleted
+let selectedFeatureId = ref(null);
 
 //are there more features currently being loaded
 let isLoadingMoreFeatures = computed(
@@ -151,6 +168,8 @@ let loadMoreFeatures = () => {
 };
 
 let deleteFeature = (id) => {
+  //show a loader to the row of the item currently being deleted
+  selectedFeatureId.value = id;
   confirm.require({
     message: "Do you want to delete this feature?",
     header: "Delete Feature",
@@ -166,7 +185,29 @@ let deleteFeature = (id) => {
       severity: "danger",
     },
     accept: () => {
-      store.dispatch("features/deleteFeature", id);
+      store
+        .dispatch("features/deleteFeature", id)
+        .dispatch("features/loadMoreFeatures")
+        .then((message) => {
+          toast.add({
+            severity: "success",
+            summary: "Feature Deleted",
+            detail: message,
+            life: 5000,
+          });
+        })
+        .catch((message) => {
+          toast.add({
+            severity: "error",
+            summary: "Delete Failed",
+            detail: message,
+            life: 10000,
+          });
+        })
+        .finally(() => {
+          //hide the loader
+          selectedFeatureId.value = null;
+        });
     },
     reject: () => {},
   });
