@@ -223,7 +223,7 @@ const routes = [
       },
 
       {
-        path: "update/:id",
+        path: ":id/update",
         name: " UpdateFeature",
         component: UpdateFeature,
       },

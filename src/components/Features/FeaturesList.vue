@@ -216,6 +216,6 @@ let deleteFeature = (id) => {
 };
 
 let updateFeature = (id) => {
-  route.push(`features/update/${id}`);
+  route.push(`features/${id}/update`);
 };
 </script>
