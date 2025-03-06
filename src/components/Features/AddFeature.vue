@@ -37,6 +37,7 @@
         icon="fas fa-plus"
         :loading="isCreatingFeature"
         :disabled="v$.$errors.length > 0 || isCreatingFeature"
+        size="small"
       />
     </form>
   </div>
@@ -88,7 +89,7 @@ let submitForm = async () => {
           detail: message,
           life: 5000,
         });
-        router.push("/");
+        router.push("/features");
       })
       .catch((message) => {
         toast.add({

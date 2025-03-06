@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <form class="feature-form m-auto">
+    <form class="feature-form m-auto" @submit.prevent="submitForm">
       <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Update feature</h3>
       <!-- <OauthBooking />-->
       <!-- <div class="d-flex align-bookings-center my-1">
@@ -10,48 +10,38 @@
       </div> -->
 
       <!-- Name input -->
-      <div class="mb-3">
-        <label for="featureName" class="form-label">Feature name</label>
-        <input
-          type="email"
-          id="featureName"
-          class="form-control"
-          v-model="v$.name.$model"
-          :class="{
-            'is-invalid': v$.name.$error,
-            'is-valid': !v$.name.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.name.$error">
+      <div class="form-group mb-3">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="featureName"
+            v-model="v$.name.$model"
+            :invalid="v$.name.$error"
+          />
+          <label for="featureName">Feature name</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.name.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.name.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Submit button -->
-      <button
-        v-if="isUpdatingFeature"
+      <Button
+        fluid
         type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Updating...
-      </button>
-      <button
-        v-else
-        :disabled="v$.$errors.length > 0"
-        @click.prevent="submitForm"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-      >
-        Update feature
-      </button>
+        :label="isUpdatingFeature ? 'Please wait...' : 'Add feature'"
+        icon="fas fa-plus"
+        :loading="isUpdatingFeature"
+        :disabled="v$.$errors.length > 0 || isUpdatingFeature"
+        size="small"
+      />
     </form>
   </div>
 </template>
@@ -60,8 +50,10 @@
 import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-//import OauthBooking from "./OauthBooking.vue";
-//Vuelidate for form validation
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import { Message } from "primevue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { useToast } from "vue-toastification";
