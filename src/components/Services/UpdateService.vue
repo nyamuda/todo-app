@@ -252,7 +252,7 @@ const imageUrl = ref(null);
 //ID of the current image(the one saved on the database)
 const currentImageId = ref(null);
 
-onMounted(async () => {
+onMounted(() => {
   //show validation errors
   v$._value.$touch();
 
@@ -262,8 +262,8 @@ onMounted(async () => {
   //get information about the service with the given ID
   getService(id.value);
 
-  //get service features
-  await store.dispatch("features/getFeatures");
+  //get all service features
+  getAllFeatures();
 });
 
 //form validation with Vuelidate start
@@ -416,6 +416,32 @@ let getService = (id) => {
         summary: "Error",
         detail: message,
         life: 10000,
+      });
+    });
+};
+
+//get all car wash service features
+//that can be added to the service
+let getAllFeatures = () => {
+  //get all service features
+  //since, we're getting all features,
+  //set the page and pageSize query parameter all to 0
+  let pageInfo = {
+    page: 0,
+    pageSize: 0,
+    hasMore: false,
+  };
+  //mutate the state
+  store.commit("features/updatePageInfo", pageInfo);
+  //get the features
+  store
+    .dispatch("features/getFeatures")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
       });
     });
 };

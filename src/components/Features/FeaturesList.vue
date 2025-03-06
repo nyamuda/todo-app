@@ -140,6 +140,14 @@ let hasMoreFeatures = computed(() => store.state.features.pageInfo.hasMore);
 
 //get features
 let getFeatures = () => {
+  //set the page and pageSize pagination query parameters
+  let pageInfo = {
+    page: 1,
+    pageSize: 10,
+    hasMore: false,
+  };
+  //mutate the state
+  store.commit("features/updatePageInfo", pageInfo);
   store
     .dispatch("features/getFeatures")
     .then()
