@@ -1,10 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/Common/HomeView.vue";
-import LoginView from "@/views/Account/LoginView.vue";
-import RegisterView from "@/views/Account/RegisterView.vue";
-import VerificationResultView from "@/views/Account/VerificationResultView.vue";
-import PasswordResetView from "@/views/Account/PasswordResetView.vue";
-import UserDashboardView from "@/views/Account/UserDashboardView.vue";
 import ContactUsView from "@/views/Common/ContactUsView.vue";
 import SentPasswordForgotEmailView from "@/views/Email/SentPasswordForgotEmailView.vue";
 import SendPasswordForgotEmailView from "@/views/Email/SendPasswordForgotEmailView.vue";
@@ -39,6 +34,7 @@ import LoginUser from "@/components/Account/LoginUser.vue";
 import RegisterUser from "@/components/Account/RegisterUser.vue";
 import PasswordReset from "@/components/Account/PasswordReset.vue";
 import VerificationResult from "@/components/Account/VerificationResult.vue";
+import AccountView from "@/views/Account/AccountView.vue";
 
 const routes = [
   {
@@ -237,6 +233,7 @@ const routes = [
   //Account Routes
   {
     path: "/account",
+    component: AccountView,
     children: [
       {
         path: "",
@@ -253,8 +250,7 @@ const routes = [
       {
         path: "login",
         name: "Login",
-        component: LoginUser
-,
+        component: LoginUser,
       },
       {
         path: "register",
@@ -265,7 +261,7 @@ const routes = [
       {
         path: "verify",
         name: "VerificationResult",
-        component:VerificationResult,
+        component: VerificationResult,
       },
 
       {

@@ -3,7 +3,7 @@
     <h1 class="display-6 mb-4">Booking statuses</h1>
     <div class="d-flex justify-content-end">
       <router-link to="/statuses/add">
-        <button type="button" class="btn btn-primary">Add status</button>
+        <Button label="Add new status" icon="fas fa-plus" size="small" />
       </router-link>
     </div>
     <div class="card mt-4" v-if="statuses.length > 0 || isGettingStatuses">
@@ -84,6 +84,7 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
+
 const confirm = useConfirm();
 
 let store = useStore();
