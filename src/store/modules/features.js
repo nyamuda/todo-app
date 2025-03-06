@@ -8,11 +8,20 @@ const features = {
     isUpdatingFeature: false,
     isGettingFeatures: false,
     isDeletingFeature: false,
+    pageInfo: {
+      //page info for lazy loading
+      page: 1, //current page size
+      pageSize: 10, //total features per page
+      hasMore: false, //whether there is more features to load
+    },
   }),
   mutations: {
     //set the car wash feature types
     setFeatures(state, features) {
       state.features = features;
+    },
+    updatePageInfo(state, pageInfo) {
+      state.pageInfo = pageInfo;
     },
   },
   getters: {
@@ -30,10 +39,14 @@ const features = {
           .then((response) => {
             //mutate the state with the fetched feature types
             commit("setFeatures", response.data);
+
+            //save the pagination info
+            commit("updatePageInfo", response.data.pageInfo);
+
             resolve();
           })
           .catch(() => {
-            reject(rootState.failureMessage);
+            reject("Failed to fetch features.");
           })
           .finally(() => {
             state.isGettingFeatures = false;

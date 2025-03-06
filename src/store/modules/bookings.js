@@ -13,7 +13,7 @@ const bookings = {
       //page info for lazy loading
       page: 1, //current page size
       pageSize: 10, //total bookings per page
-      hasMore: false, //whether there is more tasks to load
+      hasMore: false, //whether there is more bookings to load
     },
     isLoadingMoreBookings: false,
     isGettingServiceTypes: false,

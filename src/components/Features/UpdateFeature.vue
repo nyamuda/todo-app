@@ -36,7 +36,7 @@
       <Button
         fluid
         type="submit"
-        :label="isUpdatingFeature ? 'Please wait...' : 'Add feature'"
+        :label="isUpdatingFeature ? 'Saving changes...' : 'Update feature'"
         icon="fas fa-plus"
         :loading="isUpdatingFeature"
         :disabled="v$.$errors.length > 0 || isUpdatingFeature"
