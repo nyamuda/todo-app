@@ -23,38 +23,56 @@
       </DataTable>
       <!--Skeleton table end-->
       <!--Table Start-->
-      <DataTable :value="features" v-else>
-        <Column field="name" header="Name"></Column>
+      <div v-else>
+        <DataTable :value="features">
+          <Column field="name" header="Name"></Column>
 
-        <Column field="id" header="Actions">
-          <template #body="slotProps">
-            <Button
-              icon="fas fa-pen"
-              severity="contrast"
-              variant="text"
-              rounded
-              label="Update feature"
-              aria-label="update"
-              @click="updateFeature(slotProps.data.id)"
-            />
-            <Button
-              icon="fas fa-trash"
-              severity="danger"
-              variant="text"
-              label="Delete feature"
-              rounded
-              aria-label="delete"
-              @click="deleteFeature(slotProps.data.id)"
-            />
-          </template>
-        </Column>
-      </DataTable>
+          <Column field="id" header="Actions">
+            <template #body="slotProps">
+              <Button
+                icon="fas fa-pen"
+                severity="contrast"
+                variant="text"
+                rounded
+                label="Update feature"
+                aria-label="update"
+                @click="updateFeature(slotProps.data.id)"
+              />
+              <Button
+                icon="fas fa-trash"
+                severity="danger"
+                variant="text"
+                label="Delete feature"
+                rounded
+                aria-label="delete"
+                @click="deleteFeature(slotProps.data.id)"
+              />
+            </template>
+          </Column>
+        </DataTable>
+        <!--Load more features start-->
+        <div class="d-grid gap-2 col-md-3 mx-auto mt-3">
+          <Button
+            @click="loadMoreFeatures"
+            type="button"
+            :label="isLoadingMoreFeatures ? 'Loading...' : 'Load more'"
+            icon="fas fa-chevron-down"
+            :loading="isLoadingMoreFeatures"
+            :disabled="
+              isLoadingMoreFeatures || !hasMoreFeatures || isGettingFeatures
+            "
+            severity="contrast"
+            size="small"
+          />
+        </div>
+        <!--Load more features end-->
+      </div>
       <!--Table End-->
     </div>
     <!--No Features Start-->
     <div
       v-else
-      class="d-flex justify-content-center align-bookings-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
+      class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
     >
       <div class="mb-2">
         <!-- Font Awesome Icon for no features -->
@@ -96,6 +114,16 @@ onMounted(async () => {
 let features = computed(() => store.state.features.features);
 let rowSkeletons = new Array(4);
 let isGettingFeatures = computed(() => store.state.features.isGettingFeatures);
+
+//are there more features currently being loaded
+let isLoadingMoreFeatures = computed(
+  () => store.state.features.isLoadingMoreFeatures
+);
+
+//are there still more features that can be loaded
+let hasMoreFeatures = computed(
+  () => store.state.features.featuresPageInfo.hasMore
+);
 
 let deleteFeature = (id) => {
   confirm.require({

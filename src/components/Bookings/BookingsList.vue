@@ -176,7 +176,7 @@
     <!--No Bookings  Start-->
     <div
       v-else
-      class="d-flex justify-content-center align-bookings-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
+      class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
     >
       <div class="mb-2">
         <!-- Font Awesome Icon for no bookings -->
@@ -493,10 +493,6 @@ let loadMoreBookings = () => {
       });
     });
 };
-//is an booking being marked as complete
-// let isCompletingBooking = computed(
-//   () => store.state.bookings.isCompletingBooking
-// );
 
 //are there more bookings currently being loaded
 let isLoadingMoreBookings = computed(

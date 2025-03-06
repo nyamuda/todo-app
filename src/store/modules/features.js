@@ -7,6 +7,7 @@ const features = {
     isCreatingFeature: false,
     isUpdatingFeature: false,
     isGettingFeatures: false,
+    isLoadingMoreFeatures: false,
     isDeletingFeature: false,
     pageInfo: {
       //page info for lazy loading
@@ -57,7 +58,7 @@ const features = {
     //Load more features
     loadMoreFeatures({ commit, dispatch, state, rootState }) {
       return new Promise((resolve, reject) => {
-        state.isLoadingMoreBookings = true;
+        state.isLoadingMoreFeatures = true;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
@@ -71,16 +72,16 @@ const features = {
           })
           .then((response) => {
             //mutate the state with the additional tasks
-            commit("loadAdditionalBookings", response.data.bookings);
+            commit("loadAdditionalFeatures", response.data.features);
             //page info
             commit("updatePageInfo", response.data.pageInfo);
             resolve();
           })
           .catch(() => {
-            reject("Failed to load more bookings. Please try again.");
+            reject("Failed to load more features. Please try again.");
           })
           .finally(() => {
-            state.isLoadingMoreBookings = false;
+            state.isLoadingMoreFeatures = false;
           });
       });
     },
