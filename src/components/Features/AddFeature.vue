@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <form class="feature-form m-auto">
+    <form class="feature-form m-auto" @submit.prevent="submitForm">
       <h3 class="fw-normal mb-3" style="letter-spacing: 1px">
         Add car wash feature
       </h3>
@@ -30,28 +30,13 @@
       </div>
 
       <!-- Submit button -->
-      <button
-        v-if="isCreatingFeature"
+      <Button
         type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Please wait...
-      </button>
-      <button
-        v-else
-        :disabled="v$.$errors.length > 0"
-        @click.prevent="submitForm"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-      >
-        Add feature
-      </button>
+        :label="isCreatingFeature ? 'Please wait...' : 'Add feature'"
+        icon="fas fa-plus"
+        :loading="isCreatingFeature"
+        :disabled="v$.$errors.length > 0 || isCreatingFeature"
+      />
     </form>
   </div>
 </template>
