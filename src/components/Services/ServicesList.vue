@@ -31,21 +31,16 @@
     </div>
 
     <!--No Services Start-->
-    <div
+    <EmptyList
+      v-else-if="isAdmin"
+      title="No Services Available"
+      message="Add a service so clients can start booking."
+    />
+    <EmptyList
       v-else
-      class="d-flex justify-content-center align-bookings-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
-    >
-      <div class="mb-2">
-        <!-- Font Awesome Icon for no bookings -->
-        <i class="fas fa-0 fa-3x text-primary"></i>
-      </div>
-      <p class="fs-4 text-muted mb-2">
-        There are no available car wash services at the moment.
-      </p>
-      <p class="text-muted">
-        Add a service and let clients start booking car wash sessions.
-      </p>
-    </div>
+      title="No Services Available"
+      message="We're setting up our services. Check back soon."
+    />
     <!--No Service End-->
   </div>
 </template>
@@ -57,6 +52,7 @@ import ServiceItemSkeleton from "./ServiceItemSkeleton.vue";
 import Button from "primevue/button";
 import ServiceItem from "./ServiceItem.vue";
 import { useToast } from "primevue/usetoast";
+import EmptyList from "../Common/Elements/EmptyList.vue";
 
 let store = useStore();
 

@@ -171,7 +171,7 @@
     <!--No Bookings  Start-->
     <EmptyList
       v-else
-      title="You have no bookings at the moment."
+      title="Nothing booked yet"
       message="Book a car wash today and leave the rest to us"
     />
 
