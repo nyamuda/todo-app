@@ -1,9 +1,16 @@
 <template>
-  <div class="text-center mt-5">
-    <i class="fas fa-exclamation-circle fa-4x text-danger mb-3"></i>
-    <h2 class="fw-bold">Page Not Found</h2>
-    <p class="text-muted">The page you're looking for doesn't exist.</p>
-    <Button label="Go Home" icon="pi pi-home" @click="goHome" />
+  <div
+    class="d-flex flex-column justify-content-center align-items-center mt-5"
+  >
+    <i class="fas fa-times-circle fa-5x mb-3"></i>
+    <h2 class="text-dark fw-bold mb-2">404 - Page Not Found</h2>
+    <p class="text-muted mb-4">We couldn't find what you were looking for.</p>
+    <Button
+      label="Return Home"
+      icon="fas fa-home"
+      severity="primary"
+      @click="goHome"
+    />
   </div>
 </template>
 

@@ -1,25 +1,33 @@
 <template>
-  <div
-    class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
-  >
-    <div class="mb-2">
-      <!-- Font Awesome Icon for missing booking details -->
-      <i class="fas fa-info-circle fa-3x text-primary"></i>
-    </div>
-    <p class="fs-4 text-muted mb-2">{{ title }}</p>
-    <p class="text-muted">
-      {{ message }}
-    </p>
+  <div class="text-center mt-5">
+    <i class="fas fa-search fa-4x text-muted mb-3"></i>
+    <h2 class="text-muted fw-bold">{{ title }}</h2>
+    <p class="text-secondary">{{ message }}</p>
+    <Button label="Go Back" icon="fas fa-arrow-left" severity="secondary" @click="goBack"/>
   </div>
 </template>
 
 <script setup>
+import Button from "primevue/button";
+import { defineProps } from 'vue';
+import { useRouter } from "vue-router";
+
+// Define the props for title and message
 defineProps({
   title: {
     type: String,
+    default: 'Item Not Found'
   },
   message: {
     type: String,
-  },
+    default: 'The requested item could not be found.'
+  }
 });
+
+// Router for navigation
+const router = useRouter();
+
+// Go back backward
+const goBack = () => router.go(-1); 
+
 </script>
