@@ -8,7 +8,8 @@
     <Button
       label="Return Home"
       icon="fas fa-home"
-      severity="primary"
+      severity="contrast"
+      variant="outlined"
       @click="goHome"
     />
   </div>
