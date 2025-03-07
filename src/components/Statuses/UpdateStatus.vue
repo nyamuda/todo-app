@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <form class="status-form m-auto">
+    <form class="status-form m-auto" @submit.prevent="submitForm">
       <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Update status</h3>
       <!-- <OauthBooking />-->
       <!-- <div class="d-flex align-bookings-center my-1">
@@ -10,48 +10,38 @@
 			</div> -->
 
       <!-- Name input -->
-      <div class="mb-3">
-        <label for="statusName" class="form-label">Status name</label>
-        <input
-          type="email"
-          id="statusName"
-          class="form-control"
-          v-model="v$.name.$model"
-          :class="{
-            'is-invalid': v$.name.$error,
-            'is-valid': !v$.name.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.name.$error">
+      <div class="form-group mb-3">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="statusName"
+            v-model="v$.name.$model"
+            :invalid="v$.name.$error"
+          />
+          <label for="statusName">Status name</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.name.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.name.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Submit button -->
-      <button
-        v-if="isUpdatingStatus"
+      <Button
+        fluid
         type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Updating...
-      </button>
-      <button
-        v-else
-        :disabled="v$.$errors.length > 0"
-        @click.prevent="submitForm"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-      >
-        Update status
-      </button>
+        :label="isUpdatingStatus ? 'Please wait...' : 'Update status'"
+        icon="fas fa-plus"
+        :loading="isUpdatingStatus"
+        :disabled="v$.$errors.length > 0 || isUpdatingStatus"
+        size="small"
+      />
     </form>
   </div>
 </template>
@@ -60,25 +50,29 @@
 import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-//import OauthBooking from "./OauthBooking.vue";
-//Vuelidate for login form validation
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import { Message } from "primevue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import { useToast } from "vue-toastification";
+import { useToast } from "primevue/usetoast";
+
+
 
 //toast
 const toast = useToast();
 // Access the store
 const store = useStore();
 //The route
-const route = useRouter();
+const router = useRouter();
 let id = ref(null);
 
 onMounted(async () => {
   v$._value.$touch();
 
   //get the route parameter
-  id.value = route.currentRoute.value.params.id;
+  id.value = router.currentRoute.value.params.id;
 
   //populate the form with the status data
   if (id.value) {
@@ -87,8 +81,14 @@ onMounted(async () => {
       .then((status) => {
         formData.value.name = status.name;
       })
-      .catch((message) => toast.error(message));
-  }
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Fetch Failed",
+          detail: message,
+          life: 10000,
+        });
+      });
 });
 
 //form validation with Vuelidate start
@@ -106,10 +106,28 @@ const v$ = useVuelidate(rules, formData.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("statuss/updateStatus", {
-      id: id.value,
-      updatedStatus: formData.value,
-    });
+    store
+      .dispatch("statuss/updateStatus", {
+        id: id.value,
+        updatedStatus: formData.value,
+      })
+      .then((message) => {
+        toast.add({
+          severity: "success",
+          summary: "Status Update",
+          detail: message,
+          life: 5000,
+        });
+        router.push("/statuses");
+      })
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Update Failed",
+          detail: message,
+          life: 10000,
+        });
+      });
   }
 };
 let isUpdatingStatus = computed(() => store.state.statuses.isUpdatingStatus);
