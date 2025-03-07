@@ -126,7 +126,7 @@ let features = computed(() => store.state.features.features);
 let rowSkeletons = new Array(4);
 let isGettingFeatures = computed(() => store.state.features.isGettingFeatures);
 let isDeletingFeature = computed(() => store.state.features.isDeletingFeature);
-//ID of feature recording in action(e.g currently being deleted)
+//ID of feature table record in action(e.g currently being deleted)
 // this is used to show a loader to the row of the item currently being deleted
 let selectedFeatureId = ref(null);
 

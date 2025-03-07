@@ -31,8 +31,8 @@
             <Button
               icon="fas fa-pen"
               severity="contrast"
+              size="small"
               variant="text"
-              rounded
               label="Update status"
               aria-label="update"
               @click="updateStatus(slotProps.data.id)"
@@ -41,8 +41,15 @@
               icon="fas fa-trash"
               severity="danger"
               variant="text"
-              label="Delete status"
-              rounded
+              size="small"
+              :label="
+                isDeletingStatus && slotProps.data.id == selectedStatusId
+                  ? 'Deleting...'
+                  : 'Delete'
+              "
+              :loading="
+                isDeletingStatus && slotProps.data.id == selectedStatusId
+              "
               aria-label="delete"
               @click="deleteStatus(slotProps.data.id)"
             />
@@ -75,7 +82,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { Skeleton } from "primevue";
 import DataTable from "primevue/datatable";
@@ -92,23 +99,24 @@ let store = useStore();
 let route = useRouter();
 const toast = useToast();
 
-onMounted(async () => {
-  store.dispatch("statuses/getStatuses")
-  .catch((message) => {
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: message,
-        life: 10000,
-      });
-    });
+onMounted(() => {
+  //get all statuses
+  getStatuses();
 });
 
 let statuses = computed(() => store.state.statuses.statuses);
 let rowSkeletons = new Array(4);
 let isGettingStatuses = computed(() => store.state.statuses.isGettingStatuses);
+let isDeletingStatus = computed(() => store.state.statuses.isDeletingStatus);
+//ID of feature table record in action(e.g currently being deleted)
+// this is used to show a loader to the row of the item currently being deleted
+let selectedStatusId = ref(null);
 
+//Delete a status
 let deleteStatus = (id) => {
+  //show a loader to the row of the item currently being deleted
+  selectedStatusId.value = id;
+
   confirm.require({
     message: "Do you want to delete this status?",
     header: "Delete Status",
@@ -118,18 +126,54 @@ let deleteStatus = (id) => {
       label: "Cancel",
       severity: "secondary",
       outlined: true,
+      size: "small",
     },
     acceptProps: {
       label: "Delete",
       severity: "danger",
+      size: "small",
     },
     accept: () => {
-      store.dispatch("statuses/deleteStatus", id);
+      store
+        .dispatch("statuses/deleteStatus", id)
+        .then((message) => {
+          toast.add({
+            severity: "success",
+            summary: "Status Deleted",
+            detail: message,
+            life: 5000,
+          });
+          getStatuses();
+        })
+        .catch((message) => {
+          toast.add({
+            severity: "error",
+            summary: "Delete Failed",
+            detail: message,
+            life: 10000,
+          });
+        })
+        .finally(() => {
+          //hide the loader
+          selectedStatusId.value = null;
+        });
     },
     reject: () => {},
   });
 };
 let updateStatus = (id) => {
-  route.push(`statuses/update/${id}`);
+  route.push(`statuses/${id}/update`);
+};
+
+//Get all statuses
+let getStatuses = () => {
+  store.dispatch("statuses/getStatuses").catch((message) => {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: message,
+      life: 10000,
+    });
+  });
 };
 </script>
