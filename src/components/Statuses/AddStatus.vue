@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <form class="status-form m-auto">
+    <form @submit.prevent="submitForm" class="status-form m-auto">
       <h3 class="fw-normal mb-3" style="letter-spacing: 1px">
         Add booking status
       </h3>
@@ -12,48 +12,38 @@
       </div> -->
 
       <!-- Name input -->
-      <div class="mb-3">
-        <label for="statusName" class="form-label">Status name</label>
-        <input
-          type="email"
-          id="statusName"
-          class="form-control"
-          v-model="v$.name.$model"
-          :class="{
-            'is-invalid': v$.name.$error,
-            'is-valid': !v$.name.$error,
-          }"
-        />
-        <div class="invalid-feedback" v-if="v$.name.$error">
+      <div class="form-group mb-3">
+        <FloatLabel variant="on">
+          <InputText
+            class="w-100"
+            id="statusName"
+            v-model="v$.name.$model"
+            :invalid="v$.name.$error"
+          />
+          <label for="statusName">Status name</label>
+        </FloatLabel>
+        <Message
+          size="small"
+          severity="error"
+          v-if="v$.name.$error"
+          variant="simple"
+        >
           <div v-for="error of v$.name.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
-        </div>
+        </Message>
       </div>
 
       <!-- Submit button -->
-      <button
-        v-if="isCreatingStatus"
+      <Button
+        fluid
         type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-        disabled
-      >
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Please wait...
-      </button>
-      <button
-        v-else
-        :disabled="v$.$errors.length > 0"
-        @click.prevent="submitForm"
-        type="submit"
-        class="btn btn-primary btn-block mb-2 w-100"
-      >
-        Add status
-      </button>
+        :label="isCreatingStatus ? 'Please wait...' : 'Add status'"
+        icon="fas fa-plus"
+        :loading="isCreatingStatus"
+        :disabled="v$.$errors.length > 0 || isCreatingStatus"
+        size="small"
+      />
     </form>
   </div>
 </template>
@@ -61,13 +51,20 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
-//import OauthBooking from "./OauthBooking.vue";
+import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
+import Button from "primevue/button";
+import { Message } from "primevue";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
 
 // Access the store
 const store = useStore();
+const toast = useToast();
+const router = useRouter();
 
 onMounted(() => {
   v$._value.$touch();
@@ -88,7 +85,25 @@ const v$ = useVuelidate(rules, formData.value);
 let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
-    store.dispatch("statuses/addStatus", formData.value);
+    store
+      .dispatch("statuses/addStatus", formData.value)
+      .then((message) => {
+        toast.add({
+          severity: "success",
+          summary: "Status Added",
+          detail: message,
+          life: 5000,
+        });
+        router.push("/statuses");
+      })
+      .catch((message) => {
+        toast.add({
+          severity: "error",
+          summary: "Adding Status Failed",
+          detail: message,
+          life: 10000,
+        });
+      });
   }
 };
 let isCreatingStatus = computed(() => store.state.statuses.isCreatingStatus);
