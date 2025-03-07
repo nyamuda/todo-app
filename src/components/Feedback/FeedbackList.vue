@@ -43,17 +43,13 @@
           </div>
           <!--Load more reviews start-->
           <div class="d-grid gap-2 col-md-3 mx-auto mt-3">
-            <Button
-              @click="loadMoreFeedback"
-              type="button"
-              :label="isLoadingMoreFeedback ? 'Loading...' : 'Load more'"
-              icon="fas fa-chevron-down"
-              :loading="isLoadingMoreFeedback"
-              :disabled="
-                isLoadingMoreFeedback || !hasMoreFeedback || isGettingFeedback
-              "
-              severity="contrast"
-              size="small"
+            <LoadMoreButton
+              :onClick="loadMoreFeedback"
+              :has-more="hasMoreFeedback"
+              :is-loading="isLoadingMoreFeedback"
+              label="Load more reviews"
+              end-label="No more reviews to show"
+              end-variant="text"
             />
           </div>
           <!--Load more reviews end-->
@@ -69,9 +65,9 @@ import { ref, onMounted, computed } from "vue";
 import FeedbackItem from "./FeedbackItem.vue";
 import StarsDistribution from "./StarsDistribution.vue";
 import FeedbackListSkeleton from "./Skeletons/FeedbackListSkeleton.vue";
+import LoadMoreButton from "../Common/Elements/LoadMoreButton.vue";
 import { useStore } from "vuex";
 import { useToast } from "primevue";
-import Button from "primevue/button";
 import Divider from "primevue/divider";
 import Rating from "primevue/rating";
 
