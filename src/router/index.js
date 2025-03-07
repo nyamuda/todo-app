@@ -35,6 +35,7 @@ import RegisterUser from "@/components/Account/RegisterUser.vue";
 import PasswordReset from "@/components/Account/PasswordReset.vue";
 import VerificationResult from "@/components/Account/VerificationResult.vue";
 import AccountView from "@/views/Account/AccountView.vue";
+import PageNotFoundView from "@/views/Common/PageNotFoundView.vue";
 
 const routes = [
   {
@@ -312,6 +313,12 @@ const routes = [
         component: AdminDrawer,
       },
     ],
+  },
+  // Catch-all route for 404 (MUST be at the end)
+  {
+    path: "/:pathMatch(.*)*",
+    name: "PageNotFound",
+    component: PageNotFoundView,
   },
 ];
 
