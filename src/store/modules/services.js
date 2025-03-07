@@ -42,9 +42,10 @@ const services = {
           .get(`${rootState.apiUrl}/services/${id}`)
           .then((response) => resolve(response.data))
           .catch((ex) => {
-            let message = ex.response?.data.message
-              ? ex.response.data.message
-              : "Something went wrong while fetching the car wash service details.";
+            let message =
+              ex.status == 404
+                ? "The service you're looking for does not exist."
+                : "Something went wrong while fetching the car wash service details.";
             reject(message);
           });
       });

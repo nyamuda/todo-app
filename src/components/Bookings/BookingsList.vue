@@ -172,7 +172,7 @@
     <EmptyList
       v-else
       title="Nothing booked yet"
-      message="Book a car wash today and leave the rest to us"
+      message="Book a car wash today and leave the rest to us."
     />
 
     <!--No Bookings End-->

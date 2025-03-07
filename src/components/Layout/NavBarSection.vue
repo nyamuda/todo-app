@@ -196,6 +196,7 @@ const items = computed(() => {
           },
           {
             label: "Features",
+            icon: "fas fa-cogs",
             items: [
               {
                 label: "Feature List",
