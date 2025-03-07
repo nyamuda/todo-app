@@ -84,14 +84,24 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
+import { useToast } from "primevue/usetoast";
 
 const confirm = useConfirm();
 
 let store = useStore();
 let route = useRouter();
+const toast = useToast();
 
 onMounted(async () => {
-  store.dispatch("statuses/getStatuses");
+  store.dispatch("statuses/getStatuses")
+  .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+        life: 10000,
+      });
+    });
 });
 
 let statuses = computed(() => store.state.statuses.statuses);

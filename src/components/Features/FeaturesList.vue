@@ -156,7 +156,7 @@ let getFeatures = () => {
         severity: "error",
         summary: "Error",
         detail: message,
-        life: 5000,
+        life: 10000,
       });
     });
 };
