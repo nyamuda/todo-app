@@ -162,6 +162,7 @@
           :has-more="hasMoreBookings"
           :is-loading="isLoadingMoreBookings"
           label="Load more bookings"
+          end-label="That’s all your bookings for now"
         />
       </div>
       <!--Load more bookings end-->

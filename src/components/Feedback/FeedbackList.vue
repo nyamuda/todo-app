@@ -49,6 +49,7 @@
               :is-loading="isLoadingMoreFeedback"
               label="Load more reviews"
               end-label="No more reviews to show"
+              variant="outlined"
               end-variant="text"
             />
           </div>
