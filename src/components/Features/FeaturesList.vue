@@ -64,15 +64,23 @@
           <Button
             @click="loadMoreFeatures"
             type="button"
-            :label="isLoadingMoreFeatures ? 'Loading...' : 'Load more'"
-            icon="fas fa-chevron-down"
+            :label="
+              isLoadingMoreFeatures
+                ? 'Loading...'
+                : !hasMoreFeatures
+                ? 'You’ve reached the end of the list'
+                : 'Load more'
+            "
+            :icon="!hasMoreFeatures ? '' : 'fas fa-chevron-down'"
             :loading="isLoadingMoreFeatures"
             :disabled="
               isLoadingMoreFeatures || !hasMoreFeatures || isGettingFeatures
             "
             severity="contrast"
             size="small"
+            :variant="!hasMoreFeatures ? 'outlined' : 'filled'"
           />
+          <LoadMoreButton :onClick="loadMoreFeatures" :is-loading="isLoadingMoreFeatures" label="Load more features"  />
         </div>
         <!--Load more features end-->
       </div>
@@ -112,6 +120,7 @@ import { useRouter } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useToast } from "primevue/usetoast";
+import LoadMoreButton from "../Common/Elements/LoadMoreButton.vue";
 const confirm = useConfirm();
 
 let store = useStore();
