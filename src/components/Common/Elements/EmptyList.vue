@@ -1,12 +1,14 @@
 <template>
   <div class="text-center py-5">
-    <i class="fas fa-box-open fa-3x text-secondary"></i>
+    <i class="fas fa-box-open fa-4x text-secondary"></i>
+    <h5 class="mt-3">{{ title }}</h5>
     <p class="mt-3 text-muted">{{ message }}</p>
   </div>
 </template>
 
 <script setup>
 defineProps({
+  title: { type: String, default: "Nothing here yet" },
   message: { type: String, default: "No items found." },
 });
 </script>

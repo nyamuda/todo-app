@@ -166,20 +166,7 @@
     </div>
 
     <!--No Bookings  Start-->
-    <div
-      v-else
-      class="d-flex justify-content-center align-bookings-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
-    >
-      <div class="mb-2">
-        <!-- Font Awesome Icon for no bookings -->
-        <i class="fas fa-car fa-3x text-primary"></i>
-      </div>
-      <p class="fs-4 text-muted mb-2">You have no bookings at the moment.</p>
-      <p class="text-muted">
-        Don't wait! Book a car wash now and let us handle the rest.
-      </p>
-    </div>
-
+    <EmptyList v-else message="You have no bookings at the moment." />
     <!--No Bookings End-->
   </div>
 
@@ -222,7 +209,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { Tag } from "primevue";
 import Button from "primevue/button";
-
+import EmptyList from "../Common/Elements/EmptyList.vue";
 import Dialog from "primevue/dialog";
 import Skeleton from "primevue/skeleton";
 import Rating from "primevue/rating";
