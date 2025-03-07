@@ -157,17 +157,11 @@
       </div>
       <!--Load more bookings start-->
       <div class="d-grid gap-2 col-md-3 mx-auto mt-3">
-        <Button
-          @click="loadMoreBookings"
-          type="button"
-          :label="isLoadingMoreBookings ? 'Loading...' : 'Load more'"
-          icon="fas fa-chevron-down"
-          :loading="isLoadingMoreBookings"
-          :disabled="
-            isLoadingMoreBookings || !hasMoreBookings || isGettingBookings
-          "
-          severity="contrast"
-          size="small"
+        <LoadMoreButton
+          :onClick="loadMoreBookings"
+          :has-more="hasMoreBookings"
+          :is-loading="isLoadingMoreBookings"
+          label="Load more bookings"
         />
       </div>
       <!--Load more bookings end-->
@@ -318,6 +312,7 @@ import { required, minLength, numeric, helpers } from "@vuelidate/validators";
 import { useStore } from "vuex";
 import dateFormat from "dateformat";
 import { useToast } from "primevue/usetoast";
+import LoadMoreButton from "../Common/Elements/LoadMoreButton.vue";
 
 //table row skeletons
 const rowSkeletons = ref(new Array(10));
