@@ -3,9 +3,9 @@
     @click="onClick"
     type="button"
     :label="isLoading ? loadingLabel : !hasMore ? endLabel : label"
-    :icon="!hasMore ? '' : icon"
+    :icon="!hasMore ? '' : 'fas fa-chevron-down'"
     :loading="isLoading"
-    :disabled="isLoading || !hasMore || isDisabled"
+    :disabled="isLoading || !hasMore"
     :severity="severity"
     :size="size"
     :variant="!hasMore ? endVariant : variant"
@@ -27,11 +27,6 @@ defineProps({
     type: String,
     default: "You’ve reached the end of the list",
   },
-  icon: {
-    type: String,
-    default: "fas fa-chevron-down",
-  },
-
   isLoading: {
     type: Boolean,
     default: false,
@@ -42,9 +37,10 @@ defineProps({
     default: true,
     required: true,
   },
-  isDisabled: {
-    type: Boolean,
-    default: false,
+
+  onClick: {
+    type: Function,
+    required: true,
   },
   severity: {
     type: String,
@@ -61,10 +57,6 @@ defineProps({
   endVariant: {
     type: String,
     default: "outlined",
-  },
-  onClick: {
-    type: Function,
-    required: true,
   },
 });
 </script>

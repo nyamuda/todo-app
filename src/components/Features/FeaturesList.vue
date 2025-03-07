@@ -61,26 +61,12 @@
         </DataTable>
         <!--Load more features start-->
         <div class="d-grid gap-2 col-md-3 mx-auto mt-4">
-          <Button
-            @click="loadMoreFeatures"
-            type="button"
-            :label="
-              isLoadingMoreFeatures
-                ? 'Loading...'
-                : !hasMoreFeatures
-                ? 'You’ve reached the end of the list'
-                : 'Load more'
-            "
-            :icon="!hasMoreFeatures ? '' : 'fas fa-chevron-down'"
-            :loading="isLoadingMoreFeatures"
-            :disabled="
-              isLoadingMoreFeatures || !hasMoreFeatures || isGettingFeatures
-            "
-            severity="contrast"
-            size="small"
-            :variant="!hasMoreFeatures ? 'outlined' : 'filled'"
+          <LoadMoreButton
+            :onClick="loadMoreFeatures"
+            :has-more="hasMoreFeatures"
+            :is-loading="isLoadingMoreFeatures"
+            label="Load more features"
           />
-          <LoadMoreButton :onClick="loadMoreFeatures" :is-loading="isLoadingMoreFeatures" label="Load more features"  />
         </div>
         <!--Load more features end-->
       </div>
