@@ -58,8 +58,6 @@ import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { useToast } from "primevue/usetoast";
 
-
-
 //toast
 const toast = useToast();
 // Access the store
@@ -89,6 +87,7 @@ onMounted(async () => {
           life: 10000,
         });
       });
+  }
 });
 
 //form validation with Vuelidate start
@@ -107,14 +106,14 @@ let submitForm = async () => {
   const isFormCorrect = await v$._value.$validate();
   if (isFormCorrect) {
     store
-      .dispatch("statuss/updateStatus", {
+      .dispatch("statuses/updateStatus", {
         id: id.value,
         updatedStatus: formData.value,
       })
       .then((message) => {
         toast.add({
           severity: "success",
-          summary: "Status Update",
+          summary: "Status Updated",
           detail: message,
           life: 5000,
         });

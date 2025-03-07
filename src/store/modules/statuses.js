@@ -49,7 +49,7 @@ const statuses = {
           .catch((ex) => {
             let message =
               ex.response.data?.message ||
-              "Something went wrong. Unable to fetch the status.";
+              "Something went wrong. Unable to fetch the status information.";
             reject(message);
           });
       });
