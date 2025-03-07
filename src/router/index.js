@@ -190,7 +190,7 @@ const routes = [
       },
       //only admins can update a booking status
       {
-        path: "update/:id",
+        path: ":id/update",
         name: " UpdateStatus",
         component: UpdateStatus,
       },

@@ -61,7 +61,7 @@
     <!--No Statuses Start-->
     <div
       v-else
-      class="d-flex justify-content-center align-bookings-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
+      class="d-flex justify-content-center align-items-center flex-column text-center py-5 bg-light rounded-3 shadow-sm mt-5"
     >
       <div class="mb-2">
         <!-- Font Awesome Icon for no bookings -->
