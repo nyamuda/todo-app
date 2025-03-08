@@ -1,6 +1,6 @@
 <template>
   <!-- Topbar Start -->
-  <div class="container-fluid top-bar d-none d-lg-block text-primary">
+  <div class="container-fluid top-bar d-none d-lg-block py-2">
     <div
       class="d-flex align-items-center justify-content-end align-items-center"
     >
