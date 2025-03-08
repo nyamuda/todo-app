@@ -1,6 +1,6 @@
 <template>
   <!-- Topbar Start -->
-  <div class="container-fluid d-none d-lg-block bg-dark text-light">
+  <div class="container-fluid top-bar d-none d-lg-block bg-dark text-light">
     <div
       class="d-flex align-items-center justify-content-end align-items-center"
     >
@@ -248,4 +248,8 @@ const items = computed(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.top-bar {
+  background-color: rgba(255, 111, 97, 0.08); /* 50% opacity */
+}
+</style>
