@@ -1,22 +1,19 @@
 <template>
   <!-- Topbar Start -->
-  <div class="container-fluid nav-bg d-none d-lg-block">
-    <div class="row align-items-center top-bar">
-      <div class="col-lg-3 col-md-12 text-center text-lg-start">
-        <router-link to="/" class="navbar-brand m-0 p-0"
-          ><h1 class="text-primary fw-bold m-0">Prioritia</h1></router-link
-        >
-      </div>
-      <div class="col-lg-9 col-md-12 text-end">
-        <div class="h-100 d-inline-flex align-items-center me-4">
+  <div class="container-fluid d-none d-lg-block bg-dark text-light">
+    <div
+      class="d-flex align-items-center justify-content-end align-items-center"
+    >
+      <div>
+        <div class="d-inline-flex align-items-center me-4">
           <i class="fa fa-map-marker-alt text-primary me-2"></i>
           <p class="m-0">123 Street, Cape Town, South Africa</p>
         </div>
-        <div class="h-100 d-inline-flex align-items-center me-4">
+        <div class="d-inline-flex align-items-center me-4">
           <i class="far fa-envelope-open text-primary me-2"></i>
           <p class="m-0">nya20002@byui.edu</p>
         </div>
-        <div class="h-100 d-inline-flex align-items-center">
+        <div class="d-inline-flex align-items-center">
           <a
             class="btn btn-sm-square bg-white text-primary me-1"
             href="https://github.com/nyamuda"
@@ -43,13 +40,11 @@
   <!-- Topbar End -->
 
   <!-- Navbar Start -->
-  <div class="container-fluid nav-bar nav-bg shadow-sm">
+  <div class="nav-bar nav-bg shadow-sm">
     <Menubar :model="items">
       <template #start>
-        <router-link
-          to="/"
-          class="navbar-brand d-flex align-items-center m-0 p-0 d-lg-none"
-          ><h1 class="text-primary m-0 fw-bold">Prioritia</h1></router-link
+        <router-link to="/" class="navbar-brand"
+          ><h1 class="text-primary fw-bold">Prioritia</h1></router-link
         >
       </template>
       <!--Nav Links-->
@@ -196,7 +191,7 @@ const items = computed(() => {
           },
           {
             label: "Features",
-            icon: "fas fa-cogs",
+            icon: "fas fa-tint",
             items: [
               {
                 label: "Feature List",
@@ -253,111 +248,4 @@ const items = computed(() => {
 });
 </script>
 
-<style scoped>
-/*** Navbar ***/
-.nav-bg {
-  background-color: rgba(255, 111, 97, 0.08); /* 50% opacity */
-}
-.top-bar {
-  height: 75px;
-  padding: 0 4rem;
-}
-.navbar-toggler {
-  border: none;
-}
-.navbar-toggler:focus,
-.navbar-toggler:active,
-.navbar-toggler-icon:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.nav-bar {
-  position: relative;
-  padding: 0 4.75rem;
-  transition: 0.5s;
-  z-index: 10;
-}
-
-.nav-bar.sticky-top {
-  position: sticky;
-  padding: 0;
-  z-index: 9999;
-}
-
-.navbar .dropdown-toggle::after {
-  border: none;
-  content: "\f107";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  vertical-align: middle;
-  margin-left: 8px;
-}
-
-.navbar-light .navbar-nav .nav-link {
-  margin-right: 30px;
-  padding: 25px 0;
-  color: var(--dark-color);
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  outline: none;
-}
-.dropdown-item,
-.dropdown-toggle,
-.fa-user {
-  color: var(--dark-color);
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-.dropdown-item.active,
-.dropdown-item:active {
-  background-color: var(--primary-color);
-}
-.navbar-light .navbar-nav .nav-link:hover,
-.navbar-light .navbar-nav .nav-link.active {
-  color: var(--primary-color);
-}
-.call-box {
-  /* background-color: var(--primary-color); */
-}
-@media (max-width: 991.98px) {
-  .nav-bar {
-    padding: 0;
-  }
-
-  .navbar-light .navbar-nav .nav-link {
-    margin-right: 0;
-    padding: 10px 0;
-  }
-
-  .navbar-light .navbar-nav {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #eeeeee;
-  }
-}
-
-@media (min-width: 992px) {
-  .navbar .nav-item .dropdown-menu {
-    display: block;
-    border: none;
-    margin-top: 0;
-    top: 150%;
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.5s;
-  }
-
-  .navbar .nav-item:hover .dropdown-menu {
-    top: 100%;
-    visibility: visible;
-    transition: 0.5s;
-    opacity: 1;
-  }
-  .call-box {
-    margin-right: -1.5rem;
-  }
-}
-</style>
+<style scoped></style>
