@@ -27,8 +27,11 @@ const services = {
             commit("setServices", response.data);
             resolve();
           })
-          .catch(() => {
-            reject(rootState.failureMessage);
+          .catch((ex) => {
+            let message =
+              ex.response?.data?.message ||
+              "Something went wrong while fetching car wash services.";
+            reject(message);
           })
           .finally(() => {
             state.isGettingServices = false;

@@ -21,7 +21,7 @@
             ><i class="fab fa-instagram"></i
           ></a>
           <a
-            class="btn btn-primary btn-lg btn-floating text-primary me-1"
+            class="btn btn-primary text-primary me-1"
             style="background-color: #ffffff; border: none"
             role="button"
             ><i class="fab fa-facebook"></i
