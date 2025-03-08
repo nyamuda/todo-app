@@ -15,23 +15,16 @@
         </div>
         <div class="d-inline-flex align-items-center">
           <a
-            class="btn btn-sm-square bg-white text-primary me-1"
-            href="https://github.com/nyamuda"
-            target="_blank"
-            ><i class="fab fa-github"></i
-          ></a>
-
-          <a
-            class="btn btn-sm-square bg-white text-primary me-1"
-            href="https://www.linkedin.com/in/nyamuda/"
-            target="_blank"
-            ><i class="fab fa-linkedin-in"></i
+            class="btn btn-primary btn-lg btn-floating text-primary me-1"
+            style="background-color: #ffffff; border: none"
+            role="button"
+            ><i class="fab fa-instagram"></i
           ></a>
           <a
-            class="btn btn-sm-square bg-white text-primary me-0"
-            href="https://nyamuda.netlify.app/"
-            target="_blank"
-            ><i class="fas fa-briefcase"></i
+            class="btn btn-primary btn-lg btn-floating text-primary me-1"
+            style="background-color: #ffffff; border: none"
+            role="button"
+            ><i class="fab fa-facebook"></i
           ></a>
         </div>
       </div>
@@ -86,7 +79,7 @@
 
           <template v-else>
             <router-link to="/account/login"
-              ><Button label="Log in" severity="secondary"
+              ><Button label="Log in" severity="contrast" variant="text"
             /></router-link>
             <router-link class="me-0 me-md-2" to="/account/register"
               ><Button label="Sign up" class="ms-2"
