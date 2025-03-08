@@ -1,6 +1,6 @@
 <template>
   <!-- Topbar Start -->
-  <div class="container-fluid top-bar d-none d-lg-block bg-dark text-light">
+  <div class="container-fluid top-bar d-none d-lg-block text-primary">
     <div
       class="d-flex align-items-center justify-content-end align-items-center"
     >
@@ -145,6 +145,7 @@ const items = computed(() => {
       { label: "Dashboard", icon: "fas fa-gauge", route: "/admin" },
       {
         label: "Bookings",
+        icon: "fas fa-calendar-check",
 
         items: [
           {
@@ -216,6 +217,7 @@ const items = computed(() => {
       { label: "Dashboard", icon: "fas fa-gauge", route: "/account" },
       {
         label: "Bookings",
+        icon: "fas fa-calendar-check",
         items: [
           {
             label: "Booking List",
