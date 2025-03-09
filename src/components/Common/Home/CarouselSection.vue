@@ -25,7 +25,7 @@
             class="content-text position-relative text-white text-center p-4 w-100"
           >
             <div
-              class="text-light d-flex flex-column justify-content-center text-center"
+              class="row text-light d-flex flex-column justify-content-center text-center"
             >
               <h2 class="slide-title fw-bold mb-3">
                 {{ slide.title }}
@@ -34,7 +34,7 @@
                 {{ slide.description }}
               </p>
               <div
-                class="d-flex flex-column flex-sm-row flex-wrap justify-content-center btn-container"
+                class="col-8 col-sm-12 m-auto d-flex flex-column flex-sm-row flex-wrap justify-content-center btn-container"
               >
                 <a
                   class="btn custom text-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
@@ -60,6 +60,8 @@
         <template #prev>
           <div class="ms-5">
             <Button
+              id="navigator-prev-btn"
+              class="text-light"
               icon="fas fa-chevron-left"
               severity="secondary"
               variant="text"
@@ -69,6 +71,8 @@
         <template #next>
           <div class="me-5">
             <Button
+              id="navigator-next-btn"
+              class="text-light"
               icon="fas fa-chevron-right"
               severity="secondary"
               variant="text"
@@ -177,5 +181,14 @@ const slides = ref([
   .slide-description {
     font-size: 1.5rem;
   }
+}
+
+#navigator-prev-btn:hover {
+  background: none;
+  background-color: none !important;
+}
+#navigator-next-btn:hover {
+  background: none;
+  background-color: none !important;
 }
 </style>
