@@ -44,13 +44,13 @@
                   class="d-flex flex-column flex-sm-row flex-wrap justify-content-center btn-container"
                 >
                   <a
-                    class="btn custom text-light btn-lg m-2 px-3 px-md-5 py-md-3"
+                    class="btn custom text-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
                     routerLink="/booking"
                     role="button"
                     >Book Now</a
                   >
                   <a
-                    class="btn btn-light btn-lg m-2 px-3 px-md-5 py-md-3"
+                    class="btn btn-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
                     routerLink="/courses"
                     role="button"
                     >Our Courses</a
