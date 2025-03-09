@@ -24,7 +24,8 @@
             class="slide-content position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
           >
             <div
-              class="content-overlay bg-dark opacity-50 position-absolute w-100 h-100"
+              class="content-overlay position-absolute w-100 h-100"
+              style="background-color: rgba(0, 0, 0, 0.6)"
             ></div>
 
             <div
@@ -77,13 +78,15 @@ const slides = ref([
     title: "Innovative Technology",
     description:
       "Discover the latest technological advancements driving business success.",
-    image: "https://images.unsplash.com/photo-1582639510494-c80b5de9f148?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1443&q=80",
+    image:
+      "https://images.unsplash.com/photo-1582639510494-c80b5de9f148?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1443&q=80",
   },
   {
     title: "Premium Quality",
     description:
       "Exceptional craftsmanship and attention to detail in every product.",
-    image: "/images/slide3.jpg",
+    image:
+      "https://images.unsplash.com/photo-1675798891288-07fe456fc998?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1493&q=80",
   },
 ]);
 </script>
