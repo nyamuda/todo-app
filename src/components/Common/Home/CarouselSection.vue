@@ -2,7 +2,7 @@
   <div class="">
     <Carousel
       :value="slides"
-      :autoplayInterval="3000"
+      :autoplayInterval="5000"
       :circular="true"
       :numVisible="1"
       :numScroll="1"
@@ -31,15 +31,17 @@
             <div
               class="content-text position-relative text-white text-center p-4 w-100"
             >
-              <div class="container">
-                <h2 class="display-4 fw-bold mb-4">
+              <div
+                class="text-light d-flex flex-column justify-content-center text-center"
+              >
+                <h2 class="slide-title fw-bold mb-3">
                   {{ slotProps.data.title }}
                 </h2>
-                <p class="lead mb-5 mx-auto max-width-600">
+                <p class="slide-description container">
                   {{ slotProps.data.description }}
                 </p>
                 <div
-                  class="d-flex flex-column flex-md-row flex-wrap justify-content-center btn-container"
+                  class="d-flex flex-column flex-sm-row flex-wrap justify-content-center btn-container"
                 >
                   <a
                     class="btn custom text-light btn-lg m-2 px-3 px-md-5 py-md-3"
@@ -91,9 +93,20 @@ const slides = ref([
 ]);
 </script>
 <style scoped>
+.btn.custom {
+  background-color: #e6871c;
+  transition: all 0.3s ease-out;
+}
+.btn.custom:hover {
+  background-color: #f24711;
+}
 .slide-image {
   object-fit: cover;
   object-position: center;
+}
+
+.slide-title {
+  font-size: 2rem;
 }
 
 .h-500 {
@@ -108,23 +121,10 @@ const slides = ref([
   z-index: 2;
 }
 
-.max-width-600 {
-  max-width: 600px;
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .h-500 {
     height: 400px;
-  }
-
-  h2.display-4 {
-    font-size: 2.5rem;
-  }
-
-  .btn {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
   }
 }
 
@@ -132,13 +132,22 @@ const slides = ref([
   .h-500 {
     height: 300px;
   }
+}
 
-  h2.display-4 {
-    font-size: 2rem;
+@media (min-width: 768px) {
+  .slide-title {
+    font-size: 3.5rem;
   }
-
-  p.lead {
-    font-size: 1rem;
+  .slide-description {
+    font-size: 1.2rem;
+  }
+}
+@media (min-width: 992px) {
+  .slide-title {
+    font-size: 4.5rem;
+  }
+  .slide-description {
+    font-size: 1.5rem;
   }
 }
 </style>
