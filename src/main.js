@@ -6,6 +6,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import "./assets/styles.css";
 
+// Carousel library start
+import "vue3-carousel/carousel.css";
+// Carousel library end
+
 /* Toast library start*/
 import Toast, { POSITION } from "vue-toastification";
 import PrimeVue from "primevue/config";

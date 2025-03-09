@@ -1,72 +1,100 @@
 <template>
-  <div class="">
-    <Carousel
-      :value="slides"
-      :autoplayInterval="5000"
-      :circular="true"
-      :numVisible="1"
-      :numScroll="1"
-      :showNavigators="false"
-    >
-      <template #item="slotProps">
-        <div class="slide-container position-relative">
-          <!-- Image Container -->
-          <div class="slide-image-container overflow-hidden h-500">
-            <img
-              :src="slotProps.data.image"
-              :alt="slotProps.data.title"
-              class="slide-image w-100 h-100"
-            />
-          </div>
+  <Carousel v-bind="carouselConfig">
+    <Slide v-for="slide in slides" :key="slide">
+      <!-- Carousel Content Start -->
+      <div class="slide-container position-relative w-100">
+        <!-- Image Container -->
+        <div class="slide-image-container overflow-hidden h-500">
+          <img
+            :src="slide.image"
+            :alt="slide.title"
+            class="slide-image w-100 h-100"
+          />
+        </div>
 
-          <!-- Overlay Content -->
+        <!-- Overlay Content -->
+        <div
+          class="slide-content position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
+        >
           <div
-            class="slide-content position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
+            class="content-overlay position-absolute w-100 h-100"
+            style="background-color: rgba(0, 0, 0, 0.6)"
+          ></div>
+
+          <div
+            class="content-text position-relative text-white text-center p-4 w-100"
           >
             <div
-              class="content-overlay position-absolute w-100 h-100"
-              style="background-color: rgba(0, 0, 0, 0.6)"
-            ></div>
-
-            <div
-              class="content-text position-relative text-white text-center p-4 w-100"
+              class="text-light d-flex flex-column justify-content-center text-center"
             >
+              <h2 class="slide-title fw-bold mb-3">
+                {{ slide.title }}
+              </h2>
+              <p class="slide-description container">
+                {{ slide.description }}
+              </p>
               <div
-                class="text-light d-flex flex-column justify-content-center text-center"
+                class="d-flex flex-column flex-sm-row flex-wrap justify-content-center btn-container"
               >
-                <h2 class="slide-title fw-bold mb-3">
-                  {{ slotProps.data.title }}
-                </h2>
-                <p class="slide-description container">
-                  {{ slotProps.data.description }}
-                </p>
-                <div
-                  class="d-flex flex-column flex-sm-row flex-wrap justify-content-center btn-container"
+                <a
+                  class="btn custom text-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
+                  routerLink="/booking"
+                  role="button"
+                  >Book Now</a
                 >
-                  <a
-                    class="btn custom text-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
-                    routerLink="/booking"
-                    role="button"
-                    >Book Now</a
-                  >
-                  <a
-                    class="btn btn-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
-                    routerLink="/courses"
-                    role="button"
-                    >Our Courses</a
-                  >
-                </div>
+                <a
+                  class="btn btn-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
+                  routerLink="/courses"
+                  role="button"
+                  >Our Courses</a
+                >
               </div>
             </div>
           </div>
         </div>
-      </template>
-    </Carousel>
-  </div>
+      </div>
+      <!-- Carousel Content End -->
+    </Slide>
+    <template #addons>
+      <CarouselNavigation>
+        <template #prev>
+          <div class="ms-5">
+            <Button
+              icon="fas fa-chevron-left"
+              severity="secondary"
+              variant="text"
+            />
+          </div>
+        </template>
+        <template #next>
+          <div class="me-5">
+            <Button
+              icon="fas fa-chevron-right"
+              severity="secondary"
+              variant="text"
+            />
+          </div>
+        </template>
+      </CarouselNavigation>
+    </template>
+  </Carousel>
 </template>
+
 <script setup>
 import { ref } from "vue";
-import Carousel from "primevue/carousel";
+import {
+  Carousel,
+  Slide,
+  Navigation as CarouselNavigation,
+} from "vue3-carousel";
+
+import Button from "primevue/button";
+
+const carouselConfig = {
+  itemsToShow: 1,
+  wrapAround: true,
+  autoplay: 5000,
+};
 
 const slides = ref([
   {
