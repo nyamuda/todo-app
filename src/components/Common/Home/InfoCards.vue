@@ -47,3 +47,13 @@
     </div>
   </div>
 </template>
+
+<script setup></script>
+
+<style scoped>
+.cards {
+  position: relative;
+  z-index: 2;
+  margin-top: -3rem !important;
+}
+</style>
