@@ -1,46 +1,42 @@
 <template>
-  <div class="container row row-cols-1 row-cols-lg-3 m-auto cards">
+  <div class="container row row-cols-1 row-cols-lg-3 m-auto desktop-cards">
     <div class="col mb-3">
       <div class="card shadow-lg">
-        <div
-          class="card-body d-flex flex-column flex-lg-row justify-content-center align-items-center"
-        >
-          <i class="fas fa-car-alt fa-4x icon"></i>
+        <div class="card-body d-flex justify-content-start align-items-center">
+          <i class="fas fa-car fa-4x icon"></i>
           <div
-            class="d-flex flex-column align-items-center align-items-lg-start ms-0 ms-lg-2 justify-content-center"
+            class="d-flex flex-column align-items-start ms-3 justify-content-center"
           >
-            <h5 class="card-title fw-bold">Code 8</h5>
-            <p class="card-text mt-n1">Car</p>
+            <h5 class="card-title fw-bold">Basic Wash</h5>
+            <p class="card-text mt-n1">Exterior hand wash & dry</p>
           </div>
         </div>
       </div>
     </div>
     <div class="col mb-3">
       <div class="card shadow-lg">
-        <div
-          class="card-body d-flex flex-column flex-lg-row justify-content-center align-items-center"
-        >
-          <i class="fas fa-truck-moving fa-4x icon"></i>
+        <div class="card-body d-flex justify-content-start align-items-center">
+          <i class="fas fa-broom fa-4x icon"></i>
           <div
-            class="d-flex flex-column align-items-center align-items-lg-start ms-0 ms-lg-2 justify-content-center"
+            class="d-flex flex-column align-items-start ms-3 justify-content-center"
           >
-            <h5 class="card-title fw-bold">Code 10</h5>
-            <p class="card-text mt-n1">Truck</p>
+            <h5 class="card-title fw-bold">Full Interior Cleaning</h5>
+            <p class="card-text mt-n1">Vacuum, dashboard polish & windows</p>
           </div>
         </div>
       </div>
     </div>
     <div class="col mb-3">
       <div class="card shadow-lg">
-        <div
-          class="card-body d-flex flex-column flex-lg-row justify-content-center align-items-center"
-        >
-          <i class="fas fa-book-open fa-4x icon"></i>
+        <div class="card-body d-flex justify-content-start align-items-center">
+          <i class="fas fa-spray-can fa-4x icon"></i>
           <div
-            class="d-flex flex-column align-items-center align-items-lg-start ms-0 ms-lg-2 justify-content-center"
+            class="d-flex flex-column align-items-start ms-3 justify-content-center"
           >
-            <h5 class="card-title fw-bold">K53</h5>
-            <p class="card-text mt-n1">Learners License</p>
+            <h5 class="card-title fw-bold">Premium Detail</h5>
+            <p class="card-text mt-n1">
+              Full wash, wax, and deep interior clean
+            </p>
           </div>
         </div>
       </div>
@@ -51,7 +47,7 @@
 <script setup></script>
 
 <style scoped>
-.cards {
+.desktop-cards {
   position: relative;
   z-index: 2;
   margin-top: -3rem !important;
