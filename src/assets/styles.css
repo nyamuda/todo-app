@@ -2,9 +2,9 @@
 @import "@/assets/custom-theme.css";
 
 :root {
-  --primary-color: #68bd84;
-  --secondary-color: #646cff;
-  --accent-color: #34495e;
+  --primary-color: #f97316;
+  --secondary-color: #0d9488;
+  --accent-color: #e6871c;
   --dark-color: #2f4858;
   --main-font: "Oxygen", sans-serif;
   /* --primary-color:  #ff7f50;
@@ -14,6 +14,29 @@
 body {
   font-family: var(--main-font);
 }
+/*Bootstrap custom classes start*/
+.btn {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s;
+  -ms-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+  transition: background-color 0.5s;
+}
+
+/*Bootstrap custom classes end*/
 
 .cursor-pointer {
   cursor: pointer;

@@ -126,11 +126,11 @@ const slides = ref([
 </script>
 <style scoped>
 .btn.custom {
-  background-color: #e6871c;
+  background-color: var(--accent-color);
   transition: all 0.3s ease-out;
 }
 .btn.custom:hover {
-  background-color: #f24711;
+  background-color: var(--primary-color);
 }
 .slide-image {
   object-fit: cover;
