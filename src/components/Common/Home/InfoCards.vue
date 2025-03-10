@@ -1,5 +1,5 @@
 <template>
-  <div class="row row-cols-1 row-cols-lg-3 m-auto info-cards">
+  <div class="container row row-cols-1 row-cols-lg-3 m-auto info-cards">
     <div class="col mb-3">
       <div class="card shadow">
         <div class="card-body d-flex justify-content-start align-items-center">

@@ -1,8 +1,10 @@
 <template>
   <div class="home">
     <HeroSection />
-    <AboutUsSection />
-    <ServicesSection />
+    <div class="container">
+      <AboutUsSection />
+      <ServicesSection />
+    </div>
   </div>
 </template>
 
