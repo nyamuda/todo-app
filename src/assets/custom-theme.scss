@@ -1,0 +1,19 @@
+// Define your colors
+$primary: #f97316; // Orange
+$secondary: #0d9488; // Teal
+
+//Override Bootstrap primary and secondary buttons
+$btn-primary-bg: $primary;
+$btn-secondary-bg: $secondary;
+$input-border-color: $secondary;
+$input-focus-border-color: darken($secondary, 10%);
+
+// Override  Bootstrap text-primary (for text color)
+.text-primary {
+  color: $primary !important;
+}
+
+// Override Bootstrap bg-primary (for background color)
+.bg-primary {
+  background-color: $primary !important;
+}
