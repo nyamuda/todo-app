@@ -100,7 +100,8 @@ const account = {
           })
           .catch((error) => {
             const message =
-              error.response?.data?.message || rootState.failureMessage;
+              error.response?.data?.message ||
+              "There was an issue with your login. Please try again.";
             reject(message); // Reject with the error message
           })
           .finally(() => {
@@ -130,7 +131,8 @@ const account = {
           })
           .catch((error) => {
             const message =
-              error.response?.data?.message || rootState.failureMessage;
+              error.response?.data?.message ||
+              "There was an issue with your login. Please try again.";
             reject(message); // Reject with the error message
           })
           .finally(() => {
@@ -163,7 +165,8 @@ const account = {
           })
           .catch((error) => {
             const message =
-              error.response?.data?.message || rootState.failureMessage;
+              error.response?.data?.message ||
+              "There was an issue with your login. Please try again.";
             reject(message); // Reject with the error message
           })
           .finally(() => {
@@ -214,7 +217,8 @@ const account = {
               resolve("An email has been sent for verification.");
             } catch (error) {
               const message =
-                error.response?.data?.message || rootState.failureMessage;
+                error.response?.data?.message ||
+                "An error occurred during registration. Please try again.";
               reject(message);
             }
           })
