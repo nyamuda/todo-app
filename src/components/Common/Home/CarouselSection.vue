@@ -185,10 +185,8 @@ const slides = ref([
 
 #navigator-prev-btn:hover {
   background: none;
-  background-color: none !important;
 }
 #navigator-next-btn:hover {
   background: none;
-  background-color: none !important;
 }
 </style>

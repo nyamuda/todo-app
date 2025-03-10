@@ -245,6 +245,7 @@ const items = computed(() => {
 
 <style scoped>
 .top-bar {
-  background-color: rgba(255, 111, 97, 0.08); /* 50% opacity */
+  /* 50% opacity */
+  background-color: rgba(164, 216, 170, 0.08);
 }
 </style>

@@ -1,12 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Oxygen&display=swap");
 
 :root {
-  --primary-color: #ff7f50;
+  --primary-color: #68bd84;
   --secondary-color: #646cff;
   --accent-color: #34495e;
   --dark-color: #2f4858;
   --main-font: "Oxygen", sans-serif;
-  /* --primary-color: #646cff;
+  /* --primary-color:  #ff7f50;
   --secondary-color: #535bf2;*/
 }
 
