@@ -222,6 +222,12 @@ const account = {
               reject(message);
             }
           })
+          .catch((error) => {
+            const message =
+              error.response?.data?.message ||
+              "An error occurred during registration. Please try again.";
+            reject(message); // Reject with the error message
+          })
           .finally(() => (state.isRegistering = false));
       });
     },
