@@ -1,6 +1,8 @@
 <template>
   <div class="row">
+    <!-- Image section -->
     <div class="col-md-6"></div>
+    <!-- Information section -->
     <div class="col-md-6 d-flex flex-column align-items-start">
       <p class="heading-line rounded"></p>
       <p class="fs-4 text-capitalize mb-0">About us</p>
@@ -13,7 +15,7 @@
         you need a quick wash or full detailing, we bring professional-grade
         services to your doorstep.
       </p>
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center mb-4">
         <div
           class="d-flex flex-column align-items-start text-start bg-primary p-3"
         >
@@ -41,6 +43,36 @@
             ><span>Paint Protection & Waxing</span>
           </div>
         </d>
+      </div>
+      <div
+        class="d-flex flex-column flex-md-row justify-content-start justify-content-md-between w-100 gap-3"
+      >
+        <div class="card border-0">
+          <div class="d-flex justify-content-start align-items-center">
+            <span class="rounded-circle bg-primary text-light">
+              <i class="fas fa-phone-flip p-3"></i>
+            </span>
+            <div
+              class="d-flex flex-column align-items-start ms-3 justify-content-center"
+            >
+              <p class="card-title text-muted mb-0">Call us</p>
+              <p class="card-text fw-bold h5">+27 81 589 6615</p>
+            </div>
+          </div>
+        </div>
+        <div class="card border-0">
+          <div class="d-flex justify-content-start align-items-center">
+            <span class="rounded-circle bg-primary text-light">
+              <i class="fas fa-phone-flip p-3"></i>
+            </span>
+            <div
+              class="d-flex flex-column align-items-start ms-3 justify-content-center"
+            >
+              <p class="card-title text-muted mb-0">Email us</p>
+              <p class="card-text fw-bold h5">ptnrlab@gmail.com</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
