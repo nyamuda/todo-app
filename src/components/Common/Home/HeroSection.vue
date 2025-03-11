@@ -1,7 +1,10 @@
 <template>
   <section class="hero">
     <CarouselSection />
-    <InfoCards />
+    <!--Info cards mobile-->
+    <InfoCards class="d-flex d-md-none" />
+    <!-- Info cards desktop -->
+    <InfoCards class="container d-none d-md-flex" />
   </section>
 </template>
 
