@@ -1,9 +1,24 @@
 <template>
-  <div class="row">
+  <div class="row mt-5">
     <!-- Image section -->
-    <div class="col-md-6"></div>
+    <div class="row gx-2 col-lg-6 d-flex mb-5 mb-lg-0">
+      <div class="col-6 align-self-start">
+        <img
+          src="https://images.unsplash.com/photo-1565689876697-e467b6c54da2?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Car wash image"
+          class="img-fluid rounded"
+        />
+      </div>
+      <div class="col-6 align-self-end">
+        <img
+          src="https://images.unsplash.com/photo-1558683139-3ee31dae2261?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Car wash image"
+          class="img-fluid rounded"
+        />
+      </div>
+    </div>
     <!-- Information section -->
-    <div class="col-md-6 d-flex flex-column align-items-start">
+    <div class="col-lg-6 d-flex flex-column align-items-start">
       <p class="heading-line rounded"></p>
       <p class="fs-4 text-capitalize mb-0">About us</p>
       <h2 class="display-5 fw-bold mb-4">
@@ -45,7 +60,7 @@
         </d>
       </div>
       <div
-        class="d-flex flex-column flex-md-row justify-content-start justify-content-md-between w-100 gap-3"
+        class="d-flex flex-column flex-lg-row justify-content-start justify-content-lg-between w-100 gap-3"
       >
         <div class="card border-0">
           <div class="d-flex justify-content-start align-items-center">
@@ -63,7 +78,7 @@
         <div class="card border-0">
           <div class="d-flex justify-content-start align-items-center">
             <span class="rounded-circle bg-primary text-light">
-              <i class="fas fa-phone-flip p-3"></i>
+              <i class="fas fa-envelope p-3"></i>
             </span>
             <div
               class="d-flex flex-column align-items-start ms-3 justify-content-center"
@@ -77,3 +92,7 @@
     </div>
   </div>
 </template>
+
+<script setup>
+// import Image from "primevue/image";
+</script>
