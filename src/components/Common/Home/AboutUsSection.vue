@@ -23,6 +23,24 @@
             <p>Shining</p>
           </div>
         </div>
+        <d class="d-flex flex-column align-items-start gap-3 ms-3">
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-circle-check me-2 fs-5 text-primary"></i
+            ><span>Premium Hand Wash</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-circle-check me-2 fs-5 text-primary"></i
+            ><span>Exterior & Interior Detailing</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-circle-check me-2 fs-5 text-primary"></i
+            ><span>Leather Conditioning</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-circle-check me-2 fs-5 text-primary"></i
+            ><span>Paint Protection & Waxing</span>
+          </div>
+        </d>
       </div>
     </div>
   </div>

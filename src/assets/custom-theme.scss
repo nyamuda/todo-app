@@ -13,6 +13,10 @@ $input-focus-border-color: darken($secondary, 10%);
 .text-primary {
   color: $primary !important;
 }
+// Override  Bootstrap text-secondary (for text color)
+.text-secondary {
+  color: $secondary !important;
+}
 
 // Override Bootstrap bg-primary (for background color)
 .bg-primary {
