@@ -1,5 +1,5 @@
 <template>
-  <div class="row mt-5">
+  <div class="row flex-row flex-lg-row-reverse mt-5">
     <!-- Image section -->
     <div class="row gx-2 col-lg-6 d-flex mb-5 mb-lg-0">
       <div class="col-6 align-self-start">
