@@ -1,7 +1,7 @@
 <template>
   <div class="row mt-5 bg-primary p-5 g-3">
-    <div class="col-md-6 col-lg-3 text-light bg-primary">
-      <div class="card">
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-light bg-primary">
         <div class="card-body">
           <div
             class="card-text d-flex flex-column align-items-center text-center"
@@ -13,8 +13,8 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6 col-lg-3 text-light bg-primary">
-      <div class="card">
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-light bg-primary">
         <div class="card-body">
           <div
             class="card-text d-flex flex-column align-items-center text-center"
@@ -26,8 +26,8 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6 col-lg-3 text-light bg-primary">
-      <div class="card">
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-light bg-primary">
         <div class="card-body">
           <div
             class="card-text d-flex flex-column align-items-center text-center"
@@ -39,8 +39,8 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6 col-lg-3 text-light bg-primary">
-      <div class="card">
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-light bg-primary">
         <div class="card-body">
           <div
             class="card-text d-flex flex-column align-items-center text-center"
