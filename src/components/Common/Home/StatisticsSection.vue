@@ -1,6 +1,6 @@
 <template>
-  <div class="row mt-5 bg-primary p-5 w-100">
-    <div class="card col-sm-6 col-md-3 text-light bg-primary">
+  <div class="row mt-5 bg-primary p-5 w-100 gx-4">
+    <div class="card col-md-6 col-lg-3 text-light bg-primary">
       <div class="card-body">
         <div
           class="card-text d-flex flex-column align-items-center text-center"
@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <div class="card col-sm-6 col-md-3 text-light bg-primary">
+    <div class="card col-md-6 col-lg-3 text-light bg-primary">
       <div class="card-body">
         <div
           class="card-text d-flex flex-column align-items-center text-center"
@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div class="card col-sm-6 col-md-3 text-light bg-primary">
+    <div class="card col-md-6 col-lg-3 text-light bg-primary">
       <div class="card-body">
         <div
           class="card-text d-flex flex-column align-items-center text-center"
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="card col-sm-6 col-md-3 text-light bg-primary">
+    <div class="card col-md-6 col-lg-3 text-light bg-primary">
       <div class="card-body">
         <div
           class="card-text d-flex flex-column align-items-center text-center"
