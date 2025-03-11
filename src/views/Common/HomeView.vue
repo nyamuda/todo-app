@@ -3,7 +3,9 @@
     <HeroSection />
     <div class="container">
       <AboutUsSection />
-      <StatisticsSection />
+    </div>
+    <StatisticsSection />
+    <div class="container">
       <ServicesSection />
     </div>
   </div>
