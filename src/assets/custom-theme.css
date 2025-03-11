@@ -1,11 +1,15 @@
 .text-primary {
-  color: #f97316 !important;
+  color: #2b7a78 !important;
 }
 
 .text-secondary {
-  color: #0d9488 !important;
+  color: #3aafa9 !important;
 }
 
 .bg-primary {
-  background-color: #f97316 !important;
+  background-color: #2b7a78 !important;
+}
+
+.bg-secondary {
+  background-color: #3aafa9 !important;
 }/*# sourceMappingURL=custom-theme.css.map */

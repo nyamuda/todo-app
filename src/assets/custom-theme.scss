@@ -1,7 +1,7 @@
 // Define your colors
-$primary: #f97316; // Orange
-$secondary: #0d9488; // Teal
-$accent: #e6871c; // Golden Orange (Accent)
+$primary: #2b7a78;
+$secondary: #3aafa9;
+$accent: #fe7f2d;
 
 //Override Bootstrap primary and secondary buttons
 $btn-primary-bg: $primary;
@@ -22,3 +22,13 @@ $input-focus-border-color: darken($secondary, 10%);
 .bg-primary {
   background-color: $primary !important;
 }
+
+// Override Bootstrap bg-secondary (for background color)
+.bg-secondary {
+  background-color: $secondary !important;
+}
+
+//Override other Bootstrap classes
+$btn-primary-hover-bg: darken($primary, 8%);
+$btn-secondary-hover-bg: darken($secondary, 8%);
+$link-color: $secondary;

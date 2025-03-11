@@ -2,9 +2,9 @@
 @import "@/assets/custom-theme.css";
 
 :root {
-  --primary-color: #f97316;
-  --secondary-color: #0d9488;
-  --accent-color: #e6871c;
+  --primary-color: #2b7a78;
+  --secondary-color: #3aafa9;
+  --accent-color: #fe7f2d;
   --dark-color: #2f4858;
   --main-font: "Oxygen", sans-serif;
   /* --primary-color:  #ff7f50;
@@ -16,7 +16,7 @@ body {
 }
 /* Headings  start*/
 .heading-line {
-  border: 2px solid var(--primary-color);
+  border: 2px solid var(--accent-color);
   width: 2rem;
   margin-bottom: 0rem;
 }

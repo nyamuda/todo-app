@@ -34,7 +34,7 @@
         <div
           class="d-flex flex-column align-items-start text-start bg-primary p-3"
         >
-          <p class="display-3 fw-bold mb-0">50</p>
+          <p class="display-3 fw-bold mb-0 text-secondary">50</p>
           <div class="fs-5 fw-bold text-light">
             <p class="mb-0">Cars Washed &</p>
             <p>Shining</p>
