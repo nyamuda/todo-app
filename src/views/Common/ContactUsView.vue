@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid custom mt-5">
-    <TitleSection />
+    <TitleSection subtitle="Contact us" title="We’re Here to Help" />
     <p class="mb-4">
       Have any questions or need assistance with your tasks? Feel free to reach
       out to us. Our team is here to help you manage your tasks effectively and
