@@ -152,9 +152,9 @@ let submitForm = () => {
       .catch((message) => {
         toast.add({
           severity: "error",
-          summary: "Error Sending Email",
+          summary: "Error Sending Message",
           detail: message,
-          life: 15000,
+          life: 20000,
         });
       });
   }
