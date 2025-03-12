@@ -6,6 +6,13 @@
         title="What We Offer"
         align-items="center"
       />
+      <div class="row mb-4">
+        <p class="col-md-8 m-auto">
+          We offer professional car wash and detailing services to restore your
+          car’s shine and freshness. From hand washes to deep interior cleaning,
+          we do it all.
+        </p>
+      </div>
     </div>
     <!-- Add new service button (for only admins) -->
     <div v-if="isAdmin" class="d-flex justify-content-end mb-4">
