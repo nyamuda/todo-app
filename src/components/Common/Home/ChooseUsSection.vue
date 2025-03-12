@@ -11,7 +11,7 @@
         />
       </div>
       <!-- Content section -->
-      <div class="col-lg-6 text-start">
+      <div class="col-lg-6 text-start mt-2 mt-lg-0">
         <p>
           We provide access to a team of accomplished instructors who impart not
           only license-focused training but also a comprehensive understanding

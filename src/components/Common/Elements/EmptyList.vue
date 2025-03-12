@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center py-5">
+  <div class="text-center">
     <i class="fas fa-box-open fa-4x text-secondary"></i>
     <h5 class="mt-3">{{ title }}</h5>
     <p class="mt-3 text-muted">{{ message }}</p>

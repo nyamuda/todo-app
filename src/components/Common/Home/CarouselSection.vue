@@ -36,17 +36,17 @@
               <div
                 class="col-8 col-sm-12 m-auto d-flex flex-column flex-sm-row flex-wrap justify-content-center btn-container"
               >
-                <a
+                <router-link
                   class="btn custom text-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
-                  routerLink="/booking"
+                  to="/bookings/add"
                   role="button"
-                  >Book Now</a
+                  >Book Now</router-link
                 >
-                <a
+                <router-link
                   class="btn btn-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
-                  routerLink="/courses"
+                  to="/services"
                   role="button"
-                  >Our Courses</a
+                  >Our Services</router-link
                 >
               </div>
             </div>

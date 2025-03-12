@@ -6,8 +6,8 @@
     </div>
     <StatisticsSection />
     <div class="container">
-      <ChooseUsSection />
       <ServicesSection />
+      <ChooseUsSection />
     </div>
   </div>
 </template>

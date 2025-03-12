@@ -1,6 +1,6 @@
 <template>
   <!-- Services Start -->
-  <div class="mt-5">
+  <div v-if="services.length > 0" class="mt-5">
     <div class="text-center">
       <TitleSection
         subtitle="Car wash services"
@@ -32,13 +32,13 @@
         <div
           v-for="service in getTwoServices"
           :key="service.id"
-          class="col-md-6 mb-4"
+          class="col-md-6"
         >
           <ServiceItem :service="service" />
         </div>
-        <div class="m-auto">
+        <div class="m-auto mt-4">
           <router-link to="/services"
-            ><Button label="See more services" severity="contrast"
+            ><Button label="View all services" severity="contrast"
           /></router-link>
         </div>
       </div>
