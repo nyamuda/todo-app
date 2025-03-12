@@ -1,128 +1,97 @@
 <template>
-<div></div>
-  <div class="m-auto">
+  <div>
     <!-- Contact Start -->
-    <div class="">
-      <div class="container">
-        <div class="row g-4">
-          <div class="col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-            <h6 class="text-primary text-uppercase mb-2">Contact Us</h6>
-            <h1 class="display-6 mb-4">We’re Here to Help</h1>
-            <p class="mb-4">
-              Have any questions or need assistance with your tasks? Feel free
-              to reach out to us. Our team is here to help you manage your tasks
-              effectively and stay productive.
-            </p>
-            <p class="mb-4">
-              You can use the contact form below to send us a message. We're
-              available for inquiries regarding task management, technical
-              support, or feedback about the app.
-            </p>
-          </div>
-          <div class="col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="p-md-4 h-100 d-flex align-bookings-center">
-              <form @submit.prevent="submitForm">
-                <div class="row g-3">
-                  <!--Name field-->
-                  <div class="col-12">
-                    <div class="form-group">
-                      <FloatLabel variant="on">
-                        <InputText
-                          class="w-100"
-                          id="contactName"
-                          v-model="v$.name.$model"
-                          :invalid="v$.name.$error"
-                        />
-                        <label for="contactName">Your Name</label>
-                      </FloatLabel>
-                      <Message
-                        size="small"
-                        severity="error"
-                        v-if="v$.name.$error"
-                        variant="simple"
-                      >
-                        <div v-for="error of v$.name.$errors" :key="error.$uid">
-                          <div>{{ error.$message }}</div>
-                        </div>
-                      </Message>
-                    </div>
-                  </div>
-                  <!--Email field-->
-                  <div class="col-12">
-                    <div class="form-group">
-                      <FloatLabel variant="on">
-                        <InputText
-                          class="w-100"
-                          id="contactEmail"
-                          v-model="v$.email.$model"
-                          :invalid="v$.email.$error"
-                          type="email"
-                        />
-                        <label for="contactEmail">Email</label>
-                      </FloatLabel>
-                      <Message
-                        size="small"
-                        severity="error"
-                        v-if="v$.email.$error"
-                        variant="simple"
-                      >
-                        <div
-                          v-for="error of v$.email.$errors"
-                          :key="error.$uid"
-                        >
-                          <div>{{ error.$message }}</div>
-                        </div>
-                      </Message>
-                    </div>
-                  </div>
-                  <!--Message field-->
-                  <div class="col-12">
-                    <div class="form-group">
-                      <FloatLabel variant="on">
-                        <Textarea
-                          id="contactMessage"
-                          v-model="v$.message.$model"
-                          :invalid="v$.message.$error"
-                          rows="5"
-                          class="w-100"
-                          style="resize: none"
-                        />
-                        <label for="contactMessage">Message</label>
-                      </FloatLabel>
-                      <Message
-                        size="small"
-                        severity="error"
-                        v-if="v$.message.$error"
-                        variant="simple"
-                      >
-                        <div
-                          v-for="error of v$.message.$errors"
-                          :key="error.$uid"
-                        >
-                          <div>{{ error.$message }}</div>
-                        </div>
-                      </Message>
-                    </div>
-                  </div>
-
-                  <!--Submit button-->
-                  <div class="col-12">
-                    <Button
-                      fluid
-                      type="submit"
-                      :label="isContactingUs ? 'Sending message...' : 'Send'"
-                      icon="fas fa-paper-plane"
-                      :loading="isContactingUs"
-                      :disabled="v$.$errors.length > 0 || isContactingUs"
-                    />
-                  </div>
-                </div>
-              </form>
-            </div>
+    <form @submit.prevent="submitForm">
+      <div class="row g-3">
+        <!--Name field-->
+        <div class="col-12">
+          <div class="form-group">
+            <FloatLabel variant="on">
+              <InputText
+                class="w-100"
+                id="contactName"
+                v-model="v$.name.$model"
+                :invalid="v$.name.$error"
+              />
+              <label for="contactName">Your Name</label>
+            </FloatLabel>
+            <Message
+              size="small"
+              severity="error"
+              v-if="v$.name.$error"
+              variant="simple"
+            >
+              <div v-for="error of v$.name.$errors" :key="error.$uid">
+                <div>{{ error.$message }}</div>
+              </div>
+            </Message>
           </div>
         </div>
+        <!--Email field-->
+        <div class="col-12">
+          <div class="form-group">
+            <FloatLabel variant="on">
+              <InputText
+                class="w-100"
+                id="contactEmail"
+                v-model="v$.email.$model"
+                :invalid="v$.email.$error"
+                type="email"
+              />
+              <label for="contactEmail">Email</label>
+            </FloatLabel>
+            <Message
+              size="small"
+              severity="error"
+              v-if="v$.email.$error"
+              variant="simple"
+            >
+              <div v-for="error of v$.email.$errors" :key="error.$uid">
+                <div>{{ error.$message }}</div>
+              </div>
+            </Message>
+          </div>
+        </div>
+        <!--Message field-->
+        <div class="col-12">
+          <div class="form-group">
+            <FloatLabel variant="on">
+              <Textarea
+                id="contactMessage"
+                v-model="v$.message.$model"
+                :invalid="v$.message.$error"
+                rows="5"
+                class="w-100"
+                style="resize: none"
+              />
+              <label for="contactMessage">Message</label>
+            </FloatLabel>
+            <Message
+              size="small"
+              severity="error"
+              v-if="v$.message.$error"
+              variant="simple"
+            >
+              <div v-for="error of v$.message.$errors" :key="error.$uid">
+                <div>{{ error.$message }}</div>
+              </div>
+            </Message>
+          </div>
+        </div>
+
+        <!--Submit button-->
+        <div class="col-3">
+          <Button
+            fluid
+            type="submit"
+            :label="isContactingUs ? 'Sending message...' : 'Send'"
+            icon="fas fa-paper-plane"
+            :loading="isContactingUs"
+            :disabled="v$.$errors.length > 0 || isContactingUs"
+          />
+        </div>
       </div>
-    </div>
+    </form>
     <!-- Contact End -->
   </div>
 </template>

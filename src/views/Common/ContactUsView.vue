@@ -1,25 +1,46 @@
 <template>
-  <div class="container-fluid custom mt-5">
+  <div class="container mt-5">
     <TitleSection subtitle="Contact us" title="We’re Here to Help" />
-    <p class="mb-4">
-      Have any questions or need assistance with your tasks? Feel free to reach
-      out to us. Our team is here to help you manage your tasks effectively and
-      stay productive.
-    </p>
-    <p class="mb-4">
-      You can use the contact form below to send us a message. We're available
-      for inquiries regarding task management, technical support, or feedback
-      about the app.
-    </p>
-    <div class="row row-cols-1 row-cols-md-2">
-      <div class="col-md-8">
-        <ContactUsItem />
-      </div>
 
-      <div class="col-md-4 d-flex align-items-center">
-        <img src="" alt="" class="img-fluid" />
+    <!--Contact us section start-->
+    <section class="mb-4">
+      <!--Section description-->
+      <p class="text-start mb-5">
+        Have any questions or need assistance? Feel free to reach out with any
+        questions or concerns you may have. We strive to provide prompt
+        responses, typically within 24 hours on business days.
+      </p>
+
+      <div class="row">
+        <!--Grid column-->
+        <div class="col-md-9 mb-md-0 mb-5">
+          <ContactUsItem />
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-3 text-center">
+          <ul class="list-unstyled mb-0">
+            <li>
+              <i class="fas fa-map-marker-alt fa-2x"></i>
+              <p>San Francisco, CA 94126, USA</p>
+            </li>
+
+            <li>
+              <i class="fas fa-phone mt-4 fa-2x"></i>
+              <p>+ 01 234 567 89</p>
+            </li>
+
+            <li>
+              <i class="fas fa-envelope mt-4 fa-2x"></i>
+              <p>contact@mdbootstrap.com</p>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
       </div>
-    </div>
+    </section>
+    <!--Contact us section end-->
   </div>
 </template>
 
