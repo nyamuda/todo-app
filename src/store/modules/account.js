@@ -353,7 +353,8 @@ const account = {
           })
           .catch((error) => {
             const message =
-              error.response?.data?.message || rootState.failureMessage;
+              error.response?.data?.message ||
+              "We couldn’t send your message. Please try again in a few minutes.";
             reject(message);
           })
           .finally(() => {

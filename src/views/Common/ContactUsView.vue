@@ -23,17 +23,17 @@
           <ul class="list-unstyled mb-0">
             <li>
               <i class="fas fa-map-marker-alt fa-2x"></i>
-              <p>San Francisco, CA 94126, USA</p>
+              <p>123 Street, Cape Town, South Africa</p>
             </li>
 
             <li>
               <i class="fas fa-phone mt-4 fa-2x"></i>
-              <p>+ 01 234 567 89</p>
+              <p>+27 81 589 6615</p>
             </li>
 
             <li>
               <i class="fas fa-envelope mt-4 fa-2x"></i>
-              <p>contact@mdbootstrap.com</p>
+              <p>ptnrlab@gmail.com</p>
             </li>
           </ul>
         </div>
