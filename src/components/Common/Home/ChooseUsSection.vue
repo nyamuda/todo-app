@@ -1,9 +1,7 @@
 <template>
   <div class="row row-cols-1 row-cols-lg-2 mt-5">
     <div class="col text-start">
-      <p class="heading-line rounded"></p>
-      <p class="fs-4 text-capitalize mb-0">Why Choose Us</p>
-      <h2 class="display-5 fw-bold mb-4">Precision in Training</h2>
+      <TitleSection subtitle="Why Choose Us" title="Precision in Training" />
       <p>
         We provide access to a team of accomplished instructors who impart not
         only license-focused training but also a comprehensive understanding of
@@ -68,3 +66,7 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import TitleSection from "../Elements/TitleSection.vue";
+</script>
