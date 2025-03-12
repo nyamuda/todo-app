@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div class="text-center pb-2">
-      <h6 class="text-primary text-uppercase font-weight-bold">Services</h6>
-      <h1 class="mb-4">What We Offer</h1>
+    <div class="text-center">
+      <TitleSection subtitle="Services" title="What We Offer" />
     </div>
     <!-- Add new service button (for only admins) -->
     <div v-if="isAdmin" class="d-flex justify-content-end mb-4">
@@ -53,6 +52,7 @@ import Button from "primevue/button";
 import ServiceItem from "./ServiceItem.vue";
 import { useToast } from "primevue/usetoast";
 import EmptyList from "../Common/Elements/EmptyList.vue";
+import TitleSection from "../Common/Elements/TitleSection.vue";
 
 let store = useStore();
 
