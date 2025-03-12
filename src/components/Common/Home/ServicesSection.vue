@@ -1,6 +1,6 @@
 <template>
   <!-- Services Start -->
-  <div>
+  <div class="mt-5">
     <div class="text-center">
       <TitleSection
         subtitle="Car wash services"
@@ -30,13 +30,19 @@
       <div class="row" v-else-if="services.length > 0 && !isGettingServices">
         <!--Service items-->
         <div
-          v-for="service in services"
+          v-for="service in getTwoServices"
           :key="service.id"
           class="col-md-6 mb-4"
         >
           <ServiceItem :service="service" />
         </div>
+        <div class="m-auto">
+          <router-link to="/services"
+            ><Button label="See more services" severity="contrast"
+          /></router-link>
+        </div>
       </div>
+      <!-- No services -->
       <EmptyList
         v-else
         title="No Services Available"
@@ -52,10 +58,10 @@
 import { onMounted, computed } from "vue";
 import TitleSection from "../Elements/TitleSection.vue";
 import { useStore } from "vuex";
-import ServiceItemSkeleton from "./ServiceItemSkeleton.vue";
+import ServiceItemSkeleton from "@/components/Services/ServiceItemSkeleton.vue";
 import Button from "primevue/button";
-import EmptyList from "../Common/Elements/EmptyList.vue";
-import ServiceItem from "./ServiceItem.vue";
+import EmptyList from "../Elements/EmptyList.vue";
+import ServiceItem from "@/components/Services/ServiceItem.vue";
 
 let store = useStore();
 let services = computed(() => store.state.services.services);
