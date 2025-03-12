@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="text-center">
-      <TitleSection subtitle="Services" title="What We Offer" />
+      <TitleSection
+        subtitle="Services"
+        title="What We Offer"
+        align-items="center"
+      />
     </div>
     <!-- Add new service button (for only admins) -->
     <div v-if="isAdmin" class="d-flex justify-content-end mb-4">

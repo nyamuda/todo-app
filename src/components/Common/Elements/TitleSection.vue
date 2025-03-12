@@ -1,5 +1,5 @@
 <template>
-  <div :class="textAlignClass">
+  <div :class="alignItemsClass + ' d-flex flex-column'">
     <p class="heading-line rounded"></p>
     <p class="fs-4 text-capitalize mb-0">{{ subtitle }}</p>
     <h2 class="display-5 fw-bold mb-4">{{ title }}</h2>
@@ -15,20 +15,20 @@ let props = defineProps({
   subtitle: {
     type: String,
   },
-  textAlign: {
+  alignItems: {
     type: String,
     default: "start",
   },
 });
 
 //Class to use to align the items
-let textAlignClass = computed(() => {
-  if (props.textAlign == "center") {
-    return "text-center";
-  } else if (props.textAlign == "end") {
-    return "text-end";
+let alignItemsClass = computed(() => {
+  if (props.alignItems == "center") {
+    return "align-items-center";
+  } else if (props.alignItems == "end") {
+    return "align-items-end";
   } else {
-    return "text-start";
+    return "align-items-start";
   }
 });
 </script>
