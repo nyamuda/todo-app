@@ -19,11 +19,10 @@
     </div>
     <!-- Information section -->
     <div class="col-lg-6 d-flex flex-column align-items-start">
-      <p class="heading-line rounded"></p>
-      <p class="fs-4 text-capitalize mb-0">About us</p>
-      <h2 class="display-5 fw-bold mb-4">
-        Premium Car Care for a Lasting Shine
-      </h2>
+      <TitleSection
+        subtitle="About us"
+        title="Premium Car Care for a Lasting Shine"
+      />
       <p>
         Sparkle Auto Wash is a trusted mobile car wash service dedicated to
         delivering high-quality vehicle cleaning at your convenience. Whether
@@ -94,5 +93,5 @@
 </template>
 
 <script setup>
-// import Image from "primevue/image";
+import TitleSection from "../Elements/TitleSection.vue";
 </script>
