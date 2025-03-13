@@ -23,7 +23,10 @@ onMounted(() => {
   //Check if user is authenticated or not
   store.dispatch("account/authenticateUser");
   //get all the facts about the company
-  store.dispatch("company/getCompanyFacts");
+  store
+    .dispatch("company/getCompanyFacts")
+    .then(() => {})
+    .catch(() => {});
 });
 </script>
 

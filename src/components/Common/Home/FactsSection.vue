@@ -22,9 +22,9 @@
             class="card-text d-flex flex-column align-items-center text-center"
           >
             <span><i class="fas fa-car fa-3x"></i></span>
-            <span class="display-4 fw-bold mt-2 mb-1 text-secondary"
-              >>{{ companyFacts.totalCompletedBookings }}</span
-            >
+            <span class="display-4 fw-bold mt-2 mb-1 text-secondary">{{
+              companyFacts.totalCompletedBookings
+            }}</span>
             <span class="fs-5 fw-bold">Cars Washed</span>
           </div>
         </div>

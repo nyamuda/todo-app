@@ -39,7 +39,7 @@ const services = {
       });
     },
     //fetch service by ID
-    async getService({ rootState }, id) {
+    getService({ rootState }, id) {
       return new Promise((resolve, reject) => {
         axios
           .get(`${rootState.apiUrl}/services/${id}`)

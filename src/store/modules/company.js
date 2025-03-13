@@ -52,7 +52,7 @@ const company = {
     },
 
     // Fetch a company by ID
-    async getCompany({ rootState }, id) {
+    getCompany({ rootState }, id) {
       return new Promise((resolve, reject) => {
         axios
           .get(`${rootState.apiUrl}/companies/${id}`)
@@ -68,7 +68,7 @@ const company = {
     },
 
     // Fetch some facts (e.g years in service) about the company using the company ID
-    async getCompanyFacts({ commit, rootState }, id) {
+    getCompanyFacts({ commit, rootState }, id) {
       return new Promise((resolve, reject) => {
         axios
           .get(`${rootState.apiUrl}/companies/${id}/facts`)
@@ -76,8 +76,9 @@ const company = {
             commit("setCompanyFacts", response.data);
             resolve();
           })
-          .catch(() => {
+          .catch((ex) => {
             reject();
+            console.log(ex);
           });
       });
     },
