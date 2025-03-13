@@ -12,7 +12,7 @@ const company = {
       company: {},
       totalYearsInService: 0,
       totalCompletedBookings: 0,
-      totalHappyUsers: 0,
+      totalHappyCustomers: 0,
       overallRating: 0,
     },
   }),

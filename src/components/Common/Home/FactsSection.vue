@@ -7,7 +7,9 @@
             class="card-text d-flex flex-column align-items-center text-center"
           >
             <span><i class="fas fa-users fa-3x"></i></span>
-            <span class="display-4 fw-bold mt-2 mb-1 text-secondary">500</span>
+            <span class="display-4 fw-bold mt-2 mb-1 text-secondary">{{
+              companyFacts.totalHappyCustomers
+            }}</span>
             <span class="fs-5 fw-bold">Happy customers</span>
           </div>
         </div>
@@ -20,7 +22,9 @@
             class="card-text d-flex flex-column align-items-center text-center"
           >
             <span><i class="fas fa-car fa-3x"></i></span>
-            <span class="display-4 fw-bold mt-2 mb-1 text-secondary">183</span>
+            <span class="display-4 fw-bold mt-2 mb-1 text-secondary"
+              >>{{ companyFacts.totalCompletedBookings }}</span
+            >
             <span class="fs-5 fw-bold">Cars Washed</span>
           </div>
         </div>
@@ -33,7 +37,9 @@
             class="card-text d-flex flex-column align-items-center text-center"
           >
             <span><i class="fas fa-award fa-3x"></i></span>
-            <span class="display-4 fw-bold mt-2 mb-1 text-secondary">3</span>
+            <span class="display-4 fw-bold mt-2 mb-1 text-secondary">{{
+              companyFacts.totalYearsInService
+            }}</span>
             <span class="fs-5 fw-bold">Years of Service</span>
           </div>
         </div>
@@ -46,9 +52,9 @@
             class="card-text d-flex flex-column align-items-center text-center"
           >
             <span><i class="fas fa-star fa-3x"></i></span>
-            <span class="display-4 fw-bold mt-2 mb-1 text-secondary"
-              >4.8/5</span
-            >
+            <span class="display-4 fw-bold mt-2 mb-1 text-secondary">{{
+              companyFacts.overallRating
+            }}</span>
             <span class="fs-5 fw-bold">Satisfaction Rating</span>
           </div>
         </div>
@@ -56,6 +62,15 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+
+let store = useStore();
+
+let companyFacts = computed(() => store.state.company.companyFacts);
+</script>
 
 <style scoped>
 .card {
