@@ -136,6 +136,7 @@ const items = computed(() => {
     return [
       { label: "Home", icon: "fas fa-house", route: "/" },
       { label: "Dashboard", icon: "fas fa-gauge", route: "/admin" },
+      { label: "Company Details", icon: "fas fa-building", route: "/company" },
       {
         label: "Bookings",
         icon: "fas fa-calendar-check",
