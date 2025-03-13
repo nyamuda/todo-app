@@ -37,7 +37,7 @@
                 class="col-8 col-sm-12 m-auto d-flex flex-column flex-sm-row flex-wrap justify-content-center btn-container"
               >
                 <router-link
-                  class="btn custom text-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
+                  class="btn btn-primary text-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
                   to="/bookings/add"
                   role="button"
                   >Book Now</router-link
