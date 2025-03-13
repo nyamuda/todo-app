@@ -2,7 +2,7 @@
   <div class="add-booking-container container m-auto">
     <h2 class="add-booking-title text-start">Book a car wash session</h2>
 
-    <!--For guest users start-->
+    <!--Form guest users start-->
     <form
       @submit.prevent="submitForm"
       class="add-booking-form needs-validation"
@@ -211,7 +211,7 @@
         :disabled="v$.$errors.length > 0 || isCreatingBooking"
       />
     </form>
-    <!--For guest users end-->
+    <!--Form guest users end-->
   </div>
 </template>
 

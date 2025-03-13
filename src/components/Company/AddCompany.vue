@@ -2,7 +2,7 @@
   <div class="add-booking-container container m-auto">
     <h2 class="add-booking-title text-start">Add company information</h2>
 
-    <!--For guest users start-->
+    <!--Form start-->
     <form
       @submit.prevent="submitForm"
       class="add-booking-form needs-validation"
@@ -127,40 +127,19 @@
         </Message>
       </div>
 
-      <!-- Additional notes input -->
-      <div class="form-group">
-        <FloatLabel variant="on">
-          <Textarea
-            id="bookingAdditionalNotes"
-            v-model="v$.additionalNotes.$model"
-            :invalid="v$.additionalNotes.$error"
-            rows="5"
-            class="w-100"
-            style="resize: none"
-          />
-          <label for="bookingAdditionalNotes">Additional notes</label>
-        </FloatLabel>
-        <Message
-          size="small"
-          severity="error"
-          v-if="v$.additionalNotes.$error"
-          variant="simple"
-        >
-          <div v-for="error of v$.additionalNotes.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </Message>
-      </div>
-
       <Button
         type="submit"
-        :label="isCreatingCompany ? 'Creating booking...' : 'Book car wash'"
+        :label="
+          isCreatingCompany
+            ? 'Creating information...'
+            : 'Create company information'
+        "
         icon="fas fa-plus"
         :loading="isCreatingCompany"
         :disabled="v$.$errors.length > 0 || isCreatingCompany"
       />
     </form>
-    <!--For guest users end-->
+    <!--Form end-->
   </div>
 </template>
 
@@ -175,7 +154,6 @@ import DatePicker from "primevue/datepicker";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
-import Textarea from "primevue/textarea";
 import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
 
@@ -221,16 +199,16 @@ const submitForm = () => {
     .then((message) => {
       toast.add({
         severity: "success",
-        summary: "Booking Created",
+        summary: "Company Information Created",
         detail: message,
-        life: 20000,
+        life: 5000,
       });
-      router.push("/");
+      router.push("/company");
     })
     .catch((message) => {
       toast.add({
         severity: "error",
-        summary: "Booking Failed",
+        summary: "Error",
         detail: message,
         life: 10000,
       });
