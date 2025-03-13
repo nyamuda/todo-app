@@ -7,6 +7,7 @@ import statuses from "./modules/statuses";
 import images from "./modules/images";
 import features from "./modules/features";
 import feedback from "./modules/feedback";
+import company from "./modules/company";
 
 export default createStore({
   state() {
@@ -30,5 +31,6 @@ export default createStore({
     images,
     features,
     feedback,
+    company,
   },
 });
