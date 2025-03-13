@@ -12,11 +12,11 @@
         <FloatLabel variant="on">
           <InputText
             class="w-100"
-            id="bookingName"
+            id="companyName"
             v-model="v$.name.$model"
             :invalid="v$.name.$error"
           />
-          <label for="bookingName">Name</label>
+          <label for="companyName">Company name</label>
         </FloatLabel>
         <Message
           size="small"
@@ -35,12 +35,12 @@
         <FloatLabel variant="on">
           <InputText
             class="w-100"
-            id="bookingEmail"
+            id="companyEmail"
             v-model="v$.email.$model"
             :invalid="v$.email.$error"
             type="email"
           />
-          <label for="bookingEmail">Email</label>
+          <label for="companyEmail">Company email</label>
         </FloatLabel>
         <Message
           size="small"
@@ -59,12 +59,12 @@
         <FloatLabel variant="on">
           <InputText
             class="w-100"
-            id="bookingPhone"
+            id="companyPhone"
             v-model="v$.phone.$model"
             :invalid="v$.phone.$error"
             type="tel"
           />
-          <label for="bookingPhone">Phone</label>
+          <label for="companyPhone">Company phone number</label>
         </FloatLabel>
         <Message
           size="small"
@@ -78,104 +78,53 @@
         </Message>
       </div>
 
-      <!-- Vehicle type input -->
+      <!-- Address input -->
       <div class="form-group">
         <FloatLabel variant="on">
           <InputText
             class="w-100"
-            id="bookingVehicleType"
-            v-model="v$.vehicleType.$model"
-            :invalid="v$.vehicleType.$error"
+            id="companyAddress"
+            v-model="v$.address.$model"
+            :invalid="v$.address.$error"
           />
-          <label for="bookingVehicleType">Vehicle type</label>
+          <label for="companyAddress">Company Address</label>
         </FloatLabel>
         <Message
           size="small"
           severity="error"
-          v-if="v$.vehicleType.$error"
+          v-if="v$.address.$error"
           variant="simple"
         >
-          <div v-for="error of v$.vehicleType.$errors" :key="error.$uid">
+          <div v-for="error of v$.address.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
         </Message>
       </div>
 
-      <!-- Location input -->
-      <div class="form-group">
+      <!-- Year founded input -->
+      <div class="form-group col-md-6">
         <FloatLabel variant="on">
-          <InputText
+          <DatePicker
             class="w-100"
-            id="bookingLocation"
-            v-model="v$.location.$model"
-            :invalid="v$.location.$error"
+            id="yearFounded"
+            v-model="v$.yearFounded.$model"
+            :invalid="v$.yearFounded.$error"
+            fluid
+            showIcon
+            iconDisplay="input"
           />
-          <label for="bookingLocation">Location</label>
+          <label for="yearFounded">Year company was founded</label>
         </FloatLabel>
         <Message
           size="small"
           severity="error"
-          v-if="v$.location.$error"
+          v-if="v$.yearFounded.$error"
           variant="simple"
         >
-          <div v-for="error of v$.location.$errors" :key="error.$uid">
+          <div v-for="error of v$.yearFounded.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
         </Message>
-      </div>
-      <div class="row gap-3 gap-lg-0">
-        <!-- Service type input -->
-        <div class="form-group col-md-6">
-          <FloatLabel variant="on">
-            <Select
-              class="w-100"
-              id="bookingServiceType"
-              v-model="v$.serviceTypeId.$model"
-              :options="services"
-              optionLabel="name"
-              optionValue="id"
-              :invalid="v$.serviceTypeId.$error"
-            />
-            <label for="bookingServiceType">Service type</label>
-          </FloatLabel>
-          <Message
-            size="small"
-            severity="error"
-            v-if="v$.serviceTypeId.$error"
-            variant="simple"
-          >
-            <div v-for="error of v$.serviceTypeId.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div>
-          </Message>
-        </div>
-        <!-- Date and time -->
-        <div class="form-group col-md-6">
-          <FloatLabel variant="on">
-            <DatePicker
-              class="w-100"
-              id="bookingScheduledAt"
-              v-model="v$.scheduledAt.$model"
-              showTime
-              hourFormat="12"
-              :invalid="v$.scheduledAt.$error"
-              fluid
-              showIcon
-              iconDisplay="input"
-            />
-            <label for="bookingScheduledAt">Date and time</label>
-          </FloatLabel>
-          <Message
-            size="small"
-            severity="error"
-            v-if="v$.scheduledAt.$error"
-            variant="simple"
-          >
-            <div v-for="error of v$.scheduledAt.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div>
-          </Message>
-        </div>
       </div>
 
       <!-- Additional notes input -->
@@ -205,10 +154,10 @@
 
       <Button
         type="submit"
-        :label="isCreatingBooking ? 'Creating booking...' : 'Book car wash'"
+        :label="isCreatingCompany ? 'Creating booking...' : 'Book car wash'"
         icon="fas fa-plus"
-        :loading="isCreatingBooking"
-        :disabled="v$.$errors.length > 0 || isCreatingBooking"
+        :loading="isCreatingCompany"
+        :disabled="v$.$errors.length > 0 || isCreatingCompany"
       />
     </form>
     <!--For guest users end-->
@@ -221,7 +170,6 @@ import { useStore } from "vuex";
 //Vuelidate for login form validation
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers, minLength } from "@vuelidate/validators";
-import Select from "primevue/select";
 import { Message } from "primevue";
 import DatePicker from "primevue/datepicker";
 import InputText from "primevue/inputtext";
@@ -236,19 +184,12 @@ const toast = useToast();
 const router = useRouter();
 
 onMounted(() => {
+  //show form errors
   v$._value.$touch();
-  // Get the service type ID from the query parameter and ensure it's a number
-  const queryServiceTypeId = Number(
-    router.currentRoute.value.query.serviceTypeId
-  );
-  //populate the form with the service type with the given ID
-  if (queryServiceTypeId) {
-    guestUserForm.value.serviceTypeId = queryServiceTypeId;
-  }
 });
 
 // Form data
-const guestUserForm = ref({
+const companyForm = ref({
   name: "",
   email: "",
   phone: "",
@@ -269,15 +210,14 @@ const rules = {
   },
   address: { required },
   yearFounded: { required },
-
 };
 
-const v$ = useVuelidate(rules, guestUserForm.value);
+const v$ = useVuelidate(rules, companyForm.value);
 //form validation with Vuelidate end
 // Submit form
 const submitForm = () => {
   store
-    .dispatch("bookings/addGuestBooking", { booking: guestUserForm.value })
+    .dispatch("company/addCompany", { booking: companyForm.value })
     .then((message) => {
       toast.add({
         severity: "success",
@@ -298,11 +238,7 @@ const submitForm = () => {
 };
 
 //show loading button or not
-let isCreatingBooking = computed(
-  () => store.state.bookings.isCreatingGuestBooking
-);
-//available car wash services
-let services = computed(() => store.state.services.services);
+let isCreatingCompany = computed(() => store.state.company.isCreatingCompany);
 </script>
 
 <style scoped></style>
