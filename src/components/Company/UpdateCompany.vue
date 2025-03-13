@@ -1,12 +1,9 @@
 <template>
-  <div class="add-company-container container m-auto">
-    <h2 class="add-company-title text-start">Add company information</h2>
+  <div class="container m-auto">
+    <h2 class="text-start">Add company information</h2>
 
     <!--Form start-->
-    <form
-      @submit.prevent="submitForm"
-      class="add-company-form needs-validation"
-    >
+    <form @submit.prevent="submitForm" class="needs-validation">
       <!-- Name input -->
       <div class="form-group">
         <FloatLabel variant="on">
@@ -202,14 +199,14 @@ const v$ = useVuelidate(rules, companyForm.value);
 // Submit form
 const submitForm = () => {
   store
-    .dispatch("company/addCompany", {
-      company: companyForm.value,
+    .dispatch("company/updateCompany", {
+      updatedCompany: companyForm.value,
       id: id.value,
     })
     .then((message) => {
       toast.add({
         severity: "success",
-        summary: "Company Information Created",
+        summary: "Company Information Updated",
         detail: message,
         life: 5000,
       });

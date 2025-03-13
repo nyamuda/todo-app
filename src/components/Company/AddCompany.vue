@@ -1,12 +1,9 @@
 <template>
-  <div class="add-booking-container container m-auto">
-    <h2 class="add-booking-title text-start">Add company information</h2>
+  <div class="container m-auto">
+    <h2 class="text-start">Add company information</h2>
 
     <!--Form start-->
-    <form
-      @submit.prevent="submitForm"
-      class="add-booking-form needs-validation"
-    >
+    <form @submit.prevent="submitForm" class="needs-validation">
       <!-- Name input -->
       <div class="form-group">
         <FloatLabel variant="on">
@@ -195,7 +192,7 @@ const v$ = useVuelidate(rules, companyForm.value);
 // Submit form
 const submitForm = () => {
   store
-    .dispatch("company/addCompany", { booking: companyForm.value })
+    .dispatch("company/addCompany", { company: companyForm.value })
     .then((message) => {
       toast.add({
         severity: "success",
