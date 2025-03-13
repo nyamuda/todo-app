@@ -32,21 +32,20 @@
     </ul>
   </div>
   <!-- Company information not available -->
-  <div
-    v-else
-    class="card p-4 text-center border-0 bg-warning bg-opacity-25 shadow-sm"
-  >
-    <h5 class="text-warning">
-      <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
-    </h5>
-    <p class="mb-3 text-dark fw-bold">
-      Company information is missing! Please add company details.
-    </p>
-    <div class="d-flex justify-content-end">
+  <div v-else>
+    <div class="text-end">
       <router-link to="/company/add">
-        <Button label="Create company infor" icon="fas fa-plus" size="small" />
+        <Button
+          label="Create company information"
+          icon="fas fa-plus"
+          size="small"
+        />
       </router-link>
     </div>
+    <EmptyList
+      title="No information available"
+      message="Company information is missing! Please add company details."
+    />
   </div>
 </template>
 
@@ -54,6 +53,7 @@
 import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import Button from "primevue/button";
+import EmptyList from "../Common/Elements/EmptyList.vue";
 
 let store = useStore();
 
@@ -65,7 +65,7 @@ onMounted(async () => {
 //
 let company = computed(() => {
   //get the company information from an array
-  let companies = store.state.companies;
+  let companies = store.state.company;
   if (companies.length > 0) {
     return companies[0];
   } else {
