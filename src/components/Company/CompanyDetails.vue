@@ -1,45 +1,59 @@
 <template>
- <!-- Company information available -->
+  <!-- Company information available -->
   <div v-if="company" class="card p-4 shadow-sm border-0">
+    <div class="d-flex justify-content-end">
+      <router-link to="/company/update">
+        <Button label="Create company infor" icon="fas fa-plus" size="small" />
+      </router-link>
+      <router-link to="/company/add">
+        <Button label="Create company infor" icon="fas fa-plus" size="small" />
+      </router-link>
+    </div>
     <h5 class="card-title text-primary mb-3">
-      <i class="fas fa-building"></i> Our Company
+      <i class="fas fa-building"></i> Company information
     </h5>
     <ul class="list-unstyled mb-0">
       <li class="mb-2">
         <i class="fas fa-map-marker-alt text-danger"></i>
-        <strong>Address:</strong> 123 Main Street, City, Country
+        <strong>Address:</strong> {{ company.name }}
       </li>
       <li class="mb-2">
         <i class="fas fa-phone-alt text-success"></i>
-        <strong>Phone:</strong> +1 (555) 123-4567
+        <strong>Phone:</strong> {{ company.phone }}
       </li>
       <li class="mb-2">
         <i class="fas fa-envelope text-warning"></i>
-        <strong>Email:</strong> info@company.com
+        <strong>Email:</strong>{{ company.email }}
       </li>
       <li class="mb-2">
         <i class="fas fa-calendar-alt text-info"></i>
-        <strong>Founded:</strong> 2005
+        <strong>Founded:</strong> {{ company.yearFounded }}
       </li>
     </ul>
   </div>
   <!-- Company information not available -->
-  <div class="card p-4 text-center border-0 bg-warning bg-opacity-25 shadow-sm">
+  <div
+    v-else
+    class="card p-4 text-center border-0 bg-warning bg-opacity-25 shadow-sm"
+  >
     <h5 class="text-warning">
       <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
     </h5>
     <p class="mb-3 text-dark fw-bold">
       Company information is missing! Please add company details.
     </p>
-    <a href="/admin/company/create" class="btn btn-warning fw-bold">
-      <i class="fas fa-plus-circle me-2"></i> Create Company Info
-    </a>
+    <div class="d-flex justify-content-end">
+      <router-link to="/company/add">
+        <Button label="Create company infor" icon="fas fa-plus" size="small" />
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
+import Button from "primevue/button";
 
 let store = useStore();
 
