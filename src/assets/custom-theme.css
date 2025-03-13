@@ -1,3 +1,14 @@
+.btn-primary {
+  background-color: #2b7a78 !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #3aafa9 !important;
+  border-color: #3aafa9;
+  outline: none !important;
+}
+
 .text-primary {
   color: #2b7a78 !important;
 }

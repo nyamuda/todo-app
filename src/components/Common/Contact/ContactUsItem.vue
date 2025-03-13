@@ -80,7 +80,7 @@
         </div>
 
         <!--Submit button-->
-        <div class="col-3">
+        <div class="col-lg-3">
           <Button
             fluid
             type="submit"

@@ -9,9 +9,8 @@
       />
       <div class="row mb-4">
         <p class="col-md-8 m-auto">
-          We offer professional car wash and detailing services to restore your
-          car’s shine and freshness. From hand washes to deep interior cleaning,
-          we do it all.
+          Keep your car looking its best with our high-quality wash services. We
+          remove dirt, dust, and grime while protecting your vehicle’s finish.
         </p>
       </div>
 
@@ -37,9 +36,12 @@
           <ServiceItem :service="service" />
         </div>
         <div class="m-auto mt-4">
-          <router-link to="/services"
-            ><Button label="View all services" severity="contrast"
-          /></router-link>
+          <router-link
+            class="btn btn-primary btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
+            to="/services"
+            role="button"
+            >View all services</router-link
+          >
         </div>
       </div>
       <!-- No services -->
@@ -59,7 +61,7 @@ import { onMounted, computed } from "vue";
 import TitleSection from "../Elements/TitleSection.vue";
 import { useStore } from "vuex";
 import ServiceItemSkeleton from "@/components/Services/ServiceItemSkeleton.vue";
-import Button from "primevue/button";
+
 import EmptyList from "../Elements/EmptyList.vue";
 import ServiceItem from "@/components/Services/ServiceItem.vue";
 

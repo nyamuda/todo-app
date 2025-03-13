@@ -7,8 +7,6 @@
   --accent-color: #fe7f2d;
   --dark-color: #2f4858;
   --main-font: "Oxygen", sans-serif;
-  /* --primary-color:  #ff7f50;
-  --secondary-color: #535bf2;*/
 }
 
 body {
@@ -20,7 +18,6 @@ body {
   width: 2rem;
   margin-bottom: 0rem;
 }
-
 /* Headings end*/
 
 /*Bootstrap custom classes start*/

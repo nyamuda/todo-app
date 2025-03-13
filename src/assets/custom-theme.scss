@@ -9,6 +9,17 @@ $btn-secondary-bg: $secondary;
 $input-border-color: $secondary;
 $input-focus-border-color: darken($secondary, 10%);
 
+// Override  Bootstrap btn-primary (for button color)
+.btn-primary {
+  background-color: $btn-primary-bg !important;
+}
+// Override  Bootstrap btn-primary hover (for button color)
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: $btn-secondary-bg !important;
+  border-color: $btn-secondary-bg;
+  outline: none !important;
+}
 // Override  Bootstrap text-primary (for text color)
 .text-primary {
   color: $primary !important;
