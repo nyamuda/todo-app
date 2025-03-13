@@ -8,11 +8,22 @@ const company = {
     isUpdatingCompany: false,
     isGettingCompanies: false,
     isDeletingCompany: false,
+    companyFacts: {
+      company: {},
+      totalYearsInService: 0,
+      totalCompletedBookings: 0,
+      totalHappyUsers: 0,
+      overallRating: 0,
+    },
   }),
   mutations: {
     // Set the companies list
     setCompanies(state, companies) {
       state.companies = companies;
+    },
+    //set facts about the company
+    setCompanyFacts(state, facts) {
+      state.companyFacts = facts;
     },
   },
   getters: {},
@@ -49,14 +60,28 @@ const company = {
           .catch((ex) => {
             let message =
               ex.status == 404
-                ? "The company information you're looking for does not exist."
+                ? "The company you're looking for does not exist."
                 : "Something went wrong while fetching company details.";
             reject(message);
           });
       });
     },
 
- 
+    // Fetch some facts (e.g years in service) about the company using the company ID
+    async getCompanyFacts({ commit, rootState }, id) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${rootState.apiUrl}/companies/${id}/facts`)
+          .then((response) => {
+            commit("setCompanyFacts", response.data);
+            resolve();
+          })
+          .catch(() => {
+            reject();
+          });
+      });
+    },
+
     // Add a new company
     addCompany({ dispatch, state, rootState }, payload) {
       return new Promise((resolve, reject) => {
@@ -64,7 +89,9 @@ const company = {
         dispatch("setAuthorizationHeader");
         axios
           .post(`${rootState.apiUrl}/companies`, payload)
-          .then(() => resolve("The company has been successfully added."))
+          .then(() =>
+            resolve("The company information has been successfully added.")
+          )
           .catch((ex) => {
             let message =
               ex.response?.data?.message ||
@@ -84,7 +111,9 @@ const company = {
         dispatch("setAuthorizationHeader");
         axios
           .delete(`${rootState.apiUrl}/companies/${id}`)
-          .then(() => resolve("The company information has been successfully removed."))
+          .then(() =>
+            resolve("The company information has been successfully removed.")
+          )
           .catch((ex) => {
             let message =
               ex.response?.data?.message ||
@@ -105,30 +134,15 @@ const company = {
         dispatch("setAuthorizationHeader");
         axios
           .put(`${rootState.apiUrl}/companies/${id}`, updatedCompany)
-          .then(() => resolve("The company has been updated."))
+          .then(() => resolve("The company information has been updated."))
           .catch((ex) => {
             let message =
               ex.response?.data?.message ||
-              "Something went wrong. Unable to update the company.";
+              "Something went wrong. Unable to update the company information.";
             reject(message);
           })
           .finally(() => {
             state.isUpdatingCompany = false;
-          });
-      });
-    },
-
-    // Fetch the top-rated company
-    async getTopRatedCompany({ rootState }) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`${rootState.apiUrl}/companies/top-rated`)
-          .then((response) => resolve(response.data))
-          .catch((ex) => {
-            let message =
-              ex.response?.data?.message ||
-              "Something went wrong while fetching the top-rated company.";
-            reject(message);
           });
       });
     },
