@@ -1,0 +1,51 @@
+@import "./_variables";
+
+// Button customizations
+$btn-border-width: 0;
+$btn-primary-bg: $primary;
+$btn-primary-border: $primary;
+$btn-primary-hover-bg: darken($primary, 8%);
+$btn-primary-hover-border: darken($primary, 8%);
+$btn-primary-active-bg: darken($primary, 12%);
+$btn-primary-active-border: darken($primary, 12%);
+
+$btn-secondary-bg: $secondary;
+$btn-secondary-border: $secondary;
+$btn-secondary-hover-bg: darken($secondary, 8%);
+$btn-secondary-hover-border: darken($secondary, 8%);
+$btn-secondary-active-bg: darken($secondary, 12%);
+$btn-secondary-active-border: darken($secondary, 12%);
+
+// Remove focus outline/shadow
+$btn-focus-box-shadow: none !important;
+$input-btn-focus-box-shadow: none !important;
+
+// Form controls
+$input-border-color: $secondary;
+$input-focus-border-color: darken($secondary, 10%);
+
+// Links
+$link-color: $secondary;
+$link-hover-color: darken($secondary, 15%);
+
+// Custom class overrides (only if needed)
+// -------------------------------------------------------------
+// Remove outline on all elements
+*:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+// Optional: If you need to maintain text/background classes
+.text-primary {
+  color: $primary !important;
+}
+.text-secondary {
+  color: $secondary !important;
+}
+.bg-primary {
+  background-color: $primary !important;
+}
+.bg-secondary {
+  background-color: $secondary !important;
+}
