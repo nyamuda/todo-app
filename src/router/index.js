@@ -36,6 +36,10 @@ import PasswordReset from "@/components/Account/PasswordReset.vue";
 import VerificationResult from "@/components/Account/VerificationResult.vue";
 import AccountView from "@/views/Account/AccountView.vue";
 import PageNotFoundView from "@/views/Common/PageNotFoundView.vue";
+import CompanyView from "@/views/Company/CompanyView.vue";
+import CompanyDetails from "@/components/Company/CompanyDetails.vue";
+import AddCompany from "@/components/Company/AddCompany.vue";
+import UpdateCompany from "@/components/Company/UpdateCompany.vue";
 
 const routes = [
   {
@@ -274,6 +278,39 @@ const routes = [
         path: "login/oauth/google/callback", //Google Oauth redirect URL
         name: "GoogleLogin",
         component: LoginUser,
+      },
+    ],
+  },
+  //Company information routes
+  //only admins can access these routes
+  {
+    path: "/company",
+    name: "Company",
+    component: CompanyView,
+    beforeEnter: (to) => {
+      if (!store.state.account.loggedInUser.isAdmin) {
+        store.commit("account/setAttemptedUrl", to.fullPath); // Save the attempted URL
+        return { name: "Login" }; // Redirect to login page
+      }
+      return true;
+    },
+
+    children: [
+      {
+        path: "",
+        name: "CompanyDetails",
+        component: CompanyDetails,
+      },
+      {
+        path: "add",
+        name: "AddCompany",
+        component: AddCompany,
+      },
+
+      {
+        path: ":id/update",
+        name: " UpdateCompany",
+        component: UpdateCompany,
       },
     ],
   },
