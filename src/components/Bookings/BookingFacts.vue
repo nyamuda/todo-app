@@ -1,16 +1,8 @@
 <template>
   <div class="m-auto">
-    <TitleSection title="Account Overview" />
-    <div class="row mb-4 text-start">
-      <p class="col-md-8">
-        Hello, <span class="fw-bold">{{ userInfo.name }}</span
-        >! View your booking history, manage appointments, and update your
-        personal details right here.
-      </p>
-    </div>
     <div class="card shadow-sm">
       <div class="card-header bg-primary text-white">
-        <h4 class="mb-0"></h4>
+        <h4 class="mb-0">Account Overview</h4>
       </div>
       <div class="card-body">
         <!-- User Info Section -->
@@ -111,7 +103,6 @@ import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import ProgressSpinner from "primevue/progressspinner";
 import { useToast } from "primevue/usetoast";
-import TitleSection from "../Common/Elements/TitleSection.vue";
 
 const store = useStore();
 const toast = useToast();

@@ -21,7 +21,7 @@
           <div class="">
             <div class="">
               <h5 class="">
-                <i class="fas fa-check text-secondary"></i>
+                <i class="fas fa-check text-primary"></i>
                 <span class="fw-bold ms-2">Seasoned Instructors</span>
               </h5>
               <p class="">
@@ -33,7 +33,7 @@
           <div class="">
             <div class="">
               <h5 class="">
-                <i class="fas fa-check text-secondary"></i>
+                <i class="fas fa-check text-primary"></i>
                 <span class="fw-bold ms-2">Affordable fee</span>
               </h5>
               <p class="">
@@ -45,7 +45,7 @@
           <div class="">
             <div class="">
               <h5 class="">
-                <i class="fas fa-check text-secondary"></i>
+                <i class="fas fa-check text-primary"></i>
                 <span class="fw-bold ms-2">Exam-Centric Approach</span>
               </h5>
               <p class="">
@@ -57,7 +57,7 @@
           <div class="">
             <div class="">
               <h5 class="">
-                <i class="fas fa-check text-secondary"></i>
+                <i class="fas fa-check text-primary"></i>
                 <span class="fw-bold ms-2">Timing Excellence</span>
               </h5>
               <p class="">
