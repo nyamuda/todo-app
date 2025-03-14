@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="submitForm" class="register-form m-auto">
-    <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Sign up</h3>
+    <TitleSection subtitle="Create an account" align-items="center" />
     <!-- <OauthBooking />
 
 		<div class="d-flex align-bookings-center my-1">
@@ -143,6 +143,7 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
+import TitleSection from "../Common/Elements/TitleSection.vue";
 import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
 

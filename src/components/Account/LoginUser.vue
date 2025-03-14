@@ -1,7 +1,9 @@
 <template>
   <div class="">
     <form class="login-form m-auto" @submit.prevent="submitForm">
-      <h3 class="fw-normal mb-3" style="letter-spacing: 1px">Sign in</h3>
+      <div class="text-center">
+        <TitleSection subtitle="Welcome back" align-items="center" />
+      </div>
       <!-- <OauthBooking />
 			<div class="d-flex align-bookings-center my-1">
 				<hr class="flex-grow-1" />
@@ -119,6 +121,7 @@ import { required, email, helpers } from "@vuelidate/validators";
 import { Message } from "primevue";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
+import TitleSection from "../Common/Elements/TitleSection.vue";
 import Button from "primevue/button";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
