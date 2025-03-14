@@ -1,17 +1,7 @@
 <template>
   <div class="m-auto">
     <div class="card shadow-sm">
-      <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">Account Overview</h4>
-      </div>
       <div class="card-body">
-        <!-- User Info Section -->
-        <div class="mb-4">
-          <h5 class="fw-bold">
-            Welcome, <span id="userName">{{ userInfo.name }}</span>
-          </h5>
-        </div>
-
         <!-- Booking Statistics Section -->
         <div class="row text-center">
           <div class="col-md-4 mb-3">
@@ -108,7 +98,6 @@ const store = useStore();
 const toast = useToast();
 
 let userStatistics = computed(() => store.state.bookings.userStatistics);
-let userInfo = computed(() => store.state.account.loggedInUser);
 let isGettingStatistics = computed(
   () => store.state.bookings.isGettingStatistics
 );

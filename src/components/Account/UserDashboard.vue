@@ -8,99 +8,39 @@
         personal details right here.
       </p>
     </div>
-    <div class="card shadow-sm">
-      <div class="card-header bg-primary text-white">
-        <h4 class="mb-0"></h4>
-      </div>
-      <div class="card-body">
-        <!-- User Info Section -->
-        <div class="mb-4">
-          <h5 class="fw-bold">
-            Welcome, <span id="userName">{{ userInfo.name }}</span>
-          </h5>
-        </div>
-
-        <!-- Booking Statistics Section -->
-        <div class="row text-center">
-          <div class="col-md-4 mb-3">
-            <div class="p-3 border rounded bg-light">
-              <h6 class="text-dark fw-bold">
-                <i class="fas fa-list-alt me-2"></i>Total Bookings
-              </h6>
-              <ProgressSpinner
-                v-if="isGettingStatistics"
-                style="width: 50px; height: 50px"
-              />
-              <p v-else class="display-6 fw-bold">
-                {{ userStatistics.totalBookings }}
+    <div class="mt-5">
+      <div class="card">
+        <Tabs value="0">
+          <TabList>
+            <Tab value="0">My Details</Tab>
+            <Tab value="1">Bookings Overview</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel value="0">
+              <p class="m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
               </p>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="p-3 border rounded bg-light">
-              <h6 class="text-warning fw-bold">
-                <i class="fas fa-clock me-2"></i>Pending Bookings
-              </h6>
-              <ProgressSpinner
-                v-if="isGettingStatistics"
-                style="width: 50px; height: 50px"
-              />
-              <p v-else class="display-6 fw-bold">
-                {{ userStatistics.totalPendingBookings }}
+            </TabPanel>
+            <TabPanel value="1">
+              <p class="m-0">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+                quae ab illo inventore veritatis et quasi architecto beatae
+                vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
+                voluptas sit aspernatur aut odit aut fugit, sed quia
+                consequuntur magni dolores eos qui ratione voluptatem sequi
+                nesciunt. Consectetur, adipisci velit, sed quia non numquam eius
+                modi.
               </p>
-            </div>
-          </div>
-
-          <div class="col-md-4 mb-3">
-            <div class="p-3 border rounded bg-light">
-              <h6 class="text-info fw-bold">
-                <i class="fas fa-check-circle me-2"></i>Confirmed Bookings
-              </h6>
-              <ProgressSpinner
-                v-if="isGettingStatistics"
-                style="width: 50px; height: 50px"
-              />
-              <p v-else class="display-6 fw-bold">
-                {{ userStatistics.totalConfirmedBookings }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="row text-center">
-          <div class="col-md-6 mb-3">
-            <div class="p-3 border rounded bg-light">
-              <h6 class="text-success fw-bold">
-                <i class="fas fa-check me-2"></i>Completed Bookings
-              </h6>
-              <ProgressSpinner
-                v-if="isGettingStatistics"
-                style="width: 50px; height: 50px"
-              />
-              <p v-else class="display-6 fw-bold">
-                {{ userStatistics.totalCompletedBookings }}
-              </p>
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <div class="p-3 border rounded bg-light">
-              <h6 class="text-danger fw-bold">
-                <i class="fas fa-times-circle me-2"></i>Cancelled Bookings
-              </h6>
-              <ProgressSpinner
-                v-if="isGettingStatistics"
-                style="width: 50px; height: 50px"
-              />
-              <p v-else class="display-6 fw-bold">
-                {{ userStatistics.totalCancelledBookings }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer text-end">
-        <router-link to="/bookings"
-          ><button class="btn btn-secondary">View Bookings</button></router-link
-        >
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </div>
     </div>
   </div>
@@ -109,31 +49,16 @@
 <script setup>
 import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import ProgressSpinner from "primevue/progressspinner";
-import { useToast } from "primevue/usetoast";
 import TitleSection from "../Common/Elements/TitleSection.vue";
+import Tabs from "primevue/tabs";
+import TabList from "primevue/tablist";
+import Tab from "primevue/tab";
+import TabPanels from "primevue/tabpanels";
+import TabPanel from "primevue/tabpanel";
 
 const store = useStore();
-const toast = useToast();
 
-let userStatistics = computed(() => store.state.bookings.userStatistics);
 let userInfo = computed(() => store.state.account.loggedInUser);
-let isGettingStatistics = computed(
-  () => store.state.bookings.isGettingStatistics
-);
 
-onMounted(() => {
-  //get user statistics such as the total number of bookings they have completed
-  store
-    .dispatch("bookings/fetchUserStatistics")
-    .then()
-    .catch((message) => {
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: message,
-        life: 3000,
-      });
-    });
-});
+onMounted(() => {});
 </script>
