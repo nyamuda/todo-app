@@ -3,12 +3,14 @@
     <div class="col mb-3">
       <div class="card shadow">
         <div class="card-body d-flex justify-content-start align-items-center">
-          <i class="fas fa-car fa-4x icon text-primary"></i>
+          <i class="fas fa-car fa-3x icon text-secondary"></i>
           <div
             class="d-flex flex-column align-items-start ms-3 justify-content-center"
           >
             <h5 class="card-title fw-bold">Basic Wash</h5>
-            <p class="card-text mt-n1">Exterior hand wash & dry</p>
+            <p class="card-text mt-n1">
+              Exterior, interior detailing and window cleaning
+            </p>
           </div>
         </div>
       </div>
@@ -16,12 +18,12 @@
     <div class="col mb-3">
       <div class="card shadow">
         <div class="card-body d-flex justify-content-start align-items-center">
-          <i class="fas fa-broom fa-4x icon text-primary"></i>
+          <i class="fas fa-broom fa-3x icon text-secondary"></i>
           <div
             class="d-flex flex-column align-items-start ms-3 justify-content-center"
           >
             <h5 class="card-title fw-bold">Full Interior Cleaning</h5>
-            <p class="card-text mt-n1">Vacuum, dashboard polish & windows</p>
+            <p class="card-text mt-n1">Vacuum, dashboard polish and windows</p>
           </div>
         </div>
       </div>
@@ -29,7 +31,7 @@
     <div class="col mb-3">
       <div class="card shadow">
         <div class="card-body d-flex justify-content-start align-items-center">
-          <i class="fas fa-spray-can fa-4x icon text-primary"></i>
+          <i class="fas fa-spray-can fa-3x icon text-secondary"></i>
           <div
             class="d-flex flex-column align-items-start ms-3 justify-content-center"
           >
