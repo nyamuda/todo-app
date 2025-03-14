@@ -179,16 +179,21 @@ let submitForm = async () => {
   const isFormCorrect = v$._value.$validate;
   if (isFormCorrect) {
     store
-      .dispatch("account/registerUser", userForm.value)
-      .then(() => {
-        router.push("/email/verify");
+      .dispatch("account/updateAccount", userForm.value)
+      .then((message) => {
+        toast.add({
+          severity: "success",
+          summary: "Account Updated",
+          detail: message,
+          life: 5000,
+        });
       })
       .catch((message) => {
         toast.add({
           severity: "error",
-          summary: "Registration Failed",
+          summary: "Update Failed",
           detail: message,
-          life: 20000,
+          life: 10000,
         });
       });
   }
