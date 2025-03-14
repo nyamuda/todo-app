@@ -261,6 +261,7 @@ const account = {
         axios
           .put(`${rootState.apiUrl}/users/${id}`, updatedDetails)
           .then(() => {
+
             resolve("Your account details have been updated.");
           })
           .catch((error) => {

@@ -84,7 +84,9 @@
     </div>
 
     <!-- Action buttons -->
-    <div class="d-flex align-items-start gap-2">
+    <div
+      class="d-flex align-items-center justify-content-end justify-content-md-start gap-2"
+    >
       <!-- Discard changes button -->
       <Button
         v-if="isInEditMode"
@@ -180,6 +182,9 @@ const v$ = useVuelidate(rules, userForm);
 //by populating the form with the original data
 let discardChanges = () => {
   populateForm(user.value);
+
+  //disable form inputs
+  isInEditMode.value = false;
 };
 
 let submitForm = async () => {
@@ -199,6 +204,8 @@ let submitForm = async () => {
         });
         //turn off edit mode
         isInEditMode.value = false;
+        //update the user details state with the new user details
+        store.commit("account/addUserInfo", user.value);
       })
       .catch((message) => {
         toast.add({

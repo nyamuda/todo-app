@@ -29,17 +29,18 @@
         you need a quick wash or full detailing, we bring professional-grade
         services to your doorstep.
       </p>
-      <div class="d-flex align-items-center mb-4">
+      <div
+        class="d-flex flex-column-reverse flex-md-row align-items-start align-items-md-center mb-4"
+      >
         <div
-          class="d-flex flex-column align-items-start text-start bg-primary p-3"
+          class="d-flex flex-column align-items-start text-start bg-secondary p-3 mt-3 mt-md-0"
         >
-          <p class="display-3 fw-bold mb-0 text-secondary">50</p>
+          <p class="display-3 fw-bold mb-0 text-light">50</p>
           <div class="fs-5 fw-bold text-light">
-            <p class="mb-0">Cars Washed &</p>
-            <p>Shining</p>
+            <p class="mb-0">Cars Washed & Shining</p>
           </div>
         </div>
-        <d class="d-flex flex-column align-items-start gap-3 ms-3">
+        <d class="d-flex flex-column align-items-start gap-3 ms-md-3">
           <div class="d-flex align-items-center">
             <i class="fa-solid fa-circle-check me-2 fs-5 text-primary"></i
             ><span>Premium Hand Wash</span>
@@ -69,7 +70,7 @@
             <div
               class="d-flex flex-column align-items-start ms-3 justify-content-center"
             >
-              <p class="card-title text-muted mb-0">Call us</p>
+              <p class="card-title text-muted mb-0">Have any questions?</p>
               <p class="card-text fw-bold h5">+27 81 589 6615</p>
             </div>
           </div>
