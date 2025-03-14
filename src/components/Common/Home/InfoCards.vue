@@ -3,7 +3,7 @@
     <div class="col mb-3">
       <div class="card shadow">
         <div class="card-body d-flex justify-content-start align-items-center">
-          <i class="fas fa-car fa-3x icon text-secondary"></i>
+          <i class="fas fa-car fa-3x icon text-primary"></i>
           <div
             class="d-flex flex-column align-items-start ms-3 justify-content-center"
           >
@@ -18,7 +18,7 @@
     <div class="col mb-3">
       <div class="card shadow">
         <div class="card-body d-flex justify-content-start align-items-center">
-          <i class="fas fa-broom fa-3x icon text-secondary"></i>
+          <i class="fas fa-broom fa-3x icon text-primary"></i>
           <div
             class="d-flex flex-column align-items-start ms-3 justify-content-center"
           >
@@ -31,7 +31,7 @@
     <div class="col mb-3">
       <div class="card shadow">
         <div class="card-body d-flex justify-content-start align-items-center">
-          <i class="fas fa-spray-can fa-3x icon text-secondary"></i>
+          <i class="fas fa-spray-can fa-3x icon text-primary"></i>
           <div
             class="d-flex flex-column align-items-start ms-3 justify-content-center"
           >
