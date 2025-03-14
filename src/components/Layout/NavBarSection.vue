@@ -1,16 +1,16 @@
 <template>
   <!-- Topbar Start -->
-  <div class="container-fluid text-light bg-secondary d-none d-lg-block py-2">
+  <div class="container-fluid text-light bg-primary d-none d-lg-block py-2">
     <div
       class="d-flex align-items-center justify-content-end align-items-center me-3"
     >
       <div class="d-flex align-items-center">
         <div class="d-inline-flex align-items-center me-4">
-          <i class="fa fa-map-marker-alt text-primary me-2"></i>
+          <i class="fa fa-map-marker-alt text-light me-2"></i>
           <p class="m-0">123 Street, Cape Town, South Africa</p>
         </div>
         <div class="d-inline-flex align-items-center me-4">
-          <i class="far fa-envelope-open text-primary me-2"></i>
+          <i class="far fa-envelope-open text-light me-2"></i>
           <p class="m-0">nya20002@byui.edu</p>
         </div>
         <div class="d-flex align-items-center">
