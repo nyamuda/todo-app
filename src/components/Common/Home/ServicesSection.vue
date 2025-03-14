@@ -1,14 +1,23 @@
 <template>
   <!-- Services Start -->
   <div v-if="services.length > 0" class="mt-5">
-    <div class="text-center">
+    <div class="text-start text-lg-center">
+      <!-- Title for small screens -->
       <TitleSection
+        class="d-lg-none"
+        subtitle="Car wash services"
+        title="Our Expertise"
+        align-items="start"
+      />
+      <!-- Title for large screens -->
+      <TitleSection
+        class="d-none d-lg-flex"
         subtitle="Car wash services"
         title="Our Expertise"
         align-items="center"
       />
       <div class="row mb-4">
-        <p class="col-md-8 m-auto">
+        <p class="col-lg-8 m-auto">
           Keep your car looking its best with our high-quality wash services. We
           remove dirt, dust, and grime while protecting your vehicle’s finish.
         </p>
@@ -26,18 +35,21 @@
         </div>
       </div>
       <!--Car wash services-->
-      <div class="row" v-else-if="services.length > 0 && !isGettingServices">
+      <div
+        class="row gy-4 gy-lg-2"
+        v-else-if="services.length > 0 && !isGettingServices"
+      >
         <!--Service items-->
         <div
           v-for="service in getTwoServices"
           :key="service.id"
-          class="col-md-6"
+          class="col-lg-6"
         >
           <ServiceItem :service="service" />
         </div>
         <div class="m-auto mt-4">
           <router-link
-            class="btn btn-primary text-light btn-lg m-2 px-3 px-sm-4 py-sm-2 px-md-5 py-md-3"
+            class="btn btn-primary text-light btn-lg m-2 px-4 py-2 px-md-5 py-md-3"
             to="/services"
             role="button"
             >View all services</router-link
