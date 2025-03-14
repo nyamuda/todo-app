@@ -23,7 +23,7 @@
   <!-- Topbar End -->
 
   <!-- Navbar Start -->
-  <div class="nav-bar nav-bg shadow-sm">
+  <div style="z-index: 10" class="nav-bar nav-bg shadow-sm">
     <Menubar :model="items">
       <template #start>
         <router-link to="/" class="navbar-brand"
