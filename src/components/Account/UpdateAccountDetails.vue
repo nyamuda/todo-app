@@ -94,20 +94,25 @@
 
     <!-- Action buttons -->
     <div class="d-flex align-items-start">
-      <!-- Edit account button -->
-      <Button
-        icon="fas fa-pencil-alt"
-        size="small"
-        severity="info"
-        label="Edit details"
-      />
       <!-- Discard changes button -->
       <Button
+        v-if="isInEditMode"
+        @click="isInEditMode = false"
         icon="fas fa-times"
         size="small"
         severity="danger"
         label="Discard changes"
       />
+      <!-- Edit account button -->
+      <Button
+        v-else
+        @click="isInEditMode = true"
+        icon="fas fa-pencil-alt"
+        size="small"
+        severity="info"
+        label="Edit details"
+      />
+
       <!-- Save changes form -->
       <Button
         icon="fas fa-pencil-alt"
@@ -137,7 +142,6 @@ import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 import TitleSection from "../Common/Elements/TitleSection.vue";
 import { useToast } from "primevue/usetoast";
-import { get } from "core-js/core/dict";
 
 // Access the store
 const store = useStore();
@@ -197,6 +201,8 @@ let submitForm = async () => {
           detail: message,
           life: 5000,
         });
+        //turn off edit mode
+        isInEditMode.value = false;
       })
       .catch((message) => {
         toast.add({
@@ -212,7 +218,7 @@ let submitForm = async () => {
 //and populate the form with the user details
 let getUserByEmail = (email) => {
   store
-    .dispatch("account/getUserByEmail")
+    .dispatch("account/getUserByEmail", email)
     .then((data) => {
       //populate the form with the user details
       let { name, email, phone, id } = data;
