@@ -11,6 +11,7 @@ const account = {
     emailVerificationStatus: "fail",
     isSendingPasswordLink: false,
     isSendingVerificationLink: false,
+    isUpdatingAccount: false,
     googleOauth: {
       clientId:
         "966223459862-8scq77jsqaf7ue1028bt4psl4jp7t04k.apps.googleusercontent.com",
@@ -233,6 +234,30 @@ const account = {
           .finally(() => (state.isRegistering = false));
       });
     },
+
+    //Update user details
+    updateAccount({ rootState, state, dispatch }, payload) {
+      return new Promise((resolve, reject) => {
+        state.isUpdatingAccount = true;
+        let userId = state.loggedInUser.id;
+        //add authorization header to the request
+        //to access the protected route
+        dispatch("setAuthorizationHeader");
+        axios
+          .put(`${rootState.apiUrl}/account/${userId}`, payload)
+          .then(() => {
+            resolve("Your account details have been updated.");
+          })
+          .catch((error) => {
+            const message =
+              error.response?.data?.message ||
+              "Couldn’t update the account details. Please try again.";
+            reject(message);
+          })
+          .finally(() => (state.isUpdatingAccount = false));
+      });
+    },
+
     //send verification link to user to verify their email
     sendEmailVerificationLink({ state, rootState }, payload) {
       return new Promise((resolve, reject) => {

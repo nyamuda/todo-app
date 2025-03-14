@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submitForm" class="register-form m-auto">
+  <form @submit.prevent="submitForm">
     <TitleSection subtitle="Create an account" align-items="center" />
     <!-- <OauthBooking />
   
