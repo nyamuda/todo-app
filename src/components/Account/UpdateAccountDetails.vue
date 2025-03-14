@@ -88,7 +88,7 @@
       <!-- Discard changes button -->
       <Button
         v-if="isInEditMode"
-        @click="isInEditMode = false"
+        @click="discardChanges"
         icon="fas fa-times"
         size="small"
         severity="danger"
@@ -136,7 +136,7 @@ import { useToast } from "primevue/usetoast";
 // Access the store
 const store = useStore();
 const toast = useToast();
-let userId = ref(null);
+let user = ref(null);
 
 onMounted(() => {
   //show validation errors
@@ -176,12 +176,18 @@ const rules = {
 const v$ = useVuelidate(rules, userForm);
 //form validation with Vuelidate end
 
+//discard changes made by the user
+//by populating the form with the original data
+let discardChanges = () => {
+  populateForm(user.value);
+};
+
 let submitForm = async () => {
   const isFormCorrect = v$._value.$validate;
   if (isFormCorrect) {
     store
       .dispatch("account/updateAccount", {
-        id: userId.value,
+        id: user.value.id,
         updatedDetails: userForm.value,
       })
       .then((message) => {
@@ -211,13 +217,10 @@ let getUserByEmail = (email) => {
     .dispatch("account/getUserByEmail", email)
     .then((data) => {
       //populate the form with the user details
-      let { name, email, phone, id } = data;
-      userForm.value.name = name;
-      userForm.value.email = email;
-      userForm.value.phone = phone;
+      populateForm(data);
 
-      //save the ID
-      userId.value = id;
+      //save the user data
+      user.value = data;
     })
     .catch((message) => {
       toast.add({
@@ -227,6 +230,13 @@ let getUserByEmail = (email) => {
         life: 10000,
       });
     });
+};
+
+//populate the form with user data
+let populateForm = ({ name, email, phone }) => {
+  userForm.value.name = name;
+  userForm.value.email = email;
+  userForm.value.phone = phone;
 };
 </script>
 

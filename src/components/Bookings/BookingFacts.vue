@@ -1,7 +1,7 @@
 <template>
-  <div class="m-auto">
-    <div class="card shadow-sm">
-      <div class="card-body">
+  <div class="mt-3">
+    <div>
+      <div>
         <!-- Booking Statistics Section -->
         <div class="row text-center">
           <div class="col-md-4 mb-3">
@@ -79,10 +79,13 @@
           </div>
         </div>
       </div>
-      <div class="card-footer text-end">
-        <router-link to="/bookings"
-          ><button class="btn btn-secondary">View Bookings</button></router-link
-        >
+      <div class="d-flex justify-content-end">
+        <router-link to="/bookings">
+          <Button
+            icon="fas fa-calendar-day"
+            severity="contrast"
+            label="View all bookings"
+        /></router-link>
       </div>
     </div>
   </div>
@@ -93,6 +96,7 @@ import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import ProgressSpinner from "primevue/progressspinner";
 import { useToast } from "primevue/usetoast";
+import Button from "primevue/button";
 
 const store = useStore();
 const toast = useToast();

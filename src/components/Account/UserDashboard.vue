@@ -4,8 +4,7 @@
     <div class="row mb-4 text-start">
       <p class="col-md-8">
         Hello, <span class="fw-bold">{{ userInfo.name }}</span
-        >! View your booking history, manage appointments, and update your
-        personal details right here.
+        >! View your booking history or update your personal details right here.
       </p>
     </div>
     <div class="mt-3">
@@ -17,8 +16,14 @@
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <div class="row">
-                <div class="col-md-6 mt-3">
+              <div class="row mt-3">
+                <div class="col-md-4">
+                  <p>
+                    Change your personal information and be sure to save your
+                    updates.
+                  </p>
+                </div>
+                <div class="col-md-8">
                   <UpdateAccountDetails />
                 </div>
               </div>
