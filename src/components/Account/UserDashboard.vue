@@ -17,15 +17,7 @@
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <p class="m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
+              <UpdateAccountDetails />
             </TabPanel>
             <TabPanel value="1">
               <BookingFacts />
@@ -47,6 +39,7 @@ import Tab from "primevue/tab";
 import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
 import BookingFacts from "../Bookings/BookingFacts.vue";
+import UpdateAccountDetails from "./UpdateAccountDetails.vue";
 
 const store = useStore();
 
