@@ -1,8 +1,8 @@
 <template>
   <div class="text-center">
     <i class="fas fa-exclamation-circle fa-3x mb-3"></i>
-    <h2 class="text-muted fw-bold">{{ title }}</h2>
-    <p class="text-secondary m-auto col-md-5">{{ message }}</p>
+    <h2 class="text-primary fw-bold">{{ title }}</h2>
+    <p class="text-muted m-auto col-md-5">{{ message }}</p>
     <Button
       class="mt-3"
       label="Go Back"
