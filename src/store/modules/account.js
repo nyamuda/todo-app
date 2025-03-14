@@ -30,10 +30,8 @@ const account = {
       state: "",
     },
     loggedInUser: {
-      id: "",
       name: "",
       email: "",
-      phone: "",
       isVerified: false,
       isAdmin: false,
     },
@@ -178,6 +176,23 @@ const account = {
       });
     },
 
+    //get user by email
+    getUserByEmail({ rootState, dispatch }, email) {
+      dispatch("setAuthorizationHeader");
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${rootState.apiUrl}/users/email/${email}`)
+          .then((response) => resolve(response.data))
+          .catch((ex) => {
+            let message =
+              ex.status == 404
+                ? "Something went wrong. Unable to find user details."
+                : ex.response.data.message;
+            reject(message);
+          });
+      });
+    },
+
     // When the user logs out
     logoutUser({ commit }) {
       return new Promise((resolve, reject) => {
@@ -244,7 +259,7 @@ const account = {
         //to access the protected route
         dispatch("setAuthorizationHeader");
         axios
-          .put(`${rootState.apiUrl}/account/${userId}`, payload)
+          .put(`${rootState.apiUrl}/users/${userId}`, payload)
           .then(() => {
             resolve("Your account details have been updated.");
           })

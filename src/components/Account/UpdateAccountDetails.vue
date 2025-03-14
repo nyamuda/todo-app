@@ -132,12 +132,10 @@ import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 import TitleSection from "../Common/Elements/TitleSection.vue";
 import { useToast } from "primevue/usetoast";
-import { useRouter } from "vue-router";
 
 // Access the store
 const store = useStore();
 const toast = useToast();
-const router = useRouter();
 
 onMounted(() => {
   //show validation errors
@@ -153,6 +151,8 @@ onMounted(() => {
 //is form in edit mode or not
 //if not, the form fields are disabled
 let isInEditMode = ref(false);
+
+let isUpdatingAccount = computed(() => store.state.account.isUpdatingAccount);
 
 //form validation with Vuelidate start
 const userForm = ref({
@@ -198,7 +198,6 @@ let submitForm = async () => {
       });
   }
 };
-let isRegistering = computed(() => store.state.account.isRegistering);
 </script>
 
 <style scoped>
