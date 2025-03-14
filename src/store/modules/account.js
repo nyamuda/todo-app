@@ -29,8 +29,10 @@ const account = {
       state: "",
     },
     loggedInUser: {
+      id: "",
       name: "",
       email: "",
+      phone: "",
       isVerified: false,
       isAdmin: false,
     },
