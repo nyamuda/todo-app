@@ -36,7 +36,7 @@ $link-hover-color: darken($secondary, 15%);
   box-shadow: none !important;
 }
 
-// Optional: If you need to maintain text/background classes
+//Override Bootstrap
 .text-primary {
   color: $primary !important;
 }

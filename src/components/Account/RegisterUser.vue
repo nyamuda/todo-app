@@ -122,6 +122,7 @@
       class="mb-2"
       size="small"
       type="submit"
+      severity="contrast"
       :label="isRegistering ? 'Please wait...' : 'Sign up'"
       :loading="isRegistering"
       :disabled="v$.$errors.length > 0 || isRegistering"

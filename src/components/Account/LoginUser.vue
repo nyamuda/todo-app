@@ -92,6 +92,7 @@
         class="mb-2"
         size="small"
         type="submit"
+        severity="contrast"
         :label="isLoggingIn ? 'Please wait...' : 'Sign in'"
         :loading="isLoggingIn"
         :disabled="v$.$errors.length > 0 || isLoggingIn"
