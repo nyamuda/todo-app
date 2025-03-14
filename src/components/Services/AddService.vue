@@ -204,6 +204,7 @@
         class="mb-2"
         size="small"
         type="submit"
+        severity="primary"
         :label="
           isAddingServiceOrUploadingImage == 'uploading'
             ? 'Uploading image, please wait...'

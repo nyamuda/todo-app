@@ -72,7 +72,7 @@
               ><Button label="Log in" severity="contrast" variant="text"
             /></router-link>
             <router-link class="me-0 me-md-2" to="/account/register"
-              ><Button label="Sign up" class="ms-2"
+              ><Button label="Sign up" class="ms-2" severity="primary"
             /></router-link>
           </template>
         </div>

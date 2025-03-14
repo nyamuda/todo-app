@@ -143,6 +143,7 @@
 
       <Button
         type="submit"
+        severity="primary"
         :label="isUpdatingBooking ? 'Saving changes...' : 'Update booking'"
         icon="fas fa-edit"
         :loading="isUpdatingBooking"

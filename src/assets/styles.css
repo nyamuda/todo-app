@@ -11988,6 +11988,21 @@ textarea.form-control-lg {
   background-color: #2ecc71 !important;
 }
 
+/* Customizing PrimeVue */
+.p-button.p-button-primary {
+  background-color: #2ecc71 !important;
+  border-color: #2ecc71 !important;
+  color: #ffffff !important;
+}
+.p-button.p-button-primary:hover {
+  background-color: #25a25a !important;
+  border-color: #25a25a !important;
+}
+.p-button.p-button-primary:active {
+  background-color: #208e4e !important;
+  border-color: #208e4e !important;
+}
+
 body {
   font-family: "Oxygen", sans-serif;
 }

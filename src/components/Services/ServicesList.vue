@@ -15,13 +15,13 @@
       </div>
     </div>
     <!-- Add new service button (for only admins) -->
-    <div v-if="isAdmin" class="d-flex justify-content-end mb-4">
+    <div v-if="isAdmin" class="d-flex justify-content-end mb-5">
       <router-link to="/services/add">
         <Button
           icon="fas fa-plus"
           label="Add new service"
           aria-label="update"
-          size="small"
+          severity="primary"
         />
       </router-link>
     </div>

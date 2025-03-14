@@ -209,6 +209,7 @@
         icon="fas fa-plus"
         :loading="isCreatingBooking"
         :disabled="v$.$errors.length > 0 || isCreatingBooking"
+        severity="primary"
       />
     </form>
     <!--Form guest users end-->
