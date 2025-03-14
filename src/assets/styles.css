@@ -11990,17 +11990,17 @@ textarea.form-control-lg {
 
 /* Customizing PrimeVue */
 .p-button.p-button-primary {
-  background-color: #212a31 !important;
-  border-color: #212a31 !important;
+  background-color: #2ecc71 !important;
+  border-color: #2ecc71 !important;
   color: #ffffff !important;
 }
 .p-button.p-button-primary:hover {
-  background-color: #0c1013 !important;
-  border-color: #0c1013 !important;
+  background-color: #25a25a !important;
+  border-color: #25a25a !important;
 }
 .p-button.p-button-primary:active {
-  background-color: #020303 !important;
-  border-color: #020303 !important;
+  background-color: #208e4e !important;
+  border-color: #208e4e !important;
 }
 
 body {
@@ -12009,7 +12009,7 @@ body {
 
 /* Headings  start*/
 .heading-line {
-  border: 2px solid #212a31;
+  border: 2px solid #2ecc71;
   width: 2rem;
   margin-bottom: 0rem;
 }

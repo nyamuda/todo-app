@@ -14,7 +14,11 @@
         />
       </div>
       <router-link to="/bookings/add">
-        <Button label="Create new booking" icon="fas fa-plus" />
+        <Button
+          label="Create new booking"
+          icon="fas fa-plus"
+          severity="primary"
+        />
       </router-link>
     </div>
 

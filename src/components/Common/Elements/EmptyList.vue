@@ -1,6 +1,6 @@
 <template>
   <div class="text-center mt-4">
-    <i class="fas fa-box-open fa-4x text-primary"></i>
+    <i class="fas fa-box-open fa-4x text-secondary"></i>
     <h5 class="mt-3">{{ title }}</h5>
     <p class="mt-3 text-muted">{{ message }}</p>
   </div>

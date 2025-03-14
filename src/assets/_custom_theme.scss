@@ -52,17 +52,17 @@ $link-hover-color: darken($secondary, 15%);
 
 /* Customizing PrimeVue */
 .p-button.p-button-primary {
-  background-color: $secondary !important;
-  border-color: $secondary !important;
+  background-color: $primary !important;
+  border-color: $primary !important;
   color: #ffffff !important;
 
   &:hover {
-    background-color: darken($secondary, 10%) !important;
-    border-color: darken($secondary, 10%) !important;
+    background-color: darken($primary, 10%) !important;
+    border-color: darken($primary, 10%) !important;
   }
 
   &:active {
-    background-color: darken($secondary, 15%) !important;
-    border-color: darken($secondary, 15%) !important;
+    background-color: darken($primary, 15%) !important;
+    border-color: darken($primary, 15%) !important;
   }
 }
