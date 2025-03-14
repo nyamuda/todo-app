@@ -11,11 +11,10 @@
           v-model="filterBookingsBy"
           :options="statuses"
           @change="filterBookings"
-          size="small"
         />
       </div>
       <router-link to="/bookings/add">
-        <Button label="Create new booking" icon="fas fa-plus" size="small" />
+        <Button label="Create new booking" icon="fas fa-plus" />
       </router-link>
     </div>
 
