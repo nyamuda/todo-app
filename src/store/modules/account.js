@@ -186,7 +186,7 @@ const account = {
           .catch((ex) => {
             let message =
               ex.status == 404
-                ? "Something went wrong. Unable to find user details."
+                ? "Something went wrong. Unable to fetch account details."
                 : ex.response.data.message;
             reject(message);
           });
@@ -254,12 +254,12 @@ const account = {
     updateAccount({ rootState, state, dispatch }, payload) {
       return new Promise((resolve, reject) => {
         state.isUpdatingAccount = true;
-        let userId = state.loggedInUser.id;
+        let { id, updatedDetails } = payload;
         //add authorization header to the request
         //to access the protected route
         dispatch("setAuthorizationHeader");
         axios
-          .put(`${rootState.apiUrl}/users/${userId}`, payload)
+          .put(`${rootState.apiUrl}/users/${id}`, updatedDetails)
           .then(() => {
             resolve("Your account details have been updated.");
           })

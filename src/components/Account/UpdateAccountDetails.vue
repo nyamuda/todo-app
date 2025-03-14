@@ -94,24 +94,29 @@
 
     <!-- Action buttons -->
     <div class="d-flex align-items-start">
-      <!-- Discard changes button -->
-      <!-- Save changes form -->
+      <!-- Edit account button -->
       <Button
-        class="mb-2"
+        icon="fas fa-pencil-alt"
         size="small"
-        type="submit"
+        severity="info"
+        label="Edit details"
+      />
+      <!-- Discard changes button -->
+      <Button
+        icon="fas fa-times"
+        size="small"
         severity="danger"
-        variant="outlined"
         label="Discard changes"
       />
+      <!-- Save changes form -->
       <Button
-        class="mb-2"
+        icon="fas fa-pencil-alt"
         size="small"
         type="submit"
         severity="primary"
-        :label="isRegistering ? 'Please wait...' : 'Sign up'"
-        :loading="isRegistering"
-        :disabled="v$.$errors.length > 0 || isRegistering"
+        :label="isUpdatingAccount ? 'Saving changes...' : 'Save changes'"
+        :loading="isUpdatingAccount"
+        :disabled="v$.$errors.length > 0 || isUpdatingAccount"
       />
     </div>
   </form>
@@ -132,20 +137,22 @@ import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 import TitleSection from "../Common/Elements/TitleSection.vue";
 import { useToast } from "primevue/usetoast";
+import { get } from "core-js/core/dict";
 
 // Access the store
 const store = useStore();
 const toast = useToast();
+let userId = ref(null);
 
 onMounted(() => {
   //show validation errors
   v$._value.$touch();
 
-  //populate the form with the user details
-  let { name, email, phone } = store.state.account.loggedInUser;
-  userForm.value.name = name;
-  userForm.value.email = email;
-  userForm.value.phone = phone;
+  //get the user email
+  let { email } = store.state.account.loggedInUser;
+  //use that email to fetch all details about the user
+  //and populate the form with those details
+  getUserByEmail(email);
 });
 
 //is form in edit mode or not
@@ -179,7 +186,10 @@ let submitForm = async () => {
   const isFormCorrect = v$._value.$validate;
   if (isFormCorrect) {
     store
-      .dispatch("account/updateAccount", userForm.value)
+      .dispatch("account/updateAccount", {
+        id: userId.value,
+        updatedDetails: userForm.value,
+      })
       .then((message) => {
         toast.add({
           severity: "success",
@@ -197,6 +207,30 @@ let submitForm = async () => {
         });
       });
   }
+};
+//get user with the given email
+//and populate the form with the user details
+let getUserByEmail = (email) => {
+  store
+    .dispatch("account/getUserByEmail")
+    .then((data) => {
+      //populate the form with the user details
+      let { name, email, phone, id } = data;
+      userForm.value.name = name;
+      userForm.value.email = email;
+      userForm.value.phone = phone;
+
+      //save the ID
+      userId.value = id;
+    })
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+        life: 10000,
+      });
+    });
 };
 </script>
 
