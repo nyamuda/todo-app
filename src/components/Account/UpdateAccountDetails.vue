@@ -1,14 +1,5 @@
 <template>
   <form @submit.prevent="submitForm">
-    <TitleSection subtitle="Create an account" align-items="center" />
-    <!-- <OauthBooking />
-  
-          <div class="d-flex align-bookings-center my-1">
-              <hr class="flex-grow-1" />
-              <p class="text-center fw-bold mx-3 mb-0">Or</p>
-              <hr class="flex-grow-1" />
-          </div> -->
-
     <!-- Name input -->
     <div class="form-group mb-3">
       <FloatLabel variant="on">
@@ -93,7 +84,7 @@
     </div>
 
     <!-- Action buttons -->
-    <div class="d-flex align-items-start">
+    <div class="d-flex align-items-start gap-2">
       <!-- Discard changes button -->
       <Button
         v-if="isInEditMode"
@@ -103,6 +94,17 @@
         severity="danger"
         label="Discard changes"
       />
+      <!-- Save changes form -->
+      <Button
+        v-if="isInEditMode"
+        icon="fas fa-pencil-alt"
+        size="small"
+        type="submit"
+        severity="primary"
+        :label="isUpdatingAccount ? 'Saving changes...' : 'Save changes'"
+        :loading="isUpdatingAccount"
+        :disabled="v$.$errors.length > 0 || isUpdatingAccount"
+      />
       <!-- Edit account button -->
       <Button
         v-else
@@ -111,17 +113,6 @@
         size="small"
         severity="info"
         label="Edit details"
-      />
-
-      <!-- Save changes form -->
-      <Button
-        icon="fas fa-pencil-alt"
-        size="small"
-        type="submit"
-        severity="primary"
-        :label="isUpdatingAccount ? 'Saving changes...' : 'Save changes'"
-        :loading="isUpdatingAccount"
-        :disabled="v$.$errors.length > 0 || isUpdatingAccount"
       />
     </div>
   </form>
@@ -140,7 +131,6 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
-import TitleSection from "../Common/Elements/TitleSection.vue";
 import { useToast } from "primevue/usetoast";
 
 // Access the store

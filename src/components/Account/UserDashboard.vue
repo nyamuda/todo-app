@@ -8,7 +8,7 @@
         personal details right here.
       </p>
     </div>
-    <div class="mt-5">
+    <div class="mt-3">
       <div class="card">
         <Tabs value="0">
           <TabList>
@@ -17,7 +17,11 @@
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <UpdateAccountDetails />
+              <div class="row">
+                <div class="col-md-6 mt-3">
+                  <UpdateAccountDetails />
+                </div>
+              </div>
             </TabPanel>
             <TabPanel value="1">
               <BookingFacts />
