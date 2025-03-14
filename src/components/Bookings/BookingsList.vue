@@ -1,8 +1,12 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="display-6 mb-4">Bookings</h1>
+    <TitleSection
+      title="All Bookings"
+      subtitle="Review past and upcoming bookings"
+      align-items="center"
+    />
 
-    <div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-end mt-3">
       <div class="me-2">
         <Select
           style="width: 12rem"
@@ -310,6 +314,7 @@ import dateFormat from "dateformat";
 import { useToast } from "primevue/usetoast";
 import LoadMoreButton from "../Common/Elements/LoadMoreButton.vue";
 import EmptyList from "../Common/Elements/EmptyList.vue";
+import TitleSection from "../Common/Elements/TitleSection.vue";
 
 //table row skeletons
 const rowSkeletons = ref(new Array(10));
