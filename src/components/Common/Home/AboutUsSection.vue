@@ -30,17 +30,17 @@
         services to your doorstep.
       </p>
       <div
-        class="d-flex flex-column-reverse flex-md-row align-items-start align-items-md-center mb-4"
+        class="d-flex flex-column-reverse flex-lg-row align-items-start align-items-lg-center mb-4 w-100"
       >
         <div
-          class="d-flex flex-column align-items-start text-start bg-secondary p-3 mt-3 mt-md-0"
+          class="fact-block d-flex flex-column text-center text-lg-start bg-secondary p-3 mt-3 mt-lg-0 rounded-2 rounded-lg-0"
         >
           <p class="display-3 fw-bold mb-0 text-light">50</p>
           <div class="fs-5 fw-bold text-light">
             <p class="mb-0">Cars Washed & Shining</p>
           </div>
         </div>
-        <d class="d-flex flex-column align-items-start gap-3 ms-md-3">
+        <d class="d-flex flex-column align-items-start gap-3 ms-lg-3">
           <div class="d-flex align-items-center">
             <i class="fa-solid fa-circle-check me-2 fs-5 text-primary"></i
             ><span>Premium Hand Wash</span>
@@ -65,10 +65,10 @@
         <div class="card border-0">
           <div class="d-flex justify-content-start align-items-center">
             <span class="rounded-circle bg-primary text-light">
-              <i class="fas fa-phone-flip p-3"></i>
+              <i class="fas fa-phone-flip p-3 p-lg-2 p-xl-3"></i>
             </span>
             <div
-              class="d-flex flex-column align-items-start ms-3 justify-content-center"
+              class="d-flex flex-column align-items-start ms-3 justify-content-start"
             >
               <p class="card-title text-muted mb-0">Have any questions?</p>
               <p class="card-text fw-bold h5">+27 81 589 6615</p>
@@ -78,10 +78,10 @@
         <div class="card border-0">
           <div class="d-flex justify-content-start align-items-center">
             <span class="rounded-circle bg-primary text-light">
-              <i class="fas fa-envelope p-3"></i>
+              <i class="fas fa-envelope p-3 p-lg-2 p-xl-3"></i>
             </span>
             <div
-              class="d-flex flex-column align-items-start ms-3 justify-content-center"
+              class="d-flex flex-column align-items-start ms-3 justify-content-start"
             >
               <p class="card-title text-muted mb-0">Email us</p>
               <p class="card-text fw-bold h5">ptnrlab@gmail.com</p>
@@ -96,3 +96,15 @@
 <script setup>
 import TitleSection from "../Elements/TitleSection.vue";
 </script>
+
+<style scoped>
+.fact-block {
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .fact-block {
+    width: auto;
+  }
+}
+</style>
