@@ -1,10 +1,10 @@
 <template>
   <!-- Topbar Start -->
-  <div class="container-fluid top-bar d-none d-lg-block py-2">
+  <div class="container-fluid text-light bg-secondary d-none d-lg-block py-2">
     <div
       class="d-flex align-items-center justify-content-end align-items-center me-3"
     >
-      <div>
+      <div class="d-flex align-items-center">
         <div class="d-inline-flex align-items-center me-4">
           <i class="fa fa-map-marker-alt text-primary me-2"></i>
           <p class="m-0">123 Street, Cape Town, South Africa</p>
@@ -13,19 +13,9 @@
           <i class="far fa-envelope-open text-primary me-2"></i>
           <p class="m-0">nya20002@byui.edu</p>
         </div>
-        <div class="d-inline-flex align-items-center">
-          <a
-            class="btn btn-primary btn-lg btn-floating text-primary me-1"
-            style="background-color: #ffffff; border: none"
-            role="button"
-            ><i class="fab fa-instagram"></i
-          ></a>
-          <a
-            class="btn btn-primary text-primary me-1"
-            style="background-color: #ffffff; border: none"
-            role="button"
-            ><i class="fab fa-facebook"></i
-          ></a>
+        <div class="d-flex align-items-center">
+          <a class="btn"><i class="fab fa-instagram text-light fa-lg"></i></a>
+          <a class="btn"><i class="fab fa-facebook text-light fa-lg"></i></a>
         </div>
       </div>
     </div>
