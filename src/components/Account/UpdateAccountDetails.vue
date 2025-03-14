@@ -16,6 +16,7 @@
           <InputIcon class="fas fa-user" />
           <InputText
             fluid
+            :disabled="!isInEditMode"
             id="registerName"
             v-model="v$.name.$model"
             :invalid="v$.name.$error"
@@ -41,6 +42,7 @@
         <IconField>
           <InputIcon class="fas fa-envelope" />
           <InputText
+            :disabled="!isInEditMode"
             id="registerEmail"
             class="w-100"
             v-model="v$.email.$model"
@@ -62,33 +64,6 @@
       </Message>
     </div>
 
-    <!-- Password input -->
-    <div class="form-group mb-3">
-      <FloatLabel variant="on">
-        <IconField>
-          <InputIcon class="fas fa-lock" />
-          <InputText
-            fluid
-            id="registerPassword"
-            v-model="v$.password.$model"
-            :invalid="v$.password.$error"
-            type="password"
-          />
-        </IconField>
-        <label for="registerPassword">Password</label>
-      </FloatLabel>
-      <Message
-        size="small"
-        severity="error"
-        v-if="v$.password.$error"
-        variant="simple"
-      >
-        <div v-for="error of v$.password.$errors" :key="error.$uid">
-          <div>{{ error.$message }}</div>
-        </div>
-      </Message>
-    </div>
-
     <!-- Phone input -->
     <div class="form-group mb-3">
       <FloatLabel variant="on">
@@ -96,6 +71,7 @@
           <InputIcon class="fas fa-phone" />
           <InputText
             fluid
+            :disabled="!isInEditMode"
             id="registerPhone"
             v-model="v$.phone.$model"
             :invalid="v$.phone.$error"
@@ -116,17 +92,28 @@
       </Message>
     </div>
 
-    <!-- Submit button -->
-    <Button
-      fluid
-      class="mb-2"
-      size="small"
-      type="submit"
-      severity="primary"
-      :label="isRegistering ? 'Please wait...' : 'Sign up'"
-      :loading="isRegistering"
-      :disabled="v$.$errors.length > 0 || isRegistering"
-    />
+    <!-- Action buttons -->
+    <div class="d-flex align-items-start">
+      <!-- Discard changes button -->
+      <!-- Save changes form -->
+      <Button
+        class="mb-2"
+        size="small"
+        type="submit"
+        severity="danger"
+        variant="outlined"
+        label="Discard changes"
+      />
+      <Button
+        class="mb-2"
+        size="small"
+        type="submit"
+        severity="primary"
+        :label="isRegistering ? 'Please wait...' : 'Sign up'"
+        :loading="isRegistering"
+        :disabled="v$.$errors.length > 0 || isRegistering"
+      />
+    </div>
   </form>
 </template>
 
@@ -163,19 +150,18 @@ onMounted(() => {
   userForm.value.phone = phone;
 });
 
+//is form in edit mode or not
+//if not, the form fields are disabled
+let isInEditMode = ref(false);
+
 //form validation with Vuelidate start
 const userForm = ref({
   name: "",
   email: "",
   phone: "",
-  password: "",
 });
-const passwordRule = helpers.regex(
-  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-);
+
 let phoneRule = helpers.regex(/^(\+27|0)[6-8][0-9]{8}$/);
-let passwordErrorMessage =
-  "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters";
 let phoneErrorMessage = "The phone number you entered is invalid";
 const rules = {
   name: { required, minLengthValue: minLength(3) },
@@ -183,10 +169,6 @@ const rules = {
   phone: {
     required,
     phoneRule: helpers.withMessage(phoneErrorMessage, phoneRule),
-  },
-  password: {
-    required,
-    passwordRule: helpers.withMessage(passwordErrorMessage, passwordRule),
   },
 };
 
