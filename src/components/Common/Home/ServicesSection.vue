@@ -1,23 +1,22 @@
 <template>
   <!-- Services Start -->
   <div v-if="services.length > 0" class="mt-5">
-    <div class="text-start text-lg-center">
+    <div>
       <!-- Title for small screens -->
       <TitleSection
-        class="d-lg-none"
-        subtitle="Car wash services"
-        title="Our Expertise"
-        align-items="start"
-      />
-      <!-- Title for large screens -->
-      <TitleSection
-        class="d-none d-lg-flex"
         subtitle="Car wash services"
         title="Our Expertise"
         align-items="center"
       />
+      <!-- Title for large screens -->
+      <!-- <TitleSection
+        class="d-none d-lg-flex"
+        subtitle="Car wash services"
+        title="Our Expertise"
+        align-items="center"
+      /> -->
       <div class="row mb-4">
-        <p class="col-lg-8 m-auto">
+        <p class="col-lg-8 text-center m-auto">
           Keep your car looking its best with our high-quality wash services. We
           remove dirt, dust, and grime while protecting your vehicle’s finish.
         </p>
@@ -47,7 +46,7 @@
         >
           <ServiceItem :service="service" />
         </div>
-        <div class="m-auto mt-4">
+        <div class="text-center m-auto mt-4">
           <router-link
             class="btn btn-primary text-light btn-lg m-2 px-4 py-2 px-md-5 py-md-3"
             to="/services"

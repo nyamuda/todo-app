@@ -50,7 +50,7 @@
           </div>
 
           <!-- Price & Duration -->
-          <p class="card-text text-muted mb-1">
+          <p class="card-text text-secondary fw-bold mb-1">
             {{ formatCurrency(service.price) }}
           </p>
           <p class="card-text text-muted mb-2">
@@ -79,7 +79,7 @@
           />
 
           <!-- Buttons -->
-          <div class="mt-auto d-flex gap-3">
+          <div class="mt-2 d-flex gap-3">
             <Button
               size="small"
               icon="fas fa-info-circle"
@@ -153,7 +153,7 @@ import Rating from "primevue/rating";
 import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-
+import { formatCurrency } from "@/helpers/helpers";
 import Tag from "primevue/tag";
 
 let router = useRouter();
@@ -210,13 +210,6 @@ const calculateAverageRating = (feedbacks) => {
   return (totalRating / feedbacks.length).toFixed(1); // Round to 1 decimal place
 };
 
-//format number into a monetary value
-let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: currency,
-  }).format(amount);
-};
 //navigate to the service details
 let goToServiceDetails = (id) => {
   router.push(`services/${id}/details`);
