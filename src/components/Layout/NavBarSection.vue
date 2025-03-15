@@ -1,8 +1,10 @@
 <template>
   <!-- Topbar Start -->
-  <div class="container-fluid text-light bg-secondary d-none d-lg-block py-2">
+  <div
+    class="top-bar container-fluid text-light bg-secondary d-none d-lg-block py-1 px-3"
+  >
     <div
-      class="top-bar d-flex align-items-center justify-content-between align-items-center me-3"
+      class="d-flex align-items-center justify-content-between align-items-center"
     >
       <div class="d-flex align-items-center">
         <div class="d-inline-flex align-items-center me-4">
