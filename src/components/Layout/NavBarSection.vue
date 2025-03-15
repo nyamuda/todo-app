@@ -2,7 +2,7 @@
   <!-- Topbar Start -->
   <div class="container-fluid text-light bg-secondary d-none d-lg-block py-2">
     <div
-      class="d-flex align-items-center justify-content-between align-items-center me-3"
+      class="top-bar d-flex align-items-center justify-content-between align-items-center me-3"
     >
       <div class="d-flex align-items-center">
         <div class="d-inline-flex align-items-center me-4">
@@ -246,7 +246,6 @@ const items = computed(() => {
 
 <style scoped>
 .top-bar {
-  /* 50% opacity */
-  background-color: rgba(164, 216, 170, 0.08);
+  font-size: 0.9rem;
 }
 </style>
