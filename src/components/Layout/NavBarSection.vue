@@ -2,20 +2,30 @@
   <!-- Topbar Start -->
   <div class="container-fluid text-light bg-secondary d-none d-lg-block py-2">
     <div
-      class="d-flex align-items-center justify-content-end align-items-center me-3"
+      class="d-flex align-items-center justify-content-between align-items-center me-3"
     >
       <div class="d-flex align-items-center">
         <div class="d-inline-flex align-items-center me-4">
-          <i class="fa fa-map-marker-alt text-light me-2"></i>
+          <i class="fa fa-map-marker-alt text-primary me-2"></i>
           <p class="m-0">123 Street, Cape Town, South Africa</p>
         </div>
         <div class="d-inline-flex align-items-center me-4">
-          <i class="far fa-envelope-open text-light me-2"></i>
+          <i class="far fa-clock text-primary me-2"></i>
+          <p class="m-0">Mon - Friday: 08.00 PM - 05.00 PM</p>
+        </div>
+      </div>
+      <div class="d-flex align-items-center">
+        <div class="d-inline-flex align-items-center me-4">
+          <i class="fas fa-phone text-primary me-2"></i>
+          <p class="m-0">+27 81 589 6615</p>
+        </div>
+        <div class="d-inline-flex align-items-center me-4">
+          <i class="far fa-envelope-open text-primary me-2"></i>
           <p class="m-0">nya20002@byui.edu</p>
         </div>
         <div class="d-flex align-items-center">
-          <a class="btn"><i class="fab fa-instagram text-light fa-lg"></i></a>
-          <a class="btn"><i class="fab fa-facebook text-light fa-lg"></i></a>
+          <a class="btn"><i class="fab fa-instagram text-primary fa-lg"></i></a>
+          <a class="btn"><i class="fab fa-facebook text-primary fa-lg"></i></a>
         </div>
       </div>
     </div>

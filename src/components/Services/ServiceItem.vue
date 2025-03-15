@@ -85,7 +85,6 @@
               icon="fas fa-info-circle"
               label="Details"
               severity="secondary"
-              outlined
               fluid
               @click="goToServiceDetails(service?.id)"
             />
