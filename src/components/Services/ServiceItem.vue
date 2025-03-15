@@ -84,8 +84,9 @@
               size="small"
               icon="fas fa-info-circle"
               label="Details"
-              severity="secondary"
+              severity="contrast"
               fluid
+              variant="outlined"
               @click="goToServiceDetails(service?.id)"
             />
 

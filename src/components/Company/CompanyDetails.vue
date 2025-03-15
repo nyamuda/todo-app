@@ -39,6 +39,7 @@
           label="Create company information"
           icon="fas fa-plus"
           size="small"
+          severity="primary"
         />
       </router-link>
     </div>
@@ -54,12 +55,24 @@ import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import Button from "primevue/button";
 import EmptyList from "../Common/Elements/EmptyList.vue";
+import { useToast } from "primevue/usetoast";
 
+const toast = useToast();
 let store = useStore();
 
 onMounted(async () => {
   //get company information to display
-  await store.dispatch("company/getCompanies");
+  await store
+    .dispatch("company/getCompanies")
+    .then()
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Fetch Failed",
+        detail: message,
+        life: 10000,
+      });
+    });
 });
 
 //
