@@ -1,5 +1,15 @@
 <template>
   <div>
+    <!-- Feedback dialog -->
+    <Button
+      size="small"
+      label="Feedback"
+      icon="fas fa-star"
+      severity="info"
+      aria-label="Rate service"
+      @click="sendFeedback(bookingId)"
+      :loading="isSendingFeedback"
+    />
     <!--Feedback Dialog Start-->
     <ConfirmDialog group="feedback">
       <template #container="{ message, acceptCallback, rejectCallback }">
@@ -59,7 +69,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, numeric, helpers } from "@vuelidate/validators";
@@ -73,8 +83,13 @@ import { Message } from "primevue";
 import { useToast } from "primevue/usetoast";
 import { useStore } from "vuex";
 
-const toast = useToast();
+defineProps({
+  bookingId: {
+    type: String,
+  },
+});
 
+const toast = useToast();
 const store = useStore();
 const confirmDialog = useConfirm();
 let isSendingFeedback = computed(() => store.state.bookings.isSendingFeedback);
@@ -97,7 +112,7 @@ const feedbackRules = {
 //for feedback
 const v2$ = useVuelidate(feedbackRules, feedbackForm.value);
 
-//Rate a service
+//Rate a booking
 let sendFeedback = (id) => {
   //show text area errors
   v2$.value.$touch();
