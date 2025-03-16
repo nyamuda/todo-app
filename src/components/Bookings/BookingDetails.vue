@@ -235,6 +235,22 @@
       <div
         class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2"
       >
+        <!--Button to add feedback-->
+        <Button
+          v-if="
+            doesBookingRequireFeedback(
+              booking.status.name,
+              booking.feedback?.rating
+            )
+          "
+          size="small"
+          label="Feedback"
+          icon="fas fa-star"
+          severity="info"
+          aria-label="Rate service"
+          @click="sendFeedback(booking.id)"
+          :loading="isSendingFeedback"
+        />
         <Button
           v-if="
             booking?.status.name !== 'cancelled' &&
@@ -500,6 +516,16 @@ let getBooking = () => {
         isGettingBooking.value = false;
       });
   }
+};
+
+//Does the booking require feedback or not
+let doesBookingRequireFeedback = (status, rating) => {
+  //if the rating is null
+  //then the booking requires feedback
+  if (!rating && status.toLowerCase() == "completed") {
+    return true;
+  }
+  return false;
 };
 </script>
 
