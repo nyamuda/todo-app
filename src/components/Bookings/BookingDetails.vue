@@ -288,54 +288,6 @@
   </div>
   <!--Confirm dialog-->
   <ConfirmDialog></ConfirmDialog>
-  <!--Cancel Dialog Start-->
-  <ConfirmDialog group="cancel">
-    <template #container="{ message, acceptCallback, rejectCallback }">
-      <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
-        <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
-        <p class="mb-3">{{ message.message }}</p>
-        <div class="w-100">
-          <FloatLabel variant="on">
-            <Textarea
-              class="w-100"
-              id="cancelReason"
-              :invalid="v$.cancelReason.$error"
-              v-model="v$.cancelReason.$model"
-              rows="4"
-            />
-            <label for="cancelReason">Please provide a reason</label>
-          </FloatLabel>
-
-          <Message
-            v-if="v$.cancelReason.$error"
-            severity="error"
-            size="small"
-            variant="simple"
-            ><div v-for="error of v$.cancelReason.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div></Message
-          >
-        </div>
-        <div class="d-flex align-items-center justify-content-end mt-2 w-100">
-          <Button
-            class="me-3"
-            label="Never mind"
-            size="small"
-            severity="contrast"
-            @click="rejectCallback"
-          ></Button>
-          <Button
-            :disabled="v$.cancelReason.$error"
-            label="Yes, cancel booking"
-            severity="warn"
-            size="small"
-            @click="acceptCallback"
-          ></Button>
-        </div>
-      </div>
-    </template>
-  </ConfirmDialog>
-  <!--Cancel Dialog End-->
 </template>
 
 <script setup>
