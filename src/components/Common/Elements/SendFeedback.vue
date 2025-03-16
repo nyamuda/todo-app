@@ -21,15 +21,15 @@
           <div class="mb-2">
             <Rating
               class="mb-1"
-              :invalid="v2$.rating.$error"
-              v-model="v2$.rating.$model"
+              :invalid="v$.rating.$error"
+              v-model="v$.rating.$model"
             />
             <Message
-              v-if="v2$.rating.$error"
+              v-if="v$.rating.$error"
               severity="error"
               size="small"
               variant="simple"
-              ><div v-for="error of v2$.rating.$errors" :key="error.$uid">
+              ><div v-for="error of v$.rating.$errors" :key="error.$uid">
                 <div>{{ error.$message }}</div>
               </div></Message
             >
@@ -39,7 +39,7 @@
               <Textarea
                 class="w-100"
                 id="bookingFeedback"
-                v-model="v2$.content.$model"
+                v-model="v$.content.$model"
                 rows="5"
               />
               <label for="bookingFeedback">Share your thoughts</label>
@@ -55,7 +55,7 @@
               @click="rejectCallback"
             ></Button>
             <Button
-              :disabled="v2$.rating.$error"
+              :disabled="v$.rating.$error"
               label="Send feedback"
               severity="primary"
               size="small"
@@ -110,12 +110,12 @@ const feedbackRules = {
 };
 
 //for feedback
-const v2$ = useVuelidate(feedbackRules, feedbackForm.value);
+const v$ = useVuelidate(feedbackRules, feedbackForm.value);
 
 //Rate a booking
 let sendFeedback = (id) => {
   //show text area errors
-  v2$.value.$touch();
+  v$.value.$touch();
   //show dialog
   confirmDialog.require({
     group: "feedback",
