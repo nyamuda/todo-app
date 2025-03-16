@@ -127,21 +127,16 @@
                   aria-label="Custom ProgressSpinner"
                 />
                 <!--Button to add feedback-->
-                <Button
+                <SendFeedback
                   v-else-if="
                     doesBookingRequireFeedback(
                       slotProps.data.status.name,
                       slotProps.data?.feedback?.rating
                     )
                   "
-                  size="small"
-                  label="Feedback"
-                  icon="fas fa-star"
-                  severity="info"
-                  aria-label="Rate service"
-                  @click="sendFeedback(slotProps.data.id)"
-                  :loading="isSendingFeedback"
+                  :booking-id="slotProps.data.id"
                 />
+
                 <!--Cancel Booking Button-->
                 <Button
                   v-else
@@ -235,60 +230,7 @@
     </template>
   </ConfirmDialog>
   <!--Cancel Dialog End-->
-  <!--Feedback Dialog Start-->
-  <ConfirmDialog group="feedback">
-    <template #container="{ message, acceptCallback, rejectCallback }">
-      <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
-        <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
-        <p class="mb-3">{{ message.message }}</p>
-        <div class="mb-2">
-          <Rating
-            class="mb-1"
-            :invalid="v2$.rating.$error"
-            v-model="v2$.rating.$model"
-          />
-          <Message
-            v-if="v2$.rating.$error"
-            severity="error"
-            size="small"
-            variant="simple"
-            ><div v-for="error of v2$.rating.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div></Message
-          >
-        </div>
-        <div class="w-100">
-          <FloatLabel variant="on">
-            <Textarea
-              class="w-100"
-              id="bookingFeedback"
-              v-model="v2$.content.$model"
-              rows="5"
-            />
-            <label for="bookingFeedback">Share your thoughts</label>
-          </FloatLabel>
-        </div>
-        <div class="d-flex align-items-center justify-content-end mt-2 w-100">
-          <Button
-            class="me-3"
-            label="Cancel"
-            variant="outlined"
-            severity="contrast"
-            size="small"
-            @click="rejectCallback"
-          ></Button>
-          <Button
-            :disabled="v2$.rating.$error"
-            label="Send feedback"
-            severity="primary"
-            size="small"
-            @click="acceptCallback"
-          ></Button>
-        </div>
-      </div>
-    </template>
-  </ConfirmDialog>
-  <!--Feedback Dialog End-->
+
   <!--Dialogs Section Start-->
 </template>
 
@@ -304,17 +246,17 @@ import ConfirmDialog from "primevue/confirmdialog";
 import Textarea from "primevue/textarea";
 import { Message } from "primevue";
 import Skeleton from "primevue/skeleton";
-import Rating from "primevue/rating";
 import { FloatLabel } from "primevue";
 import ProgressSpinner from "primevue/progressspinner";
 import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, numeric, helpers } from "@vuelidate/validators";
+import { required, minLength } from "@vuelidate/validators";
 import { useStore } from "vuex";
 import dateFormat from "dateformat";
 import { useToast } from "primevue/usetoast";
 import LoadMoreButton from "../Common/Elements/LoadMoreButton.vue";
 import EmptyList from "../Common/Elements/EmptyList.vue";
 import TitleSection from "../Common/Elements/TitleSection.vue";
+import SendFeedback from "../Common/Elements/SendFeedback.vue";
 
 //table row skeletons
 const rowSkeletons = ref(new Array(10));
@@ -328,7 +270,6 @@ const confirmDialog = useConfirm();
 let bookings = computed(() => store.state.bookings.bookings);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
-let isSendingFeedback = computed(() => store.state.bookings.isSendingFeedback);
 //the selected booking ID for canceling or any other action
 let selectedBookingId = ref(null);
 
@@ -379,26 +320,13 @@ onMounted(async () => {
 const reasonToCancelForm = ref({
   cancelReason: "",
 });
-const feedbackForm = ref({
-  content: "",
-  rating: null,
-});
+
 const cancelRules = {
   cancelReason: { required, minLengthValue: minLength(5) },
-};
-//rules for the booking feedback form
-const feedbackRules = {
-  content: {},
-  rating: {
-    required: helpers.withMessage("Rating is required", required),
-    numeric,
-  },
 };
 
 //for cancellation
 const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
-//for feedback
-const v2$ = useVuelidate(feedbackRules, feedbackForm.value);
 
 //cancel a booking
 let cancelBooking = (id) => {
@@ -426,45 +354,6 @@ let cancelBooking = (id) => {
     },
     reject: () => {
       console.log(`Delete booking with ${id} cancelled`);
-    },
-  });
-};
-
-//Rate a booking
-let sendFeedback = (id) => {
-  //show text area errors
-  v2$.value.$touch();
-  //show dialog
-  confirmDialog.require({
-    group: "feedback",
-    message:
-      "Let us know how we did. Your rating and comments are appreciated.",
-    header: "How Was Your Car Wash?",
-    accept: () => {
-      let feedback = {
-        content: feedbackForm.value.content,
-        rating: feedbackForm.value.rating,
-        bookingId: id,
-      };
-      //send the feedback
-      store
-        .dispatch("bookings/addFeedback", { feedback })
-        .then((message) => {
-          toast.add({
-            severity: "success",
-            summary: "Feedback Sent",
-            detail: message,
-            life: 5000,
-          });
-        })
-        .catch((message) => {
-          toast.add({
-            severity: "error",
-            summary: "Feedback Failed",
-            detail: message,
-            life: 10000,
-          });
-        });
     },
   });
 };
