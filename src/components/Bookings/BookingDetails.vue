@@ -236,20 +236,14 @@
         class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2"
       >
         <!--Button to add feedback-->
-        <Button
+        <SendFeedback
+          :booking-id="booking.id"
           v-if="
             doesBookingRequireFeedback(
               booking.status.name,
               booking.feedback?.rating
             )
           "
-          size="small"
-          label="Feedback"
-          icon="fas fa-star"
-          severity="info"
-          aria-label="Rate service"
-          @click="sendFeedback(booking.id)"
-          :loading="isSendingFeedback"
         />
         <Button
           v-if="
@@ -363,6 +357,7 @@ import { Message } from "primevue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import ItemNotFound from "../Common/Elements/ItemNotFound.vue";
+import SendFeedback from "../Common/Elements/SendFeedback.vue";
 
 const store = useStore();
 const router = useRouter();
