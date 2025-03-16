@@ -407,7 +407,7 @@ import Textarea from "primevue/textarea";
 import { Message } from "primevue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import ItemNotFound from "../Common/NotFound/ItemNotFound.vue";
+import ItemNotFound from "../Common/Elements/ItemNotFound.vue";
 
 //toast
 const toast = useToast();

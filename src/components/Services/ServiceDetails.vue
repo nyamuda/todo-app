@@ -130,7 +130,7 @@ import Button from "primevue/button";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import ServiceDetailsSkeleton from "./Skeletons/ServiceDetailsSkeleton.vue";
-import ItemNotFound from "../Common/NotFound/ItemNotFound.vue";
+import ItemNotFound from "../Common/Elements/ItemNotFound.vue";
 import FeedbackList from "../Feedback/FeedbackList.vue";
 
 let store = useStore();
