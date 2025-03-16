@@ -256,7 +256,7 @@ import { useToast } from "primevue/usetoast";
 import LoadMoreButton from "../Common/Elements/LoadMoreButton.vue";
 import EmptyList from "../Common/Elements/EmptyList.vue";
 import TitleSection from "../Common/Elements/TitleSection.vue";
-import SendFeedback from "../Common/Elements/SendFeedback.vue";
+import SendFeedback from "./SendBookingFeedback.vue";
 
 //table row skeletons
 const rowSkeletons = ref(new Array(10));

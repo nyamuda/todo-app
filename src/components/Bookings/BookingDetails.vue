@@ -357,7 +357,7 @@ import { Message } from "primevue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import ItemNotFound from "../Common/Elements/ItemNotFound.vue";
-import SendFeedback from "../Common/Elements/SendFeedback.vue";
+import SendFeedback from "./SendBookingFeedback.vue";
 
 const store = useStore();
 const router = useRouter();
