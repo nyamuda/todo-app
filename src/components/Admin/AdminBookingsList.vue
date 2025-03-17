@@ -159,7 +159,10 @@
     </div>
 
     <!--No Bookings  Start-->
-    <EmptyList v-else message="You have no bookings at the moment." />
+    <EmptyList
+      :title="noBookingsMessage.title"
+      :message="noBookingsMessage.message"
+    />
     <!--No Bookings End-->
   </div>
 
@@ -211,6 +214,7 @@ import { useStore } from "vuex";
 import dateFormat from "dateformat";
 import { useToast } from "primevue/usetoast";
 import TitleSection from "../Common/Elements/TitleSection.vue";
+import { getBookingFilterNoItemsMessage } from "@/helpers/helpers";
 //table row skeletons
 const rowSkeletons = ref(new Array(10));
 
@@ -218,6 +222,10 @@ const store = useStore();
 const toast = useToast();
 
 let filterBookingsBy = ref("all");
+//no bookings custom message based on the filter
+let noBookingsMessage = computed(() =>
+  getBookingFilterNoItemsMessage(filterBookingsBy.value)
+);
 
 let bookings = computed(() => store.state.admin.bookings);
 
