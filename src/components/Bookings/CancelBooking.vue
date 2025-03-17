@@ -113,7 +113,7 @@ const cancelRules = {
 const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
 
 //cancel a booking
-let cancelBooking = (bookingId) => {
+let cancelBooking = (id) => {
   //show text area errors
   v$.value.$touch();
   //show dialog
@@ -132,7 +132,7 @@ let cancelBooking = (bookingId) => {
       };
       store
         .dispatch("bookings/changeBookingStatus", {
-          bookingId,
+          bookingId: id,
           statusUpdate,
         })
         .then((message) => {

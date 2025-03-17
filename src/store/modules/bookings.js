@@ -266,7 +266,7 @@ const bookings = {
         dispatch("setAuthorizationHeader");
         axios
           .put(
-            `${rootState.apiUrl}/admin/bookings/${bookingId}/statuses`,
+            `${rootState.apiUrl}/bookings/${bookingId}/statuses`,
             statusUpdate
           )
           .then(() => {

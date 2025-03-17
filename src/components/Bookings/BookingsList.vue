@@ -102,12 +102,7 @@
             <template #body="slotProps">
               <div class="d-flex justify-content-start align-items-center">
                 <!--Button to see more details-->
-                <router-link
-                  v-if="
-                    !isUpdatingBooking || slotProps.data.id != selectedBookingId
-                  "
-                  :to="'bookings/' + slotProps.data.id + '/details'"
-                >
+                <router-link :to="'bookings/' + slotProps.data.id + '/details'">
                   <Button
                     label="More details"
                     severity="secondary"
@@ -115,20 +110,10 @@
                     icon="fas fa-info"
                     class="no-wrap-btn me-2"
                 /></router-link>
-                <!--Spinner if an action is in progress-->
-                <ProgressSpinner
-                  v-if="
-                    isUpdatingBooking && slotProps.data.id == selectedBookingId
-                  "
-                  style="width: 32px; height: 32px"
-                  strokeWidth="8"
-                  fill="transparent"
-                  animationDuration=".5s"
-                  aria-label="Custom ProgressSpinner"
-                />
+
                 <!--Button to add feedback-->
                 <SendFeedback
-                  v-else-if="
+                  v-if="
                     doesBookingRequireFeedback(
                       slotProps.data.status.name,
                       slotProps.data?.feedback?.rating
@@ -139,7 +124,7 @@
 
                 <!--Cancel Booking Button-->
                 <CancelBooking
-                  v-else
+                  v-if="slotProps.data.status.name != 'cancelled'"
                   :booking-id="slotProps.data.id"
                   :callMethodAfterSuccess="getAllBookings"
                 />
@@ -181,7 +166,6 @@ import Column from "primevue/column";
 import { Tag } from "primevue";
 import Button from "primevue/button";
 import Skeleton from "primevue/skeleton";
-import ProgressSpinner from "primevue/progressspinner";
 import { useStore } from "vuex";
 import dateFormat from "dateformat";
 import { useToast } from "primevue/usetoast";
@@ -201,9 +185,6 @@ let filterBookingsBy = ref("all");
 
 let bookings = computed(() => store.state.bookings.bookings);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
-let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
-//the selected booking ID for canceling or any other action
-let selectedBookingId = ref(null);
 
 //since statuses are used to filter bookings,
 //fetch all the status names and include the "All" value as well
