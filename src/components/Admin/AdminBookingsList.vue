@@ -126,30 +126,16 @@
           <Column field="id" header="Actions">
             <template #body="slotProps">
               <div class="d-flex justify-content-center align-items-center">
-                <!--Spinner if an action is in progress-->
-                <ProgressSpinner
-                  v-if="
-                    isUpdatingBooking && slotProps.data.id == selectedBookingId
-                  "
-                  style="width: 32px; height: 32px"
-                  strokeWidth="8"
-                  fill="transparent"
-                  animationDuration=".5s"
-                  aria-label="Custom ProgressSpinner"
-                />
-                <!--Button to add feedback-->
-                <div v-else>
-                  <router-link
-                    :to="'bookings/' + slotProps.data.id + '/details'"
-                  >
-                    <Button
-                      label="More details"
-                      severity="secondary"
-                      size="small"
-                      icon="fas fa-info"
-                      class="no-wrap-btn"
-                  /></router-link>
-                </div>
+                <!--Button to see more details-->
+                <router-link :to="'bookings/' + slotProps.data.id + '/details'">
+                  <Button
+                    label="More details"
+                    severity="contrast"
+                    variant="outlined"
+                    size="small"
+                    icon="fas fa-info"
+                    class="no-wrap-btn me-2"
+                /></router-link>
               </div>
             </template>
           </Column>
@@ -216,7 +202,6 @@ import EmptyList from "../Common/Elements/EmptyList.vue";
 import Dialog from "primevue/dialog";
 import Skeleton from "primevue/skeleton";
 import Rating from "primevue/rating";
-import ProgressSpinner from "primevue/progressspinner";
 import LoadMoreButton from "../Common/Elements/LoadMoreButton.vue";
 import { useStore } from "vuex";
 import dateFormat from "dateformat";
@@ -246,9 +231,7 @@ let statuses = computed(() => {
 });
 
 let isGettingBookings = computed(() => store.state.admin.isGettingBookings);
-let isUpdatingBooking = computed(() => store.state.admin.isUpdatingBooking);
-//the selected booking ID for canceling or any other action
-let selectedBookingId = ref(null);
+
 //selected user to see more details about the user
 let selectedUser = ref(null);
 let showSelectedUser = ref(false);
