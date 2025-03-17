@@ -1,6 +1,10 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="display-6 mb-4">Bookings</h1>
+    <TitleSection
+      title="Client Bookings"
+      subtitle="Review past and upcoming bookings"
+      align-items="center"
+    />
 
     <div class="d-flex justify-content-end">
       <div class="me-2">
@@ -206,6 +210,7 @@ import LoadMoreButton from "../Common/Elements/LoadMoreButton.vue";
 import { useStore } from "vuex";
 import dateFormat from "dateformat";
 import { useToast } from "primevue/usetoast";
+import TitleSection from "../Common/Elements/TitleSection.vue";
 //table row skeletons
 const rowSkeletons = ref(new Array(10));
 
