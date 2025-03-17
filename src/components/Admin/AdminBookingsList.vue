@@ -160,6 +160,7 @@
 
     <!--No Bookings  Start-->
     <EmptyList
+      v-else
       :title="noBookingsMessage.title"
       :message="noBookingsMessage.message"
     />
