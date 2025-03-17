@@ -422,7 +422,7 @@ const account = {
             //decode the token and save the user info to the state
             dispatch(" decodeTokenAndLoadInfo", { token: accessToken });
 
-            //save the token to local/ session storage
+            //save the token to local storage
             //first remove any outdated tokens in the local or session storage
             localStorage.removeItem("jwt_token");
             sessionStorage.removeItem("jwt_token");

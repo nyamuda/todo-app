@@ -195,7 +195,7 @@ let submitForm = async () => {
         id: user.value.id,
         updatedDetails: userForm.value,
       })
-      .then((message) => {
+      .then(async (message) => {
         toast.add({
           severity: "success",
           summary: "Account Updated",
@@ -204,8 +204,10 @@ let submitForm = async () => {
         });
         //turn off edit mode
         isInEditMode.value = false;
-        //update the user details state with the new user details
-        store.commit("account/addUserInfo", user.value);
+        //since the user details have been update
+        //the current access token is now outdated
+        //make a request to get a new access token with the updated user details
+        await store.dispatch("account/refreshToken");
       })
       .catch((message) => {
         toast.add({
