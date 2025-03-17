@@ -105,7 +105,8 @@
                 <router-link :to="'bookings/' + slotProps.data.id + '/details'">
                   <Button
                     label="More details"
-                    severity="secondary"
+                    severity="contrast"
+                    variant="outlined"
                     size="small"
                     icon="fas fa-info"
                     class="no-wrap-btn me-2"
