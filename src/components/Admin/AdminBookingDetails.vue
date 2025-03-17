@@ -80,10 +80,7 @@
       <!-- Booking Details Card -->
       <Card class="">
         <template #title>
-          <p class="h1 mb-3 d-flex align-items-center">
-            <i class="fas fa-calendar-check me-1 text-primary"></i>
-            Booking Details
-          </p>
+          <TitleSection title="Booking Details" />
         </template>
 
         <template #content>
@@ -353,6 +350,7 @@ import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import ItemNotFound from "../Common/Elements/ItemNotFound.vue";
 import CancelBooking from "../Bookings/CancelBooking.vue";
+import TitleSection from "../Common/Elements/TitleSection.vue";
 
 //toast
 const toast = useToast();
