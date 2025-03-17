@@ -27,7 +27,7 @@
                 v-model="v$.cancelReason.$model"
                 rows="4"
               />
-              <label for="cancelReason">Please provide a reason</label>
+              <label for="cancelReason">Reason for cancelling</label>
             </FloatLabel>
 
             <Message
@@ -45,13 +45,14 @@
               class="me-3"
               label="Never mind"
               size="small"
+              variant="outlined"
               severity="contrast"
               @click="rejectCallback"
             ></Button>
             <Button
               :disabled="v$.cancelReason.$error"
               label="Yes, cancel booking"
-              severity="warn"
+              severity="primary"
               size="small"
               @click="acceptCallback"
             ></Button>
@@ -66,7 +67,7 @@
 <script setup>
 import { ref } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { minLength, required } from "@vuelidate/validators";
+import { minLength, required, helpers } from "@vuelidate/validators";
 import { FloatLabel } from "primevue";
 import Button from "primevue/button";
 import { useConfirm } from "primevue/useconfirm";
@@ -99,9 +100,13 @@ let isCancelling = ref(false);
 const reasonToCancelForm = ref({
   cancelReason: "",
 });
+const errorMessage = "Please provide a reason for cancelling the booking";
 
 const cancelRules = {
-  cancelReason: { required, minLengthValue: minLength(5) },
+  cancelReason: {
+    required: helpers.withMessage(errorMessage, required),
+    minLengthValue: minLength(5),
+  },
 };
 
 //for cancellation
