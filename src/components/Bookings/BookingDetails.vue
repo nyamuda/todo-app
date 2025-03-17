@@ -254,23 +254,6 @@
           :booking-id="booking.id"
           :callMethodAfterSuccess="getBooking"
         />
-        <Button
-          v-if="
-            booking?.status.name !== 'cancelled' &&
-            booking?.status.name !== 'completed'
-          "
-          :label="
-            isChangingBookingStatus == 'cancelled'
-              ? 'Cancelling booking...'
-              : 'Cancel Booking'
-          "
-          icon="fas fa-times-circle"
-          severity="danger"
-          @click="cancelBooking(booking.id)"
-          size="small"
-          :loading="isChangingBookingStatus == 'cancelled'"
-          :disabled="isChangingBookingStatus == 'cancelled'"
-        />
 
         <router-link :to="'/bookings/' + id + '/update'">
           <Button
@@ -318,7 +301,6 @@ const toast = useToast();
 
 let id = ref(null);
 let isGettingBooking = ref(false);
-let changingStatusTo = ref(null); // the status that the booking is currently being updated to
 //message to show if the item is not found
 const itemNotFound = ref({
   title: "No Booking Details Available",
@@ -326,11 +308,6 @@ const itemNotFound = ref({
     " The booking information could not be found. It may have been removed or does not exist.",
 });
 
-//for showing the loader on a button depending on which status the booking is being changed to
-let isChangingBookingStatus = computed(() => {
-  let status = changingStatusTo.value;
-  return status == "cancelled" ? "cancelled" : null;
-});
 let booking = ref(null);
 //user who cancelled the booking if the booking was cancelled
 let whoCancelledBooking = computed(
