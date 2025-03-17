@@ -174,6 +174,7 @@ import EmptyList from "../Common/Elements/EmptyList.vue";
 import TitleSection from "../Common/Elements/TitleSection.vue";
 import SendFeedback from "./SendBookingFeedback.vue";
 import CancelBooking from "./CancelBooking.vue";
+import { formatCurrency } from "@/helpers/helpers";
 import { getBookingFilterNoItemsMessage } from "@/helpers/helpers";
 
 //table row skeletons
@@ -313,14 +314,6 @@ let doesBookingRequireFeedback = (status, rating) => {
     return true;
   }
   return false;
-};
-
-//format number into a monetary value
-let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: currency,
-  }).format(amount);
 };
 </script>
 
