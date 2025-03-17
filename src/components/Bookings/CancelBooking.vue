@@ -4,7 +4,7 @@
     <Button
       :label="isCancelling ? 'Cancelling...' : 'Cancel Booking'"
       icon="fas fa-times-circle"
-      severity="danger"
+      :severity="cancelButtonSeverity"
       @click="cancelBooking(bookingId)"
       size="small"
       :loading="isCancelling"
@@ -82,6 +82,8 @@ let props = defineProps({
     type: Number,
     required: true,
   },
+  //cancel button severity
+  cancelButtonSeverity: { type: String, default: "danger" },
   //method to call after a success
   callMethodAfterSuccess: {
     type: Function,

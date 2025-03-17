@@ -297,6 +297,7 @@
           "
           :booking-id="booking.id"
           :callMethodAfterSuccess="getBooking"
+          cancel-button-severity="warn"
         />
 
         <!-- Button to update a booking -->
@@ -348,11 +349,6 @@ import dateFormat from "dateformat";
 import Rating from "primevue/rating";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
-import { useVuelidate } from "@vuelidate/core";
-import { required, minLength } from "@vuelidate/validators";
-import { FloatLabel } from "primevue";
-import Textarea from "primevue/textarea";
-import { Message } from "primevue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import ItemNotFound from "../Common/Elements/ItemNotFound.vue";
@@ -376,8 +372,6 @@ let isChangingBookingStatus = computed(() => {
   let status = changingStatusTo.value;
   return status == "en route"
     ? "en route"
-    : status == "cancelled"
-    ? "cancelled"
     : status == "confirmed"
     ? "confirmed"
     : status == "completed"
@@ -653,56 +647,6 @@ const deleteBooking = (id) => {
     },
   });
 };
-
-//Form validation with Vuelidate start
-//cancel reason data
-const reasonToCancelForm = ref({
-  cancelReason: "",
-});
-
-const cancelRules = {
-  cancelReason: { required, minLengthValue: minLength(5) },
-};
-
-//for cancellation
-const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
-
-//cancel a booking
-let cancelBooking = (bookingId) => {
-  //show text area errors
-  v$.value.$touch();
-  //show dialog
-  confirmDialog.require({
-    group: "cancel",
-    message: "Are you sure you want to cancel this booking?",
-    header: "Cancel Booking",
-    accept: () => {
-      //show loading button
-      changingStatusTo.value = "cancelled";
-      //change the status of the booking
-      //by changing the status to "cancelled"
-      let statusUpdate = {
-        statusName: "cancelled",
-        cancelReason: reasonToCancelForm.value.cancelReason,
-      };
-      store
-        .dispatch("admin/changeBookingStatus", {
-          bookingId,
-          statusUpdate,
-        })
-        .then((response) => {
-          toast.success(response);
-          //stop loading button
-          changingStatusTo.value = null;
-
-          //get the updated booking
-          getBooking();
-        })
-        .catch((ex) => toast.error(ex));
-    },
-  });
-};
-//Form validation with Vuelidate end
 
 let getBooking = () => {
   //get the booking details from the API
