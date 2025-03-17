@@ -243,6 +243,7 @@
       <div
         class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2"
       >
+        <!-- Button to confirm a booking -->
         <Button
           v-if="booking?.status.name === 'pending'"
           :label="
@@ -257,7 +258,7 @@
           :disable="isChangingBookingStatus == 'confirmed'"
           :loading="isChangingBookingStatus == 'confirmed'"
         />
-
+        <!-- Button to mark booking as en route-->
         <Button
           v-if="booking?.status.name === 'confirmed'"
           :label="
@@ -272,6 +273,7 @@
           :disabled="isChangingBookingStatus == 'en route'"
           :loading="isChangingBookingStatus == 'en route'"
         />
+        <!-- Button to complete a booking -->
         <Button
           v-if="booking?.status.name === 'en route'"
           :label="
@@ -287,23 +289,17 @@
           :loading="isChangingBookingStatus == 'completed'"
         />
 
-        <Button
+        <!-- Button to cancel a booking -->
+        <CancelBooking
           v-if="
             booking?.status.name !== 'cancelled' &&
             booking?.status.name !== 'completed'
           "
-          :label="
-            isChangingBookingStatus == 'cancelled'
-              ? 'Cancelling booking...'
-              : 'Cancel Booking'
-          "
-          icon="fas fa-times-circle"
-          severity="warn"
-          @click="cancelBooking(booking.id)"
-          size="small"
-          :disabled="isChangingBookingStatus == 'cancelled'"
-          :loading="isChangingBookingStatus == 'cancelled'"
+          :booking-id="booking.id"
+          :callMethodAfterSuccess="getBooking"
         />
+
+        <!-- Button to update a booking -->
         <router-link :to="'/admin/bookings/' + id + '/update'">
           <Button
             v-if="
@@ -317,7 +313,7 @@
             @click="editBooking"
             size="small"
         /></router-link>
-
+        <!-- Button to delete a booking -->
         <Button
           :loading="isDeletingBooking"
           :disabled="isDeletingBooking"
@@ -339,54 +335,6 @@
   </div>
   <!--Confirm dialog-->
   <ConfirmDialog></ConfirmDialog>
-  <!--Cancel Dialog Start-->
-  <ConfirmDialog group="cancel">
-    <template #container="{ message, acceptCallback, rejectCallback }">
-      <div class="d-flex flex-column align-items-start p-4 bg-light rounded">
-        <span class="fw-bold fs-3 d-block mb-2 mt-2">{{ message.header }}</span>
-        <p class="mb-3">{{ message.message }}</p>
-        <div class="w-100">
-          <FloatLabel variant="on">
-            <Textarea
-              class="w-100"
-              id="cancelReason"
-              :invalid="v$.cancelReason.$error"
-              v-model="v$.cancelReason.$model"
-              rows="4"
-            />
-            <label for="cancelReason">Please provide a reason</label>
-          </FloatLabel>
-
-          <Message
-            v-if="v$.cancelReason.$error"
-            severity="error"
-            size="small"
-            variant="simple"
-            ><div v-for="error of v$.cancelReason.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div></Message
-          >
-        </div>
-        <div class="d-flex align-items-center justify-content-end mt-2 w-100">
-          <Button
-            class="me-3"
-            label="Never mind"
-            size="small"
-            severity="contrast"
-            @click="rejectCallback"
-          ></Button>
-          <Button
-            :disabled="v$.cancelReason.$error"
-            label="Yes, cancel booking"
-            severity="warn"
-            size="small"
-            @click="acceptCallback"
-          ></Button>
-        </div>
-      </div>
-    </template>
-  </ConfirmDialog>
-  <!--Cancel Dialog End-->
 </template>
 
 <script setup>
@@ -408,6 +356,7 @@ import { Message } from "primevue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import ItemNotFound from "../Common/Elements/ItemNotFound.vue";
+import CancelBooking from "../Bookings/CancelBooking.vue";
 
 //toast
 const toast = useToast();

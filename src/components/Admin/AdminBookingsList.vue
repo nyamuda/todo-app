@@ -225,7 +225,7 @@ const toast = useToast();
 let filterBookingsBy = ref("all");
 //no bookings custom message based on the filter
 let noBookingsMessage = computed(() =>
-  getBookingFilterNoItemsMessage(filterBookingsBy.value)
+  getBookingFilterNoItemsMessage(filterBookingsBy.value, true)
 );
 
 let bookings = computed(() => store.state.admin.bookings);
