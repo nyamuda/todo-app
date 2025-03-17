@@ -316,6 +316,24 @@ let formatCurrency = (amount, currency = "ZAR", locale = "en-ZA") => {
     currency: currency,
   }).format(amount);
 };
+
+//custom messages for the select filter input
+//if there are no items for the select value
+const getFilterNoItemsMessage= (filter) => {
+  let value = filter ? filter.toLowerCase() : "";
+  switch (value) {
+    case "completed":
+      return "success"; // Green
+    case "confirmed":
+      return "info"; // Blue
+    case "pending":
+      return "warn"; // Yellow
+    case "cancelled":
+      return "danger"; // Red
+    default:
+      return "secondary";
+  }
+};
 </script>
 
 <style>
