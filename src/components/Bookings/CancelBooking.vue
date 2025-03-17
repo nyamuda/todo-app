@@ -5,7 +5,7 @@
       :label="isCancelling ? 'Cancelling...' : 'Cancel Booking'"
       icon="fas fa-times-circle"
       severity="danger"
-      @click="cancelBooking(booking.id)"
+      @click="cancelBooking(bookingId)"
       size="small"
       :loading="isCancelling"
       :disabled="isCancelling"
@@ -78,7 +78,7 @@ import { useStore } from "vuex";
 
 let props = defineProps({
   bookingId: {
-    type: String,
+    type: Number,
     required: true,
   },
   //method to call after a success

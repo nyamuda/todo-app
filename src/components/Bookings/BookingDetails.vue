@@ -77,10 +77,7 @@
       <!-- Booking Details Card -->
       <Card class="">
         <template #title>
-          <p class="h1 mb-3 d-flex align-items-center">
-            <i class="fas fa-calendar-check me-1 text-primary"></i>
-            Booking Details
-          </p>
+          <TitleSection title="Booking Details" />
         </template>
 
         <template #content>
@@ -232,9 +229,7 @@
       </Card>
 
       <!-- Action Buttons -->
-      <div
-        class="mt-4 d-flex flex-column flex-lg-row justify-content-end gap-2"
-      >
+      <div class="mt-4 d-flex flex-wrap flex-lg-row justify-content-end gap-2">
         <!--Button to add feedback-->
         <SendFeedback
           :booking-id="booking.id"
@@ -294,6 +289,7 @@ import { useToast } from "primevue/usetoast";
 import ItemNotFound from "../Common/Elements/ItemNotFound.vue";
 import SendFeedback from "./SendBookingFeedback.vue";
 import CancelBooking from "./CancelBooking.vue";
+import TitleSection from "../Common/Elements/TitleSection.vue";
 
 const store = useStore();
 const router = useRouter();
