@@ -261,7 +261,6 @@ const account = {
         axios
           .put(`${rootState.apiUrl}/users/${id}`, updatedDetails)
           .then(() => {
-
             resolve("Your account details have been updated.");
           })
           .catch((error) => {
@@ -402,6 +401,42 @@ const account = {
           })
           .finally(() => {
             state.isContactingUs = false;
+          });
+      });
+    },
+
+    //Refresh the access token
+    //using the an HTTP-Only cookie containing the refresh token in the request --> withCredentials:true
+    refreshToken({ state, rootState, dispatch }) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            `${rootState.apiUrl}/account/refresh-token`,
+            {},
+            { withCredentials: true }
+          )
+          .then((response) => {
+            //get the access token
+            let accessToken = response.data.token;
+
+            //decode the token and save the user info to the state
+            dispatch(" decodeTokenAndLoadInfo", { token: accessToken });
+
+            //save the token to local/ session storage
+            //first remove any outdated tokens in the local or session storage
+            localStorage.removeItem("jwt_token");
+            sessionStorage.removeItem("jwt_token");
+
+            //then finally save new access token
+            localStorage.setItem("jwt_token", accessToken);
+          })
+          .catch((error) => {
+            const message =
+              error.response?.data?.message || rootState.failureMessage;
+            reject(message); // Reject with the error message
+          })
+          .finally(() => {
+            state.isSendingPasswordLink = false; // Reset loading state
           });
       });
     },

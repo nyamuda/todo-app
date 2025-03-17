@@ -152,7 +152,7 @@
                       ><strong>Cancelled By:</strong>
                       {{
                         whoCancelledBooking.role == "Admin"
-                          ? "Admin"
+                          ? ""
                           : whoCancelledBooking.name
                       }}
                       <Tag
