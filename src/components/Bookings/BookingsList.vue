@@ -138,7 +138,10 @@
                 />
 
                 <!--Cancel Booking Button-->
-                <CancelBooking :booking-id="slotProps.data.id" />
+                <CancelBooking
+                  :booking-id="slotProps.data.id"
+                  :callMethodAfterSuccess="getAllBookings"
+                />
               </div>
             </template>
           </Column>
@@ -176,15 +179,8 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { Tag } from "primevue";
 import Button from "primevue/button";
-import { useConfirm } from "primevue/useconfirm";
-import ConfirmDialog from "primevue/confirmdialog";
-import Textarea from "primevue/textarea";
-import { Message } from "primevue";
 import Skeleton from "primevue/skeleton";
-import { FloatLabel } from "primevue";
 import ProgressSpinner from "primevue/progressspinner";
-import { useVuelidate } from "@vuelidate/core";
-import { required, minLength } from "@vuelidate/validators";
 import { useStore } from "vuex";
 import dateFormat from "dateformat";
 import { useToast } from "primevue/usetoast";
@@ -202,7 +198,6 @@ const toast = useToast();
 
 let filterBookingsBy = ref("all");
 
-const confirmDialog = useConfirm();
 let bookings = computed(() => store.state.bookings.bookings);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);
 let isUpdatingBooking = computed(() => store.state.bookings.isUpdatingBooking);
@@ -223,8 +218,15 @@ let statuses = computed(() => {
   return statusNames;
 });
 
-onMounted(async () => {
+onMounted(() => {
   //get all bookings
+  getAllBookings();
+
+  //get all statuses
+  getBookingStatuses();
+});
+//get all bookings
+let getAllBookings = () => {
   store
     .dispatch("bookings/getBookings")
     .then()
@@ -236,8 +238,9 @@ onMounted(async () => {
         life: 5000,
       });
     });
-
-  //get all booking statuses
+};
+//get all booking statuses
+let getBookingStatuses = () => {
   store
     .dispatch("statuses/getStatuses")
     .then()
@@ -249,52 +252,7 @@ onMounted(async () => {
         life: 5000,
       });
     });
-});
-
-//Form validation with Vuelidate start
-//cancel reason data
-const reasonToCancelForm = ref({
-  cancelReason: "",
-});
-
-const cancelRules = {
-  cancelReason: { required, minLengthValue: minLength(5) },
 };
-
-//for cancellation
-const v$ = useVuelidate(cancelRules, reasonToCancelForm.value);
-
-//cancel a booking
-let cancelBooking = (id) => {
-  //show text area errors
-  v$.value.$touch();
-  selectedBookingId.value = id; //show loader for in the row of the of the booking
-  //show dialog
-  confirmDialog.require({
-    group: "cancel",
-    message: "Are you sure you want to cancel this booking?",
-    header: "Cancel Booking",
-    accept: () => {
-      //change the status of the booking
-      //by changing the status to "cancelled"
-      let statusUpdate = {
-        statusName: "cancelled",
-        cancelReason: reasonToCancelForm.value.cancelReason,
-      };
-
-      //save the updated booking
-      store.dispatch("bookings/changeBookingStatus", {
-        bookingId: id,
-        statusUpdate,
-      });
-    },
-    reject: () => {
-      console.log(`Delete booking with ${id} cancelled`);
-    },
-  });
-};
-//Form validation with Vuelidate end
-
 //Filter bookings by status
 let filterBookings = () => {
   const filterValue = filterBookingsBy.value.toLowerCase();
