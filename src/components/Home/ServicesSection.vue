@@ -69,11 +69,11 @@
 
 <script setup>
 import { onMounted, computed } from "vue";
-import TitleSection from "../Elements/TitleSection.vue";
+import TitleSection from "@/components/Common/Elements/TitleSection.vue";
 import { useStore } from "vuex";
 import ServiceItemSkeleton from "@/components/Services/ServiceItemSkeleton.vue";
 
-import EmptyList from "../Elements/EmptyList.vue";
+import EmptyList from "../Common/Elements/EmptyList.vue";
 import ServiceItem from "@/components/Services/ServiceItem.vue";
 
 let store = useStore();

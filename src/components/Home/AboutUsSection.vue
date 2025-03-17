@@ -94,7 +94,7 @@
 </template>
 
 <script setup>
-import TitleSection from "../Elements/TitleSection.vue";
+import TitleSection from "../Common/Elements/TitleSection.vue";
 </script>
 
 <style scoped>

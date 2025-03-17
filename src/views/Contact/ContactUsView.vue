@@ -45,6 +45,6 @@
 </template>
 
 <script setup>
-import ContactUsItem from "@/components/Common/Contact/ContactUsItem.vue";
+import ContactUsItem from "@/components/Contact/ContactUsItem.vue";
 import TitleSection from "@/components/Common/Elements/TitleSection.vue";
 </script>

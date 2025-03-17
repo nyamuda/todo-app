@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "@/views/Common/HomeView.vue";
-import ContactUsView from "@/views/Common/ContactUsView.vue";
+import HomeView from "@/views/Home/HomeView.vue";
+import ContactUsView from "@/views/Contact/ContactUsView.vue";
 import SentPasswordForgotEmailView from "@/views/Email/SentPasswordForgotEmailView.vue";
 import SendPasswordForgotEmailView from "@/views/Email/SendPasswordForgotEmailView.vue";
 import SentEmailVerificationView from "@/views/Email/SentEmailVerificationView.vue";
@@ -35,7 +35,7 @@ import RegisterUser from "@/components/Account/RegisterUser.vue";
 import PasswordReset from "@/components/Account/PasswordReset.vue";
 import VerificationResult from "@/components/Account/VerificationResult.vue";
 import AccountView from "@/views/Account/AccountView.vue";
-import PageNotFoundView from "@/views/Common/PageNotFoundView.vue";
+import PageNotFoundView from "@/views/NotFound/PageNotFoundView.vue";
 import CompanyView from "@/views/Company/CompanyView.vue";
 import CompanyDetails from "@/components/Company/CompanyDetails.vue";
 import AddCompany from "@/components/Company/AddCompany.vue";
