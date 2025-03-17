@@ -245,6 +245,13 @@
             )
           "
         />
+        <CancelBooking
+          v-if="
+            booking?.status.name !== 'cancelled' &&
+            booking?.status.name !== 'completed'
+          "
+          :booking-id="booking.id"
+        />
         <Button
           v-if="
             booking?.status.name !== 'cancelled' &&
@@ -310,6 +317,7 @@ import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import ItemNotFound from "../Common/Elements/ItemNotFound.vue";
 import SendFeedback from "./SendBookingFeedback.vue";
+import CancelBooking from "./CancelBooking.vue";
 
 const store = useStore();
 const router = useRouter();

@@ -1,5 +1,19 @@
 <template>
   <div>
+    <!-- Cancel button -->
+    <Button
+      :label="
+        isChangingBookingStatus == 'cancelled'
+          ? 'Cancelling booking...'
+          : 'Cancel Booking'
+      "
+      icon="fas fa-times-circle"
+      severity="danger"
+      @click="cancelBooking(booking.id)"
+      size="small"
+      :loading="isChangingBookingStatus == 'cancelled'"
+      :disabled="isChangingBookingStatus == 'cancelled'"
+    />
     <!--Cancel Dialog Start-->
     <ConfirmDialog group="cancel">
       <template #container="{ message, acceptCallback, rejectCallback }">
@@ -54,10 +68,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, numeric, helpers } from "@vuelidate/validators";
-import Rating from "primevue/rating";
+import { minLength, required } from "@vuelidate/validators";
 import { FloatLabel } from "primevue";
 import Button from "primevue/button";
 import { useConfirm } from "primevue/useconfirm";
@@ -67,9 +80,15 @@ import { Message } from "primevue";
 import { useToast } from "primevue/usetoast";
 import { useStore } from "vuex";
 
-defineProps({
+let props = defineProps({
   bookingId: {
     type: String,
+    required: true,
+  },
+  //method to call after a success
+  callAfterSuccess: {
+    type: Function,
+    required: true,
   },
 });
 
@@ -123,6 +142,8 @@ let cancelBooking = (bookingId) => {
             detail: message,
             life: 5000,
           });
+          //when the request is a success, call a certain method
+          props.callAfterSuccess();
         })
         .catch((message) => {
           toast.add({
