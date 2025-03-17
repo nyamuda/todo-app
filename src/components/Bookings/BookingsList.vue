@@ -150,8 +150,8 @@
     <!--No Bookings  Start-->
     <EmptyList
       v-else
-      title="Nothing booked yet"
-      message="Book a car wash today and leave the rest to us."
+      :title="noBookingsMessage.title"
+      :message="noBookingsMessage.message"
     />
 
     <!--No Bookings End-->
@@ -174,6 +174,7 @@ import EmptyList from "../Common/Elements/EmptyList.vue";
 import TitleSection from "../Common/Elements/TitleSection.vue";
 import SendFeedback from "./SendBookingFeedback.vue";
 import CancelBooking from "./CancelBooking.vue";
+import { getBookingFilterNoItemsMessage } from "@/helpers/helpers";
 
 //table row skeletons
 const rowSkeletons = ref(new Array(10));
@@ -182,6 +183,11 @@ const store = useStore();
 const toast = useToast();
 
 let filterBookingsBy = ref("all");
+
+//no bookings custom message based on the filter
+let noBookingsMessage = computed(() =>
+  getBookingFilterNoItemsMessage(filterBookingsBy.value)
+);
 
 let bookings = computed(() => store.state.bookings.bookings);
 let isGettingBookings = computed(() => store.state.bookings.isGettingBookings);

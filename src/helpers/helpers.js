@@ -49,7 +49,7 @@ const getBookingFilterNoItemsMessage = (filter) => {
       };
     default:
       return {
-        title: "No Bookings",
+        title: "Nothing booked yet",
         message: "Book a car wash today and leave the rest to us.",
       };
   }
