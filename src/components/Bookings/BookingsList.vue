@@ -139,6 +139,7 @@
 
                 <!--Cancel Booking Button-->
                 <CancelBooking
+                  v-else
                   :booking-id="slotProps.data.id"
                   :callMethodAfterSuccess="getAllBookings"
                 />

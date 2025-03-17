@@ -2,17 +2,13 @@
   <div>
     <!-- Cancel button -->
     <Button
-      :label="
-        isChangingBookingStatus == 'cancelled'
-          ? 'Cancelling booking...'
-          : 'Cancel Booking'
-      "
+      :label="isCancelling ? 'Cancelling...' : 'Cancel Booking'"
       icon="fas fa-times-circle"
       severity="danger"
       @click="cancelBooking(booking.id)"
       size="small"
-      :loading="isChangingBookingStatus == 'cancelled'"
-      :disabled="isChangingBookingStatus == 'cancelled'"
+      :loading="isCancelling"
+      :disabled="isCancelling"
     />
     <!--Cancel Dialog Start-->
     <ConfirmDialog group="cancel">
