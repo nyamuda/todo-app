@@ -86,7 +86,7 @@ let props = defineProps({
     required: true,
   },
   //method to call after a success
-  callAfterSuccess: {
+  callMethodAfterSuccess: {
     type: Function,
     required: true,
   },
@@ -143,7 +143,7 @@ let cancelBooking = (bookingId) => {
             life: 5000,
           });
           //when the request is a success, call a certain method
-          props.callAfterSuccess();
+          props.callMethodAfterSuccess();
         })
         .catch((message) => {
           toast.add({
