@@ -432,10 +432,9 @@ const account = {
             //then finally save new access token
             localStorage.setItem("jwt_token", accessToken);
           })
-          .catch((ex) => {
-            console.log(ex);
+          .catch(() => {
             const message =
-              ex.response?.data?.message || rootState.failureMessage;
+              "Something went wrong while refreshing your session.";
             reject(message); // Reject with the error message
           })
           .finally(() => {
