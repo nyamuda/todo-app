@@ -422,7 +422,7 @@ const account = {
             let accessToken = response.data.token;
 
             //decode the token and save the user info to the state
-            dispatch(" decodeTokenAndLoadInfo", { token: accessToken });
+            dispatch("decodeTokenAndLoadInfo", { token: accessToken });
 
             //save the token to local storage
             //first remove any outdated tokens in the local or session storage

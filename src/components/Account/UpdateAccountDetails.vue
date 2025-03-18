@@ -204,15 +204,23 @@ let submitForm = async () => {
         });
         //turn off edit mode
         isInEditMode.value = false;
+
+        //update the user state
+        user.value = userForm.value;
+
         //since the user details have been update
         //the current access token is now outdated
         //make a request to get a new access token with the updated user details
-        await store.dispatch("account/refreshToken");
+        try {
+          await store.dispatch("account/refreshToken");
+        } catch (ex) {
+          console.log(ex);
+        }
       })
       .catch((message) => {
         toast.add({
           severity: "error",
-          summary: "Update Failed",
+          summary: "Error",
           detail: message,
           life: 10000,
         });
