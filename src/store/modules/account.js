@@ -389,7 +389,7 @@ const account = {
       return new Promise((resolve, reject) => {
         state.isContactingUs = true;
         axios
-          .post(`${rootState.apiUrl}/email/contact`, payload)
+          .post(`${rootState.apiUrl}/email/contact-message`, payload)
           .then(() => {
             let message =
               "We’ve received your message. Our team will get back to you shortly.";
