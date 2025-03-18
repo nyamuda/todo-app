@@ -281,7 +281,7 @@ const account = {
         state.isSendingVerificationLink = true;
 
         axios
-          .post(`${rootState.apiUrl}/email/verify`, payload)
+          .post(`${rootState.apiUrl}/email/verification-request`, payload)
           .then(() => {
             let message =
               "Email verification link sent. Please check your inbox and follow the instructions to confirm your email.";
@@ -304,7 +304,7 @@ const account = {
     async verifyUser({ state, rootState }, payload) {
       state.emailVerificationStatus = "verifying";
       try {
-        await axios.put(`${rootState.apiUrl}/account/verify`, payload);
+        await axios.put(`${rootState.apiUrl}/account/verification`, payload);
         state.emailVerificationStatus = "success";
       } catch (ex) {
         state.emailVerificationStatus = "fail";
@@ -317,7 +317,7 @@ const account = {
         state.isSendingPasswordLink = true;
 
         axios
-          .post(`${rootState.apiUrl}/email/password`, payload)
+          .post(`${rootState.apiUrl}/email/reset-password-request`, payload)
           .then(() => {
             resolve("Password reset email sent."); // Resolve on successful request
           })
