@@ -78,7 +78,9 @@ const account = {
         state.isLoggingIn = true;
 
         axios
-          .post(`${rootState.apiUrl}/account/login`, loginDetails)
+          .post(`${rootState.apiUrl}/account/login`, loginDetails, {
+            withCredentials: true,
+          })
           .then(async (response) => {
             // Get the access token and decode it
             const accessToken = response.data.token;
@@ -413,7 +415,7 @@ const account = {
           .post(
             `${rootState.apiUrl}/account/refresh-token`,
             {},
-            { withCredentials: true }
+            { withCredentials: true } // Send cookies
           )
           .then((response) => {
             //get the access token
@@ -430,9 +432,10 @@ const account = {
             //then finally save new access token
             localStorage.setItem("jwt_token", accessToken);
           })
-          .catch((error) => {
+          .catch((ex) => {
+            console.log(ex);
             const message =
-              error.response?.data?.message || rootState.failureMessage;
+              ex.response?.data?.message || rootState.failureMessage;
             reject(message); // Reject with the error message
           })
           .finally(() => {
