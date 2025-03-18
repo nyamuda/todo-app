@@ -265,10 +265,7 @@ const bookings = {
         //to access the protected route
         dispatch("setAuthorizationHeader");
         axios
-          .put(
-            `${rootState.apiUrl}/bookings/${bookingId}/statuses`,
-            statusUpdate
-          )
+          .put(`${rootState.apiUrl}/bookings/${bookingId}/status`, statusUpdate)
           .then(() => {
             let message = `The booking status is now ${statusUpdate.statusName}.`;
             resolve(message);
