@@ -58,7 +58,7 @@ const statuses = {
     async getStatusByName({ rootState }, name) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${rootState.apiUrl}/statuses/name/${name}`)
+          .get(`${rootState.apiUrl}/statuses?name=${name}`)
           .then((response) => resolve(response.data))
           .catch((ex) => {
             let message =
