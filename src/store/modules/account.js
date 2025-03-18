@@ -79,7 +79,7 @@ const account = {
 
         axios
           .post(`${rootState.apiUrl}/account/login`, loginDetails, {
-            withCredentials: true,
+            withCredentials: true, // Attach cookies
           })
           .then(async (response) => {
             // Get the access token and decode it
