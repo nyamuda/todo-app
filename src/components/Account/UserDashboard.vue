@@ -1,10 +1,12 @@
 <template>
   <div class="m-auto">
-    <TitleSection title="Account Overview" />
+    <TitleSection title="Profile & Bookings" />
     <div class="row mb-4 text-start">
+      <h3>
+        Hello, <span class="fw-bold text-primary">{{ userInfo.name }}</span>
+      </h3>
       <p class="col-md-8">
-        Hello, <span class="fw-bold">{{ userInfo.name }}</span
-        >! View your booking history or update your personal details right here.
+        View your booking history or update your personal details right here.
       </p>
     </div>
     <div class="mt-3">

@@ -339,7 +339,7 @@ const account = {
       return new Promise((resolve, reject) => {
         state.isResettingPassword = true;
         axios
-          .post(`${rootState.apiUrl}/account/password-reset`, payload)
+          .post(`${rootState.apiUrl}/account/reset-password`, payload)
           .then(() => {
             resolve("Your password has been successfully reset.");
           })

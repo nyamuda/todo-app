@@ -206,7 +206,9 @@ let submitForm = async () => {
         isInEditMode.value = false;
 
         //update the user state
-        user.value = userForm.value;
+        user.value.name = userForm.value.name;
+        user.value.email = userForm.value.email;
+        user.value.phone = userForm.value.phone;
 
         //since the user details have been update
         //the current access token is now outdated
