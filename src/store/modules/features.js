@@ -111,7 +111,7 @@ const features = {
     async getFeatureByName({ rootState }, name) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${rootState.apiUrl}/features/name/${name}`)
+          .get(`${rootState.apiUrl}/features?name=${name}`)
           .then((response) => resolve(response.data))
           .catch((ex) => {
             let message = ex.response?.data.message

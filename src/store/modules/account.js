@@ -384,28 +384,6 @@ const account = {
         commit("authenticateUser", false);
       }
     },
-    //Contact us message from user
-    contactUs({ state, rootState }, payload) {
-      return new Promise((resolve, reject) => {
-        state.isContactingUs = true;
-        axios
-          .post(`${rootState.apiUrl}/email/contact-message`, payload)
-          .then(() => {
-            let message =
-              "We’ve received your message. Our team will get back to you shortly.";
-            resolve(message);
-          })
-          .catch((error) => {
-            const message =
-              error.response?.data?.message ||
-              "We couldn’t send your message. Please try again in a few minutes.";
-            reject(message);
-          })
-          .finally(() => {
-            state.isContactingUs = false;
-          });
-      });
-    },
 
     //Refresh the access token
     //using the an HTTP-Only cookie containing the refresh token in the request --> withCredentials:true
