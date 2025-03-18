@@ -115,7 +115,7 @@ const bookings = {
         dispatch("setAuthorizationHeader");
         state.isGettingStatistics = true;
         axios
-          .get(`${rootState.apiUrl}/bookings/statistics`)
+          .get(`${rootState.apiUrl}/bookings/stats`)
           .then((response) => {
             //mutate the state with the fetched statistics
             commit("setUserStatistics", response.data);
