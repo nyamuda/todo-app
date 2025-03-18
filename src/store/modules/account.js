@@ -178,12 +178,12 @@ const account = {
       });
     },
 
-    //get user by email
-    getUserByEmail({ rootState, dispatch }, email) {
+    //get user details
+    getUserDetails({ rootState, dispatch }) {
       dispatch("setAuthorizationHeader");
       return new Promise((resolve, reject) => {
         axios
-          .get(`${rootState.apiUrl}/users/email/${email}`)
+          .get(`${rootState.apiUrl}/users/me`)
           .then((response) => resolve(response.data))
           .catch((ex) => {
             let message =

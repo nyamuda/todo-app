@@ -144,11 +144,9 @@ onMounted(() => {
   //show validation errors
   v$._value.$touch();
 
-  //get the user email
-  let { email } = store.state.account.loggedInUser;
-  //use that email to fetch all details about the user
+  //get the user details
   //and populate the form with those details
-  getUserByEmail(email);
+  getUserDetails();
 });
 
 //is form in edit mode or not
@@ -229,11 +227,11 @@ let submitForm = async () => {
       });
   }
 };
-//get user with the given email
+//get user detauls
 //and populate the form with the user details
-let getUserByEmail = (email) => {
+let getUserDetails = () => {
   store
-    .dispatch("account/getUserByEmail", email)
+    .dispatch("account/getUserDetails")
     .then((data) => {
       //populate the form with the user details
       populateForm(data);
