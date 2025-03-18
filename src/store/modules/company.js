@@ -71,7 +71,7 @@ const company = {
     getCompanyFacts({ commit, rootState }, id) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${rootState.apiUrl}/companies/${id}/facts`)
+          .get(`${rootState.apiUrl}/companies/${id}/company-facts`)
           .then((response) => {
             commit("setCompanyFacts", response.data);
             resolve();
