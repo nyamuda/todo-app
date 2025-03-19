@@ -26,54 +26,55 @@
         </Message>
       </div>
 
-      <!-- Email input -->
-      <div class="form-group mb-3">
-        <FloatLabel variant="on">
-          <InputText
-            class="w-100"
-            id="companyEmail"
-            v-model="v$.email.$model"
-            :invalid="v$.email.$error"
-            type="email"
-          />
-          <label for="companyEmail">Company email</label>
-        </FloatLabel>
-        <Message
-          size="small"
-          severity="error"
-          v-if="v$.email.$error"
-          variant="simple"
-        >
-          <div v-for="error of v$.email.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </Message>
-      </div>
+      <div class="row">
+        <!-- Email input -->
+        <div class="form-group mb-3 col-md-6">
+          <FloatLabel variant="on">
+            <InputText
+              class="w-100"
+              id="companyEmail"
+              v-model="v$.email.$model"
+              :invalid="v$.email.$error"
+              type="email"
+            />
+            <label for="companyEmail">Company email</label>
+          </FloatLabel>
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.email.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.email.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
+        </div>
 
-      <!-- Phone input -->
-      <div class="form-group mb-3">
-        <FloatLabel variant="on">
-          <InputText
-            class="w-100"
-            id="companyPhone"
-            v-model="v$.phone.$model"
-            :invalid="v$.phone.$error"
-            type="tel"
-          />
-          <label for="companyPhone">Company phone number</label>
-        </FloatLabel>
-        <Message
-          size="small"
-          severity="error"
-          v-if="v$.phone.$error"
-          variant="simple"
-        >
-          <div v-for="error of v$.phone.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </Message>
+        <!-- Phone input -->
+        <div class="form-group mb-3 col-md-6">
+          <FloatLabel variant="on">
+            <InputText
+              class="w-100"
+              id="companyPhone"
+              v-model="v$.phone.$model"
+              :invalid="v$.phone.$error"
+              type="tel"
+            />
+            <label for="companyPhone">Company phone number</label>
+          </FloatLabel>
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.phone.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.phone.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
+        </div>
       </div>
-
       <!-- Address input -->
       <div class="form-group mb-3">
         <FloatLabel variant="on">
