@@ -1,22 +1,26 @@
 <template>
   <div class="container m-auto">
     <TitleSection title="Company details" />
-    <div class="row mt-3">
+    <div class="row mt-2">
       <!-- Message section -->
       <div class="col-md-4">
-        <Message v-if="!company?.id" severity="warn"
-          >No company details have been added yet. This information helps
-          customers connect with your business.</Message
-        >
-        <p class="mt-3">
+        <p class="mb-3">
           The details you enter here will be visible to customers. Keep them
           accurate and up-to-date.
         </p>
+        <Message v-if="!company?.id && !isGettingCompany" severity="warn"
+          >No company details have been added yet. This information helps
+          customers connect with your business.</Message
+        >
       </div>
 
       <div class="col-md-8">
         <!--Form start-->
-        <form @submit.prevent="submitForm" class="needs-validation">
+        <form
+          @submit.prevent="submitForm"
+          class="needs-validation"
+          v-if="!isGettingCompany"
+        >
           <div class="row">
             <!-- Name input -->
             <div class="form-group mb-3 col-md-8">
@@ -26,7 +30,7 @@
                   id="companyName"
                   v-model="v$.name.$model"
                   :invalid="v$.name.$error"
-                  :disabled="!isInEditMode"
+                  :disabled="disableField"
                 />
                 <label for="companyName">Company name</label>
               </FloatLabel>
@@ -55,9 +59,9 @@
                   dateFormat="mm/yy"
                   showIcon
                   iconDisplay="input"
-                  :disabled="!isInEditMode"
+                  :disabled="disableField"
                 />
-                <label for="dateFounded">Year company was founded</label>
+                <label for="dateFounded">Founded on</label>
               </FloatLabel>
               <Message
                 size="small"
@@ -82,7 +86,7 @@
                   v-model="v$.email.$model"
                   :invalid="v$.email.$error"
                   type="email"
-                  :disabled="!isInEditMode"
+                  :disabled="disableField"
                 />
                 <label for="companyEmail">Company email</label>
               </FloatLabel>
@@ -107,7 +111,7 @@
                   v-model="v$.phone.$model"
                   :invalid="v$.phone.$error"
                   type="tel"
-                  :disabled="!isInEditMode"
+                  :disabled="disableField"
                 />
                 <label for="companyPhone">Company phone number</label>
               </FloatLabel>
@@ -131,7 +135,7 @@
                 id="companyAddress"
                 v-model="v$.address.$model"
                 :invalid="v$.address.$error"
-                :disabled="!isInEditMode"
+                :disabled="disableField"
               />
               <label for="companyAddress">Company Address</label>
             </FloatLabel>
@@ -159,6 +163,7 @@
               size="small"
               severity="danger"
               label="Discard changes"
+              :disabled="isAddingOrUpdatingCompany"
             />
             <!-- Save changes form -->
             <Button
@@ -176,15 +181,21 @@
             <!-- Edit account button -->
             <Button
               v-else
-              @click="isInEditMode = true"
+              @click="editForm"
               icon="fas fa-pencil-alt"
               size="small"
               severity="info"
               label="Edit details"
+              :disabled="isGettingCompany"
             />
           </div>
         </form>
         <!--Form end-->
+        <!-- Progress spinner start -->
+        <div class="d-flex justify-content-center" v-else>
+          <ProgressSpinner />
+        </div>
+        <!-- Progress spinner end -->
       </div>
     </div>
   </div>
@@ -203,26 +214,48 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 import TitleSection from "../Common/Elements/TitleSection.vue";
+import ProgressSpinner from "primevue/progressspinner";
 
 const store = useStore();
 const toast = useToast();
+
+onMounted(() => {
+  getCompanyDetailsAndPopulateForm();
+});
 
 let company = ref(null);
 //show loading button or not
 let isAddingOrUpdatingCompany = computed(
   () => store.state.company.isAddingOrUpdatingCompany
 );
+//is fetching company information for display
+let isGettingCompany = computed(() => store.state.company.isGettingCompany);
 
 //is form in edit mode or not
 //if not, the form fields are disabled
 let isInEditMode = ref(false);
+//disable form field or not
+let disableField = computed(() => !isInEditMode.value);
 
-onMounted(() => {
-  //show form errors
+//discard changes made
+//by populating the form with the original data
+let discardChanges = () => {
+  if (company.value) {
+    populateForm(company.value);
+  }
+
+  //disable form inputs
+  isInEditMode.value = false;
+};
+
+//edit the form
+let editForm = () => {
+  isInEditMode.value = true;
+  //show validation errors
   v$._value.$touch();
 
-  getCompanyDetailsAndPopulateForm();
-});
+  console.log(disableField);
+};
 
 // Form data
 const companyForm = ref({
@@ -277,18 +310,7 @@ const submitForm = async () => {
       detail: ex,
       life: 10000,
     });
-  } finally {
-    isInEditMode.value = false;
   }
-};
-
-//discard changes made
-//by populating the form with the original data
-let discardChanges = () => {
-  populateForm(company.value);
-
-  //disable form inputs
-  isInEditMode.value = false;
 };
 
 //get company details and populate the form with those details
@@ -297,7 +319,9 @@ let getCompanyDetailsAndPopulateForm = () => {
     .dispatch("company/getCompany")
     .then((companyData) => {
       //populate the form with company info
-      populateForm(companyData);
+      if (companyData) {
+        populateForm(companyData);
+      }
       //store company info
       company.value = companyData;
     })
@@ -324,6 +348,7 @@ let addCompany = async () => {
     detail: message,
     life: 5000,
   });
+  isInEditMode.value = false;
 };
 //Update company details
 let updateCompany = async () => {
@@ -337,6 +362,7 @@ let updateCompany = async () => {
     detail: message,
     life: 5000,
   });
+  isInEditMode.value = false;
 };
 </script>
 

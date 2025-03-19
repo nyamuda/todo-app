@@ -7,6 +7,7 @@ const company = {
     isAddingOrUpdatingCompany: false,
     isGettingCompanies: false,
     isDeletingCompany: false,
+    isGettingCompany: false,
     companyFacts: {
       company: {},
       totalYearsInService: 0,
@@ -51,8 +52,9 @@ const company = {
     },
 
     // Fetch a company by ID
-    getCompany({ rootState }) {
+    getCompany({ rootState, state }) {
       return new Promise((resolve, reject) => {
+        state.isGettingCompany = true;
         axios
           .get(`${rootState.apiUrl}/companies/first`)
           .then((response) => resolve(response.data))
@@ -60,7 +62,8 @@ const company = {
             let message =
               "Something went wrong while fetching company details.";
             reject(message);
-          });
+          })
+          .finally(() => (state.isGettingCompany = false));
       });
     },
 
@@ -91,6 +94,7 @@ const company = {
             resolve("The company information has been successfully added.")
           )
           .catch((ex) => {
+            console.log(ex);
             let message =
               ex.response?.data?.message ||
               "Something went wrong while adding the company information.";
@@ -131,7 +135,7 @@ const company = {
         state.isAddingOrUpdatingCompany = true;
         dispatch("setAuthorizationHeader");
         axios
-          .put(`${rootState.apiUrl}/companies/${id}`, updatedCompany)
+          .patch(`${rootState.apiUrl}/companies/${id}`, updatedCompany)
           .then(() => resolve("The company information has been updated."))
           .catch((ex) => {
             let message =
