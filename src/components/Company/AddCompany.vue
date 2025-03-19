@@ -36,6 +36,8 @@
               v-model="v$.yearFounded.$model"
               :invalid="v$.yearFounded.$error"
               fluid
+              view="year"
+              dateFormat="yy"
               showIcon
               iconDisplay="input"
             />
@@ -172,7 +174,7 @@ const companyForm = ref({
   email: "",
   phone: "",
   address: "",
-  yearFounded: "",
+  yearFounded: null,
 });
 
 //form validation with Vuelidate start
