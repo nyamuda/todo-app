@@ -81,12 +81,12 @@ const company = {
     },
 
     // Add a new company
-    addCompany({ dispatch, state, rootState }, payload) {
+    addCompany({ dispatch, state, rootState }, { company }) {
       return new Promise((resolve, reject) => {
         state.isAddingOrUpdatingCompany = true;
         dispatch("setAuthorizationHeader");
         axios
-          .post(`${rootState.apiUrl}/companies`, payload)
+          .post(`${rootState.apiUrl}/companies`, company)
           .then(() =>
             resolve("The company information has been successfully added.")
           )

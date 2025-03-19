@@ -47,25 +47,25 @@
               <FloatLabel variant="on">
                 <DatePicker
                   class="w-100"
-                  id="yearFounded"
-                  v-model="v$.yearFounded.$model"
-                  :invalid="v$.yearFounded.$error"
+                  id="dateFounded"
+                  v-model="v$.dateFounded.$model"
+                  :invalid="v$.dateFounded.$error"
                   fluid
-                  view="year"
-                  dateFormat="yy"
+                  view="month"
+                  dateFormat="mm/yy"
                   showIcon
                   iconDisplay="input"
                   :disabled="!isInEditMode"
                 />
-                <label for="yearFounded">Year company was founded</label>
+                <label for="dateFounded">Year company was founded</label>
               </FloatLabel>
               <Message
                 size="small"
                 severity="error"
-                v-if="v$.yearFounded.$error"
+                v-if="v$.dateFounded.$error"
                 variant="simple"
               >
-                <div v-for="error of v$.yearFounded.$errors" :key="error.$uid">
+                <div v-for="error of v$.dateFounded.$errors" :key="error.$uid">
                   <div>{{ error.$message }}</div>
                 </div>
               </Message>
@@ -230,7 +230,7 @@ const companyForm = ref({
   email: "",
   phone: "",
   address: "",
-  yearFounded: null,
+  dateFounded: null,
 });
 
 //form validation with Vuelidate start
@@ -245,7 +245,7 @@ const rules = {
     phoneRule: helpers.withMessage(phoneErrorMessage, phoneRule),
   },
   address: { required },
-  yearFounded: { required },
+  dateFounded: { required },
 };
 
 const v$ = useVuelidate(rules, companyForm.value);
@@ -258,23 +258,23 @@ const submitForm = async () => {
     // then the company details have not be added to the database yet
     //which means we need create a new record of the company to the database
     if (!company.value?.id) {
-      addCompany();
+      await addCompany();
     }
     //if company ID is not null
     //then the company details have already been created
     //which means we need to update the company details
     else if (company.value?.id) {
-      updateCompany();
+      await updateCompany();
     } else {
       throw new Error(
-        "An unexpected error occurred while saving the company details"
+        "An unexpected error occurred while saving the company details."
       );
     }
   } catch (ex) {
     toast.add({
       severity: "error",
-      summary: "Error",
-      detail: ex.message,
+      summary: "Saving Changes Failed",
+      detail: ex,
       life: 10000,
     });
   } finally {
@@ -305,11 +305,11 @@ let getCompanyDetailsAndPopulateForm = () => {
 };
 
 //populate the form with company data
-let populateForm = ({ name, email, phone, yearFounded, address }) => {
+let populateForm = ({ name, email, phone, dateFounded, address }) => {
   companyForm.value.name = name;
   companyForm.value.email = email;
   companyForm.value.phone = phone;
-  companyForm.value.yearFounded = yearFounded;
+  companyForm.value.dateFounded = dateFounded;
   companyForm.value.address = address;
 };
 
