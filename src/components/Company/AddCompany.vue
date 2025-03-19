@@ -1,176 +1,188 @@
 <template>
   <div class="container m-auto">
     <TitleSection subtitle="Company details" />
-    <!--Form start-->
-    <form @submit.prevent="submitForm" class="needs-validation">
-      <div class="row">
-        <!-- Name input -->
-        <div class="form-group mb-3 col-md-8">
-          <FloatLabel variant="on">
-            <InputText
-              class="w-100"
-              id="companyName"
-              v-model="v$.name.$model"
-              :invalid="v$.name.$error"
-              :disabled="!isInEditMode"
-            />
-            <label for="companyName">Company name</label>
-          </FloatLabel>
-          <Message
-            size="small"
-            severity="error"
-            v-if="v$.name.$error"
-            variant="simple"
-          >
-            <div v-for="error of v$.name.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div>
-          </Message>
-        </div>
-
-        <!-- Year founded input -->
-        <div class="form-group mb-3 col-md-4">
-          <FloatLabel variant="on">
-            <DatePicker
-              class="w-100"
-              id="yearFounded"
-              v-model="v$.yearFounded.$model"
-              :invalid="v$.yearFounded.$error"
-              fluid
-              view="year"
-              dateFormat="yy"
-              showIcon
-              iconDisplay="input"
-              :disabled="!isInEditMode"
-            />
-            <label for="yearFounded">Year company was founded</label>
-          </FloatLabel>
-          <Message
-            size="small"
-            severity="error"
-            v-if="v$.yearFounded.$error"
-            variant="simple"
-          >
-            <div v-for="error of v$.yearFounded.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div>
-          </Message>
-        </div>
-      </div>
-
-      <div class="row">
-        <!-- Email input -->
-        <div class="form-group mb-3 col-md-6">
-          <FloatLabel variant="on">
-            <InputText
-              class="w-100"
-              id="companyEmail"
-              v-model="v$.email.$model"
-              :invalid="v$.email.$error"
-              type="email"
-              :disabled="!isInEditMode"
-            />
-            <label for="companyEmail">Company email</label>
-          </FloatLabel>
-          <Message
-            size="small"
-            severity="error"
-            v-if="v$.email.$error"
-            variant="simple"
-          >
-            <div v-for="error of v$.email.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div>
-          </Message>
-        </div>
-
-        <!-- Phone input -->
-        <div class="form-group mb-3 col-md-6">
-          <FloatLabel variant="on">
-            <InputText
-              class="w-100"
-              id="companyPhone"
-              v-model="v$.phone.$model"
-              :invalid="v$.phone.$error"
-              type="tel"
-              :disabled="!isInEditMode"
-            />
-            <label for="companyPhone">Company phone number</label>
-          </FloatLabel>
-          <Message
-            size="small"
-            severity="error"
-            v-if="v$.phone.$error"
-            variant="simple"
-          >
-            <div v-for="error of v$.phone.$errors" :key="error.$uid">
-              <div>{{ error.$message }}</div>
-            </div>
-          </Message>
-        </div>
-      </div>
-      <!-- Address input -->
-      <div class="form-group mb-3">
-        <FloatLabel variant="on">
-          <InputText
-            class="w-100"
-            id="companyAddress"
-            v-model="v$.address.$model"
-            :invalid="v$.address.$error"
-            :disabled="!isInEditMode"
-          />
-          <label for="companyAddress">Company Address</label>
-        </FloatLabel>
-        <Message
-          size="small"
-          severity="error"
-          v-if="v$.address.$error"
-          variant="simple"
+    <div class="row">
+      <!-- Message section -->
+      <div class="col-md-4">
+        <Message v-if="!company?.id" icon="fas fa-info" severity="warn"
+          >No company details have been added yet. Create your company profile
+          so clients can learn more about your business.</Message
         >
-          <div v-for="error of v$.address.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </Message>
       </div>
 
-      <!-- Action buttons -->
-      <div
-        class="d-flex align-items-center justify-content-end justify-content-md-start gap-2"
-      >
-        <!-- Discard changes button -->
-        <Button
-          v-if="isInEditMode"
-          @click="discardChanges"
-          icon="fas fa-times"
-          size="small"
-          severity="danger"
-          label="Discard changes"
-        />
-        <!-- Save changes form -->
-        <Button
-          v-if="isInEditMode"
-          icon="fas fa-pencil-alt"
-          size="small"
-          type="submit"
-          severity="primary"
-          :label="
-            isAddingOrUpdatingCompany ? 'Saving changes...' : 'Save changes'
-          "
-          :loading="isAddingOrUpdatingCompany"
-          :disabled="v$.$errors.length > 0 || isAddingOrUpdatingCompany"
-        />
-        <!-- Edit account button -->
-        <Button
-          v-else
-          @click="isInEditMode = true"
-          icon="fas fa-pencil-alt"
-          size="small"
-          severity="info"
-          label="Edit details"
-        />
+      <div class="col-md-8">
+        <!--Form start-->
+        <form @submit.prevent="submitForm" class="needs-validation">
+          <div class="row">
+            <!-- Name input -->
+            <div class="form-group mb-3 col-md-8">
+              <FloatLabel variant="on">
+                <InputText
+                  class="w-100"
+                  id="companyName"
+                  v-model="v$.name.$model"
+                  :invalid="v$.name.$error"
+                  :disabled="!isInEditMode"
+                />
+                <label for="companyName">Company name</label>
+              </FloatLabel>
+              <Message
+                size="small"
+                severity="error"
+                v-if="v$.name.$error"
+                variant="simple"
+              >
+                <div v-for="error of v$.name.$errors" :key="error.$uid">
+                  <div>{{ error.$message }}</div>
+                </div>
+              </Message>
+            </div>
+
+            <!-- Year founded input -->
+            <div class="form-group mb-3 col-md-4">
+              <FloatLabel variant="on">
+                <DatePicker
+                  class="w-100"
+                  id="yearFounded"
+                  v-model="v$.yearFounded.$model"
+                  :invalid="v$.yearFounded.$error"
+                  fluid
+                  view="year"
+                  dateFormat="yy"
+                  showIcon
+                  iconDisplay="input"
+                  :disabled="!isInEditMode"
+                />
+                <label for="yearFounded">Year company was founded</label>
+              </FloatLabel>
+              <Message
+                size="small"
+                severity="error"
+                v-if="v$.yearFounded.$error"
+                variant="simple"
+              >
+                <div v-for="error of v$.yearFounded.$errors" :key="error.$uid">
+                  <div>{{ error.$message }}</div>
+                </div>
+              </Message>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Email input -->
+            <div class="form-group mb-3 col-md-6">
+              <FloatLabel variant="on">
+                <InputText
+                  class="w-100"
+                  id="companyEmail"
+                  v-model="v$.email.$model"
+                  :invalid="v$.email.$error"
+                  type="email"
+                  :disabled="!isInEditMode"
+                />
+                <label for="companyEmail">Company email</label>
+              </FloatLabel>
+              <Message
+                size="small"
+                severity="error"
+                v-if="v$.email.$error"
+                variant="simple"
+              >
+                <div v-for="error of v$.email.$errors" :key="error.$uid">
+                  <div>{{ error.$message }}</div>
+                </div>
+              </Message>
+            </div>
+
+            <!-- Phone input -->
+            <div class="form-group mb-3 col-md-6">
+              <FloatLabel variant="on">
+                <InputText
+                  class="w-100"
+                  id="companyPhone"
+                  v-model="v$.phone.$model"
+                  :invalid="v$.phone.$error"
+                  type="tel"
+                  :disabled="!isInEditMode"
+                />
+                <label for="companyPhone">Company phone number</label>
+              </FloatLabel>
+              <Message
+                size="small"
+                severity="error"
+                v-if="v$.phone.$error"
+                variant="simple"
+              >
+                <div v-for="error of v$.phone.$errors" :key="error.$uid">
+                  <div>{{ error.$message }}</div>
+                </div>
+              </Message>
+            </div>
+          </div>
+          <!-- Address input -->
+          <div class="form-group mb-3">
+            <FloatLabel variant="on">
+              <InputText
+                class="w-100"
+                id="companyAddress"
+                v-model="v$.address.$model"
+                :invalid="v$.address.$error"
+                :disabled="!isInEditMode"
+              />
+              <label for="companyAddress">Company Address</label>
+            </FloatLabel>
+            <Message
+              size="small"
+              severity="error"
+              v-if="v$.address.$error"
+              variant="simple"
+            >
+              <div v-for="error of v$.address.$errors" :key="error.$uid">
+                <div>{{ error.$message }}</div>
+              </div>
+            </Message>
+          </div>
+
+          <!-- Action buttons -->
+          <div
+            class="d-flex align-items-center justify-content-end justify-content-md-start gap-2"
+          >
+            <!-- Discard changes button -->
+            <Button
+              v-if="isInEditMode"
+              @click="discardChanges"
+              icon="fas fa-times"
+              size="small"
+              severity="danger"
+              label="Discard changes"
+            />
+            <!-- Save changes form -->
+            <Button
+              v-if="isInEditMode"
+              icon="fas fa-pencil-alt"
+              size="small"
+              type="submit"
+              severity="primary"
+              :label="
+                isAddingOrUpdatingCompany ? 'Saving changes...' : 'Save changes'
+              "
+              :loading="isAddingOrUpdatingCompany"
+              :disabled="v$.$errors.length > 0 || isAddingOrUpdatingCompany"
+            />
+            <!-- Edit account button -->
+            <Button
+              v-else
+              @click="isInEditMode = true"
+              icon="fas fa-pencil-alt"
+              size="small"
+              severity="info"
+              label="Edit details"
+            />
+          </div>
+        </form>
+        <!--Form end-->
       </div>
-    </form>
-    <!--Form end-->
+    </div>
   </div>
 </template>
 
@@ -187,6 +199,7 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 import TitleSection from "../Common/Elements/TitleSection.vue";
+import Message from "primevue/message";
 
 const store = useStore();
 const toast = useToast();
