@@ -162,7 +162,7 @@
                   type="url"
                   :disabled="disableField"
                 />
-                <label for="companyFacebook">Facebook url</label>
+                <label for="companyFacebook">Facebook URL</label>
               </FloatLabel>
               <Message
                 size="small"
@@ -187,7 +187,7 @@
                   type="url"
                   :disabled="disableField"
                 />
-                <label for="companyLinkedIn">Facebook url</label>
+                <label for="companyLinkedIn">LinkedIn URL</label>
               </FloatLabel>
               <Message
                 size="small"
@@ -212,7 +212,7 @@
                   type="url"
                   :disabled="disableField"
                 />
-                <label for="companyInstagram">Facebook url</label>
+                <label for="companyInstagram">Instagram URL</label>
               </FloatLabel>
               <Message
                 size="small"
@@ -225,6 +225,32 @@
                 </div>
               </Message>
             </div>
+          </div>
+
+          <!-- Opening hours input -->
+          <div class="form-group mb-3">
+            <IftaLabel>
+              <InputText
+                class="w-100"
+                id="companyOpeningHours"
+                v-model="v$.openingHours.$model"
+                :invalid="v$.openingHours.$error"
+                :disabled="disableField"
+                placeholder="E.g. Monday - Friday: 08.00 AM - 05.00 PM"
+                type="text"
+              />
+              <label for="companyOpeningHours">Company opening hours</label>
+            </IftaLabel>
+            <Message
+              size="small"
+              severity="error"
+              v-if="v$.openingHours.$error"
+              variant="simple"
+            >
+              <div v-for="error of v$.openingHours.$errors" :key="error.$uid">
+                <div>{{ error.$message }}</div>
+              </div>
+            </Message>
           </div>
           <!-- Action buttons -->
           <div
@@ -290,6 +316,7 @@ import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 import TitleSection from "../Common/Elements/TitleSection.vue";
 import ProgressSpinner from "primevue/progressspinner";
+import IftaLabel from "primevue/iftalabel";
 
 const store = useStore();
 const toast = useToast();
