@@ -12,6 +12,7 @@
               id="companyName"
               v-model="v$.name.$model"
               :invalid="v$.name.$error"
+              :disabled="!isInEditMode"
             />
             <label for="companyName">Company name</label>
           </FloatLabel>
@@ -40,6 +41,7 @@
               dateFormat="yy"
               showIcon
               iconDisplay="input"
+              :disabled="!isInEditMode"
             />
             <label for="yearFounded">Year company was founded</label>
           </FloatLabel>
@@ -66,6 +68,7 @@
               v-model="v$.email.$model"
               :invalid="v$.email.$error"
               type="email"
+              :disabled="!isInEditMode"
             />
             <label for="companyEmail">Company email</label>
           </FloatLabel>
@@ -90,6 +93,7 @@
               v-model="v$.phone.$model"
               :invalid="v$.phone.$error"
               type="tel"
+              :disabled="!isInEditMode"
             />
             <label for="companyPhone">Company phone number</label>
           </FloatLabel>
@@ -113,6 +117,7 @@
             id="companyAddress"
             v-model="v$.address.$model"
             :invalid="v$.address.$error"
+            :disabled="!isInEditMode"
           />
           <label for="companyAddress">Company Address</label>
         </FloatLabel>
@@ -148,9 +153,11 @@
           size="small"
           type="submit"
           severity="primary"
-          :label="isUpdatingAccount ? 'Saving changes...' : 'Save changes'"
-          :loading="isUpdatingAccount"
-          :disabled="v$.$errors.length > 0 || isUpdatingAccount"
+          :label="
+            isAddingOrUpdatingCompany ? 'Saving changes...' : 'Save changes'
+          "
+          :loading="isAddingOrUpdatingCompany"
+          :disabled="v$.$errors.length > 0 || isAddingOrUpdatingCompany"
         />
         <!-- Edit account button -->
         <Button
@@ -278,14 +285,7 @@ let getCompanyDetailsAndPopulateForm = () => {
       //store company info
       company.value = companyData;
     })
-    .catch((message) => {
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: message,
-        life: 10000,
-      });
-    });
+    .catch(() => {});
 };
 
 //populate the form with company data
