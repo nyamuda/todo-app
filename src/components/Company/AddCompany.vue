@@ -179,16 +179,14 @@ import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
-import { useRouter } from "vue-router";
 import TitleSection from "../Common/Elements/TitleSection.vue";
 
 const store = useStore();
 const toast = useToast();
-const router = useRouter();
 
 let company = ref(null);
 //show loading button or not
-let isUpdatingCompany = computed(() => store.state.company.isUpdateCompany);
+let isAddingOrUpdatingCompany = computed(() => store.state.company.isAddingOrUpdatingCompany);
 
 //is form in edit mode or not
 //if not, the form fields are disabled
@@ -254,6 +252,8 @@ const submitForm = async () => {
       detail: ex.message,
       life: 10000,
     });
+  } finally {
+    isInEditMode.value = false;
   }
 };
 
