@@ -52,16 +52,14 @@ const company = {
     },
 
     // Fetch a company by ID
-    getCompany({ rootState }, id) {
+    getCompany({ rootState }) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${rootState.apiUrl}/companies/${id}`)
+          .get(`${rootState.apiUrl}/companies/first`)
           .then((response) => resolve(response.data))
-          .catch((ex) => {
+          .catch(() => {
             let message =
-              ex.status == 404
-                ? "The company you're looking for does not exist."
-                : "Something went wrong while fetching company details.";
+              "Something went wrong while fetching company details.";
             reject(message);
           });
       });

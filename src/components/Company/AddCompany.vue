@@ -163,6 +163,9 @@ const store = useStore();
 const toast = useToast();
 const router = useRouter();
 
+//show loading button or not
+let isCreatingCompany = computed(() => store.state.company.isCreatingCompany);
+
 onMounted(() => {
   //show form errors
   v$._value.$touch();
@@ -217,8 +220,26 @@ const submitForm = () => {
     });
 };
 
-//show loading button or not
-let isCreatingCompany = computed(() => store.state.company.isCreatingCompany);
+//get company details and populate the form with those details
+let getCompanyDetailsAndPopulateForm = () => {
+  store
+    .dispatch("company/getCompany")
+    .then((company) => {
+      companyForm.value.name = company.name;
+      companyForm.value.email = company.email;
+      companyForm.value.phone = company.phone;
+      companyForm.value.yearFounded = company.yearFounded;
+      companyForm.value.address = company.address;
+    })
+    .catch((message) => {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: message,
+        life: 10000,
+      });
+    });
+};
 </script>
 
 <style scoped></style>

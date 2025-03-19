@@ -226,9 +226,9 @@ const submitForm = () => {
 let isUpdatingCompany = computed(() => store.state.company.isUpdatingCompany);
 
 //get company details and populate the form with those details
-let getCompanyDetailsAndPopulateForm = (id) => {
+let getCompanyDetailsAndPopulateForm = () => {
   store
-    .dispatch("company/getCompany", id.value)
+    .dispatch("company/getCompany")
     .then((company) => {
       companyForm.value.name = company.name;
       companyForm.value.email = company.email;
