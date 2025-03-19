@@ -1,13 +1,17 @@
 <template>
   <div class="container m-auto">
-    <TitleSection subtitle="Company details" />
-    <div class="row">
+    <TitleSection title="Company details" />
+    <div class="row mt-3">
       <!-- Message section -->
       <div class="col-md-4">
-        <Message v-if="!company?.id" icon="fas fa-info" severity="warn"
-          >No company details have been added yet. Create your company profile
-          so clients can learn more about your business.</Message
+        <Message v-if="!company?.id" severity="warn"
+          >No company details have been added yet. This information helps
+          customers connect with your business.</Message
         >
+        <p class="mt-3">
+          The details you enter here will be visible to customers. Keep them
+          accurate and up-to-date.
+        </p>
       </div>
 
       <div class="col-md-8">
@@ -199,7 +203,6 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 import TitleSection from "../Common/Elements/TitleSection.vue";
-import Message from "primevue/message";
 
 const store = useStore();
 const toast = useToast();
