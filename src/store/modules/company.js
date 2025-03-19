@@ -4,8 +4,7 @@ const company = {
   namespaced: true,
   state: () => ({
     companies: [], // All companies
-    isCreatingCompany: false,
-    isUpdatingCompany: false,
+    isAddingOrUpdatingCompany: false,
     isGettingCompanies: false,
     isDeletingCompany: false,
     companyFacts: {
@@ -84,7 +83,7 @@ const company = {
     // Add a new company
     addCompany({ dispatch, state, rootState }, payload) {
       return new Promise((resolve, reject) => {
-        state.isCreatingCompany = true;
+        state.isAddingOrUpdatingCompany = true;
         dispatch("setAuthorizationHeader");
         axios
           .post(`${rootState.apiUrl}/companies`, payload)
@@ -98,7 +97,7 @@ const company = {
             reject(message);
           })
           .finally(() => {
-            state.isCreatingCompany = false;
+            state.isAddingOrUpdatingCompany = false;
           });
       });
     },
@@ -129,7 +128,7 @@ const company = {
     updateCompany({ dispatch, state, rootState }, payload) {
       return new Promise((resolve, reject) => {
         let { id, updatedCompany } = payload;
-        state.isUpdatingCompany = true;
+        state.isAddingOrUpdatingCompany = true;
         dispatch("setAuthorizationHeader");
         axios
           .put(`${rootState.apiUrl}/companies/${id}`, updatedCompany)
@@ -141,7 +140,7 @@ const company = {
             reject(message);
           })
           .finally(() => {
-            state.isUpdatingCompany = false;
+            state.isAddingOrUpdatingCompany = false;
           });
       });
     },

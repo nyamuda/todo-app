@@ -186,7 +186,9 @@ const toast = useToast();
 
 let company = ref(null);
 //show loading button or not
-let isAddingOrUpdatingCompany = computed(() => store.state.company.isAddingOrUpdatingCompany);
+let isAddingOrUpdatingCompany = computed(
+  () => store.state.company.isAddingOrUpdatingCompany
+);
 
 //is form in edit mode or not
 //if not, the form fields are disabled
@@ -310,7 +312,7 @@ let addCompany = async () => {
 //Update company details
 let updateCompany = async () => {
   let message = await store.dispatch("company/updateCompany", {
-    company: companyForm.value,
+    updatedCompany: companyForm.value,
     id: company.value.id,
   });
   toast.add({
