@@ -5,7 +5,7 @@
     <!--Form start-->
     <form @submit.prevent="submitForm" class="needs-validation">
       <!-- Name input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <InputText
             class="w-100"
@@ -28,7 +28,7 @@
       </div>
 
       <!-- Email input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <InputText
             class="w-100"
@@ -52,7 +52,7 @@
       </div>
 
       <!-- Phone input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <InputText
             class="w-100"
@@ -76,7 +76,7 @@
       </div>
 
       <!-- Address input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <InputText
             class="w-100"
@@ -99,7 +99,7 @@
       </div>
 
       <!-- Year founded input -->
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-6 mb-3">
         <FloatLabel variant="on">
           <DatePicker
             class="w-100"

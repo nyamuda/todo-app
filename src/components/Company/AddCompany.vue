@@ -1,11 +1,10 @@
 <template>
   <div class="container m-auto">
-    <h2 class="text-start">Add company information</h2>
-
+    <TitleSection subtitle="Company details" />
     <!--Form start-->
     <form @submit.prevent="submitForm" class="needs-validation">
       <!-- Name input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <InputText
             class="w-100"
@@ -28,7 +27,7 @@
       </div>
 
       <!-- Email input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <InputText
             class="w-100"
@@ -52,7 +51,7 @@
       </div>
 
       <!-- Phone input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <InputText
             class="w-100"
@@ -76,7 +75,7 @@
       </div>
 
       <!-- Address input -->
-      <div class="form-group">
+      <div class="form-group mb-3">
         <FloatLabel variant="on">
           <InputText
             class="w-100"
@@ -99,7 +98,7 @@
       </div>
 
       <!-- Year founded input -->
-      <div class="form-group col-md-6">
+      <div class="form-group mb-3 col-md-6">
         <FloatLabel variant="on">
           <DatePicker
             class="w-100"
@@ -153,6 +152,7 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
+import TitleSection from "../Common/Elements/TitleSection.vue";
 
 const store = useStore();
 const toast = useToast();
