@@ -128,17 +128,40 @@
         </Message>
       </div>
 
-      <Button
-        type="submit"
-        :label="
-          isCreatingCompany
-            ? 'Creating information...'
-            : 'Create company information'
-        "
-        icon="fas fa-plus"
-        :loading="isCreatingCompany"
-        :disabled="v$.$errors.length > 0 || isCreatingCompany"
-      />
+      <!-- Action buttons -->
+      <div
+        class="d-flex align-items-center justify-content-end justify-content-md-start gap-2"
+      >
+        <!-- Discard changes button -->
+        <Button
+          v-if="isInEditMode"
+          @click="discardChanges"
+          icon="fas fa-times"
+          size="small"
+          severity="danger"
+          label="Discard changes"
+        />
+        <!-- Save changes form -->
+        <Button
+          v-if="isInEditMode"
+          icon="fas fa-pencil-alt"
+          size="small"
+          type="submit"
+          severity="primary"
+          :label="isUpdatingAccount ? 'Saving changes...' : 'Save changes'"
+          :loading="isUpdatingAccount"
+          :disabled="v$.$errors.length > 0 || isUpdatingAccount"
+        />
+        <!-- Edit account button -->
+        <Button
+          v-else
+          @click="isInEditMode = true"
+          icon="fas fa-pencil-alt"
+          size="small"
+          severity="info"
+          label="Edit details"
+        />
+      </div>
     </form>
     <!--Form end-->
   </div>
@@ -163,12 +186,19 @@ const store = useStore();
 const toast = useToast();
 const router = useRouter();
 
+let company = ref(null);
 //show loading button or not
 let isCreatingCompany = computed(() => store.state.company.isCreatingCompany);
+
+//is form in edit mode or not
+//if not, the form fields are disabled
+let isInEditMode = ref(false);
 
 onMounted(() => {
   //show form errors
   v$._value.$touch();
+
+  getCompanyDetailsAndPopulateForm();
 });
 
 // Form data
@@ -220,16 +250,24 @@ const submitForm = () => {
     });
 };
 
+//discard changes made
+//by populating the form with the original data
+let discardChanges = () => {
+  populateForm(company.value);
+
+  //disable form inputs
+  isInEditMode.value = false;
+};
+
 //get company details and populate the form with those details
 let getCompanyDetailsAndPopulateForm = () => {
   store
     .dispatch("company/getCompany")
-    .then((company) => {
-      companyForm.value.name = company.name;
-      companyForm.value.email = company.email;
-      companyForm.value.phone = company.phone;
-      companyForm.value.yearFounded = company.yearFounded;
-      companyForm.value.address = company.address;
+    .then((companyData) => {
+      //populate the form with company info
+      populateForm(companyData);
+      //store company info
+      company.value = companyData;
     })
     .catch((message) => {
       toast.add({
@@ -239,6 +277,15 @@ let getCompanyDetailsAndPopulateForm = () => {
         life: 10000,
       });
     });
+};
+
+//populate the form with company data
+let populateForm = ({ name, email, phone, yearFounded, address }) => {
+  companyForm.value.name = name;
+  companyForm.value.email = email;
+  companyForm.value.phone = phone;
+  companyForm.value.yearFounded = yearFounded;
+  companyForm.value.address = address;
 };
 </script>
 
