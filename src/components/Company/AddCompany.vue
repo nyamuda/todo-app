@@ -150,7 +150,82 @@
               </div>
             </Message>
           </div>
+          <div class="row">
+            <!-- Facebook input -->
+            <div class="form-group mb-3 col-md-4">
+              <FloatLabel variant="on">
+                <InputText
+                  class="w-100"
+                  id="companyFacebook"
+                  v-model="v$.facebookUrl.$model"
+                  :invalid="v$.facebookUrl.$error"
+                  type="url"
+                  :disabled="disableField"
+                />
+                <label for="companyFacebook">Facebook url</label>
+              </FloatLabel>
+              <Message
+                size="small"
+                severity="error"
+                v-if="v$.facebookUrl.$error"
+                variant="simple"
+              >
+                <div v-for="error of v$.facebookUrl.$errors" :key="error.$uid">
+                  <div>{{ error.$message }}</div>
+                </div>
+              </Message>
+            </div>
 
+            <!-- LinkedIn input -->
+            <div class="form-group mb-3 col-md-4">
+              <FloatLabel variant="on">
+                <InputText
+                  class="w-100"
+                  id="companyLinkedIn"
+                  v-model="v$.linkedInUrl.$model"
+                  :invalid="v$.linkedInUrl.$error"
+                  type="url"
+                  :disabled="disableField"
+                />
+                <label for="companyLinkedIn">Facebook url</label>
+              </FloatLabel>
+              <Message
+                size="small"
+                severity="error"
+                v-if="v$.linkedInUrl.$error"
+                variant="simple"
+              >
+                <div v-for="error of v$.linkedInUrl.$errors" :key="error.$uid">
+                  <div>{{ error.$message }}</div>
+                </div>
+              </Message>
+            </div>
+
+            <!-- Instagram input -->
+            <div class="form-group mb-3 col-md-4">
+              <FloatLabel variant="on">
+                <InputText
+                  class="w-100"
+                  id="companyInstagram"
+                  v-model="v$.instagramUrl.$model"
+                  :invalid="v$.instagramUrl.$error"
+                  type="url"
+                  :disabled="disableField"
+                />
+                <label for="companyInstagram">Facebook url</label>
+              </FloatLabel>
+              <Message
+                size="small"
+                severity="error"
+                v-if="v$.instagramUrl.$error"
+                variant="simple"
+              >
+                <div v-for="error of v$.instagramUrl.$errors" :key="error.$uid">
+                  <div>{{ error.$message }}</div>
+                </div>
+              </Message>
+            </div>
+          </div>
           <!-- Action buttons -->
           <div
             class="d-flex align-items-center justify-content-end justify-content-md-start gap-2"
@@ -264,6 +339,10 @@ const companyForm = ref({
   phone: "",
   address: "",
   dateFounded: null,
+  linkedInUrl: "",
+  instagramUrl: "",
+  facebookUrl: "",
+  openingHours: "",
 });
 
 //form validation with Vuelidate start
@@ -279,6 +358,10 @@ const rules = {
   },
   address: { required },
   dateFounded: { required },
+  linkedInUrl: {},
+  instagramUrl: {},
+  facebookUrl: {},
+  openingHours: {},
 };
 
 const v$ = useVuelidate(rules, companyForm.value);
