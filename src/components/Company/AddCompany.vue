@@ -188,7 +188,7 @@ const router = useRouter();
 
 let company = ref(null);
 //show loading button or not
-let isCreatingCompany = computed(() => store.state.company.isCreatingCompany);
+let isUpdatingCompany = computed(() => store.state.company.isUpdateCompany);
 
 //is form in edit mode or not
 //if not, the form fields are disabled
@@ -226,28 +226,35 @@ const rules = {
 };
 
 const v$ = useVuelidate(rules, companyForm.value);
+
 //form validation with Vuelidate end
 // Submit form
-const submitForm = () => {
-  store
-    .dispatch("company/addCompany", { company: companyForm.value })
-    .then((message) => {
-      toast.add({
-        severity: "success",
-        summary: "Company Information Created",
-        detail: message,
-        life: 5000,
-      });
-      router.push("/company");
-    })
-    .catch((message) => {
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: message,
-        life: 10000,
-      });
+const submitForm = async () => {
+  try {
+    //if company ID is null,
+    // then the company details have not be added to the database yet
+    //which means we need create a new record of the company to the database
+    if (!company.value?.id) {
+      addCompany();
+    }
+    //if company ID is not null
+    //then the company details have already been created
+    //which means we need to update the company details
+    else if (company.value?.id) {
+      updateCompany();
+    } else {
+      throw new Error(
+        "An unexpected error occurred while saving the company details"
+      );
+    }
+  } catch (ex) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: ex.message,
+      life: 10000,
     });
+  }
 };
 
 //discard changes made
@@ -286,6 +293,32 @@ let populateForm = ({ name, email, phone, yearFounded, address }) => {
   companyForm.value.phone = phone;
   companyForm.value.yearFounded = yearFounded;
   companyForm.value.address = address;
+};
+
+//Add company details
+let addCompany = async () => {
+  let message = await store.dispatch("company/addCompany", {
+    company: companyForm.value,
+  });
+  toast.add({
+    severity: "success",
+    summary: "Company Information Created",
+    detail: message,
+    life: 5000,
+  });
+};
+//Update company details
+let updateCompany = async () => {
+  let message = await store.dispatch("company/updateCompany", {
+    company: companyForm.value,
+    id: company.value.id,
+  });
+  toast.add({
+    severity: "success",
+    summary: "Company Information Created",
+    detail: message,
+    life: 5000,
+  });
 };
 </script>
 
