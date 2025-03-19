@@ -3,27 +3,55 @@
     <TitleSection subtitle="Company details" />
     <!--Form start-->
     <form @submit.prevent="submitForm" class="needs-validation">
-      <!-- Name input -->
-      <div class="form-group mb-3">
-        <FloatLabel variant="on">
-          <InputText
-            class="w-100"
-            id="companyName"
-            v-model="v$.name.$model"
-            :invalid="v$.name.$error"
-          />
-          <label for="companyName">Company name</label>
-        </FloatLabel>
-        <Message
-          size="small"
-          severity="error"
-          v-if="v$.name.$error"
-          variant="simple"
-        >
-          <div v-for="error of v$.name.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </Message>
+      <div class="row">
+        <!-- Name input -->
+        <div class="form-group mb-3 col-md-8">
+          <FloatLabel variant="on">
+            <InputText
+              class="w-100"
+              id="companyName"
+              v-model="v$.name.$model"
+              :invalid="v$.name.$error"
+            />
+            <label for="companyName">Company name</label>
+          </FloatLabel>
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.name.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.name.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
+        </div>
+
+        <!-- Year founded input -->
+        <div class="form-group mb-3 col-md-4">
+          <FloatLabel variant="on">
+            <DatePicker
+              class="w-100"
+              id="yearFounded"
+              v-model="v$.yearFounded.$model"
+              :invalid="v$.yearFounded.$error"
+              fluid
+              showIcon
+              iconDisplay="input"
+            />
+            <label for="yearFounded">Year company was founded</label>
+          </FloatLabel>
+          <Message
+            size="small"
+            severity="error"
+            v-if="v$.yearFounded.$error"
+            variant="simple"
+          >
+            <div v-for="error of v$.yearFounded.$errors" :key="error.$uid">
+              <div>{{ error.$message }}</div>
+            </div>
+          </Message>
+        </div>
       </div>
 
       <div class="row">
@@ -93,32 +121,6 @@
           variant="simple"
         >
           <div v-for="error of v$.address.$errors" :key="error.$uid">
-            <div>{{ error.$message }}</div>
-          </div>
-        </Message>
-      </div>
-
-      <!-- Year founded input -->
-      <div class="form-group mb-3 col-md-6">
-        <FloatLabel variant="on">
-          <DatePicker
-            class="w-100"
-            id="yearFounded"
-            v-model="v$.yearFounded.$model"
-            :invalid="v$.yearFounded.$error"
-            fluid
-            showIcon
-            iconDisplay="input"
-          />
-          <label for="yearFounded">Year company was founded</label>
-        </FloatLabel>
-        <Message
-          size="small"
-          severity="error"
-          v-if="v$.yearFounded.$error"
-          variant="simple"
-        >
-          <div v-for="error of v$.yearFounded.$errors" :key="error.$uid">
             <div>{{ error.$message }}</div>
           </div>
         </Message>
