@@ -135,9 +135,10 @@ const company = {
         state.isAddingOrUpdatingCompany = true;
         dispatch("setAuthorizationHeader");
         axios
-          .patch(`${rootState.apiUrl}/companies/${id}`, updatedCompany)
+          .update(`${rootState.apiUrl}/companies/${id}`, updatedCompany)
           .then(() => resolve("The company information has been updated."))
           .catch((ex) => {
+            console.log(ex);
             let message =
               ex.response?.data?.message ||
               "Something went wrong. Unable to update the company information.";

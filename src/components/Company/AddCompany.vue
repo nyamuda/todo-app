@@ -439,12 +439,26 @@ let getCompanyDetailsAndPopulateForm = () => {
 };
 
 //populate the form with company data
-let populateForm = ({ name, email, phone, dateFounded, address }) => {
+let populateForm = ({
+  name,
+  email,
+  phone,
+  dateFounded,
+  address,
+  linkedInUrl,
+  facebookUrl,
+  instagramUrl,
+  openingHours,
+}) => {
   companyForm.value.name = name;
   companyForm.value.email = email;
   companyForm.value.phone = phone;
   companyForm.value.dateFounded = dateFounded;
   companyForm.value.address = address;
+  companyForm.value.linkedInUrl = linkedInUrl;
+  companyForm.value.facebookUrl = facebookUrl;
+  companyForm.value.instagramUrl = instagramUrl;
+  companyForm.value.openingHours = openingHours;
 };
 
 //Add company details
