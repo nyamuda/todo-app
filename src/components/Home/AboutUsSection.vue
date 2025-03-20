@@ -35,7 +35,9 @@
         <div
           class="fact-block d-flex flex-column text-center text-lg-start bg-secondary p-3 mt-3 mt-lg-0 rounded-2 rounded-lg-0"
         >
-          <p class="display-3 fw-bold mb-0 text-light">50</p>
+          <p class="display-3 fw-bold mb-0 text-light">
+            {{ companyFacts.totalYearsInService }}
+          </p>
           <div class="fs-5 fw-bold text-light">
             <p class="mb-0">Cars Washed & Shining</p>
           </div>
@@ -94,7 +96,13 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import TitleSection from "../Common/Elements/TitleSection.vue";
+import { useStore } from "vuex";
+
+let store = useStore();
+
+let companyFacts = computed(() => store.state.company.companyFacts);
 </script>
 
 <style scoped>

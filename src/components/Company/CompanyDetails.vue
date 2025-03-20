@@ -352,8 +352,6 @@ let editForm = () => {
   isInEditMode.value = true;
   //show validation errors
   v$._value.$touch();
-
-  console.log(disableField);
 };
 
 // Form data
