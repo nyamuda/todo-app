@@ -68,10 +68,10 @@ const company = {
     },
 
     // Fetch some facts (e.g years in service) about the company using the company ID
-    getCompanyFacts({ commit, rootState }, id) {
+    getCompanyFacts({ commit, rootState }) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${rootState.apiUrl}/companies/${id}/company-facts`)
+          .get(`${rootState.apiUrl}/companies/company-facts`)
           .then((response) => {
             commit("setCompanyFacts", response.data);
             resolve();
