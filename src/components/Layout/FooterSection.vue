@@ -59,7 +59,7 @@
             <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">Car Wash Services</h6>
 
-            <div v-for="service in service.slice(0, 3)" :key="service.id">
+            <div v-for="service in services.slice(0, 3)" :key="service.id">
               <p>
                 <router-link
                   :to="'/services/' + service.id + '/details'"
@@ -94,13 +94,12 @@
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
             <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-            <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+            <p><i class="fas fa-home me-3"></i>{{ company?.address }}</p>
             <p>
               <i class="fas fa-envelope me-3"></i>
-              info@example.com
+              {{ company?.email }}
             </p>
-            <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
-            <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+            <p><i class="fas fa-phone me-3"></i>{{ company?.phone }}</p>
           </div>
           <!-- Grid column -->
         </div>
@@ -127,7 +126,7 @@ import { useStore } from "vuex";
 
 let store = useStore();
 
-let companyFacts = computed(() => store.state.company.companyFacts);
+let company = computed(() => store.state.company.companyFacts.company);
 let services = computed(() => store.state.services.services);
 </script>
 
