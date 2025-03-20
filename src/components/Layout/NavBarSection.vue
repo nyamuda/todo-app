@@ -8,29 +8,35 @@
       class="d-flex align-items-center justify-content-between align-items-center"
     >
       <div class="d-flex align-items-center">
-        <div class="d-inline-flex align-items-center me-4">
+        <div
+          v-if="company.address"
+          class="d-inline-flex align-items-center me-4"
+        >
           <i class="fa fa-map-marker-alt text-primary me-2"></i>
-          <p class="m-0">{{ company?.address }}</p>
+          <p class="m-0">{{ company.address }}</p>
         </div>
-        <div class="d-inline-flex align-items-center me-4">
+        <div
+          v-if="company.openingHours"
+          class="d-inline-flex align-items-center me-4"
+        >
           <i class="far fa-clock text-primary me-2"></i>
-          <p class="m-0">{{ company?.openingHours }}</p>
+          <p class="m-0">{{ company.openingHours }}</p>
         </div>
       </div>
       <div class="d-flex align-items-center">
-        <div class="d-inline-flex align-items-center me-4">
+        <div v-if="company.phone" class="d-inline-flex align-items-center me-4">
           <i class="fas fa-phone text-primary me-2"></i>
-          <p class="m-0">{{ company?.phone }}</p>
+          <p class="m-0">{{ company.phone }}</p>
         </div>
-        <div class="d-inline-flex align-items-center me-4">
+        <div v-if="company.email" class="d-inline-flex align-items-center me-4">
           <i class="far fa-envelope-open text-primary me-2"></i>
-          <p class="m-0">{{ company?.email }}</p>
+          <p class="m-0">{{ company.email }}</p>
         </div>
         <div class="d-flex align-items-center">
-          <a :href="company?.instagramUrl" target="_blank" class="btn"
+          <a :href="company.instagramUrl" target="_blank" class="btn"
             ><i class="fab fa-instagram text-primary fa-lg"></i
           ></a>
-          <a :href="company?.facebookUrl" target="_blank" class="btn"
+          <a :href="company.facebookUrl" target="_blank" class="btn"
             ><i class="fab fa-facebook text-primary fa-lg"></i
           ></a>
         </div>

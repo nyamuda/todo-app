@@ -64,7 +64,7 @@
       <div
         class="d-flex flex-column flex-lg-row justify-content-start justify-content-lg-between w-100 gap-3"
       >
-        <div class="card border-0">
+        <div v-if="companyFacts.company?.phone" class="card border-0">
           <div class="d-flex justify-content-start align-items-center">
             <span class="rounded-circle bg-primary text-light">
               <i class="fas fa-phone-flip p-3 p-lg-2 p-xl-3"></i>
@@ -73,11 +73,13 @@
               class="d-flex flex-column align-items-start ms-3 justify-content-start"
             >
               <p class="card-title text-muted mb-0">Have any questions?</p>
-              <p class="card-text fw-bold h5">+27 81 589 6615</p>
+              <p class="card-text fw-bold h5">
+                {{ companyFacts.company?.phone }}
+              </p>
             </div>
           </div>
         </div>
-        <div class="card border-0">
+        <div v-if="companyFacts.company?.email" class="card border-0">
           <div class="d-flex justify-content-start align-items-center">
             <span class="rounded-circle bg-primary text-light">
               <i class="fas fa-envelope p-3 p-lg-2 p-xl-3"></i>
@@ -86,7 +88,9 @@
               class="d-flex flex-column align-items-start ms-3 justify-content-start"
             >
               <p class="card-title text-muted mb-0">Email us</p>
-              <p class="card-text fw-bold h5">ptnrlab@gmail.com</p>
+              <p class="card-text fw-bold h5">
+                {{ companyFacts.company?.email }}
+              </p>
             </div>
           </div>
         </div>
