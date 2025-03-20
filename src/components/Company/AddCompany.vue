@@ -261,7 +261,6 @@
               v-if="isInEditMode"
               @click="discardChanges"
               icon="fas fa-times"
-              size="small"
               severity="danger"
               label="Discard changes"
               :disabled="isAddingOrUpdatingCompany"
@@ -270,7 +269,6 @@
             <Button
               v-if="isInEditMode"
               icon="fas fa-pencil-alt"
-              size="small"
               type="submit"
               severity="primary"
               :label="
@@ -284,7 +282,6 @@
               v-else
               @click="editForm"
               icon="fas fa-pencil-alt"
-              size="small"
               severity="info"
               label="Edit details"
               :disabled="isGettingCompany"
