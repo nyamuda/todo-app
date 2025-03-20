@@ -1,6 +1,7 @@
 <template>
   <!-- Topbar Start -->
   <div
+    v-if="company"
     class="top-bar container-fluid text-light bg-secondary d-none d-lg-block py-1 px-3"
   >
     <div

@@ -9,7 +9,7 @@ const company = {
     isDeletingCompany: false,
     isGettingCompany: false,
     companyFacts: {
-      company: {},
+      company: null,
       totalYearsInService: 0,
       totalCompletedBookings: 0,
       totalHappyCustomers: 0,
