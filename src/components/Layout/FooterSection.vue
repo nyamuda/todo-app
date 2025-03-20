@@ -57,19 +57,17 @@
           <!-- Grid column -->
           <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
             <!-- Links -->
-            <h6 class="text-uppercase fw-bold mb-4">Products</h6>
-            <p>
-              <a href="#!" class="text-reset">Angular</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset">React</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset">Vue</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset">Laravel</a>
-            </p>
+            <h6 class="text-uppercase fw-bold mb-4">Car Wash Services</h6>
+
+            <div v-for="service in service.slice(0, 3)" :key="service.id">
+              <p>
+                <router-link
+                  :to="'/services/' + service.id + '/details'"
+                  class="text-reset"
+                  >{{ service.name }}</router-link
+                >
+              </p>
+            </div>
           </div>
           <!-- Grid column -->
 
@@ -124,13 +122,13 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 let store = useStore();
 
 let companyFacts = computed(() => store.state.company.companyFacts);
 let services = computed(() => store.state.services.services);
-
 </script>
 
 <style scoped>
