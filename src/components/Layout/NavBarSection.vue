@@ -9,25 +9,29 @@
       <div class="d-flex align-items-center">
         <div class="d-inline-flex align-items-center me-4">
           <i class="fa fa-map-marker-alt text-primary me-2"></i>
-          <p class="m-0">123 Street, Cape Town, South Africa</p>
+          <p class="m-0">{{ company?.address }}</p>
         </div>
         <div class="d-inline-flex align-items-center me-4">
           <i class="far fa-clock text-primary me-2"></i>
-          <p class="m-0">Mon - Friday: 08.00 PM - 05.00 PM</p>
+          <p class="m-0">{{ company?.openingHours }}</p>
         </div>
       </div>
       <div class="d-flex align-items-center">
         <div class="d-inline-flex align-items-center me-4">
           <i class="fas fa-phone text-primary me-2"></i>
-          <p class="m-0">+27 81 589 6615</p>
+          <p class="m-0">{{ company?.phone }}</p>
         </div>
         <div class="d-inline-flex align-items-center me-4">
           <i class="far fa-envelope-open text-primary me-2"></i>
-          <p class="m-0">nya20002@byui.edu</p>
+          <p class="m-0">{{ company?.email }}</p>
         </div>
         <div class="d-flex align-items-center">
-          <a class="btn"><i class="fab fa-instagram text-primary fa-lg"></i></a>
-          <a class="btn"><i class="fab fa-facebook text-primary fa-lg"></i></a>
+          <a :href="company?.instagramUrl" target="_blank" class="btn"
+            ><i class="fab fa-instagram text-primary fa-lg"></i
+          ></a>
+          <a :href="company?.facebookUrl" target="_blank" class="btn"
+            ><i class="fab fa-facebook text-primary fa-lg"></i
+          ></a>
         </div>
       </div>
     </div>
@@ -106,6 +110,7 @@ import { useRouter } from "vue-router";
 
 let isAuthenticated = computed(() => store.state.account.isAuthenticated);
 let isAdmin = computed(() => store.state.account.loggedInUser.isAdmin);
+let company = computed(() => store.state.company.companyFacts.company);
 
 const toast = useToast();
 const router = useRouter();
