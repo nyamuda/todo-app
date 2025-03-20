@@ -135,7 +135,7 @@ const company = {
         state.isAddingOrUpdatingCompany = true;
         dispatch("setAuthorizationHeader");
         axios
-          .update(`${rootState.apiUrl}/companies/${id}`, updatedCompany)
+          .put(`${rootState.apiUrl}/companies/${id}`, updatedCompany)
           .then(() => resolve("The company information has been updated."))
           .catch((ex) => {
             console.log(ex);

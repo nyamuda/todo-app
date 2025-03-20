@@ -416,7 +416,7 @@ const submitForm = async () => {
   } catch (ex) {
     toast.add({
       severity: "error",
-      summary: "Saving Changes Failed",
+      summary: "Error Occurred",
       detail: ex,
       life: 10000,
     });
@@ -468,7 +468,7 @@ let addCompany = async () => {
   });
   toast.add({
     severity: "success",
-    summary: "Company Information Created",
+    summary: "Company Added",
     detail: message,
     life: 5000,
   });
@@ -482,7 +482,7 @@ let updateCompany = async () => {
   });
   toast.add({
     severity: "success",
-    summary: "Company Information Created",
+    summary: "Update Success",
     detail: message,
     life: 5000,
   });
