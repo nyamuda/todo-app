@@ -36,13 +36,13 @@
           class="fact-block d-flex flex-column text-center text-lg-start bg-secondary p-3 mt-3 mt-lg-0 rounded-2 rounded-lg-0"
         >
           <p class="display-3 fw-bold mb-0 text-light">
-            {{ companyFacts.totalYearsInService }}
+            {{ companyFacts.totalCompletedBookings }}
           </p>
           <div class="fs-5 fw-bold text-light">
             <p class="mb-0">Cars Washed & Shining</p>
           </div>
         </div>
-        <d class="d-flex flex-column align-items-start gap-3 ms-lg-3">
+        <div class="d-flex flex-column align-items-start gap-3 ms-lg-3">
           <div class="d-flex align-items-center">
             <i class="fa-solid fa-circle-check me-2 fs-5 text-primary"></i
             ><span>Premium Hand Wash</span>
@@ -59,7 +59,7 @@
             <i class="fa-solid fa-circle-check me-2 fs-5 text-primary"></i
             ><span>Paint Protection & Waxing</span>
           </div>
-        </d>
+        </div>
       </div>
       <div
         class="d-flex flex-column flex-lg-row justify-content-start justify-content-lg-between w-100 gap-3"

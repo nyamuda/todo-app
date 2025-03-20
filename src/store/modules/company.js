@@ -73,6 +73,7 @@ const company = {
         axios
           .get(`${rootState.apiUrl}/companies/company-facts`)
           .then((response) => {
+            console.log(response.data);
             commit("setCompanyFacts", response.data);
             resolve();
           })
