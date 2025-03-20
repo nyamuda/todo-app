@@ -38,9 +38,6 @@ import AccountView from "@/views/Account/AccountView.vue";
 import PageNotFoundView from "@/views/NotFound/PageNotFoundView.vue";
 import CompanyView from "@/views/Company/CompanyView.vue";
 import CompanyDetails from "@/components/Company/CompanyDetails.vue";
-import AddCompany from "@/components/Company/AddCompany.vue";
-import UpdateCompany from "@/components/Company/UpdateCompany.vue";
-
 const routes = [
   {
     path: "/",
@@ -300,17 +297,6 @@ const routes = [
         path: "",
         name: "CompanyDetails",
         component: CompanyDetails,
-      },
-      {
-        path: "add",
-        name: "AddCompany",
-        component: AddCompany,
-      },
-
-      {
-        path: ":id/update",
-        name: " UpdateCompany",
-        component: UpdateCompany,
       },
     ],
   },
