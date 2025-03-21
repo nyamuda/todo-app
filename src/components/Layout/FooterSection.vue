@@ -1,35 +1,8 @@
 <template>
   <!-- Footer -->
   <footer class="text-center text-lg-start bg-secondary-light text-light">
-    <!-- Section: Social media -->
-    <section class="d-flex justify-content-center p-4 border-bottom">
-      <!-- Center -->
-      <div>
-        <a href="" class="me-4 text-reset">
-          <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="" class="me-4 text-reset">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="" class="me-4 text-reset">
-          <i class="fab fa-google"></i>
-        </a>
-        <a href="" class="me-4 text-reset">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="" class="me-4 text-reset">
-          <i class="fab fa-linkedin"></i>
-        </a>
-        <a href="" class="me-4 text-reset">
-          <i class="fab fa-github"></i>
-        </a>
-      </div>
-      <!-- Center -->
-    </section>
-    <!-- Section: Social media -->
-
     <!-- Section: Links  -->
-    <section class="">
+    <section class="pb-4">
       <div class="container text-center text-md-start mt-5">
         <!-- Grid row -->
         <div class="row mt-3">
@@ -85,6 +58,34 @@
               <div><i class="fas fa-envelope"></i></div>
               <div>{{ company?.email }}</div>
             </div>
+            <!-- Section: Social media -->
+            <section
+              class="d-flex justify-content-center justify-content-md-start align-items-start gap-2 text-light mt-3"
+            >
+              <!-- Center -->
+              <div>
+                <a href="" class="me-4 text-reset">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                  <i class="fab fa-twitter"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                  <i class="fab fa-google"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                  <i class="fab fa-instagram"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                  <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                  <i class="fab fa-github"></i>
+                </a>
+              </div>
+              <!-- Center -->
+            </section>
+            <!-- Section: Social media -->
           </div>
           <!-- Grid column -->
         </div>
