@@ -37,6 +37,25 @@
           <!-- Grid column -->
 
           <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">Business Hours</h6>
+            <div class="d-flex flex-column align-items-start mb-2">
+              <span class="text-primary fw-bold">Monday - Friday</span>
+              <span>09:00 am - 05:00 pm</span>
+            </div>
+            <div class="d-flex flex-column align-items-start mb-2">
+              <span class="text-primary fw-bold">Saturday</span>
+              <span>09:00 am - 01:00 pm</span>
+            </div>
+            <div class="d-flex flex-column align-items-start">
+              <span class="text-primary fw-bold">Sunday</span>
+              <span>Closed</span>
+            </div>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
             <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
