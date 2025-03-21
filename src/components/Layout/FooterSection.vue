@@ -10,7 +10,7 @@
           <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
             <!-- Content -->
             <h6 class="text-uppercase fw-bold mb-4">
-              {{ company.name }}
+              {{ company?.name }}
             </h6>
             <p class="text-light">
               Here you can use rows and columns to organize your footer content.
@@ -62,28 +62,9 @@
             <section
               class="d-flex justify-content-center justify-content-md-start align-items-start gap-2 text-light mt-3"
             >
-              <!-- Center -->
-              <div>
-                <a href="" class="me-4 text-reset">
-                  <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                  <i class="fab fa-twitter"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                  <i class="fab fa-google"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                  <i class="fab fa-instagram"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                  <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                  <i class="fab fa-github"></i>
-                </a>
-              </div>
-              <!-- Center -->
+              <Button severity="primary" rounded icon="fab fa-facebook-f" />
+              <Button severity="primary" rounded icon="fab fa-instagram" />
+              <Button severity="primary" rounded icon="fab fa-linkedin-in" />
             </section>
             <!-- Section: Social media -->
           </div>
@@ -109,6 +90,7 @@
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import Button from "primevue/button";
 
 let store = useStore();
 
