@@ -33,11 +33,23 @@
           <p class="m-0">{{ company.email }}</p>
         </div>
         <div class="d-flex align-items-center">
-          <a :href="company.instagramUrl" target="_blank" class="btn"
-            ><i class="fab fa-instagram text-primary fa-lg"></i
+          <a
+            :href="company?.instagramUrl ? company?.instagramUrl : '/'"
+            target="_blank"
+            class="btn"
+            ><i class="fab fa-instagram text-light fa-lg"></i
           ></a>
-          <a :href="company.facebookUrl" target="_blank" class="btn"
-            ><i class="fab fa-facebook text-primary fa-lg"></i
+          <a
+            :href="company?.facebookUrl ? company?.facebookUrl : '/'"
+            target="_blank"
+            class="btn"
+            ><i class="fab fa-facebook text-light fa-lg"></i
+          ></a>
+          <a
+            :href="company?.linkedInUrl ? company?.linkedInUrlUrl : '/'"
+            target="_blank"
+            class="btn"
+            ><i class="fab fa-linkedin-in text-light fa-lg"></i
           ></a>
         </div>
       </div>
