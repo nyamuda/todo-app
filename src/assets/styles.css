@@ -12003,6 +12003,11 @@ textarea.form-control-lg {
   border-color: #208e4e !important;
 }
 
+/* Own styles*/
+.bg-secondary-light {
+  background-color: #27323a;
+}
+
 body {
   font-family: "Oxygen", sans-serif;
 }

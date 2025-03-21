@@ -1,6 +1,6 @@
 <template>
   <!-- Footer -->
-  <footer class="text-center text-lg-start bg-body-tertiary text-muted">
+  <footer class="text-center text-lg-start bg-secondary-light text-light">
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center p-4 border-bottom">
       <!-- Center -->
@@ -37,9 +37,9 @@
           <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
             <!-- Content -->
             <h6 class="text-uppercase fw-bold mb-4">
-              <i class="fas fa-gem me-3"></i>Company name
+              {{ company.name }}
             </h6>
-            <p class="text-dark">
+            <p class="text-light">
               Here you can use rows and columns to organize your footer content.
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             </p>
@@ -54,7 +54,7 @@
             <div v-for="service in services.slice(0, 3)" :key="service.id">
               <p>
                 <router-link
-                  class="footer-links text-dark"
+                  class="footer-links text-light"
                   :to="'/services/' + service.id + '/details'"
                   >{{ service.name }}</router-link
                 >
@@ -68,19 +68,19 @@
             <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
             <div
-              class="d-flex justify-content-center justify-content-md-start align-items-start gap-2 text-dark"
+              class="d-flex justify-content-center justify-content-md-start align-items-start gap-2 text-light"
             >
               <div><i class="fas fa-home"></i></div>
               <div>{{ company?.address }}</div>
             </div>
             <div
-              class="d-flex justify-content-center justify-content-md-start align-items-start gap-2 my-2 text-dark"
+              class="d-flex justify-content-center justify-content-md-start align-items-start gap-2 my-2 text-light"
             >
               <div><i class="fas fa-phone"></i></div>
               <div>{{ company?.phone }}</div>
             </div>
             <div
-              class="d-flex justify-content-center justify-content-md-start align-items-start gap-2 text-dark"
+              class="d-flex justify-content-center justify-content-md-start align-items-start gap-2 text-light"
             >
               <div><i class="fas fa-envelope"></i></div>
               <div>{{ company?.email }}</div>
@@ -94,7 +94,7 @@
     <!-- Section: Links  -->
 
     <!-- Copyright -->
-    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05)">
+    <div class="text-center p-4 bg-secondary">
       © 2025 Copyright:
       <a class="text-reset fw-bold" href="https://mdbootstrap.com/"
         >Prioritia</a

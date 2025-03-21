@@ -66,3 +66,8 @@ $link-hover-color: darken($secondary, 15%);
     border-color: darken($primary, 15%) !important;
   }
 }
+
+/* Own styles*/
+.bg-secondary-light {
+  background-color: lighten($color: $secondary, $amount: 3%);
+}
