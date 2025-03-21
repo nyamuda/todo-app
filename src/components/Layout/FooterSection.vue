@@ -88,19 +88,31 @@
               class="d-flex justify-content-center justify-content-md-start align-items-start gap-2 text-light mt-3"
             >
               <Button
-                @click="goToSocialPlatform"
+                @click="
+                  goToSocialPlatform(
+                    company?.facebookUrl ? company?.facebookUrl : '/'
+                  )
+                "
                 severity="primary"
                 rounded
                 icon="fab fa-facebook-f"
               />
               <Button
-                @click="goToSocialPlatform"
+                @click="
+                  goToSocialPlatform(
+                    company?.instagramUrl ? company?.instagramUrl : '/'
+                  )
+                "
                 severity="primary"
                 rounded
                 icon="fab fa-instagram"
               />
               <Button
-                @click="goToSocialPlatform"
+                @click="
+                  goToSocialPlatform(
+                    company?.linkedInUrl ? company?.linkedInUrlUrl : '/'
+                  )
+                "
                 severity="primary"
                 rounded
                 icon="fab fa-linkedin-in"
